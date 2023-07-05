@@ -1,8 +1,7 @@
 ﻿<Application x:Class="SokuLauncher.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SokuLauncher"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:SokuLauncher">
     <Application.Resources>
          
     </Application.Resources>

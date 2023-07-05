@@ -76,6 +76,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp">
@@ -105,9 +106,13 @@
     <Compile Include="Converters\ReverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\RelativePathConverter.cs" />
     <Compile Include="Models\ModInfoModel.cs" />
+    <Compile Include="Models\UpdateFileModel.cs" />
+    <Compile Include="Models\UpdateVersionInfoModel.cs" />
+    <Compile Include="StaticVariable.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
     <Compile Include="Utils\ModsManager.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Utils\UpdateUtil.cs" />
     <Compile Include="ViewModels\MainWindwoViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

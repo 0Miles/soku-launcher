@@ -22,9 +22,11 @@ namespace SokuLauncher.Utils
             {
                 SokuDir = sokuDir;
             }
-            ModInfoList.Clear();
+        }
 
-            // search modules dir
+        public void SearchModulesDir()
+        {
+            ModInfoList.Clear();
             string modulesDirectory = Path.Combine(SokuDir, "modules");
 
             if (!Directory.Exists(modulesDirectory))
@@ -43,8 +45,10 @@ namespace SokuLauncher.Utils
                     ModInfoList.Add(new ModInfoModel(dllFilePath));
                 }
             }
+        }
 
-            // load SWRSToys.ini setting
+        public void LoadSWRSToysSetting()
+        {
             string iniFilePath = Path.Combine(SokuDir, "SWRSToys.ini");
 
             if (!File.Exists(iniFilePath))
@@ -86,9 +90,14 @@ namespace SokuLauncher.Utils
             }
         }
     
+        public ModInfoModel GetModInfoByModName(string modName)
+        {
+            return ModInfoList.FirstOrDefault(x => x.Name.ToLower() == modName.ToLower() || x.DirName.ToLower() == modName.ToLower() && x.SameDirModPathList.Count == 0);
+        }
+
         public void ChangeModEnabled(string modName, bool enabled)
         {
-            var modInfo = ModInfoList.FirstOrDefault(x => x.Name.ToLower() == modName.ToLower() || x.DirName.ToLower() == modName.ToLower() && x.SameDirModPathList.Count == 0);
+            var modInfo = GetModInfoByModName(modName);
             if (modInfo != null) {
                 modInfo.Enabled = enabled;
             }

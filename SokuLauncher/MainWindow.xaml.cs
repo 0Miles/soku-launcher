@@ -1,11 +1,8 @@
-﻿using Newtonsoft.Json;
-using SokuLauncher.Model;
-using SokuLauncher.Utils;
+﻿using SokuLauncher.Utils;
 using SokuLauncher.ViewModel;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -19,9 +16,6 @@ namespace SokuLauncher
 
         public MainWindow()
         {
-
-            ConfigUtil.ReadConfig();
-
             if (ViewModel == null)
             {
                 ViewModel = new MainWindwoViewModel();
@@ -61,31 +55,33 @@ namespace SokuLauncher
             try
             {
                 var settingGroup = ViewModel.SelectedSokuModSettingGroup;
-                                
+
                 string sokuFile = Path.Combine(ConfigUtil.SokuDirFullPath, ConfigUtil.Config.SokuFileName);
-                ModsManager modsManager = new ModsManager();
+
                 foreach (var enableMod in settingGroup.EnableMods)
                 {
-                    modsManager.ChangeModEnabled(enableMod, true);
+                    StaticVariable.ModsManager.ChangeModEnabled(enableMod, true);
                 }
                 foreach (var disableMod in settingGroup.DisableMods)
                 {
-                    modsManager.ChangeModEnabled(disableMod, false);
+                    StaticVariable.ModsManager.ChangeModEnabled(disableMod, false);
                 }
-                modsManager.SaveSWRSToysIni();
+                StaticVariable.ModsManager.SaveSWRSToysIni();
 
                 if (!File.Exists(sokuFile))
                 {
                     throw new Exception($"The '{ConfigUtil.Config.SokuFileName}' file does not exist.");
                 }
 
-                HideWindow((s, _) => {
+                HideWindow((s, _) =>
+                {
                     Directory.SetCurrentDirectory(ConfigUtil.SokuDirFullPath);
                     Process.Start(sokuFile);
                     Close();
                 });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message);
             }
         }
@@ -140,7 +136,7 @@ namespace SokuLauncher
             DoubleAnimation fadeOutAnimation = new DoubleAnimation(0, new Duration(TimeSpan.FromMilliseconds(500)));
             fadeOutAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
             window.Opacity = 1;
-            window.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
+            window.BeginAnimation(OpacityProperty, fadeOutAnimation);
 
             DoubleAnimation moveAnimation = new DoubleAnimation(-500, new Duration(TimeSpan.FromMilliseconds(500)));
             moveAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
