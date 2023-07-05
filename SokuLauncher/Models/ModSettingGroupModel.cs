@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SokuLauncher.Model
 {
-    public class ModSettingGroupModel
+    internal class ModSettingGroupModel
     {
         public string Name { get; set; } = string.Empty;
         public string Desc { get; set; } = string.Empty;

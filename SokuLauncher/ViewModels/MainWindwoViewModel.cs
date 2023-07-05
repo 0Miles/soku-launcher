@@ -1,15 +1,17 @@
 ﻿using SokuLauncher.Model;
-using System;
+using SokuLauncher.Utils;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SokuLauncher.ViewModel
 {
     internal class MainWindwoViewModel
     {
-        public ConfigModel Config { get; set; } = new ConfigModel();
+        public List<ModSettingGroupModel> SokuModSettingGroups { 
+            get
+            {
+                return ConfigUtil.Config.SokuModSettingGroups;
+            }
+        }
         public ModSettingGroupModel SelectedSokuModSettingGroup { get; set; }
     }
 }

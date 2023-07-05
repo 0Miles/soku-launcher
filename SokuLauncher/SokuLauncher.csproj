@@ -101,13 +101,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converter\ReverseBooleanToVisibilityConverter.cs" />
-    <Compile Include="Converter\RelativePathConverter.cs" />
-    <Compile Include="Model\ModInfoModel.cs" />
-    <Compile Include="ModsManager.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\ReverseBooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\RelativePathConverter.cs" />
+    <Compile Include="Models\ModInfoModel.cs" />
+    <Compile Include="Utils\ConfigUtil.cs" />
+    <Compile Include="Utils\ModsManager.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ViewModel\MainWindwoViewModel.cs" />
+    <Compile Include="ViewModels\MainWindwoViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -122,8 +123,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ConfigModel.cs" />
-    <Compile Include="Model\ModSettingGroupModel.cs" />
+    <Compile Include="Models\ConfigModel.cs" />
+    <Compile Include="Models\ModSettingGroupModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

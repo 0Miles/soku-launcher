@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace SokuLauncher
+namespace SokuLauncher.Utils
 {
     internal class ModsManager
     {
@@ -16,7 +16,7 @@ namespace SokuLauncher
         {
             if (sokuDir == null)
             {
-                SokuDir = AppDomain.CurrentDomain.BaseDirectory;
+                SokuDir = ConfigUtil.SokuDirFullPath;
             }
             else
             {
@@ -75,7 +75,7 @@ namespace SokuLauncher
                     if (splitedLine.Length > 1 && !splitedLine[0].StartsWith(";"))
                     {
                         string[] splitedPath = splitedLine[1].Split(';');
-                        string fullPath = Path.GetFullPath(Path.Combine(SokuDir, splitedPath[0].Trim()));
+                        string fullPath = Path.Combine(SokuDir, splitedPath[0].Trim().Replace('/', '\\'));
                         var modInfo = ModInfoList.FirstOrDefault(x => x.FullPath.ToLower() == fullPath.ToLower());
                         if (modInfo != null)
                         {
@@ -96,6 +96,7 @@ namespace SokuLauncher
 
         public void SaveSWRSToysIni()
         {
+            Directory.SetCurrentDirectory(SokuDir);
             string modLoaderSettingPath = Path.Combine(SokuDir, "ModLoaderSettings.json");
             if (File.Exists(modLoaderSettingPath))
             {
@@ -121,7 +122,7 @@ namespace SokuLauncher
             Uri relativeUri = baseUri.MakeRelativeUri(absoluteUri);
             string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
-            return relativePath.Replace('/', Path.DirectorySeparatorChar);
+            return relativePath;
         }
     }
 }

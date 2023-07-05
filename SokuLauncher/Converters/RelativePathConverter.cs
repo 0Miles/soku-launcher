@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Windows.Data;
 
 namespace SokuLauncher.Converter
@@ -12,7 +13,10 @@ namespace SokuLauncher.Converter
             string relativePath = value as string;
             if (!string.IsNullOrEmpty(relativePath))
             {
-                string absolutePath = Path.GetFullPath(relativePath);
+                string exePath = Assembly.GetExecutingAssembly().Location;
+                string exeDirectory = Path.GetDirectoryName(exePath);
+
+                string absolutePath = Path.GetFullPath(Path.Combine(exeDirectory, relativePath));
                 return absolutePath;
             }
             return null;

@@ -11,6 +11,7 @@ namespace SokuLauncher.Model
         public string FullPath { get; set; }
         public string DirName { get; set; }
         public bool Enabled { get; set; } = false;
+
         private List<string> _SameDirModPathList;
         public List<string> SameDirModPathList {
             get

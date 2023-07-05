@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SokuLauncher.Model;
+using SokuLauncher.Utils;
 using SokuLauncher.ViewModel;
 using System;
 using System.Diagnostics;
@@ -14,21 +15,19 @@ namespace SokuLauncher
 {
     public partial class MainWindow : Window
     {
-        const string CONFIG_FILE_NAME = "SokuLauncher.json";
-
         MainWindwoViewModel ViewModel { get; set; }
-
 
         public MainWindow()
         {
+
+            ConfigUtil.ReadConfig();
+
             if (ViewModel == null)
             {
                 ViewModel = new MainWindwoViewModel();
             }
-            ReadConfig();
             DataContext = ViewModel;
             InitializeComponent();
-
         }
 
         private void WrapPanel_Loaded(object sender, RoutedEventArgs e)
@@ -52,18 +51,6 @@ namespace SokuLauncher
             }
         }
 
-        private void ReadConfig()
-        {
-            if (!File.Exists(CONFIG_FILE_NAME))
-            {
-                var jsonString = JsonConvert.SerializeObject(new ConfigModel());
-                File.WriteAllText(CONFIG_FILE_NAME, jsonString);
-            }
-
-            var json = File.ReadAllText(CONFIG_FILE_NAME);
-            ViewModel.Config = JsonConvert.DeserializeObject<ConfigModel>(json) ?? new ConfigModel();
-        }
-
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             CloseWindow();
@@ -74,10 +61,9 @@ namespace SokuLauncher
             try
             {
                 var settingGroup = ViewModel.SelectedSokuModSettingGroup;
-
-                string sokuDir = Path.GetFullPath($"{ViewModel.Config.SokuDirPath}/");
-                string sokuFile = Path.Combine(sokuDir, ViewModel.Config.SokuFileName);
-                ModsManager modsManager = new ModsManager(sokuDir);
+                                
+                string sokuFile = Path.Combine(ConfigUtil.SokuDirFullPath, ConfigUtil.Config.SokuFileName);
+                ModsManager modsManager = new ModsManager();
                 foreach (var enableMod in settingGroup.EnableMods)
                 {
                     modsManager.ChangeModEnabled(enableMod, true);
@@ -90,11 +76,11 @@ namespace SokuLauncher
 
                 if (!File.Exists(sokuFile))
                 {
-                    throw new Exception($"The '{ViewModel.Config.SokuFileName}' file does not exist.");
+                    throw new Exception($"The '{ConfigUtil.Config.SokuFileName}' file does not exist.");
                 }
 
                 HideWindow((s, _) => {
-                    Directory.SetCurrentDirectory(sokuDir);
+                    Directory.SetCurrentDirectory(ConfigUtil.SokuDirFullPath);
                     Process.Start(sokuFile);
                     Close();
                 });
