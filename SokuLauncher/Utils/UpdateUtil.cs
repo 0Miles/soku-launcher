@@ -37,59 +37,53 @@ namespace SokuLauncher.Utils
 
         public void CheckUpdate()
         {
-            AvailableUpdateList.Clear();
-            List<UpdateVersionInfoModel> latestVersionInfoList = GetLatestVersionInfoList();
-
-            foreach (UpdateVersionInfoModel lastestVersionInfo in latestVersionInfoList)
-            {
-                Version latestVersion = new Version(lastestVersionInfo.Version);
-
-                string localFileName;
-                Version currentVersion;
-
-                switch (lastestVersionInfo.Name)
-                {
-                    case "SokuLauncher":
-                        currentVersion = GetFileCurrentVersion(SelfFileName);
-                        localFileName = SelfFileName;
-                        break;
-                    default:
-                        ConfigUtil.Config.SokuModVersion.TryGetValue(lastestVersionInfo.Name, out string modCurrentVersion);
-                        if (modCurrentVersion == null)
-                        {
-                            continue;
-                        }
-                        currentVersion = new Version(modCurrentVersion);
-                        var modInfo = StaticVariable.ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
-                        if (modInfo == null)
-                        {
-                            continue;
-                        }
-                        localFileName = modInfo.FullPath;
-                        break;
-                }
-
-                if (currentVersion != null && latestVersion > currentVersion)
-                {
-                    AvailableUpdateList.Add(new UpdateFileInfoModel
-                    {
-                        FileName = lastestVersionInfo.FileName,
-                        DownloadUrl = lastestVersionInfo.DownloadUrl,
-                        LocalFileName = localFileName,
-                        Compressed = lastestVersionInfo.Compressed
-                    });
-                }
-            }
-        }
-
-        private List<UpdateVersionInfoModel> GetLatestVersionInfoList()
-        {
             try
             {
-                using (WebClient client = new WebClient())
+                WebClient client = new WebClient();
+                string response = client.DownloadString(VERSION_URL);
+
+                List<UpdateVersionInfoModel> latestVersionInfoList = JsonConvert.DeserializeObject<List<UpdateVersionInfoModel>>(response);
+
+                AvailableUpdateList.Clear();
+                foreach (UpdateVersionInfoModel lastestVersionInfo in latestVersionInfoList)
                 {
-                    string response = client.DownloadString(VERSION_URL);
-                    return JsonConvert.DeserializeObject<List<UpdateVersionInfoModel>>(response);
+                    Version latestVersion = new Version(lastestVersionInfo.Version);
+
+                    string localFileName;
+                    Version currentVersion;
+
+                    switch (lastestVersionInfo.Name)
+                    {
+                        case "SokuLauncher":
+                            currentVersion = GetFileCurrentVersion(SelfFileName);
+                            localFileName = SelfFileName;
+                            break;
+                        default:
+                            ConfigUtil.Config.SokuModVersion.TryGetValue(lastestVersionInfo.Name, out string modCurrentVersion);
+                            if (modCurrentVersion == null)
+                            {
+                                continue;
+                            }
+                            currentVersion = new Version(modCurrentVersion);
+                            var modInfo = StaticVariable.ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
+                            if (modInfo == null)
+                            {
+                                continue;
+                            }
+                            localFileName = modInfo.FullPath;
+                            break;
+                    }
+
+                    if (currentVersion != null && latestVersion > currentVersion)
+                    {
+                        AvailableUpdateList.Add(new UpdateFileInfoModel
+                        {
+                            FileName = lastestVersionInfo.FileName,
+                            DownloadUrl = lastestVersionInfo.DownloadUrl,
+                            LocalFileName = localFileName,
+                            Compressed = lastestVersionInfo.Compressed
+                        });
+                    }
                 }
             }
             catch (Exception ex)
