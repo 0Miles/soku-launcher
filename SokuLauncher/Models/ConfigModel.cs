@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SokuLauncher.Model
+namespace SokuLauncher.Models
 {
     internal class ConfigModel
     {

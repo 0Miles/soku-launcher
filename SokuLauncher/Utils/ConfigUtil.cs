@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SokuLauncher.Model;
+using SokuLauncher.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

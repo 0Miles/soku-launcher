@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Data;
 
-namespace SokuLauncher.Converter
+namespace SokuLauncher.Converters
 {
     public class RelativePathConverter : IValueConverter
     {

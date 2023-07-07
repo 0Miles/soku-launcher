@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace SokuLauncher.Model
+namespace SokuLauncher.Models
 {
     internal class ModInfoModel
     {

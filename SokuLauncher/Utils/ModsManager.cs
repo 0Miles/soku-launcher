@@ -1,5 +1,4 @@
-﻿using SokuLauncher.Converter;
-using SokuLauncher.Model;
+﻿using SokuLauncher.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

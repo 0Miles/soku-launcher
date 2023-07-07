@@ -1,5 +1,4 @@
-﻿using SokuLauncher.Utils;
-using SokuLauncher.ViewModel;
+﻿using SokuLauncher.ViewModels;
 using System;
 using System.Diagnostics;
 using System.IO;

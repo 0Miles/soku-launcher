@@ -3,7 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 
-namespace SokuLauncher.Converter
+namespace SokuLauncher.Converters
 {
     public class ReverseBooleanToVisibilityConverter : IValueConverter
     {

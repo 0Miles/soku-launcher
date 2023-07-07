@@ -106,6 +106,7 @@
     <Compile Include="Converters\ReverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\RelativePathConverter.cs" />
     <Compile Include="Models\ModInfoModel.cs" />
+    <Compile Include="Models\SelectorNodeModel.cs" />
     <Compile Include="Models\UpdateFileModel.cs" />
     <Compile Include="Models\UpdateVersionInfoModel.cs" />
     <Compile Include="Static.cs" />
@@ -115,6 +116,10 @@
     <Compile Include="Utils\ResourceManager.cs" />
     <Compile Include="Utils\UpdateUtil.cs" />
     <Compile Include="ViewModels\MainWindwoViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Controls\SelectorWindow.xaml.cs">
+      <DependentUpon>SelectorWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -127,6 +132,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Controls\SelectorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ConfigModel.cs" />

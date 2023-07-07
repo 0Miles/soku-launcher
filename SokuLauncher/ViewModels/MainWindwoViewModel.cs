@@ -1,5 +1,4 @@
-﻿using SokuLauncher.Model;
-using SokuLauncher.ViewModels;
+﻿using SokuLauncher.Models;
 using System.Collections.Generic;
 
 namespace SokuLauncher.ViewModels
