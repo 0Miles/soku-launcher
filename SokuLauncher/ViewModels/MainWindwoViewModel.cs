@@ -9,7 +9,7 @@ namespace SokuLauncher.ViewModel
         public List<ModSettingGroupModel> SokuModSettingGroups { 
             get
             {
-                return ConfigUtil.Config.SokuModSettingGroups;
+                return Static.ConfigUtil.Config.SokuModSettingGroups;
             }
         }
         public ModSettingGroupModel SelectedSokuModSettingGroup { get; set; }

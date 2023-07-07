@@ -56,26 +56,26 @@ namespace SokuLauncher
             {
                 var settingGroup = ViewModel.SelectedSokuModSettingGroup;
 
-                string sokuFile = Path.Combine(ConfigUtil.SokuDirFullPath, ConfigUtil.Config.SokuFileName);
+                string sokuFile = Path.Combine(Static.ConfigUtil.SokuDirFullPath, Static.ConfigUtil.Config.SokuFileName);
 
                 foreach (var enableMod in settingGroup.EnableMods)
                 {
-                    StaticVariable.ModsManager.ChangeModEnabled(enableMod, true);
+                    Static.ModsManager.ChangeModEnabled(enableMod, true);
                 }
                 foreach (var disableMod in settingGroup.DisableMods)
                 {
-                    StaticVariable.ModsManager.ChangeModEnabled(disableMod, false);
+                    Static.ModsManager.ChangeModEnabled(disableMod, false);
                 }
-                StaticVariable.ModsManager.SaveSWRSToysIni();
+                Static.ModsManager.SaveSWRSToysIni();
 
                 if (!File.Exists(sokuFile))
                 {
-                    throw new Exception($"The '{ConfigUtil.Config.SokuFileName}' file does not exist.");
+                    throw new Exception($"The '{Static.ConfigUtil.Config.SokuFileName}' file does not exist.");
                 }
 
                 HideWindow((s, _) =>
                 {
-                    Directory.SetCurrentDirectory(ConfigUtil.SokuDirFullPath);
+                    Directory.SetCurrentDirectory(Static.ConfigUtil.SokuDirFullPath);
                     Process.Start(sokuFile);
                     Close();
                 });

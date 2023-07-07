@@ -20,14 +20,11 @@ namespace SokuLauncher.Utils
         public event Action<int> DownloadProgressChanged;
         public List<UpdateFileInfoModel> AvailableUpdateList { get; private set; } = new List<UpdateFileInfoModel>();
 
-        private readonly string TempDirPath;
-        private readonly string SelfFileName;
+        private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "update");
 
         public UpdateUtil()
         {
-            TempDirPath = Path.Combine(Path.GetTempPath(), $"SokuLauncher");
-            Directory.CreateDirectory(TempDirPath);
-            SelfFileName = System.Reflection.Assembly.GetEntryAssembly().Location;
+            Directory.CreateDirectory(UpdateTempDirPath);
         }
 
         private Version GetFileCurrentVersion(string fileName)
@@ -55,17 +52,17 @@ namespace SokuLauncher.Utils
                     switch (lastestVersionInfo.Name)
                     {
                         case "SokuLauncher":
-                            currentVersion = GetFileCurrentVersion(SelfFileName);
-                            localFileName = SelfFileName;
+                            currentVersion = GetFileCurrentVersion(Static.SelfFileName);
+                            localFileName = Static.SelfFileName;
                             break;
                         default:
-                            ConfigUtil.Config.SokuModVersion.TryGetValue(lastestVersionInfo.Name, out string modCurrentVersion);
+                            Static.ConfigUtil.Config.SokuModVersion.TryGetValue(lastestVersionInfo.Name, out string modCurrentVersion);
                             if (modCurrentVersion == null)
                             {
                                 continue;
                             }
                             currentVersion = new Version(modCurrentVersion);
-                            var modInfo = StaticVariable.ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
+                            var modInfo = Static.ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
                             if (modInfo == null)
                             {
                                 continue;
@@ -97,7 +94,7 @@ namespace SokuLauncher.Utils
             try
             {
                 string remoteFileName = Path.GetFileName(updateFileInfo.DownloadUrl);
-                string downloadToTempFilePath = Path.Combine(TempDirPath, remoteFileName);
+                string downloadToTempFilePath = Path.Combine(UpdateTempDirPath, remoteFileName);
 
                 using (WebClient client = new WebClient())
                 {
@@ -107,7 +104,7 @@ namespace SokuLauncher.Utils
 
                 if (updateFileInfo.Compressed)
                 {
-                    ZipFile.ExtractToDirectory(downloadToTempFilePath, TempDirPath);
+                    ZipFile.ExtractToDirectory(downloadToTempFilePath, UpdateTempDirPath);
                     File.Delete(downloadToTempFilePath);
                 }
 
@@ -120,17 +117,17 @@ namespace SokuLauncher.Utils
 
         public void ReplaceFile(UpdateFileInfoModel updateFileInfo)
         {
-            string newVersionFileName = Path.Combine(TempDirPath, updateFileInfo.FileName);
+            string newVersionFileName = Path.Combine(UpdateTempDirPath, updateFileInfo.FileName);
             if (File.Exists(newVersionFileName))
             {
-                if (updateFileInfo.LocalFileName == SelfFileName)
+                if (updateFileInfo.LocalFileName == Static.SelfFileName)
                 {
                     // replace self
-                    string replaceBatPath = Path.Combine(TempDirPath, "replace.bat");
+                    string replaceBatPath = Path.Combine(UpdateTempDirPath, "replace.bat");
 
-                    string batContent = $"copy \"{newVersionFileName}\" \"{SelfFileName}\" /Y{Environment.NewLine}";
+                    string batContent = $"copy \"{newVersionFileName}\" \"{Static.SelfFileName}\" /Y{Environment.NewLine}";
                     batContent += $"del \"{newVersionFileName}\"{Environment.NewLine}";
-                    batContent += $"start \"\" \"{SelfFileName}\"{Environment.NewLine}";
+                    batContent += $"start \"\" \"{Static.SelfFileName}\"{Environment.NewLine}";
                     batContent += $"del \"{replaceBatPath}\"";
 
                     File.WriteAllText(replaceBatPath, batContent);

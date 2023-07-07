@@ -16,7 +16,7 @@ namespace SokuLauncher.Utils
         {
             if (sokuDir == null)
             {
-                SokuDir = ConfigUtil.SokuDirFullPath;
+                SokuDir = Static.ConfigUtil.SokuDirFullPath;
             }
             else
             {
@@ -118,20 +118,10 @@ namespace SokuLauncher.Utils
                 writer.WriteLine("[Module]");
                 foreach (var modInfo in ModInfoList)
                 {
-                    writer.WriteLine((modInfo.Enabled ? "" : ";") + $"{modInfo.Name}={GetRelativePath(modInfo.FullPath)}");
+                    writer.WriteLine((modInfo.Enabled ? "" : ";") + $"{modInfo.Name}={Static.GetRelativePath(modInfo.FullPath, SokuDir)}");
                 }
                 writer.Close();
             }
-        }
-
-        private string GetRelativePath(string absolutePath)
-        {
-            Uri baseUri = new Uri(SokuDir);
-            Uri absoluteUri = new Uri(absolutePath);
-            Uri relativeUri = baseUri.MakeRelativeUri(absoluteUri);
-            string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
-
-            return relativePath;
         }
     }
 }

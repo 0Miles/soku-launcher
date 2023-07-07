@@ -13,10 +13,9 @@ namespace SokuLauncher.Converter
             string relativePath = value as string;
             if (!string.IsNullOrEmpty(relativePath))
             {
-                string exePath = Assembly.GetExecutingAssembly().Location;
-                string exeDirectory = Path.GetDirectoryName(exePath);
+                relativePath = relativePath.Replace("%tmp%", Path.GetTempPath());
 
-                string absolutePath = Path.GetFullPath(Path.Combine(exeDirectory, relativePath));
+                string absolutePath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, relativePath));
                 return absolutePath;
             }
             return null;

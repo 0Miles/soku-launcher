@@ -108,10 +108,11 @@
     <Compile Include="Models\ModInfoModel.cs" />
     <Compile Include="Models\UpdateFileModel.cs" />
     <Compile Include="Models\UpdateVersionInfoModel.cs" />
-    <Compile Include="StaticVariable.cs" />
+    <Compile Include="Static.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
     <Compile Include="Utils\ModsManager.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Utils\ResourceManager.cs" />
     <Compile Include="Utils\UpdateUtil.cs" />
     <Compile Include="ViewModels\MainWindwoViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -169,7 +170,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\cover1.mp4" />
+    <EmbeddedResource Include="Resources\cover2.mp4" />
+  </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>

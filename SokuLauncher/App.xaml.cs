@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,21 +18,30 @@ namespace SokuLauncher
 
             try
             {
-                ConfigUtil.ReadConfig();
-                StaticVariable.ModsManager = new ModsManager();
-                StaticVariable.ModsManager.SearchModulesDir();
-                StaticVariable.ModsManager.LoadSWRSToysSetting();
+                Static.TempDirPath = Path.Combine(Path.GetTempPath(), "SokuLauncher");
+                Directory.CreateDirectory(Static.TempDirPath);
+                Directory.CreateDirectory(Path.Combine(Static.TempDirPath, "Resources"));
 
-                StaticVariable.UpdateUtil = new UpdateUtil();
-                StaticVariable.UpdateUtil.CheckUpdate();
-                if (StaticVariable.UpdateUtil.AvailableUpdateList.Count > 0)
+                Static.ResourcesManager = new ResourceManager();
+                Static.ResourcesManager.CopyVideoResources();
+
+                Static.ConfigUtil = new ConfigUtil();
+                Static.ConfigUtil.ReadConfig();
+
+                Static.ModsManager = new ModsManager();
+                Static.ModsManager.SearchModulesDir();
+                Static.ModsManager.LoadSWRSToysSetting();
+
+                Static.UpdateUtil = new UpdateUtil();
+                Static.UpdateUtil.CheckUpdate();
+                if (Static.UpdateUtil.AvailableUpdateList.Count > 0)
                 {
                     if (MessageBox.Show("Update detected. Would you like to download the new version?", "Update", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        foreach (var updateFileInfo in StaticVariable.UpdateUtil.AvailableUpdateList)
+                        foreach (var updateFileInfo in Static.UpdateUtil.AvailableUpdateList)
                         {
-                            StaticVariable.UpdateUtil.DownloadAndExtractFile(updateFileInfo);
-                            StaticVariable.UpdateUtil.ReplaceFile(updateFileInfo);
+                            Static.UpdateUtil.DownloadAndExtractFile(updateFileInfo);
+                            Static.UpdateUtil.ReplaceFile(updateFileInfo);
                         }
                     }
                 }
