@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SokuLauncher" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:converters="clr-namespace:SokuLauncher.Converters"
         mc:Ignorable="d"
         x:Name="SokuLauncherMainWindow" Background="{x:Null}" AllowsTransparency="True" WindowStyle="None" Topmost="True"
-        Title="SokuLauncher" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight" Icon="/Resources/icon.ico">
+        Title="SokuLauncher" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight" Icon="/Resources/icon.ico">
     <Window.Resources>
         <converters:RelativePathConverter x:Key="RelativePathConverter" />
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

@@ -143,5 +143,10 @@ namespace SokuLauncher
             MainGrid.RenderTransform = new TranslateTransform(0, 0);
             MainGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation, HandoffBehavior.Compose);
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel.SokuModSettingGroups = Static.ConfigUtil.Config.SokuModSettingGroups;
+        }
     }
 }

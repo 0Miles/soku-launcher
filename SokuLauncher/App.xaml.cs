@@ -16,6 +16,8 @@ namespace SokuLauncher
         {
             base.OnStartup(e);
 
+            MainWindow mainWindow = new MainWindow();
+
             try
             {
                 Static.TempDirPath = Path.Combine(Path.GetTempPath(), "SokuLauncher");
@@ -50,8 +52,6 @@ namespace SokuLauncher
             {
                 MessageBox.Show(ex.Message);
             }
-
-            MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
         }
     }

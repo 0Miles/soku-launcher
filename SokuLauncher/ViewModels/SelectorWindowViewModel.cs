@@ -1,12 +1,14 @@
 ﻿using SokuLauncher.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace SokuLauncher.ViewModels
 {
     public class SelectorWindowViewModel: ViewModelBase
     {
-        public bool IsMutiSelect { get; set; }
+        public bool IsMutiSelect { get; set; } = false;
 
         private string _Title;
         public string Title

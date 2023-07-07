@@ -1,17 +1,21 @@
 ﻿using Newtonsoft.Json;
+using SokuLauncher.Controls;
 using SokuLauncher.Models;
+using SokuLauncher.ViewModels;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Imaging;
 
 namespace SokuLauncher.Utils
 {
     internal class ConfigUtil
     {
         const string CONFIG_FILE_NAME = "SokuLauncher.json";
-
+        const string SOKU_FILENAME_REGEX = @"th123(?:\s+)?\-?(?:\s+)?(?:\w+)?\.exe";
         public ConfigModel Config { get; set; } = new ConfigModel();
         public string SokuDirFullPath { get; set; }
 
@@ -36,6 +40,17 @@ namespace SokuLauncher.Utils
                 var json = File.ReadAllText(configFileName);
 
                 Config = JsonConvert.DeserializeObject<ConfigModel>(json) ?? new ConfigModel();
+
+                if (!CheckSokuDirAndFileExists(Config.SokuDirPath, Config.SokuFileName))
+                {
+                    Config.SokuDirPath = FindSokuDir();
+
+                    if (Config.SokuDirPath != null)
+                    {
+                        Config.SokuFileName = SelectSokuFile(Config.SokuDirPath);
+                    }
+                    SaveConfig();
+                }
             }
 
             SokuDirFullPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, $"{Config.SokuDirPath}/"));
@@ -52,7 +67,14 @@ namespace SokuLauncher.Utils
         private ConfigModel GenerateConfig()
         {
             ConfigModel config = new ConfigModel();
+
             config.SokuDirPath = FindSokuDir();
+
+            if (config.SokuDirPath != null)
+            {
+                config.SokuFileName = SelectSokuFile(config.SokuDirPath);
+            }
+
             config.SokuModSettingGroups = new List<ModSettingGroupModel>
             {
                 new ModSettingGroupModel
@@ -98,6 +120,15 @@ namespace SokuLauncher.Utils
             return config;
         }
 
+        private bool CheckSokuDirAndFileExists(string sokuDir, string sokuFileName)
+        {
+            string sokuDirFullPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, $"{sokuDir}/"));
+            if (!Directory.Exists(sokuDirFullPath) || !File.Exists(Path.Combine(sokuDirFullPath, sokuFileName)))
+            {
+                return false;
+            }
+            return true;
+        }
 
         private string FindSokuDir()
         {
@@ -106,11 +137,11 @@ namespace SokuLauncher.Utils
 
             foreach (string directory in directoriesToSearch)
             {
-                string[] matchingFiles = Directory.GetFiles(directory, "*.exe");
-                foreach (string file in matchingFiles)
+                string[] exeFiles = Directory.GetFiles(directory, "*.exe");
+                foreach (string file in exeFiles)
                 {
                     string fileName = Path.GetFileName(file);
-                    if (Regex.IsMatch(fileName, @"th123-?\w?\.exe"))
+                    if (Regex.IsMatch(fileName, SOKU_FILENAME_REGEX))
                     {
                         return Static.GetRelativePath(directory, Static.SelfFileDir);
                     }
@@ -118,6 +149,65 @@ namespace SokuLauncher.Utils
             }
 
             return null;
+        }
+
+        private List<string> FindSokuFiles(string directory)
+        {
+            List<string> result = new List<string>();
+            string[] exeFiles = Directory.GetFiles(directory, "*.exe");
+            foreach (string file in exeFiles)
+            {
+                string fileName = Path.GetFileName(file);
+                if (Regex.IsMatch(fileName, SOKU_FILENAME_REGEX))
+                {
+                    result.Add(fileName);
+                }
+            }
+            return result;
+        }
+    
+        private string SelectSokuFile(string sokuDirPath)
+        {
+            var SokuFileNames = FindSokuFiles(sokuDirPath);
+            if (SokuFileNames.Count > 0)
+            {
+
+                SelectorWindowViewModel swvm = new SelectorWindowViewModel
+                {
+                    Title = "Choose the executable file",
+                    Desc = "Multiple th123 executable files found. Please select the file to be set as the default launcher.",
+                    SelectorNodeList = new List<SelectorNodeModel>()
+                };
+
+                foreach (string fileName in SokuFileNames)
+                {
+                    Icon icon = Icon.ExtractAssociatedIcon(Path.Combine(sokuDirPath, fileName));
+                    BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
+                        icon.Handle,
+                        System.Windows.Int32Rect.Empty,
+                        BitmapSizeOptions.FromWidthAndHeight(icon.Width, icon.Height));
+                    icon.Dispose();
+                    swvm.SelectorNodeList.Add(new SelectorNodeModel
+                    {
+                        Title = fileName,
+                        Icon = bitmapSource
+                    });
+                }
+
+                (swvm.SelectorNodeList.FirstOrDefault(x => x.Title == "th123.exe") ?? swvm.SelectorNodeList.First()).Selected = true;
+                SelectorWindow selectorWindow = new SelectorWindow(swvm);
+                selectorWindow.ShowDialog();
+
+                if (selectorWindow.DialogResult == true)
+                {
+                    return swvm.SelectorNodeList.FirstOrDefault(x => x.Selected)?.Title ?? "";
+                }
+            }
+            else
+            {
+                return SokuFileNames.First();
+            }
+            return "";
         }
     }
 }

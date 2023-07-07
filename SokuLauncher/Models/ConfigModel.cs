@@ -7,7 +7,7 @@ namespace SokuLauncher.Models
         public List<ModSettingGroupModel> SokuModSettingGroups { get; set; }
         public Dictionary<string, string> SokuModVersion { get; set; }
         public List<string> SokuModAlias { get; set; }
-        public string SokuFileName { get; set; } = "th123.exe";
-        public string SokuDirPath { get; set; } = ".";
+        public string SokuFileName { get; set; }
+        public string SokuDirPath { get; set; }
     }
 }

@@ -5,10 +5,17 @@ namespace SokuLauncher.ViewModels
 {
     internal class MainWindwoViewModel: ViewModelBase
     {
-        public List<ModSettingGroupModel> SokuModSettingGroups { 
+        private List<ModSettingGroupModel> _SokuModSettingGroups;
+        public List<ModSettingGroupModel> SokuModSettingGroups
+        {
             get
             {
-                return Static.ConfigUtil.Config.SokuModSettingGroups;
+                return _SokuModSettingGroups;
+            }
+            set
+            {
+                _SokuModSettingGroups = value;
+                RaisePropertyChanged("SokuModSettingGroups");
             }
         }
         public ModSettingGroupModel SelectedSokuModSettingGroup { get; set; }
