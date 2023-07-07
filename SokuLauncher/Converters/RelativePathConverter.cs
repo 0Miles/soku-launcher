@@ -13,6 +13,11 @@ namespace SokuLauncher.Converters
             string relativePath = value as string;
             if (!string.IsNullOrEmpty(relativePath))
             {
+                if (relativePath.StartsWith("%resources%"))
+                {
+                    return relativePath.Replace("%resources%", "pack://application:,,,/Resources");
+                }
+
                 relativePath = relativePath.Replace("%tmp%", Path.GetTempPath());
 
                 string absolutePath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, relativePath));

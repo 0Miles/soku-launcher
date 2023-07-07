@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="SokuLauncher.Controls.ModSettingGroupUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:converters="clr-namespace:SokuLauncher.Converters" xmlns:models="clr-namespace:SokuLauncher.Models" d:DataContext="{d:DesignInstance Type=models:ModSettingGroupModel}"
+             mc:Ignorable="d" 
+             Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <converters:RelativePathConverter x:Key="RelativePathConverter" />
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+
+        <Style x:Key="BorderButtonStyle" TargetType="{x:Type Border}">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleX)" To="1.035" Duration="0:0:0.2">
+                                    <DoubleAnimation.EasingFunction>
+                                        <QuadraticEase EasingMode="EaseIn"></QuadraticEase>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleY)" To="1.035" Duration="0:0:0.2">
+                                    <DoubleAnimation.EasingFunction>
+                                        <QuadraticEase EasingMode="EaseIn"></QuadraticEase>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="BorderOpacityStyle" TargetType="{x:Type Border}">
+            <Setter Property="Opacity" Value=".6"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To=".3" Duration="0:0:1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To=".6" Duration="0:0:.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Border MouseEnter="WrapperBorder_MouseEnter" MouseLeave="WrapperBorder_MouseLeave" Style="{StaticResource BorderButtonStyle}" Background="Black" BorderThickness="0" HorizontalAlignment="Stretch" Cursor="Hand">
+        <Grid>
+            <Grid x:Name="CoverGrid" ClipToBounds="True">
+            </Grid>
+            <Border Background="{Binding CoverOverlayColor}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <Border Style="{StaticResource BorderOpacityStyle}" Background="{Binding HoverColor}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <Grid VerticalAlignment="Center" Margin="48,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Name}" IsHitTestVisible="False" Foreground="{Binding NameColor}" FontSize="32" HorizontalAlignment="Center"  Visibility="{Binding Name, Converter={StaticResource StringToVisibilityConverter}}" />
+                <TextBlock Grid.Row="1" Text="{Binding Desc}" IsHitTestVisible="False" Foreground="{Binding DescColor}" FontSize="16" HorizontalAlignment="Center" Margin="0,16" Visibility="{Binding Desc, Converter={StaticResource StringToVisibilityConverter}}" />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

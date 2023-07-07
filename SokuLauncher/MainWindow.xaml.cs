@@ -88,34 +88,6 @@ namespace SokuLauncher
             SokuModSettingGroupListView.SelectedItem = null;
         }
 
-        private void MediaElement_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            MediaElement mediaElement = (MediaElement)sender;
-            mediaElement.Position = TimeSpan.FromMilliseconds(1);
-            mediaElement.Play();
-        }
-
-        private void MediaElement_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            MediaElement mediaElement = (MediaElement)sender;
-            mediaElement.Position = TimeSpan.FromMilliseconds(1);
-            mediaElement.Stop();
-        }
-
-        private void MediaElement_Loaded(object sender, RoutedEventArgs e)
-        {
-            MediaElement mediaElement = (MediaElement)sender;
-            mediaElement.Position = TimeSpan.FromMilliseconds(1);
-            mediaElement.Pause();
-        }
-
-        private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
-        {
-            MediaElement mediaElement = (MediaElement)sender;
-            mediaElement.Position = TimeSpan.FromMilliseconds(1);
-            mediaElement.Play();
-        }
-
         private void HideWindow(EventHandler callBack)
         {
             Window window = SokuLauncherMainWindow;
