@@ -132,7 +132,7 @@ namespace SokuLauncher.Utils
         private string FindSokuDir()
         {
             string currentDirectory = Directory.GetCurrentDirectory();
-            List<string> directoriesToSearch = new List<string> { currentDirectory, ".." }.Concat(Directory.GetDirectories(currentDirectory, "*", SearchOption.AllDirectories)).ToList();
+            List<string> directoriesToSearch = new List<string> { currentDirectory, Path.Combine(Static.SelfFileDir, "..") }.Concat(Directory.GetDirectories(currentDirectory, "*", SearchOption.AllDirectories)).ToList();
 
             foreach (string directory in directoriesToSearch)
             {
