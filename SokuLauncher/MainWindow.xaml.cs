@@ -51,6 +51,7 @@ namespace SokuLauncher
 
         private void SokuModSettingGroupsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (ViewModel.SelectedSokuModSettingGroup == null) return;
             try
             {
                 var settingGroup = ViewModel.SelectedSokuModSettingGroup;
@@ -65,6 +66,7 @@ namespace SokuLauncher
                 {
                     Static.ModsManager.ChangeModEnabled(disableMod, false);
                 }
+                Static.ModsManager.DisableDuplicateEnabledMods();
                 Static.ModsManager.SaveSWRSToysIni();
 
                 if (!File.Exists(sokuFile))
@@ -83,6 +85,7 @@ namespace SokuLauncher
             {
                 MessageBox.Show(ex.Message);
             }
+            SokuModSettingGroupListView.SelectedItem = null;
         }
 
         private void MediaElement_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)

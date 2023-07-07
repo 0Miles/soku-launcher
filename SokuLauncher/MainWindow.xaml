@@ -110,6 +110,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ListView Grid.Row="1"
+            x:Name="SokuModSettingGroupListView"
             ItemsSource="{Binding SokuModSettingGroups}"
             Focusable="False"
             SelectedItem="{Binding SelectedSokuModSettingGroup}"

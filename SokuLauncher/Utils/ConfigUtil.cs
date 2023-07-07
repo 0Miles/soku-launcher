@@ -16,7 +16,9 @@ namespace SokuLauncher.Utils
     internal class ConfigUtil
     {
         const string CONFIG_FILE_NAME = "SokuLauncher.json";
-        const string SOKU_FILENAME_REGEX = @"th123(?:\s+)?\-?(?:\s+)?(?:\w+)?\.exe";
+        const string DEFAULT_SOKU_FILE_NAME = "th123.exe";
+        const string DEFAULT_SOKU_DIR = ".";
+        const string SOKU_FILE_NAME_REGEX = @"th123(?:\s+)?\-?(?:\s+)?(?:\w+)?\.exe";
         public ConfigModel Config { get; set; } = new ConfigModel();
         public string SokuDirFullPath { get; set; }
 
@@ -33,7 +35,7 @@ namespace SokuLauncher.Utils
                 }
                 else
                 {
-                    Config.SokuDirPath = ".";
+                    Config.SokuDirPath = DEFAULT_SOKU_DIR;
                 }
             }
             else
@@ -44,12 +46,8 @@ namespace SokuLauncher.Utils
 
                 if (!CheckSokuDirAndFileExists(Config.SokuDirPath, Config.SokuFileName))
                 {
-                    Config.SokuDirPath = FindSokuDir();
-
-                    if (Config.SokuDirPath != null)
-                    {
-                        Config.SokuFileName = SelectSokuFile(Config.SokuDirPath);
-                    }
+                    Config.SokuDirPath = FindSokuDir() ?? DEFAULT_SOKU_DIR;
+                    Config.SokuFileName = SelectSokuFile(Config.SokuDirPath);
                     SaveConfig();
                 }
             }
@@ -142,7 +140,7 @@ namespace SokuLauncher.Utils
                 foreach (string file in exeFiles)
                 {
                     string fileName = Path.GetFileName(file);
-                    if (Regex.IsMatch(fileName, SOKU_FILENAME_REGEX))
+                    if (Regex.IsMatch(fileName, SOKU_FILE_NAME_REGEX))
                     {
                         return Static.GetRelativePath(directory, Static.SelfFileDir);
                     }
@@ -159,7 +157,7 @@ namespace SokuLauncher.Utils
             foreach (string file in exeFiles)
             {
                 string fileName = Path.GetFileName(file);
-                if (Regex.IsMatch(fileName, SOKU_FILENAME_REGEX))
+                if (Regex.IsMatch(fileName, SOKU_FILE_NAME_REGEX))
                 {
                     result.Add(fileName);
                 }
@@ -195,7 +193,7 @@ namespace SokuLauncher.Utils
                     });
                 }
 
-                (swvm.SelectorNodeList.FirstOrDefault(x => x.Title == "th123.exe") ?? swvm.SelectorNodeList.First()).Selected = true;
+                (swvm.SelectorNodeList.FirstOrDefault(x => x.Title == DEFAULT_SOKU_FILE_NAME) ?? swvm.SelectorNodeList.First()).Selected = true;
                 SelectorWindow selectorWindow = new SelectorWindow(swvm);
                 selectorWindow.ShowDialog();
 
@@ -205,12 +203,12 @@ namespace SokuLauncher.Utils
                 }
                 else
                 {
-                    return "th123.exe";
+                    return DEFAULT_SOKU_FILE_NAME;
                 }
             }
             else
             {
-                return SokuFileNames.First();
+                return SokuFileNames.FirstOrDefault() ?? DEFAULT_SOKU_FILE_NAME;
             }
         }
     }

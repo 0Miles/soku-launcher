@@ -26,14 +26,28 @@ namespace SokuLauncher
 
                 Static.ResourcesManager = new ResourceManager();
                 Static.ResourcesManager.CopyVideoResources();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
+            try
+            {
                 Static.ConfigUtil = new ConfigUtil();
                 Static.ConfigUtil.ReadConfig();
 
                 Static.ModsManager = new ModsManager();
                 Static.ModsManager.SearchModulesDir();
                 Static.ModsManager.LoadSWRSToysSetting();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
+            try
+            {
                 Static.UpdateUtil = new UpdateUtil();
                 if (Static.ConfigUtil.Config.AutoCheckUpdate)
                 {
@@ -55,6 +69,7 @@ namespace SokuLauncher
             {
                 MessageBox.Show(ex.Message);
             }
+
             mainWindow.Show();
         }
     }

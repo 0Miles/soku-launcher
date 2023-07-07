@@ -102,6 +102,30 @@ namespace SokuLauncher.Utils
             }
         }
 
+        public void DisableDuplicateEnabledMods()
+        {
+            foreach (string alias in Static.ConfigUtil.Config.SokuModAlias)
+            {
+                string[] sameModNames = alias.Split('=');
+                bool hasOneEnable = false;
+                foreach (string modName in sameModNames)
+                {
+                    var modInfo = GetModInfoByModName(modName);
+                    if (modInfo != null)
+                    {
+                        if (hasOneEnable)
+                        {
+                            modInfo.Enabled = false;
+                        } 
+                        else if (modInfo.Enabled)
+                        {
+                            hasOneEnable = true;
+                        }
+                    }
+                }
+            }
+        }
+
         public void SaveSWRSToysIni()
         {
             Directory.SetCurrentDirectory(SokuDir);
