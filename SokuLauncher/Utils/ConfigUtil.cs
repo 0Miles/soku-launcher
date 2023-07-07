@@ -98,7 +98,8 @@ namespace SokuLauncher.Utils
                     Desc = "Enable InGameHostlist and SokuRoll 1.3",
                     EnableMods = new List<string> { "SWRSokuRoll", "InGameHostlist" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod" },
-                    Cover = "%tmp%/SokuLauncher/Resources/cover3.mp4"
+                    Cover = "%resources%/gearbackground.png",
+                    CoverOverlayColor = "#6FA92E00"
                 },
                 new ModSettingGroupModel
                 {
@@ -106,7 +107,8 @@ namespace SokuLauncher.Utils
                     Desc = "Enable InGameHostlist, No any Roll",
                     EnableMods = new List<string> { "InGameHostlist" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod", "SWRSokuRoll" },
-                    Cover = "%tmp%/SokuLauncher/Resources/cover4.mp4"
+                    Cover = "%resources%/gearbackground-r.png",
+                   CoverOverlayColor = "#6F002EA9"
                 },
             };
             config.SokuModVersion = new Dictionary<string, string>

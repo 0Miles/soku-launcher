@@ -91,32 +91,66 @@ namespace SokuLauncher
         private void HideWindow(EventHandler callBack)
         {
             Window window = SokuLauncherMainWindow;
-            DoubleAnimation fadeOutAnimation = new DoubleAnimation(0, new Duration(TimeSpan.FromMilliseconds(500)));
-            fadeOutAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
-            window.Opacity = 1;
-            window.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
 
-            DoubleAnimation moveAnimation = new DoubleAnimation(500, new Duration(TimeSpan.FromMilliseconds(500)));
-            moveAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
-            moveAnimation.Completed += callBack;
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation
+            {
+                To = 0,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+            DoubleAnimation scaleAnimation = new DoubleAnimation
+            {
+                To = 1.5,
+                Duration = TimeSpan.FromMilliseconds(500),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+            DoubleAnimation scale2Animation = new DoubleAnimation
+            {
+                To = 1.5,
+                Duration = TimeSpan.FromMilliseconds(500),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
 
-            MainGrid.RenderTransform = new TranslateTransform(0, 0);
-            MainGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation, HandoffBehavior.Compose);
+            scaleAnimation.Completed += callBack;
+
+            window.RenderTransform = new ScaleTransform(1, 1);
+            window.RenderTransformOrigin = new Point(0.5, 0.5);
+
+            window.BeginAnimation(OpacityProperty, fadeOutAnimation);
+            window.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation, HandoffBehavior.Compose);
+            window.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scale2Animation, HandoffBehavior.Compose);
         }
 
         private void CloseWindow()
         {
             Window window = SokuLauncherMainWindow;
-            DoubleAnimation fadeOutAnimation = new DoubleAnimation(0, new Duration(TimeSpan.FromMilliseconds(500)));
-            fadeOutAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
-            window.Opacity = 1;
-            window.BeginAnimation(OpacityProperty, fadeOutAnimation);
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation
+            {
+                To = 0,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+            DoubleAnimation scaleAnimation = new DoubleAnimation
+            {
+                To = 0.5,
+                Duration = TimeSpan.FromMilliseconds(500),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+            DoubleAnimation scale2Animation = new DoubleAnimation
+            {
+                To = 0.5,
+                Duration = TimeSpan.FromMilliseconds(500),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
 
-            DoubleAnimation moveAnimation = new DoubleAnimation(-500, new Duration(TimeSpan.FromMilliseconds(500)));
-            moveAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
-            moveAnimation.Completed += (s, _) => { this.Close(); };
-            MainGrid.RenderTransform = new TranslateTransform(0, 0);
-            MainGrid.RenderTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation, HandoffBehavior.Compose);
+            scaleAnimation.Completed += (s, _) => { Close(); };
+
+            window.RenderTransform = new ScaleTransform(1, 1);
+            window.RenderTransformOrigin = new Point(0.5, 0.5);
+
+            window.BeginAnimation(OpacityProperty, fadeOutAnimation);
+            window.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation, HandoffBehavior.Compose);
+            window.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scale2Animation, HandoffBehavior.Compose);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
