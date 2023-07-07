@@ -1,10 +1,10 @@
 ﻿using SokuLauncher.Model;
-using SokuLauncher.Utils;
+using SokuLauncher.ViewModels;
 using System.Collections.Generic;
 
-namespace SokuLauncher.ViewModel
+namespace SokuLauncher.ViewModels
 {
-    internal class MainWindwoViewModel
+    internal class MainWindwoViewModel: ViewModelBase
     {
         public List<ModSettingGroupModel> SokuModSettingGroups { 
             get
