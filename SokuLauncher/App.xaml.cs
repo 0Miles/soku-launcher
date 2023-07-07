@@ -35,15 +35,18 @@ namespace SokuLauncher
                 Static.ModsManager.LoadSWRSToysSetting();
 
                 Static.UpdateUtil = new UpdateUtil();
-                Static.UpdateUtil.CheckUpdate();
-                if (Static.UpdateUtil.AvailableUpdateList.Count > 0)
+                if (Static.ConfigUtil.Config.AutoCheckUpdate)
                 {
-                    if (MessageBox.Show("Update detected. Would you like to download the new version?", "Update", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    Static.UpdateUtil.CheckUpdate();
+                    if (Static.UpdateUtil.AvailableUpdateList.Count > 0)
                     {
-                        foreach (var updateFileInfo in Static.UpdateUtil.AvailableUpdateList)
+                        if (MessageBox.Show("Update detected. Would you like to download the new version?", "Update", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         {
-                            Static.UpdateUtil.DownloadAndExtractFile(updateFileInfo);
-                            Static.UpdateUtil.ReplaceFile(updateFileInfo);
+                            foreach (var updateFileInfo in Static.UpdateUtil.AvailableUpdateList)
+                            {
+                                Static.UpdateUtil.DownloadAndExtractFile(updateFileInfo);
+                                Static.UpdateUtil.ReplaceFile(updateFileInfo);
+                            }
                         }
                     }
                 }

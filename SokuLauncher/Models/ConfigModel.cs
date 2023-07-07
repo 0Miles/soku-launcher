@@ -9,5 +9,6 @@ namespace SokuLauncher.Models
         public List<string> SokuModAlias { get; set; }
         public string SokuFileName { get; set; }
         public string SokuDirPath { get; set; }
+        public bool AutoCheckUpdate { get; set; } = true;
     }
 }
