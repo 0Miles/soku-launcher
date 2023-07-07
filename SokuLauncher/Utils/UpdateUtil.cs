@@ -55,6 +55,10 @@ namespace SokuLauncher.Utils
                             currentVersion = GetFileCurrentVersion(Static.SelfFileName);
                             localFileName = Static.SelfFileName;
                             break;
+                        case "SWRSToys":
+                            currentVersion = new Version("1.0.0.0");
+                            localFileName = Path.Combine(Static.ConfigUtil.SokuDirFullPath, "d3d9.dll");
+                            break;
                         default:
                             Static.ConfigUtil.Config.SokuModVersion.TryGetValue(lastestVersionInfo.Name, out string modCurrentVersion);
                             if (modCurrentVersion == null)
