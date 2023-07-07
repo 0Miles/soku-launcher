@@ -116,6 +116,7 @@
     <Compile Include="Utils\ResourceManager.cs" />
     <Compile Include="Utils\UpdateUtil.cs" />
     <Compile Include="ViewModels\MainWindwoViewModel.cs" />
+    <Compile Include="ViewModels\SelectorWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Controls\SelectorWindow.xaml.cs">
       <DependentUpon>SelectorWindow.xaml</DependentUpon>

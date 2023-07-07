@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SokuLauncher.Models
 {
-    internal class SelectorNodeModel
+    public class SelectorNodeModel
     {
         public string Title { get; set; }
         public string Description { get; set; }
