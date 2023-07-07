@@ -3,6 +3,7 @@ using SokuLauncher.Controls;
 using SokuLauncher.Models;
 using SokuLauncher.ViewModels;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -120,7 +121,7 @@ namespace SokuLauncher.Utils
             return config;
         }
 
-        private bool CheckSokuDirAndFileExists(string sokuDir, string sokuFileName)
+        public bool CheckSokuDirAndFileExists(string sokuDir, string sokuFileName)
         {
             string sokuDirFullPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, $"{sokuDir}/"));
             if (!Directory.Exists(sokuDirFullPath) || !File.Exists(Path.Combine(sokuDirFullPath, sokuFileName)))
@@ -166,10 +167,10 @@ namespace SokuLauncher.Utils
             return result;
         }
     
-        private string SelectSokuFile(string sokuDirPath)
+        public string SelectSokuFile(string sokuDirPath)
         {
             var SokuFileNames = FindSokuFiles(sokuDirPath);
-            if (SokuFileNames.Count > 0)
+            if (SokuFileNames.Count > 1)
             {
 
                 SelectorWindowViewModel swvm = new SelectorWindowViewModel
@@ -202,12 +203,15 @@ namespace SokuLauncher.Utils
                 {
                     return swvm.SelectorNodeList.FirstOrDefault(x => x.Selected)?.Title ?? "";
                 }
+                else
+                {
+                    return "th123.exe";
+                }
             }
             else
             {
                 return SokuFileNames.First();
             }
-            return "";
         }
     }
 }
