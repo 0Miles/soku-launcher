@@ -101,15 +101,15 @@ namespace SokuLauncher.Controls
             {
                 ModSettingGroupEditGrid.Opacity = 0;
                 ModSettingGroupEditGrid.Visibility = Visibility.Visible;
-                HideSokuModSettingGroupsListViewAnimation((s, _) =>
+                HideSokuModSettingGroupsGridAnimation((s, _) =>
                 {
-                    SokuModSettingGroupsListView.Visibility = Visibility.Collapsed;
+                    SokuModSettingGroupsGrid.Visibility = Visibility.Collapsed;
                 });
                 ShowModSettingGroupEditGridAnimation();
             }
         }
 
-        private void HideSokuModSettingGroupsListViewAnimation(EventHandler callback = null)
+        private void HideSokuModSettingGroupsGridAnimation(EventHandler callback = null)
         {
             DoubleAnimation fadeAnimation = new DoubleAnimation
             {
@@ -130,15 +130,15 @@ namespace SokuLauncher.Controls
                 fadeAnimation.Completed += callback;
             }
 
-            SokuModSettingGroupsListView.Opacity = 1;
-            SokuModSettingGroupsListView.RenderTransform = new ScaleTransform(1, 1);
-            SokuModSettingGroupsListView.RenderTransformOrigin = new Point(.5, .5);
+            SokuModSettingGroupsGrid.Opacity = 1;
+            SokuModSettingGroupsGrid.RenderTransform = new ScaleTransform(1, 1);
+            SokuModSettingGroupsGrid.RenderTransformOrigin = new Point(.5, .5);
 
-            SokuModSettingGroupsListView.BeginAnimation(OpacityProperty, fadeAnimation);
-            SokuModSettingGroupsListView.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, moveAnimation, HandoffBehavior.Compose);
-            SokuModSettingGroupsListView.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
+            SokuModSettingGroupsGrid.BeginAnimation(OpacityProperty, fadeAnimation);
+            SokuModSettingGroupsGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, moveAnimation, HandoffBehavior.Compose);
+            SokuModSettingGroupsGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
         }
-        private void ShowSokuModSettingGroupsListViewAnimation(EventHandler callback = null)
+        private void ShowSokuModSettingGroupsGridAnimation(EventHandler callback = null)
         {
             DoubleAnimation fadeAnimation = new DoubleAnimation
             {
@@ -159,12 +159,12 @@ namespace SokuLauncher.Controls
                 fadeAnimation.Completed += callback;
             }
 
-            SokuModSettingGroupsListView.RenderTransform = new ScaleTransform(2, 2);
-            SokuModSettingGroupsListView.RenderTransformOrigin = new Point(.5, .5);
+            SokuModSettingGroupsGrid.RenderTransform = new ScaleTransform(2, 2);
+            SokuModSettingGroupsGrid.RenderTransformOrigin = new Point(.5, .5);
 
-            SokuModSettingGroupsListView.BeginAnimation(OpacityProperty, fadeAnimation);
-            SokuModSettingGroupsListView.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, moveAnimation, HandoffBehavior.Compose);
-            SokuModSettingGroupsListView.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
+            SokuModSettingGroupsGrid.BeginAnimation(OpacityProperty, fadeAnimation);
+            SokuModSettingGroupsGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, moveAnimation, HandoffBehavior.Compose);
+            SokuModSettingGroupsGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
         }
         private void ShowModSettingGroupEditGridAnimation(EventHandler callback = null)
         {
@@ -225,14 +225,14 @@ namespace SokuLauncher.Controls
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            SokuModSettingGroupsListView.Opacity = 0;
-            SokuModSettingGroupsListView.Visibility = Visibility.Visible;
+            SokuModSettingGroupsGrid.Opacity = 0;
+            SokuModSettingGroupsGrid.Visibility = Visibility.Visible;
             HidModSettingGroupEditGridAnimation((s, _) =>
             {
                 ModSettingGroupEditGrid.Visibility = Visibility.Collapsed;
                 ViewModel.SelectedSokuModSettingGroup = null;
             });
-            ShowSokuModSettingGroupsListViewAnimation();
+            ShowSokuModSettingGroupsGridAnimation();
         }
 
         private void SokuModSettingGroupsListView_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

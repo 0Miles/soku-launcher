@@ -5,61 +5,136 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
         mc:Ignorable="d" Closing="Window_Closing"
-        Title="Config" MinWidth="520" MinHeight="560" SizeToContent="Width">
+        Title="Config" Width="520" MinWidth="520" MinHeight="560">
     <Window.Resources>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <converters:ReverseStringToVisibilityConverter x:Key="ReverseStringToVisibilityConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <ControlTemplate x:Key="NoMouseOverButtonTemplate" TargetType="Button">
+            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="{x:Static SystemColors.ControlLightBrush}" />
+                    <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
     </Window.Resources>
     <Grid>
-        <StackPanel Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Button Padding="12,7" Margin="8,0,0,0" IsEnabled="{Binding Saveable}" Click="SaveButton_Click">Save</Button>
-        </StackPanel>
-        <TabControl Margin="8,26,8,8">
+        <TabControl Margin="8,18,8,8">
             <TabItem Header="Edit Mods">
                 <Grid>
-                    <ListView
-                        x:Name="SokuModSettingGroupsListView"
-                        ItemsSource="{Binding SokuModSettingGroups}"
-                        Focusable="False"
-                        IsTabStop="False"
-                        SelectedItem="{Binding SelectedSokuModSettingGroup}"
-                        FocusVisualStyle="{x:Null}"
-                        BorderThickness="0"
-                        BorderBrush="{x:Null}"
-                        Background="{x:Null}"
-                        Keyboard.PreviewKeyDown="SokuModSettingGroupsListView_PreviewKeyDown"
-                        SelectionChanged="SokuModSettingGroupsListView_SelectionChanged">
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Vertical" FlowDirection="RightToLeft" MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.CanContentScroll="False" />
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                            <Grid>
-                                                <Grid Margin="-210,-75,0,0">
-                                                    <local:ModSettingGroupUserControl VerticalAlignment="Bottom" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4">
-                                                        <local:ModSettingGroupUserControl.RenderTransform>
-                                                            <ScaleTransform ScaleX=".5" ScaleY=".5"></ScaleTransform>
-                                                        </local:ModSettingGroupUserControl.RenderTransform>
-                                                    </local:ModSettingGroupUserControl>
+                    <Grid x:Name="SokuModSettingGroupsGrid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <ListView
+                            Grid.Row="1"
+                            x:Name="SokuModSettingGroupsListView"
+                            ItemsSource="{Binding SokuModSettingGroups}"
+                            Focusable="False"
+                            IsTabStop="False"
+                            SelectedItem="{Binding SelectedSokuModSettingGroup}"
+                            FocusVisualStyle="{x:Null}"
+                            BorderThickness="0"
+                            BorderBrush="{x:Null}"
+                            Background="{x:Null}"
+                            Keyboard.PreviewKeyDown="SokuModSettingGroupsListView_PreviewKeyDown"
+                            SelectionChanged="SokuModSettingGroupsListView_SelectionChanged">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Vertical" FlowDirection="RightToLeft" MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.CanContentScroll="False" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                                <Grid>
+                                                    <Grid Margin="-168,-60,0,0">
+                                                        <local:ModSettingGroupUserControl VerticalAlignment="Bottom" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4">
+                                                            <local:ModSettingGroupUserControl.RenderTransform>
+                                                                <ScaleTransform ScaleX=".6" ScaleY=".6"></ScaleTransform>
+                                                            </local:ModSettingGroupUserControl.RenderTransform>
+                                                        </local:ModSettingGroupUserControl>
+                                                    </Grid>
+                                                    <Border Margin="4" FlowDirection="LeftToRight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                                        <Grid>
+                                                            <Grid HorizontalAlignment="Left">
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition />
+                                                                    <RowDefinition />
+                                                                </Grid.RowDefinitions>
+                                                                <Button BorderThickness="0" Background="Transparent" Cursor="Hand" Padding="8,0">
+                                                                    <Path Data="M6,15 L12,9 L18,15" Stroke="White" StrokeThickness="2" Fill="{x:Null}"  StrokeLineJoin="Round" Width="24" Height="24"/>
+                                                                </Button>
+                                                                <Button Grid.Row="1" BorderThickness="0" Background="Transparent" Cursor="Hand" Padding="8,0">
+                                                                    <Path Data="M6,9 L12,15 L18,9" Stroke="White" StrokeThickness="2" Fill="{x:Null}" StrokeLineJoin="Round" Width="24" Height="24"/>
+                                                                </Button>
+                                                            </Grid>
+                                                            <Button HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" Cursor="Hand" Padding="8">
+                                                                <Path Data="M4,7 L20,7 M10,11 L10,17 M14,11 L14,17 M5,7 L6,19 A2,2 0 0 0 8,21 H16 A2,2 0 0 0 18,19 L19,7 M9,7 V4 A1,1 0 0 1 10,3 H14 A1,1 0 0 1 15,4 V7" Stroke="White" StrokeThickness="2" StrokeLineJoin="Round" Width="24" Height="24"/>
+                                                            </Button>
+                                                        </Grid>
+                                                    </Border>
                                                 </Grid>
-                                            </Grid>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Grid>
 
                     <Grid x:Name="ModSettingGroupEditGrid" Visibility="Collapsed">
-                        <StackPanel>
-                            <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click"></Button>
-                            <Border CornerRadius="2" BorderBrush="DarkGray" Margin="8,16" BorderThickness="1" Background="{x:Null}" HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Button Padding="16,8" Background="#FFEFEFEF" BorderThickness="0" VerticalAlignment="Top" Click="Button_Click" Cursor="Hand">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <Path Stroke="Black" Width="24" Height="24" Margin="0,0,8,0" VerticalAlignment="Center" StrokeThickness="1" Fill="{x:Null}">
+                                    <Path.Data>
+                                        <GeometryGroup>
+                                            <PathGeometry>
+                                                <PathFigure StartPoint="9,14">
+                                                    <LineSegment Point="5,10" />
+                                                    <LineSegment Point="9,6" />
+                                                </PathFigure>
+                                            </PathGeometry>
+                                            <PathGeometry>
+                                                <PathFigure StartPoint="5,10">
+                                                    <LineSegment Point="16,10" />
+                                                    <ArcSegment Size="4,4" RotationAngle="0" IsLargeArc="False" SweepDirection="Clockwise" Point="16,18" />
+                                                    <LineSegment Point="15,18" />
+                                                </PathFigure>
+                                            </PathGeometry>
+                                        </GeometryGroup>
+                                    </Path.Data>
+                                </Path>
+                                <TextBlock Grid.Column="1" Text="Back To Select" VerticalAlignment="Center" />
+                            </Grid>
+                        </Button>
+                        <StackPanel Margin="0,16,0,0" Grid.Row="1">
+                            <StackPanel HorizontalAlignment="Stretch" Margin="8,4">
+                                <TextBlock Text="Name: " HorizontalAlignment="Left" Width="60" Margin="8, 0" />
+                                <TextBox Grid.Column="1" Text="{Binding SelectedSokuModSettingGroup.Name }" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="8,0"/>
+                            </StackPanel>
+                            <StackPanel HorizontalAlignment="Stretch" Margin="8,4">
+                                <TextBlock Text="Description: " HorizontalAlignment="Left" Width="60" Margin="8, 0" />
+                                <TextBox Grid.Column="1" Text="{Binding SelectedSokuModSettingGroup.Desc }" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="8,0"/>
+                            </StackPanel>
+                            
+                            <Border CornerRadius="2" BorderBrush="DarkGray" Margin="16,24,16,8" BorderThickness="1" Background="{x:Null}" HorizontalAlignment="Stretch">
                                 <Grid>
                                     <TextBlock Text="Preview" Margin="8,-10,0,0" Padding="4,0" Background="White" HorizontalAlignment="Left"/>
                                     <local:ModSettingGroupUserControl DataContext="{Binding SelectedSokuModSettingGroup}" VerticalAlignment="Top" HorizontalAlignment="Center" Width="420" Height="150" Margin="8,24" />
@@ -109,5 +184,8 @@
                 <Grid />
             </TabItem>
         </TabControl>
+        <StackPanel Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button Padding="12,3" Margin="8,0,0,0" IsEnabled="{Binding Saveable}" Click="SaveButton_Click">Save</Button>
+        </StackPanel>
     </Grid>
 </Window>

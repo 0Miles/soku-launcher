@@ -145,13 +145,7 @@ namespace SokuLauncher
             DoubleAnimation scaleAnimation = new DoubleAnimation
             {
                 To = 0.5,
-                Duration = TimeSpan.FromMilliseconds(500),
-                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
-            };
-            DoubleAnimation scale2Animation = new DoubleAnimation
-            {
-                To = 0.5,
-                Duration = TimeSpan.FromMilliseconds(500),
+                Duration = TimeSpan.FromMilliseconds(300),
                 EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
             };
 
@@ -162,7 +156,7 @@ namespace SokuLauncher
 
             MainGrid.BeginAnimation(OpacityProperty, fadeOutAnimation);
             MainGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation, HandoffBehavior.Compose);
-            MainGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scale2Animation, HandoffBehavior.Compose);
+            MainGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation, HandoffBehavior.Compose);
         }
 
         private void ZoomOutShowWindow(EventHandler callBack)
@@ -209,8 +203,11 @@ namespace SokuLauncher
                 SokuFileName = Static.ConfigUtil.Config.SokuFileName,
                 SokuModSettingGroups = Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups)
             });
-            configWindow.Show();
-            ZoomOutHideWindow((s, _) => { Close(); });
+            
+            ZoomOutHideWindow((s, _) => {
+                configWindow.Show();
+                Close();
+            });
         }
 
         private void SokuLauncherMainWindow_Activated(object sender, EventArgs e)
