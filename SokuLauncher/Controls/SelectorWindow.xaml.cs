@@ -13,14 +13,14 @@ namespace SokuLauncher.Controls
         public SelectorWindowViewModel ViewModel { get; set; }
         public SelectorWindow(SelectorWindowViewModel viewModel = null)
         {
-            InitializeComponent();
-
             ViewModel = viewModel;
             if (ViewModel == null)
             {
                 ViewModel = new SelectorWindowViewModel();
             }
             DataContext = ViewModel;
+
+            InitializeComponent();
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)

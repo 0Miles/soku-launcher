@@ -155,7 +155,7 @@ namespace SokuLauncher.Utils
             return null;
         }
 
-        private List<string> FindSokuFiles(string directory)
+        public static List<string> FindSokuFiles(string directory)
         {
             List<string> result = new List<string>();
             string[] exeFiles = Directory.GetFiles(directory, "*.exe");
@@ -170,7 +170,7 @@ namespace SokuLauncher.Utils
             return result;
         }
     
-        public string SelectSokuFile(string sokuDirPath)
+        public static string SelectSokuFile(string sokuDirPath)
         {
             var SokuFileNames = FindSokuFiles(sokuDirPath);
             if (SokuFileNames.Count > 1)
@@ -185,12 +185,7 @@ namespace SokuLauncher.Utils
 
                 foreach (string fileName in SokuFileNames)
                 {
-                    Icon icon = Icon.ExtractAssociatedIcon(Path.Combine(sokuDirPath, fileName));
-                    BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
-                        icon.Handle,
-                        System.Windows.Int32Rect.Empty,
-                        BitmapSizeOptions.FromWidthAndHeight(icon.Width, icon.Height));
-                    icon.Dispose();
+                    var bitmapSource = Static.GetExtractAssociatedIcon(Path.Combine(sokuDirPath, fileName));
                     swvm.SelectorNodeList.Add(new SelectorNodeModel
                     {
                         Title = fileName,
@@ -213,7 +208,7 @@ namespace SokuLauncher.Utils
             }
             else
             {
-                return SokuFileNames.FirstOrDefault() ?? DEFAULT_SOKU_FILE_NAME;
+                return SokuFileNames.FirstOrDefault();
             }
         }
     }

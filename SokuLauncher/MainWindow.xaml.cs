@@ -1,7 +1,11 @@
-﻿using SokuLauncher.ViewModels;
+﻿using SokuLauncher.Controls;
+using SokuLauncher.Utils;
+using SokuLauncher.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,23 +16,29 @@ namespace SokuLauncher
     public partial class MainWindow : Window
     {
         MainWindwoViewModel ViewModel { get; set; }
-
-        public MainWindow()
+        public MainWindow(MainWindwoViewModel viewModel = null)
         {
+            ViewModel = viewModel;
             if (ViewModel == null)
             {
                 ViewModel = new MainWindwoViewModel();
             }
             DataContext = ViewModel;
-            InitializeComponent();
+
+            InitializeComponent();            
         }
 
         private void WrapPanel_Loaded(object sender, RoutedEventArgs e)
         {
             WrapPanel wrapPanel = sender as WrapPanel;
-            DoubleAnimation fadeInAnimation = new DoubleAnimation(1.0, new Duration(TimeSpan.FromMilliseconds(500)));
+
+            DoubleAnimation fadeInAnimation = new DoubleAnimation
+            {
+                To = 1,
+                Duration = TimeSpan.FromMilliseconds(500),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseInOut }
+            };
             DoubleAnimation moveAnimation = new DoubleAnimation(0, new Duration(TimeSpan.FromMilliseconds(1000)));
-            fadeInAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseInOut };
             moveAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
 
             for (int i = 0; i < wrapPanel.Children.Count; i++)
@@ -36,8 +46,8 @@ namespace SokuLauncher
                 fadeInAnimation.BeginTime = TimeSpan.FromMilliseconds(200 + i * 100);
                 moveAnimation.BeginTime = TimeSpan.FromMilliseconds(200 + i * 100);
 
-                wrapPanel.Children[i].Opacity = 0.0;
-                wrapPanel.Children[i].BeginAnimation(UIElement.OpacityProperty, (AnimationTimeline)fadeInAnimation.GetAsFrozen());
+                wrapPanel.Children[i].Opacity = 0;
+                wrapPanel.Children[i].BeginAnimation(OpacityProperty, fadeInAnimation);
 
                 wrapPanel.Children[i].RenderTransform = new TranslateTransform(0, -50);
                 wrapPanel.Children[i].RenderTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation, HandoffBehavior.Compose);
@@ -46,7 +56,7 @@ namespace SokuLauncher
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            CloseWindow();
+            ZoomOutHideWindow((s, _) => { Close(); });
         }
 
         private void SokuModSettingGroupsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -55,6 +65,11 @@ namespace SokuLauncher
             try
             {
                 var settingGroup = ViewModel.SelectedSokuModSettingGroup;
+
+                if (string.IsNullOrWhiteSpace(Static.ConfigUtil.Config.SokuFileName))
+                {
+                    throw new Exception($"The game executable does not exist.");
+                }
 
                 string sokuFile = Path.Combine(Static.ConfigUtil.SokuDirFullPath, Static.ConfigUtil.Config.SokuFileName);
 
@@ -74,7 +89,7 @@ namespace SokuLauncher
                     throw new Exception($"The '{Static.ConfigUtil.Config.SokuFileName}' file does not exist.");
                 }
 
-                HideWindow((s, _) =>
+                ZoomInHideWindow((s, _) =>
                 {
                     Directory.SetCurrentDirectory(Static.ConfigUtil.SokuDirFullPath);
                     Process.Start(sokuFile);
@@ -88,10 +103,8 @@ namespace SokuLauncher
             SokuModSettingGroupListView.SelectedItem = null;
         }
 
-        private void HideWindow(EventHandler callBack)
+        private void ZoomInHideWindow(EventHandler callBack)
         {
-            Window window = SokuLauncherMainWindow;
-
             DoubleAnimation fadeOutAnimation = new DoubleAnimation
             {
                 To = 0,
@@ -113,17 +126,16 @@ namespace SokuLauncher
 
             scaleAnimation.Completed += callBack;
 
-            window.RenderTransform = new ScaleTransform(1, 1);
-            window.RenderTransformOrigin = new Point(0.5, 0.5);
+            MainGrid.RenderTransform = new ScaleTransform(1, 1);
+            MainGrid.RenderTransformOrigin = new Point(0.5, 0.5);
 
-            window.BeginAnimation(OpacityProperty, fadeOutAnimation);
-            window.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation, HandoffBehavior.Compose);
-            window.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scale2Animation, HandoffBehavior.Compose);
+            MainGrid.BeginAnimation(OpacityProperty, fadeOutAnimation);
+            MainGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation, HandoffBehavior.Compose);
+            MainGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scale2Animation, HandoffBehavior.Compose);
         }
 
-        private void CloseWindow()
+        private void ZoomOutHideWindow(EventHandler callBack)
         {
-            Window window = SokuLauncherMainWindow;
             DoubleAnimation fadeOutAnimation = new DoubleAnimation
             {
                 To = 0,
@@ -143,19 +155,70 @@ namespace SokuLauncher
                 EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
             };
 
-            scaleAnimation.Completed += (s, _) => { Close(); };
+            scaleAnimation.Completed += callBack;
 
-            window.RenderTransform = new ScaleTransform(1, 1);
-            window.RenderTransformOrigin = new Point(0.5, 0.5);
+            MainGrid.RenderTransform = new ScaleTransform(1, 1);
+            MainGrid.RenderTransformOrigin = new Point(0.5, 0.5);
 
-            window.BeginAnimation(OpacityProperty, fadeOutAnimation);
-            window.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation, HandoffBehavior.Compose);
-            window.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scale2Animation, HandoffBehavior.Compose);
+            MainGrid.BeginAnimation(OpacityProperty, fadeOutAnimation);
+            MainGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation, HandoffBehavior.Compose);
+            MainGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scale2Animation, HandoffBehavior.Compose);
+        }
+
+        private void ZoomOutShowWindow(EventHandler callBack)
+        {
+            DoubleAnimation fadeInAnimation = new DoubleAnimation
+            {
+                To = 1,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseIn }
+            };
+            DoubleAnimation scaleAnimation = new DoubleAnimation
+            {
+                To = 1,
+                Duration = TimeSpan.FromMilliseconds(800),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+            DoubleAnimation scale2Animation = new DoubleAnimation
+            {
+                To = 1,
+                Duration = TimeSpan.FromMilliseconds(800),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            scaleAnimation.Completed += callBack;
+
+            MainGrid.RenderTransform = new ScaleTransform(.1, .1);
+            MainGrid.RenderTransformOrigin = new Point(0.5, 0.5);
+
+            MainGrid.BeginAnimation(OpacityProperty, fadeInAnimation);
+            MainGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation, HandoffBehavior.Compose);
+            MainGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scale2Animation, HandoffBehavior.Compose);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ViewModel.SokuModSettingGroups = Static.ConfigUtil.Config.SokuModSettingGroups;
+        }
+
+        private void ConfigButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigWindow configWindow = new ConfigWindow(new ConfigWindowViewModel
+            {
+                SokuDirPath = Static.ConfigUtil.Config.SokuDirPath,
+                SokuFileName = Static.ConfigUtil.Config.SokuFileName,
+                SokuModSettingGroups = Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups)
+            });
+            configWindow.Show();
+            ZoomOutHideWindow((s, _) => { Close(); });
+        }
+
+        private void SokuLauncherMainWindow_Activated(object sender, EventArgs e)
+        {
+            if (MainGrid.Opacity == 0)
+            {
+                ZoomOutShowWindow((s, _) => { });
+            }
         }
     }
 }

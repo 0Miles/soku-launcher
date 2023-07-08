@@ -78,6 +78,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp">
       <Private>False</Private>
@@ -102,33 +103,53 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ConfigWindow.xaml.cs">
+      <DependentUpon>ConfigWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ModSettingGroupUserControl.xaml.cs">
       <DependentUpon>ModSettingGroupUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ModSettingGroupEditWindow.xaml.cs">
+      <DependentUpon>ModSettingGroupEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\PathToBackgroundConverter.cs" />
+    <Compile Include="Converters\ReverseStringToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
-    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\ReverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\RelativePathConverter.cs" />
+    <Compile Include="Models\ModSettingOptionModel.cs" />
+    <Compile Include="Models\ModSettingInfoModel.cs" />
     <Compile Include="Models\ModInfoModel.cs" />
     <Compile Include="Models\SelectorNodeModel.cs" />
     <Compile Include="Models\UpdateFileModel.cs" />
     <Compile Include="Models\UpdateVersionInfoModel.cs" />
     <Compile Include="Static.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
+    <Compile Include="Utils\ListViewHelper.cs" />
     <Compile Include="Utils\ModsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utils\ResourceManager.cs" />
     <Compile Include="Utils\UpdateUtil.cs" />
     <Compile Include="ViewModels\MainWindwoViewModel.cs" />
+    <Compile Include="ViewModels\ConfigWindowViewModel.cs" />
+    <Compile Include="ViewModels\ModSettingGroupEditWindowViewModel.cs" />
     <Compile Include="ViewModels\SelectorWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Controls\SelectorWindow.xaml.cs">
       <DependentUpon>SelectorWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\ConfigWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ModSettingGroupUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ModSettingGroupEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

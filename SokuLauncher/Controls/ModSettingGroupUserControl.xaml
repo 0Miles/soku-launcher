@@ -4,13 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:converters="clr-namespace:SokuLauncher.Converters" xmlns:models="clr-namespace:SokuLauncher.Models" d:DataContext="{d:DesignInstance Type=models:ModSettingGroupModel}"
-             mc:Ignorable="d" 
-             Loaded="UserControl_Loaded">
+             mc:Ignorable="d">
     <UserControl.Resources>
         <converters:RelativePathConverter x:Key="RelativePathConverter" />
+        <converters:PathToBackgroundConverter x:Key="PathToBackgroundConverter" />
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
 
-        <Style x:Key="BorderButtonStyle" TargetType="{x:Type Border}">
+        <Style x:Key="WrapperGridStyle" TargetType="{x:Type Grid}">
             <Setter Property="RenderTransform">
                 <Setter.Value>
                     <ScaleTransform ScaleX="1" ScaleY="1"/>
@@ -69,20 +69,32 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <Border MouseEnter="WrapperBorder_MouseEnter" MouseLeave="WrapperBorder_MouseLeave" Style="{StaticResource BorderButtonStyle}" Background="Black" BorderThickness="0" HorizontalAlignment="Stretch" Cursor="Hand">
-        <Grid>
-            <Grid x:Name="CoverGrid" ClipToBounds="True">
-            </Grid>
-            <Border Background="{Binding CoverOverlayColor}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Border Style="{StaticResource BorderOpacityStyle}" Background="{Binding HoverColor}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Grid VerticalAlignment="Center" Margin="48,0">
+    <Grid MouseEnter="WrapperGrid_MouseEnter" MouseLeave="WrapperGrid_MouseLeave" Style="{StaticResource WrapperGridStyle}" Background="Black" HorizontalAlignment="Stretch" Cursor="Hand" >
+        <Grid x:Name="CoverGrid" Background="{Binding Cover, Converter={StaticResource PathToBackgroundConverter}}">
+            <MediaElement
+                x:Name="CoverMediaElement"
+                Source="{Binding Cover, Converter={StaticResource RelativePathConverter}}"
+                FlowDirection="LeftToRight"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Stretch="UniformToFill"
+                LoadedBehavior="Manual"
+                UnloadedBehavior="Stop"
+                ScrubbingEnabled="True"
+                Loaded="CoverMediaElement_Loaded"
+                MediaEnded="CoverMediaElement_MediaEnded"/>
+        </Grid>
+        <Border Background="{Binding CoverOverlayColor}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <Border Style="{StaticResource BorderOpacityStyle}" Background="{Binding HoverColor}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <Border Padding="48,0">
+            <Grid VerticalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="{Binding Name}" IsHitTestVisible="False" Foreground="{Binding NameColor}" FontSize="32" HorizontalAlignment="Center"  Visibility="{Binding Name, Converter={StaticResource StringToVisibilityConverter}}" />
-                <TextBlock Grid.Row="1" Text="{Binding Desc}" IsHitTestVisible="False" Foreground="{Binding DescColor}" FontSize="16" HorizontalAlignment="Center" Margin="0,16" Visibility="{Binding Desc, Converter={StaticResource StringToVisibilityConverter}}" />
+                <TextBlock Grid.Row="1" Text="{Binding Desc}" IsHitTestVisible="False" Foreground="{Binding DescColor}" FontSize="16" TextWrapping="Wrap" FlowDirection="LeftToRight" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,16" Visibility="{Binding Desc, Converter={StaticResource StringToVisibilityConverter}}" />
             </Grid>
-        </Grid>
-    </Border>
+        </Border>
+    </Grid>
 </UserControl>

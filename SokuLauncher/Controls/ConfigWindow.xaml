@@ -1,0 +1,112 @@
+﻿<Window x:Class="SokuLauncher.Controls.ConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
+        mc:Ignorable="d" Closing="Window_Closing"
+        Title="Config" Height="450" Width="800">
+    <Window.Resources>
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <converters:ReverseStringToVisibilityConverter x:Key="ReverseStringToVisibilityConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TabControl Margin="8,8,8,0">
+            <TabItem Header="Mods">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ListView Grid.Row="1"
+                        VerticalAlignment="Center"
+                        ItemsSource="{Binding SokuModSettingGroups}"
+                        Focusable="False"
+                        SelectedItem="{Binding SelectedSokuModSettingGroup}"
+                        FocusVisualStyle="{x:Null}"
+                        BorderThickness="0"
+                        BorderBrush="{x:Null}"
+                        Background="{x:Null}">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Vertical" ScrollViewer.CanContentScroll="False" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                            <Grid>
+                                                <Grid Margin="-210,-75,0,0">
+                                                    <local:ModSettingGroupUserControl VerticalAlignment="Bottom" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4">
+                                                        <local:ModSettingGroupUserControl.RenderTransform>
+                                                            <ScaleTransform ScaleX=".5" ScaleY=".5"></ScaleTransform>
+                                                        </local:ModSettingGroupUserControl.RenderTransform>
+                                                    </local:ModSettingGroupUserControl>
+                                                </Grid>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+
+                    <Grid Grid.Column="1">
+                        <local:ModSettingGroupUserControl DataContext="{Binding SelectedSokuModSettingGroup}" VerticalAlignment="Center" HorizontalAlignment="Center" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Path">
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Soku Dir: " Width="60" Margin="8" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBox Text="{Binding SokuDirPath}" Width="260" Margin="8,0,0,0"/>
+                        <Button  Content="Browser" Width="70" Padding="8,0" Margin="8,0,8,0" Click="SokuDirButton_Click" Height="17" VerticalAlignment="Top" Cursor="Hand" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="1" Text="Soku File: " Width="60" Margin="8" />
+
+                    <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="8" Click="SokuFileNameButton_Click" Cursor="Hand" >
+                        <Grid>
+                            <Border Padding="8,16,8,8" IsHitTestVisible="False" Visibility="{Binding SokuFileName, Converter={StaticResource StringToVisibilityConverter}}">
+                                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="{Binding SokuFileIcon}" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding SokuFileIcon, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="8">
+                                        <TextBox Background="{x:Null}" Text="{Binding SokuFileName}" IsReadOnly="True" BorderThickness="0" Margin="8,0,0,0" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <TextBox Background="{x:Null}" IsHitTestVisible="False" Text="Select" IsReadOnly="True" BorderThickness="0" Margin="8,0" Visibility="{Binding SokuFileName, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
+                        </Grid>
+                    </Button>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Update">
+                <Grid />
+            </TabItem>
+        </TabControl>
+        <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+            <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>
+            <Button Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click">OK</Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SokuLauncher.Models
 {
-    internal class ModInfoModel
+    public class ModInfoModel
     {
         public string Name { get; set; }
         public string FullPath { get; set; }

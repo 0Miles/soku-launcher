@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SokuLauncher.Models
 {
-    internal class ModSettingGroupModel
+    [Serializable]
+    public class ModSettingGroupModel
     {
         public string Name { get; set; } = string.Empty;
         public string Desc { get; set; } = string.Empty;

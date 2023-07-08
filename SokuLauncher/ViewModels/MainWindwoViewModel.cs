@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SokuLauncher.ViewModels
 {
-    internal class MainWindwoViewModel: ViewModelBase
+    public class MainWindwoViewModel: ViewModelBase
     {
         private List<ModSettingGroupModel> _SokuModSettingGroups;
         public List<ModSettingGroupModel> SokuModSettingGroups

@@ -3,8 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Runtime.Versioning;
+using System.Threading;
+using SokuLauncher.Models;
+using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace SokuLauncher
 {
@@ -21,8 +27,18 @@ namespace SokuLauncher
                 return Path.GetDirectoryName(SelfFileName);
             }
         }
+
         public static string GetRelativePath(string absolutePath, string baseDirPath)
         {
+            if (absolutePath == baseDirPath)
+            {
+                return ".";
+            } 
+            else if (absolutePath == Path.GetFullPath(Path.Combine(baseDirPath, "..")))
+            {
+                return "..";
+            }
+
             if (!baseDirPath.EndsWith("\\"))
             {
                 baseDirPath += "\\";
@@ -33,6 +49,39 @@ namespace SokuLauncher
             string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
             return relativePath;
+        }
+
+        public static BitmapSource GetExtractAssociatedIcon(string fileName)
+        {
+            try
+            {
+                Icon icon = Icon.ExtractAssociatedIcon(fileName);
+                BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
+                    icon.Handle,
+                    System.Windows.Int32Rect.Empty,
+                    BitmapSizeOptions.FromWidthAndHeight(icon.Width, icon.Height));
+                icon.Dispose();
+
+                return bitmapSource;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static T DeepCopy<T>(T source)
+        {
+            if (source == null)
+                return default;
+
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                formatter.Serialize(memoryStream, source);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                return (T)formatter.Deserialize(memoryStream);
+            }
         }
     }
 }
