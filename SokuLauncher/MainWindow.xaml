@@ -28,12 +28,15 @@
         <ListView Grid.Row="1"
             x:Name="SokuModSettingGroupListView"
             ItemsSource="{Binding SokuModSettingGroups}"
-            Focusable="False"
             SelectedItem="{Binding SelectedSokuModSettingGroup}"
             FocusVisualStyle="{x:Null}"
             BorderThickness="0"
             BorderBrush="{x:Null}"
             Background="{x:Null}"
+            Focusable="False"
+            IsTabStop="False"
+            KeyboardNavigation.DirectionalNavigation="None"
+            Keyboard.PreviewKeyDown="SokuModSettingGroupListView_PreviewKeyDown"
             SelectionChanged="SokuModSettingGroupsListView_SelectionChanged">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -46,7 +49,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <controls:ModSettingGroupUserControl VerticalAlignment="Center" MinWidth="250" Height="150" Margin="8" />
+                                <controls:ModSettingGroupUserControl VerticalAlignment="Center" Width="420" Height="150" Margin="8" />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>

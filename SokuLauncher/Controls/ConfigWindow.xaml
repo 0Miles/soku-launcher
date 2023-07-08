@@ -5,36 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
         mc:Ignorable="d" Closing="Window_Closing"
-        Title="Config" Height="450" Width="800">
+        Title="Config" MinWidth="520" MinHeight="560" SizeToContent="Width">
     <Window.Resources>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <converters:ReverseStringToVisibilityConverter x:Key="ReverseStringToVisibilityConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <TabControl Margin="8,8,8,0">
-            <TabItem Header="Mods">
+        <StackPanel Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button Padding="12,7" Margin="8,0,0,0" IsEnabled="{Binding Saveable}" Click="SaveButton_Click">Save</Button>
+        </StackPanel>
+        <TabControl Margin="8,26,8,8">
+            <TabItem Header="Edit Mods">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <ListView Grid.Row="1"
-                        VerticalAlignment="Center"
+                    <ListView
+                        x:Name="SokuModSettingGroupsListView"
                         ItemsSource="{Binding SokuModSettingGroups}"
                         Focusable="False"
+                        IsTabStop="False"
                         SelectedItem="{Binding SelectedSokuModSettingGroup}"
                         FocusVisualStyle="{x:Null}"
                         BorderThickness="0"
                         BorderBrush="{x:Null}"
-                        Background="{x:Null}">
+                        Background="{x:Null}"
+                        Keyboard.PreviewKeyDown="SokuModSettingGroupsListView_PreviewKeyDown"
+                        SelectionChanged="SokuModSettingGroupsListView_SelectionChanged">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Vertical" ScrollViewer.CanContentScroll="False" />
+                                <WrapPanel Orientation="Vertical" FlowDirection="RightToLeft" MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" HorizontalAlignment="Center" VerticalAlignment="Center" ScrollViewer.CanContentScroll="False" />
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
                         <ListView.ItemContainerStyle>
@@ -58,26 +56,33 @@
                         </ListView.ItemContainerStyle>
                     </ListView>
 
-                    <Grid Grid.Column="1">
-                        <local:ModSettingGroupUserControl DataContext="{Binding SelectedSokuModSettingGroup}" VerticalAlignment="Center" HorizontalAlignment="Center" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4" />
+                    <Grid x:Name="ModSettingGroupEditGrid" Visibility="Collapsed">
+                        <StackPanel>
+                            <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click"></Button>
+                            <Border CornerRadius="2" BorderBrush="DarkGray" Margin="8,16" BorderThickness="1" Background="{x:Null}" HorizontalAlignment="Stretch">
+                                <Grid>
+                                    <TextBlock Text="Preview" Margin="8,-10,0,0" Padding="4,0" Background="White" HorizontalAlignment="Left"/>
+                                    <local:ModSettingGroupUserControl DataContext="{Binding SelectedSokuModSettingGroup}" VerticalAlignment="Top" HorizontalAlignment="Center" Width="420" Height="150" Margin="8,24" />
+                                </Grid>
+                            </Border>
+                        </StackPanel>
                     </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Path">
-                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="36,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <TextBlock Text="Soku Dir: " Width="60" Margin="8" />
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBox Text="{Binding SokuDirPath}" Width="260" Margin="8,0,0,0"/>
-                        <Button  Content="Browser" Width="70" Padding="8,0" Margin="8,0,8,0" Click="SokuDirButton_Click" Height="17" VerticalAlignment="Top" Cursor="Hand" />
-                    </StackPanel>
+                    <TextBox Grid.Column="1" Text="{Binding SokuDirPath}" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="8"/>
+                    <Button Grid.Column="2" Content="Browser" Width="70" Padding="8,0" Margin="0,0,8,0" Click="SokuDirButton_Click" VerticalAlignment="Center" Cursor="Hand" />
 
                     <TextBlock Grid.Row="1" Text="Soku File: " Width="60" Margin="8" />
 
@@ -104,9 +109,5 @@
                 <Grid />
             </TabItem>
         </TabControl>
-        <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
-            <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>
-            <Button Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click">OK</Button>
-        </StackPanel>
     </Grid>
 </Window>

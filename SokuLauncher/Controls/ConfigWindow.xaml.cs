@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 namespace SokuLauncher.Controls
@@ -89,14 +90,154 @@ namespace SokuLauncher.Controls
             ViewModel.SokuFileIcon = Static.GetExtractAssociatedIcon(Path.GetFullPath(Path.Combine(ViewModel.SokuDirPath, ViewModel.SokuFileName ?? "")));
         }
 
-        private void OKButton_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void SokuModSettingGroupsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Close();
+            if (ViewModel.SelectedSokuModSettingGroup != null)
+            {
+                ModSettingGroupEditGrid.Opacity = 0;
+                ModSettingGroupEditGrid.Visibility = Visibility.Visible;
+                HideSokuModSettingGroupsListViewAnimation((s, _) =>
+                {
+                    SokuModSettingGroupsListView.Visibility = Visibility.Collapsed;
+                });
+                ShowModSettingGroupEditGridAnimation();
+            }
+        }
+
+        private void HideSokuModSettingGroupsListViewAnimation(EventHandler callback = null)
+        {
+            DoubleAnimation fadeAnimation = new DoubleAnimation
+            {
+                To = 0,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            DoubleAnimation moveAnimation = new DoubleAnimation
+            {
+                To = 2,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            if (callback != null)
+            {
+                fadeAnimation.Completed += callback;
+            }
+
+            SokuModSettingGroupsListView.Opacity = 1;
+            SokuModSettingGroupsListView.RenderTransform = new ScaleTransform(1, 1);
+            SokuModSettingGroupsListView.RenderTransformOrigin = new Point(.5, .5);
+
+            SokuModSettingGroupsListView.BeginAnimation(OpacityProperty, fadeAnimation);
+            SokuModSettingGroupsListView.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, moveAnimation, HandoffBehavior.Compose);
+            SokuModSettingGroupsListView.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
+        }
+        private void ShowSokuModSettingGroupsListViewAnimation(EventHandler callback = null)
+        {
+            DoubleAnimation fadeAnimation = new DoubleAnimation
+            {
+                To = 1,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            DoubleAnimation moveAnimation = new DoubleAnimation
+            {
+                To = 1,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            if (callback != null)
+            {
+                fadeAnimation.Completed += callback;
+            }
+
+            SokuModSettingGroupsListView.RenderTransform = new ScaleTransform(2, 2);
+            SokuModSettingGroupsListView.RenderTransformOrigin = new Point(.5, .5);
+
+            SokuModSettingGroupsListView.BeginAnimation(OpacityProperty, fadeAnimation);
+            SokuModSettingGroupsListView.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, moveAnimation, HandoffBehavior.Compose);
+            SokuModSettingGroupsListView.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
+        }
+        private void ShowModSettingGroupEditGridAnimation(EventHandler callback = null)
+        {
+            DoubleAnimation fadeAnimation = new DoubleAnimation
+            {
+                To = 1,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            DoubleAnimation moveAnimation = new DoubleAnimation
+            {
+                To = 1,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            if (callback != null)
+            {
+                fadeAnimation.Completed += callback;
+            }
+
+            ModSettingGroupEditGrid.RenderTransform = new ScaleTransform(.5, .5);
+            ModSettingGroupEditGrid.RenderTransformOrigin = new Point(.5, .5);
+
+            ModSettingGroupEditGrid.BeginAnimation(OpacityProperty, fadeAnimation);
+            ModSettingGroupEditGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, moveAnimation, HandoffBehavior.Compose);
+            ModSettingGroupEditGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
+        }
+        private void HidModSettingGroupEditGridAnimation(EventHandler callback = null)
+        {
+            DoubleAnimation fadeAnimation = new DoubleAnimation
+            {
+                To = 0,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            DoubleAnimation moveAnimation = new DoubleAnimation
+            {
+                To = .5,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            if (callback != null)
+            {
+                fadeAnimation.Completed += callback;
+            }
+
+            ModSettingGroupEditGrid.RenderTransform = new ScaleTransform(1, 1);
+            ModSettingGroupEditGrid.RenderTransformOrigin = new Point(.5, .5);
+
+            ModSettingGroupEditGrid.BeginAnimation(OpacityProperty, fadeAnimation);
+            ModSettingGroupEditGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, moveAnimation, HandoffBehavior.Compose);
+            ModSettingGroupEditGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            SokuModSettingGroupsListView.Opacity = 0;
+            SokuModSettingGroupsListView.Visibility = Visibility.Visible;
+            HidModSettingGroupEditGridAnimation((s, _) =>
+            {
+                ModSettingGroupEditGrid.Visibility = Visibility.Collapsed;
+                ViewModel.SelectedSokuModSettingGroup = null;
+            });
+            ShowSokuModSettingGroupsListViewAnimation();
+        }
+
+        private void SokuModSettingGroupsListView_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

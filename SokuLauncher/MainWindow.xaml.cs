@@ -220,5 +220,10 @@ namespace SokuLauncher
                 ZoomOutShowWindow((s, _) => { });
             }
         }
+
+        private void SokuModSettingGroupListView_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 }

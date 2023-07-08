@@ -9,6 +9,21 @@ namespace SokuLauncher.ViewModels
 {
     public class ConfigWindowViewModel : ViewModelBase
     {
+        private bool _Saveable;
+        public bool Saveable
+        {
+            get
+            {
+                return _Saveable;
+            }
+            set
+            {
+                _Saveable = value;
+                RaisePropertyChanged("Saveable");
+            }
+        }
+
+
         private List<ModSettingGroupModel> _SokuModSettingGroups;
         public List<ModSettingGroupModel> SokuModSettingGroups
         {
