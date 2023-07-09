@@ -1,8 +1,10 @@
 ﻿using SokuLauncher.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace SokuLauncher.ViewModels
@@ -24,8 +26,8 @@ namespace SokuLauncher.ViewModels
         }
 
 
-        private List<ModSettingGroupModel> _SokuModSettingGroups;
-        public List<ModSettingGroupModel> SokuModSettingGroups
+        private ObservableCollection<ModSettingGroupModel> _SokuModSettingGroups;
+        public ObservableCollection<ModSettingGroupModel> SokuModSettingGroups
         {
             get
             {
@@ -100,5 +102,6 @@ namespace SokuLauncher.ViewModels
             }
         }
         public bool AutoCheckUpdate { get; set; } = true;
+
     }
 }

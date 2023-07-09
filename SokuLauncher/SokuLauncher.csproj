@@ -112,9 +112,11 @@
     <Compile Include="Controls\ModSettingGroupEditWindow.xaml.cs">
       <DependentUpon>ModSettingGroupEditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\IsLastItemConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\PathToBackgroundConverter.cs" />
     <Compile Include="Converters\ReverseStringToVisibilityConverter.cs" />
+    <Compile Include="Converters\IsFirstItemConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\ReverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\RelativePathConverter.cs" />

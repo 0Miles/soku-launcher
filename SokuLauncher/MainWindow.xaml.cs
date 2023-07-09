@@ -1,8 +1,10 @@
 ﻿using SokuLauncher.Controls;
+using SokuLauncher.Models;
 using SokuLauncher.Utils;
 using SokuLauncher.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -201,7 +203,7 @@ namespace SokuLauncher
             {
                 SokuDirPath = Static.ConfigUtil.Config.SokuDirPath,
                 SokuFileName = Static.ConfigUtil.Config.SokuFileName,
-                SokuModSettingGroups = Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups)
+                SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups))
             });
             
             ZoomOutHideWindow((s, _) => {

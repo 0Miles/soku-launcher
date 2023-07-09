@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
         mc:Ignorable="d" Closing="Window_Closing"
-        Title="Config" Width="520" MinWidth="520" MinHeight="560">
+        Title="Config" MinWidth="260" MinHeight="320" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
     <Window.Resources>
+        <converters:IsFirstItemConverter x:Key="IsFirstItemConverter"/>
+        <converters:IsLastItemConverter x:Key="IsLastItemConverter"/>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <converters:ReverseStringToVisibilityConverter x:Key="ReverseStringToVisibilityConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
@@ -23,7 +25,7 @@
         </ControlTemplate>
     </Window.Resources>
     <Grid>
-        <TabControl Margin="8,18,8,8">
+        <TabControl Margin="8,18,8,8" FocusVisualStyle="{x:Null}">
             <TabItem Header="Edit Mods">
                 <Grid>
                     <Grid x:Name="SokuModSettingGroupsGrid">
@@ -31,6 +33,32 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
+                        <Grid Background="#FFEFEFEF" HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Padding="8,4" Background="#FFEFEFEF" BorderThickness="0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="M12,5 V19 M5,12 H19" Stroke="Green" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Add" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="2" Padding="8,4" Background="#FFEFEFEF" BorderThickness="0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="M18,18 V12 A3,3 0 0 0 15,9 H5 L9,5 M9,13 L5,9" Stroke="Black" StrokeThickness="1" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Undo" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="3" Padding="8,4" Background="#FFEFEFEF" BorderThickness="0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="M6,18 V12 A3,3 0 0 1 9,9 H19 L15,5 M15,13 L19,9" Stroke="Black" StrokeThickness="1" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Redo" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
                         <ListView
                             Grid.Row="1"
                             x:Name="SokuModSettingGroupsListView"
@@ -56,30 +84,147 @@
                                             <ControlTemplate TargetType="{x:Type ListViewItem}">
                                                 <Grid>
                                                     <Grid Margin="-168,-60,0,0">
-                                                        <local:ModSettingGroupUserControl VerticalAlignment="Bottom" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4">
+                                                        <local:ModSettingGroupUserControl VerticalAlignment="Bottom" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4" Cursor="Hand">
                                                             <local:ModSettingGroupUserControl.RenderTransform>
                                                                 <ScaleTransform ScaleX=".6" ScaleY=".6"></ScaleTransform>
                                                             </local:ModSettingGroupUserControl.RenderTransform>
                                                         </local:ModSettingGroupUserControl>
                                                     </Grid>
-                                                    <Border Margin="4" FlowDirection="LeftToRight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                                    <Border Margin="4" Opacity=".3" FlowDirection="LeftToRight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                                         <Grid>
                                                             <Grid HorizontalAlignment="Left">
-                                                                <Grid.RowDefinitions>
-                                                                    <RowDefinition />
-                                                                    <RowDefinition />
-                                                                </Grid.RowDefinitions>
-                                                                <Button BorderThickness="0" Background="Transparent" Cursor="Hand" Padding="8,0">
-                                                                    <Path Data="M6,15 L12,9 L18,15" Stroke="White" StrokeThickness="2" Fill="{x:Null}"  StrokeLineJoin="Round" Width="24" Height="24"/>
-                                                                </Button>
-                                                                <Button Grid.Row="1" BorderThickness="0" Background="Transparent" Cursor="Hand" Padding="8,0">
-                                                                    <Path Data="M6,9 L12,15 L18,9" Stroke="White" StrokeThickness="2" Fill="{x:Null}" StrokeLineJoin="Round" Width="24" Height="24"/>
-                                                                </Button>
+                                                                <Border Background="#00FFFFFF" BorderThickness="0" VerticalAlignment="Stretch">
+                                                                    <Button x:Name="MoveUpModSettingGroupButton" Template="{StaticResource NoMouseOverButtonTemplate}" BorderThickness="0" Background="Transparent" Cursor="Hand" Width="36"  VerticalAlignment="Stretch" Click="MoveUpModSettingGroupButton_Click">
+                                                                        <Path Data="M6,15 L12,9 L18,15" Stroke="White" StrokeThickness="2" Fill="{x:Null}" VerticalAlignment="Stretch" StrokeLineJoin="Round" Width="24" Height="24"/>
+                                                                    </Button>
+                                                                    <Border.Style>
+                                                                        <Style TargetType="Border">
+                                                                            <Setter Property="Margin" Value="0,0,0,45"/>
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsFirstItemConverter}}">
+                                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                </DataTrigger>
+                                                                                <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsLastItemConverter}}">
+                                                                                    <Setter Property="Margin" Value="0"/>
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </Border.Style>
+                                                                    <Border.Triggers>
+                                                                        <EventTrigger RoutedEvent="MouseEnter">
+                                                                            <BeginStoryboard>
+                                                                                <Storyboard>
+                                                                                    <ColorAnimation
+                                                                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                                        To="#6FFFFFFF"
+                                                                                        Duration="0:0:0.3"/>
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </EventTrigger>
+                                                                        <EventTrigger RoutedEvent="MouseLeave">
+                                                                            <BeginStoryboard>
+                                                                                <Storyboard>
+                                                                                    <ColorAnimation
+                                                                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                                        To="#00FFFFFF"
+                                                                                        Duration="0:0:0.3"/>
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </EventTrigger>
+                                                                    </Border.Triggers>
+                                                                </Border>
+
+                                                                <Border Background="#00FFFFFF" BorderThickness="0" VerticalAlignment="Stretch">
+                                                                    <Button x:Name="MoveDownModSettingGroupButton" Template="{StaticResource NoMouseOverButtonTemplate}" BorderThickness="0" Background="Transparent" Cursor="Hand" Width="36" Click="MoveDownModSettingGroupButton_Click">
+                                                                        <Path Data="M6,9 L12,15 L18,9" Stroke="White" StrokeThickness="2" Fill="{x:Null}" StrokeLineJoin="Round" Width="24" Height="24"/>
+                                                                    </Button>
+                                                                    <Border.Style>
+                                                                        <Style TargetType="Border">
+                                                                            <Setter Property="Margin" Value="0,45,0,0"/>
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsLastItemConverter}}">
+                                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                </DataTrigger>
+                                                                                <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsFirstItemConverter}}">
+                                                                                    <Setter Property="Margin" Value="0"/>
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </Border.Style>
+                                                                    <Border.Triggers>
+                                                                        <EventTrigger RoutedEvent="MouseEnter">
+                                                                            <BeginStoryboard>
+                                                                                <Storyboard>
+                                                                                    <ColorAnimation
+                                                                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                                        To="#6FFFFFFF"
+                                                                                        Duration="0:0:0.3"/>
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </EventTrigger>
+                                                                        <EventTrigger RoutedEvent="MouseLeave">
+                                                                            <BeginStoryboard>
+                                                                                <Storyboard>
+                                                                                    <ColorAnimation
+                                                                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                                        To="#00FFFFFF"
+                                                                                        Duration="0:0:0.3"/>
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </EventTrigger>
+                                                                    </Border.Triggers>
+                                                                </Border>
                                                             </Grid>
-                                                            <Button HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" Cursor="Hand" Padding="8">
-                                                                <Path Data="M4,7 L20,7 M10,11 L10,17 M14,11 L14,17 M5,7 L6,19 A2,2 0 0 0 8,21 H16 A2,2 0 0 0 18,19 L19,7 M9,7 V4 A1,1 0 0 1 10,3 H14 A1,1 0 0 1 15,4 V7" Stroke="White" StrokeThickness="2" StrokeLineJoin="Round" Width="24" Height="24"/>
-                                                            </Button>
+                                                            <Border Background="#00CF2100" BorderThickness="0" HorizontalAlignment="Right" VerticalAlignment="Stretch">
+                                                                <Button x:Name="DeleteModSettingGroupButton" Template="{StaticResource NoMouseOverButtonTemplate}" VerticalAlignment="Stretch" Background="Transparent" BorderThickness="0" Cursor="Hand" Width="36" Click="DeleteModSettingGroupButton_Click">
+                                                                    <Path Data="M4,7 L20,7 M10,11 L10,17 M14,11 L14,17 M5,7 L6,19 A2,2 0 0 0 8,21 H16 A2,2 0 0 0 18,19 L19,7 M9,7 V4 A1,1 0 0 1 10,3 H14 A1,1 0 0 1 15,4 V7" Stroke="White" StrokeThickness="2" StrokeLineJoin="Round" Width="24" Height="24"/>
+                                                                </Button>
+                                                                <Border.Triggers>
+                                                                    <EventTrigger RoutedEvent="MouseEnter">
+                                                                        <BeginStoryboard>
+                                                                            <Storyboard>
+                                                                                <ColorAnimation
+                                                                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                                        To="#6FCF2100"
+                                                                                        Duration="0:0:0.3"/>
+                                                                            </Storyboard>
+                                                                        </BeginStoryboard>
+                                                                    </EventTrigger>
+                                                                    <EventTrigger RoutedEvent="MouseLeave">
+                                                                        <BeginStoryboard>
+                                                                            <Storyboard>
+                                                                                <ColorAnimation
+                                                                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                                        To="#00CF2100"
+                                                                                        Duration="0:0:0.3"/>
+                                                                            </Storyboard>
+                                                                        </BeginStoryboard>
+                                                                    </EventTrigger>
+                                                                </Border.Triggers>
+                                                            </Border>
                                                         </Grid>
+                                                        <Border.Triggers>
+                                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation
+                                                                                        Storyboard.TargetProperty="Opacity"
+                                                                                        To="1"
+                                                                                        Duration="0:0:0.3"/>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </EventTrigger>
+                                                            <EventTrigger RoutedEvent="MouseLeave">
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation
+                                                                                        Storyboard.TargetProperty="Opacity"
+                                                                                        To=".3"
+                                                                                        Duration="0:0:0.5"/>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </EventTrigger>
+                                                        </Border.Triggers>
                                                     </Border>
                                                 </Grid>
                                             </ControlTemplate>
@@ -92,10 +237,10 @@
 
                     <Grid x:Name="ModSettingGroupEditGrid" Visibility="Collapsed">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Button Padding="16,8" Background="#FFEFEFEF" BorderThickness="0" VerticalAlignment="Top" Click="Button_Click" Cursor="Hand">
+                        <Button Padding="4" Background="#FFEFEFEF" BorderThickness="0" VerticalAlignment="Top" Click="Button_Click" Cursor="Hand">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
@@ -124,23 +269,95 @@
                                 <TextBlock Grid.Column="1" Text="Back To Select" VerticalAlignment="Center" />
                             </Grid>
                         </Button>
-                        <StackPanel Margin="0,16,0,0" Grid.Row="1">
-                            <StackPanel HorizontalAlignment="Stretch" Margin="8,4">
-                                <TextBlock Text="Name: " HorizontalAlignment="Left" Width="60" Margin="8, 0" />
-                                <TextBox Grid.Column="1" Text="{Binding SelectedSokuModSettingGroup.Name }" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="8,0"/>
-                            </StackPanel>
-                            <StackPanel HorizontalAlignment="Stretch" Margin="8,4">
-                                <TextBlock Text="Description: " HorizontalAlignment="Left" Width="60" Margin="8, 0" />
-                                <TextBox Grid.Column="1" Text="{Binding SelectedSokuModSettingGroup.Desc }" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="8,0"/>
-                            </StackPanel>
-                            
-                            <Border CornerRadius="2" BorderBrush="DarkGray" Margin="16,24,16,8" BorderThickness="1" Background="{x:Null}" HorizontalAlignment="Stretch">
-                                <Grid>
-                                    <TextBlock Text="Preview" Margin="8,-10,0,0" Padding="4,0" Background="White" HorizontalAlignment="Left"/>
-                                    <local:ModSettingGroupUserControl DataContext="{Binding SelectedSokuModSettingGroup}" VerticalAlignment="Top" HorizontalAlignment="Center" Width="420" Height="150" Margin="8,24" />
+                        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}">
+                            <StackPanel HorizontalAlignment="Stretch" Margin="8" MinWidth="450">
+                                <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4" VerticalAlignment="Center">
+                                    <TextBlock Text="Name: " HorizontalAlignment="Left" Margin="0,0,0,8" />
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Text="{Binding SelectedSokuModSettingGroup.Name }" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
+                                        <Button Grid.Column="1" Margin="8,0" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand">
+                                            <Border Background="{Binding SelectedSokuModSettingGroup.NameColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4">
+                                    <TextBlock Text="Description: " HorizontalAlignment="Left" Margin="0,0,0,8" />
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Text="{Binding SelectedSokuModSettingGroup.Desc }" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
+                                        <Button Grid.Column="1" Margin="8,0" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand">
+                                            <Border Background="{Binding SelectedSokuModSettingGroup.DescColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+                                <TextBlock Text="Appearance: " HorizontalAlignment="Left" Margin="8" />
+                                <local:ModSettingGroupUserControl DataContext="{Binding SelectedSokuModSettingGroup}" VerticalAlignment="Top" HorizontalAlignment="Center" Width="420" Height="150" Margin="16,8" />
+                                <StackPanel Width="420">
+                                    <Button Padding="6" Cursor="Hand">
+                                        Select cover background
+                                    </Button>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
+                                            <TextBlock Text="Cover color: " HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                            <Button HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Margin="8">
+                                                <Border Background="{Binding SelectedSokuModSettingGroup.CoverOverlayColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
+                                            </Button>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="8">
+                                            <TextBlock Text="Hover color: " HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                            <Button HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Margin="8">
+                                                <Border Background="{Binding SelectedSokuModSettingGroup.HoverColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Margin="8"/>
+                                <Grid Margin="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Button Padding="16">
+                                        Select mods
+                                    </Button>
+                                    <StackPanel Grid.Column="1">
+                                        <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4" VerticalAlignment="Center">
+                                            <TextBlock Text="Enable mods: " HorizontalAlignment="Left" Margin="0,0,0,8" />
+                                            <ListView ItemsSource="{Binding SelectedSokuModSettingGroup.EnableMods}" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch">
+                                                <ListView.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal"  MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" ScrollViewer.CanContentScroll="False" />
+                                                    </ItemsPanelTemplate>
+                                                </ListView.ItemsPanel>
+                                            </ListView>
+                                        </StackPanel>
+                                        <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4" VerticalAlignment="Center">
+                                            <TextBlock Text="Disable mods: " HorizontalAlignment="Left" Margin="0,0,0,8" />
+                                            <ListView ItemsSource="{Binding SelectedSokuModSettingGroup.DisableMods}" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch">
+                                                <ListView.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal"  MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" ScrollViewer.CanContentScroll="False" />
+                                                    </ItemsPanelTemplate>
+                                                </ListView.ItemsPanel>
+                                            </ListView>
+                                        </StackPanel>
+                                    </StackPanel>
                                 </Grid>
-                            </Border>
-                        </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
                     </Grid>
                 </Grid>
             </TabItem>

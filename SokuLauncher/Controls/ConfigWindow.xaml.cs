@@ -1,20 +1,13 @@
-﻿using SokuLauncher.Utils;
+﻿using SokuLauncher.Models;
+using SokuLauncher.Utils;
 using SokuLauncher.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
+using Button = System.Windows.Controls.Button;
 
 namespace SokuLauncher.Controls
 {
@@ -46,10 +39,10 @@ namespace SokuLauncher.Controls
         private void SokuDirButton_Click(object sender, RoutedEventArgs e)
         {
             string prev = ViewModel.SokuDirPath;
-            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
             folderDialog.SelectedPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
 
-            DialogResult result = folderDialog.ShowDialog();
+            System.Windows.Forms.DialogResult result = folderDialog.ShowDialog();
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -71,12 +64,12 @@ namespace SokuLauncher.Controls
 
         private void SokuFileNameButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
             openFileDialog.Filter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*";
             openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
             openFileDialog.FileName = ViewModel.SokuFileName;
 
-            DialogResult result = openFileDialog.ShowDialog();
+            System.Windows.Forms.DialogResult result = openFileDialog.ShowDialog();
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -238,6 +231,109 @@ namespace SokuLauncher.Controls
         private void SokuModSettingGroupsListView_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             e.Handled = true;
+        }
+
+        private void MoveUpModSettingGroupButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            ModSettingGroupModel selectedMember = (ModSettingGroupModel)button.DataContext;
+
+            var listViewItem = SokuModSettingGroupsListView.ItemContainerGenerator.ContainerFromItem(selectedMember) as ListViewItem;
+
+            DoubleAnimation moveAnimation = new DoubleAnimation
+            {
+                To = -98,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseInOut }
+            };
+
+            moveAnimation.Completed += (s, _) =>
+            {
+                int selectedIndex = ViewModel.SokuModSettingGroups.IndexOf(selectedMember);
+                if (selectedIndex > 0)
+                {
+                    listViewItem.RenderTransform = new TranslateTransform(0, 0);
+                    ModSettingGroupModel previousMember = ViewModel.SokuModSettingGroups[selectedIndex - 1];
+                    ViewModel.SokuModSettingGroups[selectedIndex - 1] = selectedMember;
+                    ViewModel.SokuModSettingGroups[selectedIndex] = previousMember;
+                }
+            };
+
+            listViewItem.RenderTransform = new TranslateTransform(0, 0);
+            listViewItem.RenderTransformOrigin = new Point(.5, 0);
+
+            listViewItem.RenderTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation);
+        }
+
+        private void MoveDownModSettingGroupButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            ModSettingGroupModel selectedMember = (ModSettingGroupModel)button.DataContext;
+
+            var listViewItem = SokuModSettingGroupsListView.ItemContainerGenerator.ContainerFromItem(selectedMember) as ListViewItem;
+
+            DoubleAnimation moveAnimation = new DoubleAnimation
+            {
+                To = 98,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseInOut }
+            };
+
+            var originZindex = Panel.GetZIndex(listViewItem);
+            Panel.SetZIndex(listViewItem, 100);
+
+            moveAnimation.Completed += (s, _) =>
+            {
+                int selectedIndex = ViewModel.SokuModSettingGroups.IndexOf(selectedMember);
+                if (selectedIndex < ViewModel.SokuModSettingGroups.Count - 1)
+                {
+                    Panel.SetZIndex(listViewItem, originZindex);
+                    listViewItem.RenderTransform = new TranslateTransform(0, 0);
+                    ModSettingGroupModel nextMember = ViewModel.SokuModSettingGroups[selectedIndex + 1];
+                    ViewModel.SokuModSettingGroups[selectedIndex + 1] = selectedMember;
+                    ViewModel.SokuModSettingGroups[selectedIndex] = nextMember;
+                }
+            };
+            
+            listViewItem.RenderTransform = new TranslateTransform(0, 0);
+            listViewItem.RenderTransformOrigin = new Point(.5, 1);
+
+            listViewItem.RenderTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation);
+        }
+
+        private void DeleteModSettingGroupButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            ModSettingGroupModel selectedMember = (ModSettingGroupModel)button.DataContext;
+            var listViewItem = SokuModSettingGroupsListView.ItemContainerGenerator.ContainerFromItem(selectedMember) as ListViewItem;
+            
+            DoubleAnimation fadeAnimation = new DoubleAnimation
+            {
+                To = 0,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            DoubleAnimation moveAnimation = new DoubleAnimation
+            {
+                To = .5,
+                Duration = TimeSpan.FromMilliseconds(200),
+                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            fadeAnimation.Completed += (s, _) =>
+            {
+                ViewModel.SokuModSettingGroups.Remove(selectedMember);
+                listViewItem.RenderTransform = new ScaleTransform(1, 1);
+                listViewItem.Opacity = 1;
+            };
+
+            listViewItem.RenderTransform = new ScaleTransform(1, 1);
+            listViewItem.RenderTransformOrigin = new Point(.5, .5);
+
+            listViewItem.BeginAnimation(OpacityProperty, fadeAnimation);
+            listViewItem.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, moveAnimation, HandoffBehavior.Compose);
+            listViewItem.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
         }
     }
 }

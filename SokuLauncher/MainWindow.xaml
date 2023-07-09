@@ -49,7 +49,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <controls:ModSettingGroupUserControl VerticalAlignment="Center" Width="420" Height="150" Margin="8" />
+                                <controls:ModSettingGroupUserControl VerticalAlignment="Center" Width="420" Height="150" Margin="8" Cursor="Hand"/>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
