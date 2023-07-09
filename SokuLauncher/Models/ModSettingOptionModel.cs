@@ -9,6 +9,6 @@ namespace SokuLauncher.Models
     {
         public string Name { get; set; }
         public string FullPath { get; set; }
-        public bool? Enabled { get; set; }
+        public string Enabled { get; set; }
     }
 }

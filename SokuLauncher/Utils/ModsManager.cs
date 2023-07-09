@@ -104,7 +104,7 @@ namespace SokuLauncher.Utils
 
         public void DisableDuplicateEnabledMods()
         {
-            foreach (string alias in Static.ConfigUtil.Config.SokuModAlias)
+            foreach (string alias in Static.ConfigUtil.Config.SokuModAlias ?? new List<string>())
             {
                 string[] sameModNames = alias.Split('=');
                 bool hasOneEnable = false;

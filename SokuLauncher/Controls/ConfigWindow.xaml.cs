@@ -29,10 +29,21 @@ namespace SokuLauncher.Controls
             DataContext = ViewModel;
             InitializeComponent();
             GetSokuFileIcon();
+            ViewModel.Saveable = false;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (ViewModel.Saveable)
+            {
+                if (MessageBox.Show("There are unsaved changes, do you want to discard changes?", "Unsaved changes", MessageBoxButton.YesNo, MessageBoxImage.Question)
+                    == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
             MainWindow mainWindow = new MainWindow
             {
                 WindowState = WindowState.Normal,
@@ -85,6 +96,13 @@ namespace SokuLauncher.Controls
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            Static.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
+            Static.ConfigUtil.Config.SokuModAlias = ViewModel.SokuModAlias.ToList();
+            Static.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
+            Static.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
+            Static.ConfigUtil.Config.AutoCheckUpdate = ViewModel.AutoCheckUpdate;
+
+            Static.ConfigUtil.SaveConfig();
             ViewModel.Saveable = false;
         }
 
@@ -347,9 +365,9 @@ namespace SokuLauncher.Controls
         {
             ViewModel.SokuModSettingGroups.Add(new ModSettingGroupViewModel
             {
-                Name = "NewSetting",
-                Desc = "New setting group, no mod settings added",
-                Cover = "%resources%/gearbackground-r.png"
+                Name = "Untitle",
+                Desc = "Please enter description here...",
+                Cover = "%resources%/gearbackground.png"
             });
 
             ForceSokuModSettingGroupsListViewRefresh();
@@ -440,6 +458,81 @@ namespace SokuLauncher.Controls
                     ViewModel.SelectedSokuModSettingGroup.Cover = selectedFileName;
                     ViewModel.Saveable = true;
                 }
+            }
+        }
+
+        private void TextBoxSetSaveableTrue_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+            string oldValue = "";
+            string newValue = "";
+
+            foreach (var change in e.Changes)
+            {
+                int offset = change.Offset;
+                int length = change.AddedLength;
+                oldValue = textBox.Text.Substring(offset, length);
+                newValue = textBox.Text;
+                if (oldValue != newValue)
+                {
+                    ViewModel.Saveable = true;
+                }
+            }
+        }
+
+        private void ModSettingGroupSelectModsButton_Click(object sender, RoutedEventArgs e)
+        {
+            ModSettingGroupEditWindowViewModel msgewvm = new ModSettingGroupEditWindowViewModel();
+            msgewvm.ModSettingInfoList = Static.ModsManager.ModInfoList
+                    .Select(x => new ModSettingInfoModel
+                    {
+                        Name = x.Name,
+                        FullPath = x.FullPath,
+                        Enabled = "null"
+                    })
+                    .ToList();
+
+            if (ViewModel.SelectedSokuModSettingGroup.EnableMods?.Count > 0)
+            {
+                foreach (var modName in ViewModel.SelectedSokuModSettingGroup.EnableMods)
+                {
+                    var modInfo = msgewvm.ModSettingInfoList.FirstOrDefault(x => x.Name.ToLower() == modName.ToLower());
+                    if (modInfo != null)
+                    {
+                        modInfo.Enabled = "true";
+                    }
+                    else
+                    {
+                        msgewvm.ModSettingInfoList.Add(new ModSettingInfoModel { Name = modName, Enabled = "true" });
+                    }
+                }
+            }
+
+            if (ViewModel.SelectedSokuModSettingGroup.DisableMods?.Count > 0)
+            {
+                foreach (var modName in ViewModel.SelectedSokuModSettingGroup.DisableMods)
+                {
+                    var modInfo = msgewvm.ModSettingInfoList.FirstOrDefault(x => x.Name.ToLower() == modName.ToLower());
+                    if (modInfo != null)
+                    {
+                        modInfo.Enabled = "false";
+                    }
+                    else
+                    {
+                        msgewvm.ModSettingInfoList.Add(new ModSettingInfoModel { Name = modName, Enabled = "false" });
+                    }
+                }
+            }
+
+            ModSettingGroupEditWindow modSettingGroupEditWindow = new ModSettingGroupEditWindow(msgewvm);
+            modSettingGroupEditWindow.ShowDialog();
+
+            if (modSettingGroupEditWindow.DialogResult == true)
+            {
+                ViewModel.SelectedSokuModSettingGroup.EnableMods = msgewvm.EnableMods;
+                ViewModel.SelectedSokuModSettingGroup.DisableMods = msgewvm.DisableMods;
+                ViewModel.Saveable = true;
             }
         }
     }

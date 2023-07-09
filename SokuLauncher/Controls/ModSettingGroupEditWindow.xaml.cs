@@ -25,8 +25,8 @@ namespace SokuLauncher.Controls
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.EnableMods = ViewModel.ModSettingInfoList.Where(x => x.Enabled == true).Select(x => x.Name).ToList();
-            ViewModel.DisableMods = ViewModel.ModSettingInfoList.Where(x => x.Enabled == false).Select(x => x.Name).ToList();
+            ViewModel.EnableMods = ViewModel.ModSettingInfoList.Where(x => x.Enabled == "true").Select(x => x.Name).ToList();
+            ViewModel.DisableMods = ViewModel.ModSettingInfoList.Where(x => x.Enabled == "false").Select(x => x.Name).ToList();
             DialogResult = true;
         }
 

@@ -58,23 +58,8 @@ namespace SokuLauncher.ViewModels
             }
         }
         
-        private Dictionary<string, string> _SokuModVersion;
-        public Dictionary<string, string> SokuModVersion
-        {
-            get
-            {
-                return _SokuModVersion;
-            }
-            set
-            {
-                _SokuModVersion = value;
-                Saveable = true;
-                RaisePropertyChanged("SokuModVersion");
-            }
-        }
-        
-        private List<string> _SokuModAlias;
-        public List<string> SokuModAlias
+        private ObservableCollection<string> _SokuModAlias;
+        public ObservableCollection<string> SokuModAlias
         {
             get
             {

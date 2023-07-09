@@ -11,6 +11,7 @@ using System.Threading;
 using SokuLauncher.Models;
 using System.Drawing;
 using System.Windows.Media.Imaging;
+using Newtonsoft.Json;
 
 namespace SokuLauncher
 {
@@ -75,13 +76,8 @@ namespace SokuLauncher
             if (source == null)
                 return default;
 
-            BinaryFormatter formatter = new BinaryFormatter();
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                formatter.Serialize(memoryStream, source);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                return (T)formatter.Deserialize(memoryStream);
-            }
+            string jsonString = JsonConvert.SerializeObject(source);
+            return JsonConvert.DeserializeObject<T>(jsonString);
         }
     }
 }

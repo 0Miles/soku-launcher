@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ModSettingGroupEditWindowViewModel}"
-        mc:Ignorable="d" Loaded="Window_Loaded" x:Name="SokuLauncherModSettingGroupEditWindow"
-        Height="350" Width="300" SizeToContent="Height" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d" Loaded="Window_Loaded" x:Name="SokuLauncherModSettingGroupEditWindow" Title="Mod Setting"
+        Height="550" Width="520" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+        <converters:ReverseStringToVisibilityConverter x:Key="ReverseStringToVisibilityConverter" />
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
     </Window.Resources>
     <Grid>
@@ -18,31 +19,59 @@
         <ListView Grid.Row="1"
                   x:Name="SelectorListView"
                   ItemsSource="{Binding ModSettingInfoList}"
+                  VerticalContentAlignment="Center"
+                  Focusable="False"
                   Margin="8,8,8,8" Grid.ColumnSpan="2">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Border Padding="8">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Name}" FontSize="16"/>
-                                <TextBlock Text="{Binding FullPath}" Foreground="DarkGray" />
-                            </StackPanel>
-                            <ComboBox />
-                            <ComboBox Grid.Column="1" ItemsSource="{Binding Options, ElementName=SokuLauncherModSettingGroupEditWindow}" SelectedValue="{Binding Enabled}" Width="120" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Title}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" ScrollViewer.CanContentScroll="False" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                <Border Padding="8" BorderThickness="0,0,0,1" BorderBrush="LightGray" >
+                                    <Grid HorizontalAlignment="Stretch" Height="70" VerticalAlignment="Center"  >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" >
+                                            <TextBlock Text="{Binding Name}" FontSize="16" Margin="0,0,0,8"/>
+                                            <TextBlock Text="{Binding FullPath}" MaxWidth="350" TextWrapping="Wrap" Foreground="DarkGray" Visibility="{Binding FullPath, Converter={StaticResource StringToVisibilityConverter}}" />
+                                            <TextBlock Text="Module not found" MaxWidth="350" TextWrapping="Wrap" Foreground="DarkRed" Visibility="{Binding FullPath, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
+                                        </StackPanel>
+                                        <ComboBox Grid.Column="1" ItemsSource="{Binding DataContext.Options, ElementName=SokuLauncherModSettingGroupEditWindow}" SelectedValue="{Binding Enabled}" SelectedValuePath="Enabled" Width="100" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}" >
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Name}" Value="Enable">
+                                                                        <Setter Property="Foreground" Value="Blue" />
+                                                                        <Setter Property="FontWeight" Value="Bold" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Name}" Value="Disable">
+                                                                        <Setter Property="Foreground" Value="Red" />
+                                                                        <Setter Property="FontWeight" Value="Bold" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
         <StackPanel Grid.Row="2" Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>

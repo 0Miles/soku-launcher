@@ -75,11 +75,11 @@ namespace SokuLauncher
 
                 string sokuFile = Path.Combine(Static.ConfigUtil.SokuDirFullPath, Static.ConfigUtil.Config.SokuFileName);
 
-                foreach (var enableMod in settingGroup.EnableMods)
+                foreach (var enableMod in settingGroup.EnableMods ?? new List<string>())
                 {
                     Static.ModsManager.ChangeModEnabled(enableMod, true);
                 }
-                foreach (var disableMod in settingGroup.DisableMods)
+                foreach (var disableMod in settingGroup.DisableMods ?? new List<string>())
                 {
                     Static.ModsManager.ChangeModEnabled(disableMod, false);
                 }
@@ -203,7 +203,8 @@ namespace SokuLauncher
             {
                 SokuDirPath = Static.ConfigUtil.Config.SokuDirPath,
                 SokuFileName = Static.ConfigUtil.Config.SokuFileName,
-                SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(Static.ConfigUtil.Config.SokuModSettingGroups)
+                SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups)),
+                SokuModAlias = new ObservableCollection<string>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModAlias))
             });
             
             ZoomOutHideWindow((s, _) => {

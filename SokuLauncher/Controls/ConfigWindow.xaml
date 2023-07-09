@@ -280,7 +280,7 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBox Text="{Binding SelectedSokuModSettingGroup.Name }" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
+                                        <TextBox Text="{Binding SelectedSokuModSettingGroup.Name }" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"  TextChanged="TextBoxSetSaveableTrue_TextChanged"/>
                                         <Button Grid.Column="1" Margin="8,0" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Click="PickColorButton_Click" Tag="NameColor">
                                             <Border Background="{Binding SelectedSokuModSettingGroup.NameColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
                                         </Button>
@@ -293,7 +293,7 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBox Text="{Binding SelectedSokuModSettingGroup.Desc }" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
+                                        <TextBox Text="{Binding SelectedSokuModSettingGroup.Desc }" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" TextChanged="TextBoxSetSaveableTrue_TextChanged" />
                                         <Button Grid.Column="1" Margin="8,0" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Click="PickColorButton_Click" Tag="DescColor">
                                             <Border Background="{Binding SelectedSokuModSettingGroup.DescColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
                                         </Button>
@@ -331,7 +331,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <Button Padding="16" Cursor="Hand">
+                                    <Button Padding="16" Cursor="Hand" Click="ModSettingGroupSelectModsButton_Click">
                                         Select mods
                                     </Button>
                                     <StackPanel Grid.Column="1">

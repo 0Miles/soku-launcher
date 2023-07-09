@@ -10,9 +10,9 @@ namespace SokuLauncher.ViewModels
     {
         public List<ModSettingOptionModel> Options { get; set; } = new List<ModSettingOptionModel>
         {
-            new ModSettingOptionModel { Name = "Enable", Enabled = true},
-            new ModSettingOptionModel { Name = "Disable", Enabled = false},
-            new ModSettingOptionModel { Name = "Constant", Enabled = null }
+            new ModSettingOptionModel { Name = "Enable", Enabled = "true"},
+            new ModSettingOptionModel { Name = "Disable", Enabled = "false"},
+            new ModSettingOptionModel { Name = "Constant", Enabled = "null" }
         };
 
         private List<ModSettingInfoModel> _ModSettingInfoList;
