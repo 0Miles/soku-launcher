@@ -68,7 +68,7 @@
                             <Storyboard>
                                 <ColorAnimation
                                 Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                To="#AF5F5F5F"
+                                To="#FF5F5F5F"
                                 Duration="0:0:0.3"/>
                             </Storyboard>
                         </BeginStoryboard>
@@ -87,30 +87,7 @@
             </Border>
             <Border Background="#90CF2100" CornerRadius="2" BorderThickness="0" Margin="0" Cursor="Hand" Width="32" Height="32">
                 <Button Template="{StaticResource NoMouseOverButtonTemplate}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Click="ExitButton_Click">
-                    <Path IsHitTestVisible="False" Stroke="White" StrokeThickness="2" Fill="{x:Null}" Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Path.Data>
-                            <PathGeometry>
-                                <PathGeometry.Figures>
-                                    <PathFigureCollection>
-                                        <PathFigure StartPoint="18,6">
-                                            <PathFigure.Segments>
-                                                <PathSegmentCollection>
-                                                    <LineSegment Point="6,18" />
-                                                </PathSegmentCollection>
-                                            </PathFigure.Segments>
-                                        </PathFigure>
-                                        <PathFigure StartPoint="6,6">
-                                            <PathFigure.Segments>
-                                                <PathSegmentCollection>
-                                                    <LineSegment Point="18,18" />
-                                                </PathSegmentCollection>
-                                            </PathFigure.Segments>
-                                        </PathFigure>
-                                    </PathFigureCollection>
-                                </PathGeometry.Figures>
-                            </PathGeometry>
-                        </Path.Data>
-                    </Path>
+                    <Path Data="M18,6 L6,18 M6,6 L18,18" IsHitTestVisible="False" Stroke="White" StrokeThickness="2" Width="24" Height="24" Fill="Transparent" StrokeLineJoin="Round"/>
                 </Button>
                 <Border.Triggers>
                     <EventTrigger RoutedEvent="MouseEnter">
