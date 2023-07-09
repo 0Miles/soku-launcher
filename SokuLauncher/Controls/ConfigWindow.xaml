@@ -270,7 +270,7 @@
                             </Grid>
                         </Button>
                         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}">
-                            <StackPanel HorizontalAlignment="Stretch" Margin="8" MinWidth="450">
+                            <StackPanel HorizontalAlignment="Stretch" MinWidth="450">
                                 <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4" VerticalAlignment="Center">
                                     <TextBlock Text="Name: " HorizontalAlignment="Left" Margin="0,0,0,8" />
                                     <Grid>
@@ -373,8 +373,8 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <TextBlock Text="Soku Dir: " Width="60" Margin="8" />
-                    <TextBox Grid.Column="1" Text="{Binding SokuDirPath}" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="8"/>
-                    <Button Grid.Column="2" Content="Browser" Width="70" Padding="8,0" Margin="0,0,8,0" Click="SokuDirButton_Click" VerticalAlignment="Center" Cursor="Hand" />
+                    <TextBox Grid.Column="1" Text="{Binding SokuDirPath}" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="8"/>
+                    <Button Grid.Column="2" Content="Browser" Width="70" Padding="8,4" Margin="0,0,8,0" Click="SokuDirButton_Click" VerticalAlignment="Center" Cursor="Hand" />
 
                     <TextBlock Grid.Row="1" Text="Soku File: " Width="60" Margin="8" />
 
