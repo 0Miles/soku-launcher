@@ -2,12 +2,17 @@
 using SokuLauncher.Utils;
 using SokuLauncher.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Button = System.Windows.Controls.Button;
+using Egorozh.ColorPicker.Dialog;
+using Microsoft.Win32;
 
 namespace SokuLauncher.Controls
 {
@@ -64,16 +69,11 @@ namespace SokuLauncher.Controls
 
         private void SokuFileNameButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            openFileDialog.Filter = "Executable files (*.exe)|*.exe|All files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
-            openFileDialog.FileName = ViewModel.SokuFileName;
+            string sokuFileName = ConfigUtil.SelectExeFile(ViewModel.SokuDirPath);
 
-            System.Windows.Forms.DialogResult result = openFileDialog.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.OK)
+            if (sokuFileName != null && sokuFileName != ViewModel.SokuFileName)
             {
-                ViewModel.SokuFileName = Path.GetFileName(openFileDialog.FileName);
+                ViewModel.SokuFileName = sokuFileName;
                 GetSokuFileIcon();
             }
         }
@@ -85,7 +85,7 @@ namespace SokuLauncher.Controls
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            ViewModel.Saveable = false;
         }
 
         private void SokuModSettingGroupsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -216,7 +216,7 @@ namespace SokuLauncher.Controls
             ModSettingGroupEditGrid.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BackToModSettingGroupsButton_Click(object sender, RoutedEventArgs e)
         {
             SokuModSettingGroupsGrid.Opacity = 0;
             SokuModSettingGroupsGrid.Visibility = Visibility.Visible;
@@ -236,7 +236,7 @@ namespace SokuLauncher.Controls
         private void MoveUpModSettingGroupButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            ModSettingGroupModel selectedMember = (ModSettingGroupModel)button.DataContext;
+            ModSettingGroupViewModel selectedMember = (ModSettingGroupViewModel)button.DataContext;
 
             var listViewItem = SokuModSettingGroupsListView.ItemContainerGenerator.ContainerFromItem(selectedMember) as ListViewItem;
 
@@ -252,11 +252,13 @@ namespace SokuLauncher.Controls
                 int selectedIndex = ViewModel.SokuModSettingGroups.IndexOf(selectedMember);
                 if (selectedIndex > 0)
                 {
-                    listViewItem.RenderTransform = new TranslateTransform(0, 0);
-                    ModSettingGroupModel previousMember = ViewModel.SokuModSettingGroups[selectedIndex - 1];
+                    ModSettingGroupViewModel previousMember = ViewModel.SokuModSettingGroups[selectedIndex - 1];
                     ViewModel.SokuModSettingGroups[selectedIndex - 1] = selectedMember;
                     ViewModel.SokuModSettingGroups[selectedIndex] = previousMember;
+
+                    ViewModel.Saveable = true;
                 }
+                listViewItem.RenderTransform = new TranslateTransform(0, 0);
             };
 
             listViewItem.RenderTransform = new TranslateTransform(0, 0);
@@ -268,7 +270,7 @@ namespace SokuLauncher.Controls
         private void MoveDownModSettingGroupButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            ModSettingGroupModel selectedMember = (ModSettingGroupModel)button.DataContext;
+            ModSettingGroupViewModel selectedMember = (ModSettingGroupViewModel)button.DataContext;
 
             var listViewItem = SokuModSettingGroupsListView.ItemContainerGenerator.ContainerFromItem(selectedMember) as ListViewItem;
 
@@ -287,14 +289,17 @@ namespace SokuLauncher.Controls
                 int selectedIndex = ViewModel.SokuModSettingGroups.IndexOf(selectedMember);
                 if (selectedIndex < ViewModel.SokuModSettingGroups.Count - 1)
                 {
-                    Panel.SetZIndex(listViewItem, originZindex);
-                    listViewItem.RenderTransform = new TranslateTransform(0, 0);
-                    ModSettingGroupModel nextMember = ViewModel.SokuModSettingGroups[selectedIndex + 1];
+
+                    ModSettingGroupViewModel nextMember = ViewModel.SokuModSettingGroups[selectedIndex + 1];
                     ViewModel.SokuModSettingGroups[selectedIndex + 1] = selectedMember;
                     ViewModel.SokuModSettingGroups[selectedIndex] = nextMember;
+
+                    ViewModel.Saveable = true;
                 }
+                Panel.SetZIndex(listViewItem, originZindex);
+                listViewItem.RenderTransform = new TranslateTransform(0, 0);
             };
-            
+
             listViewItem.RenderTransform = new TranslateTransform(0, 0);
             listViewItem.RenderTransformOrigin = new Point(.5, 1);
 
@@ -304,9 +309,9 @@ namespace SokuLauncher.Controls
         private void DeleteModSettingGroupButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            ModSettingGroupModel selectedMember = (ModSettingGroupModel)button.DataContext;
+            ModSettingGroupViewModel selectedMember = (ModSettingGroupViewModel)button.DataContext;
             var listViewItem = SokuModSettingGroupsListView.ItemContainerGenerator.ContainerFromItem(selectedMember) as ListViewItem;
-            
+
             DoubleAnimation fadeAnimation = new DoubleAnimation
             {
                 To = 0,
@@ -326,6 +331,8 @@ namespace SokuLauncher.Controls
                 ViewModel.SokuModSettingGroups.Remove(selectedMember);
                 listViewItem.RenderTransform = new ScaleTransform(1, 1);
                 listViewItem.Opacity = 1;
+                ForceSokuModSettingGroupsListViewRefresh();
+                ViewModel.Saveable = true;
             };
 
             listViewItem.RenderTransform = new ScaleTransform(1, 1);
@@ -334,6 +341,106 @@ namespace SokuLauncher.Controls
             listViewItem.BeginAnimation(OpacityProperty, fadeAnimation);
             listViewItem.RenderTransform.BeginAnimation(ScaleTransform.ScaleXProperty, moveAnimation, HandoffBehavior.Compose);
             listViewItem.RenderTransform.BeginAnimation(ScaleTransform.ScaleYProperty, moveAnimation, HandoffBehavior.Compose);
+        }
+
+        private void AddModSettingGroupButton_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.SokuModSettingGroups.Add(new ModSettingGroupViewModel
+            {
+                Name = "NewSetting",
+                Desc = "New setting group, no mod settings added",
+                Cover = "%resources%/gearbackground-r.png"
+            });
+
+            ForceSokuModSettingGroupsListViewRefresh();
+            ViewModel.Saveable = true;
+        }
+
+        private void ForceSokuModSettingGroupsListViewRefresh()
+        {
+            ObservableCollection<ModSettingGroupViewModel> tempCollection = new ObservableCollection<ModSettingGroupViewModel>(ViewModel.SokuModSettingGroups);
+            SokuModSettingGroupsListView.ItemsSource = tempCollection;
+            SokuModSettingGroupsListView.ItemsSource = ViewModel.SokuModSettingGroups;
+        }
+
+        private void PickColorButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            Color color;
+            switch (button.Tag)
+            {
+                case "NameColor":
+                    color = (Color)ColorConverter.ConvertFromString(ViewModel.SelectedSokuModSettingGroup.NameColor);
+                    break;
+                case "DescColor":
+                    color = (Color)ColorConverter.ConvertFromString(ViewModel.SelectedSokuModSettingGroup.DescColor);
+                    break;
+                case "CoverOverlayColor":
+                    color = (Color)ColorConverter.ConvertFromString(ViewModel.SelectedSokuModSettingGroup.CoverOverlayColor);
+                    break;
+                case "HoverColor":
+                    color = (Color)ColorConverter.ConvertFromString(ViewModel.SelectedSokuModSettingGroup.HoverColor);
+                    break;
+                default:
+                    return;
+            }
+
+            var dialog = new ColorPickerDialog
+            {
+                Owner = Owner,
+                Color = color
+            };
+
+            var res = dialog.ShowDialog();
+
+            if (res == true)
+            {
+                string hexString = "#" + dialog.Color.A.ToString("X2") + dialog.Color.R.ToString("X2") + dialog.Color.G.ToString("X2") + dialog.Color.B.ToString("X2");
+
+                switch (button.Tag)
+                {
+                    case "NameColor":
+                        ViewModel.SelectedSokuModSettingGroup.NameColor = hexString;
+                        break;
+                    case "DescColor":
+                        ViewModel.SelectedSokuModSettingGroup.DescColor = hexString;
+                        break;
+                    case "CoverOverlayColor":
+                        ViewModel.SelectedSokuModSettingGroup.CoverOverlayColor = hexString;
+                        break;
+                    case "HoverColor":
+                        ViewModel.SelectedSokuModSettingGroup.HoverColor = hexString;
+                        break;
+                }
+                ViewModel.Saveable = true;
+            }
+        }
+
+        private void SelectCoverBackgroundButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Filter = "Image files (*.png,*.jpg,*.jpeg,*.gif,*.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp|Video files (*.mp4,*.avi,*.wmv)|*.mp4;*.avi;*.wmv";
+            openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
+            openFileDialog.FileName = ViewModel.SokuFileName;
+
+            bool? result = openFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                string relativePath = Static.GetRelativePath(openFileDialog.FileName, Static.SelfFileDir);
+                if (!relativePath.StartsWith("../../"))
+                {
+                    selectedFileName = relativePath;
+                }
+
+                if (ViewModel.SelectedSokuModSettingGroup.Cover != selectedFileName)
+                {
+                    ViewModel.SelectedSokuModSettingGroup.Cover = selectedFileName;
+                    ViewModel.Saveable = true;
+                }
+            }
         }
     }
 }

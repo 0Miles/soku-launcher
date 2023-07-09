@@ -70,9 +70,19 @@
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Egorozh.ColorPicker.Core, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Egorozh.ColorPicker.Core.1.0.1\lib\net47\Egorozh.ColorPicker.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Egorozh.ColorPicker.WPF, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Egorozh.ColorPicker.WPF.5.0.0\lib\net47\Egorozh.ColorPicker.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Egorozh.ColorPicker.WPF.Dialog, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Egorozh.ColorPicker.WPF.Dialog.5.0.0\lib\net47\Egorozh.ColorPicker.WPF.Dialog.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -133,6 +143,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Utils\ResourceManager.cs" />
     <Compile Include="Utils\UpdateUtil.cs" />
+    <Compile Include="ViewModels\ModSettingGroupViewModel.cs" />
     <Compile Include="ViewModels\MainWindwoViewModel.cs" />
     <Compile Include="ViewModels\ConfigWindowViewModel.cs" />
     <Compile Include="ViewModels\ModSettingGroupEditWindowViewModel.cs" />
@@ -172,7 +183,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ConfigModel.cs" />
-    <Compile Include="Models\ModSettingGroupModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

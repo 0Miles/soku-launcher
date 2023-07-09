@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
         mc:Ignorable="d" Closing="Window_Closing"
-        Title="Config" MinWidth="260" MinHeight="320" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+        Title="Config" MinWidth="260" MinHeight="320" Width="500" Height="720" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:IsFirstItemConverter x:Key="IsFirstItemConverter"/>
         <converters:IsLastItemConverter x:Key="IsLastItemConverter"/>
@@ -27,7 +27,7 @@
     <Grid>
         <TabControl Margin="8,18,8,8" FocusVisualStyle="{x:Null}">
             <TabItem Header="Edit Mods">
-                <Grid>
+                <Grid ClipToBounds="True">
                     <Grid x:Name="SokuModSettingGroupsGrid">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -40,24 +40,24 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Button Padding="8,4" Background="#FFEFEFEF" BorderThickness="0">
-                                <StackPanel Orientation="Horizontal">
+                            <Button Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Cursor="Hand" Click="AddModSettingGroupButton_Click">
+                                <StackPanel Orientation="Horizontal" IsHitTestVisible="False">
                                     <Path Data="M12,5 V19 M5,12 H19" Stroke="Green" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center"/>
                                     <TextBlock Text="Add" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="2" Padding="8,4" Background="#FFEFEFEF" BorderThickness="0">
-                                <StackPanel Orientation="Horizontal">
+                            <!--<Button Grid.Column="2" Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Cursor="Hand">
+                                <StackPanel Orientation="Horizontal" IsHitTestVisible="False">
                                     <Path Data="M18,18 V12 A3,3 0 0 0 15,9 H5 L9,5 M9,13 L5,9" Stroke="Black" StrokeThickness="1" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center"/>
                                     <TextBlock Text="Undo" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button Grid.Column="3" Padding="8,4" Background="#FFEFEFEF" BorderThickness="0">
-                                <StackPanel Orientation="Horizontal">
+                            <Button Grid.Column="3" Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Cursor="Hand">
+                                <StackPanel Orientation="Horizontal" IsHitTestVisible="False">
                                     <Path Data="M6,18 V12 A3,3 0 0 1 9,9 H19 L15,5 M15,13 L19,9" Stroke="Black" StrokeThickness="1" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center"/>
                                     <TextBlock Text="Redo" VerticalAlignment="Center"/>
                                 </StackPanel>
-                            </Button>
+                            </Button>-->
                         </Grid>
                         <ListView
                             Grid.Row="1"
@@ -101,10 +101,10 @@
                                                                         <Style TargetType="Border">
                                                                             <Setter Property="Margin" Value="0,0,0,45"/>
                                                                             <Style.Triggers>
-                                                                                <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsFirstItemConverter}}">
+                                                                                <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsFirstItemConverter}}">
                                                                                     <Setter Property="Visibility" Value="Collapsed"/>
                                                                                 </DataTrigger>
-                                                                                <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsLastItemConverter}}">
+                                                                                <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsLastItemConverter}}">
                                                                                     <Setter Property="Margin" Value="0"/>
                                                                                 </DataTrigger>
                                                                             </Style.Triggers>
@@ -145,7 +145,7 @@
                                                                                 <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsLastItemConverter}}">
                                                                                     <Setter Property="Visibility" Value="Collapsed"/>
                                                                                 </DataTrigger>
-                                                                                <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsFirstItemConverter}}">
+                                                                                <DataTrigger Value="True" Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListViewItem}, Converter={StaticResource IsFirstItemConverter}}">
                                                                                     <Setter Property="Margin" Value="0"/>
                                                                                 </DataTrigger>
                                                                             </Style.Triggers>
@@ -240,35 +240,37 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Button Padding="4" Background="#FFEFEFEF" BorderThickness="0" VerticalAlignment="Top" Click="Button_Click" Cursor="Hand">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
+                        <Grid HorizontalAlignment="Stretch" Background="#FFEFEFEF">
+                            <Button Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Click="BackToModSettingGroupsButton_Click" Cursor="Hand">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
 
-                                <Path Stroke="Black" Width="24" Height="24" Margin="0,0,8,0" VerticalAlignment="Center" StrokeThickness="1" Fill="{x:Null}">
-                                    <Path.Data>
-                                        <GeometryGroup>
-                                            <PathGeometry>
-                                                <PathFigure StartPoint="9,14">
-                                                    <LineSegment Point="5,10" />
-                                                    <LineSegment Point="9,6" />
-                                                </PathFigure>
-                                            </PathGeometry>
-                                            <PathGeometry>
-                                                <PathFigure StartPoint="5,10">
-                                                    <LineSegment Point="16,10" />
-                                                    <ArcSegment Size="4,4" RotationAngle="0" IsLargeArc="False" SweepDirection="Clockwise" Point="16,18" />
-                                                    <LineSegment Point="15,18" />
-                                                </PathFigure>
-                                            </PathGeometry>
-                                        </GeometryGroup>
-                                    </Path.Data>
-                                </Path>
-                                <TextBlock Grid.Column="1" Text="Back To Select" VerticalAlignment="Center" />
-                            </Grid>
-                        </Button>
+                                    <Path Stroke="DodgerBlue" Width="24" Height="24" Margin="0,0,8,0" VerticalAlignment="Center" StrokeThickness="1" Fill="{x:Null}">
+                                        <Path.Data>
+                                            <GeometryGroup>
+                                                <PathGeometry>
+                                                    <PathFigure StartPoint="9,14">
+                                                        <LineSegment Point="5,10" />
+                                                        <LineSegment Point="9,6" />
+                                                    </PathFigure>
+                                                </PathGeometry>
+                                                <PathGeometry>
+                                                    <PathFigure StartPoint="5,10">
+                                                        <LineSegment Point="16,10" />
+                                                        <ArcSegment Size="4,4" RotationAngle="0" IsLargeArc="False" SweepDirection="Clockwise" Point="16,18" />
+                                                        <LineSegment Point="15,18" />
+                                                    </PathFigure>
+                                                </PathGeometry>
+                                            </GeometryGroup>
+                                        </Path.Data>
+                                    </Path>
+                                    <TextBlock Grid.Column="1" Text="Back To Select" VerticalAlignment="Center" />
+                                </Grid>
+                            </Button>
+                        </Grid>
                         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}">
                             <StackPanel HorizontalAlignment="Stretch" MinWidth="450">
                                 <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4" VerticalAlignment="Center">
@@ -279,7 +281,7 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <TextBox Text="{Binding SelectedSokuModSettingGroup.Name }" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
-                                        <Button Grid.Column="1" Margin="8,0" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand">
+                                        <Button Grid.Column="1" Margin="8,0" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Click="PickColorButton_Click" Tag="NameColor">
                                             <Border Background="{Binding SelectedSokuModSettingGroup.NameColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
                                         </Button>
                                     </Grid>
@@ -292,7 +294,7 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <TextBox Text="{Binding SelectedSokuModSettingGroup.Desc }" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" />
-                                        <Button Grid.Column="1" Margin="8,0" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand">
+                                        <Button Grid.Column="1" Margin="8,0" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Click="PickColorButton_Click" Tag="DescColor">
                                             <Border Background="{Binding SelectedSokuModSettingGroup.DescColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
                                         </Button>
                                     </Grid>
@@ -300,7 +302,7 @@
                                 <TextBlock Text="Appearance: " HorizontalAlignment="Left" Margin="8" />
                                 <local:ModSettingGroupUserControl DataContext="{Binding SelectedSokuModSettingGroup}" VerticalAlignment="Top" HorizontalAlignment="Center" Width="420" Height="150" Margin="16,8" />
                                 <StackPanel Width="420">
-                                    <Button Padding="6" Cursor="Hand">
+                                    <Button Padding="6" Cursor="Hand" Click="SelectCoverBackgroundButton_Click">
                                         Select cover background
                                     </Button>
                                     <Grid>
@@ -308,16 +310,15 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
                                             <TextBlock Text="Cover color: " HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                            <Button HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Margin="8">
+                                            <Button HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Margin="8" Click="PickColorButton_Click" Tag="CoverOverlayColor">
                                                 <Border Background="{Binding SelectedSokuModSettingGroup.CoverOverlayColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
                                             </Button>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="8">
                                             <TextBlock Text="Hover color: " HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                            <Button HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Margin="8">
+                                            <Button HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Margin="8" Click="PickColorButton_Click" Tag="HoverColor">
                                                 <Border Background="{Binding SelectedSokuModSettingGroup.HoverColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
                                             </Button>
                                         </StackPanel>
@@ -330,7 +331,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <Button Padding="16">
+                                    <Button Padding="16" Cursor="Hand">
                                         Select mods
                                     </Button>
                                     <StackPanel Grid.Column="1">
@@ -402,7 +403,7 @@
             </TabItem>
         </TabControl>
         <StackPanel Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Button Padding="12,3" Margin="8,0,0,0" IsEnabled="{Binding Saveable}" Click="SaveButton_Click">Save</Button>
+            <Button Padding="12,3" Margin="8,0,0,0" IsEnabled="{Binding Saveable}" Click="SaveButton_Click" Cursor="Hand">Save</Button>
         </StackPanel>
     </Grid>
 </Window>

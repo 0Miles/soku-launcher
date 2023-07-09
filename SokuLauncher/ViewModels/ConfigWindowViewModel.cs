@@ -26,8 +26,8 @@ namespace SokuLauncher.ViewModels
         }
 
 
-        private ObservableCollection<ModSettingGroupModel> _SokuModSettingGroups;
-        public ObservableCollection<ModSettingGroupModel> SokuModSettingGroups
+        private ObservableCollection<ModSettingGroupViewModel> _SokuModSettingGroups;
+        public ObservableCollection<ModSettingGroupViewModel> SokuModSettingGroups
         {
             get
             {
@@ -36,12 +36,13 @@ namespace SokuLauncher.ViewModels
             set
             {
                 _SokuModSettingGroups = value;
+                Saveable = true;
                 RaisePropertyChanged("SokuModSettingGroups");
             }
         }
 
-        private ModSettingGroupModel _SelectedSokuModSettingGroup;
-        public ModSettingGroupModel SelectedSokuModSettingGroup
+        private ModSettingGroupViewModel _SelectedSokuModSettingGroup;
+        public ModSettingGroupViewModel SelectedSokuModSettingGroup
         {
             get
             {
@@ -56,9 +57,36 @@ namespace SokuLauncher.ViewModels
                 }
             }
         }
-
-        public Dictionary<string, string> SokuModVersion { get; set; } = new Dictionary<string, string>();
-        public List<string> SokuModAlias { get; set; } = new List<string>();
+        
+        private Dictionary<string, string> _SokuModVersion;
+        public Dictionary<string, string> SokuModVersion
+        {
+            get
+            {
+                return _SokuModVersion;
+            }
+            set
+            {
+                _SokuModVersion = value;
+                Saveable = true;
+                RaisePropertyChanged("SokuModVersion");
+            }
+        }
+        
+        private List<string> _SokuModAlias;
+        public List<string> SokuModAlias
+        {
+            get
+            {
+                return _SokuModAlias;
+            }
+            set
+            {
+                _SokuModAlias = value;
+                Saveable = true;
+                RaisePropertyChanged("SokuModAlias");
+            }
+        }
         
         private string _SokuFileName;
         public string SokuFileName
@@ -70,6 +98,7 @@ namespace SokuLauncher.ViewModels
             set
             {
                 _SokuFileName = value;
+                Saveable = true;
                 RaisePropertyChanged("SokuFileName");
             }
         }
@@ -84,6 +113,7 @@ namespace SokuLauncher.ViewModels
             set
             {
                 _SokuDirPath = value;
+                Saveable = true;
                 RaisePropertyChanged("SokuDirPath");
             }
         }
@@ -101,7 +131,21 @@ namespace SokuLauncher.ViewModels
                 RaisePropertyChanged("SokuFileIcon");
             }
         }
-        public bool AutoCheckUpdate { get; set; } = true;
+
+        private bool _AutoCheckUpdate;
+        public bool AutoCheckUpdate
+        {
+            get
+            {
+                return _AutoCheckUpdate;
+            }
+            set
+            {
+                _AutoCheckUpdate = value;
+                Saveable = true;
+                RaisePropertyChanged("AutoCheckUpdate");
+            }
+        }
 
     }
 }

@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace SokuLauncher.Utils
@@ -74,9 +75,9 @@ namespace SokuLauncher.Utils
                 config.SokuFileName = SelectSokuFile(config.SokuDirPath);
             }
 
-            config.SokuModSettingGroups = new List<ModSettingGroupModel>
+            config.SokuModSettingGroups = new List<ModSettingGroupViewModel>
             {
-                new ModSettingGroupModel
+                new ModSettingGroupViewModel
                 {
                     Name = "Giuroll",
                     Desc = "Enable SokuLobbies and Giuroll",
@@ -84,7 +85,7 @@ namespace SokuLauncher.Utils
                     DisableMods = new List<string> { "Giuroll-62F", "SWRSokuRoll", "InGameHostlist" },
                     Cover = "%tmp%/SokuLauncher/Resources/cover1.mp4"
                 },
-                new ModSettingGroupModel
+                new ModSettingGroupViewModel
                 {
                     Name = "Giuroll CN",
                     Desc = "Enable SokuLobbies and Giuroll-62F",
@@ -92,7 +93,7 @@ namespace SokuLauncher.Utils
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "SWRSokuRoll", "InGameHostlist" },
                     Cover = "%tmp%/SokuLauncher/Resources/cover2.mp4"
                 },
-                new ModSettingGroupModel
+                new ModSettingGroupViewModel
                 {
                     Name = "SokuRoll",
                     Desc = "Enable InGameHostlist and SokuRoll 1.3",
@@ -101,14 +102,14 @@ namespace SokuLauncher.Utils
                     Cover = "%resources%/gearbackground.png",
                     CoverOverlayColor = "#6FA92E00"
                 },
-                new ModSettingGroupModel
+                new ModSettingGroupViewModel
                 {
                     Name = "No Roll",
                     Desc = "Enable InGameHostlist, No any Roll",
                     EnableMods = new List<string> { "InGameHostlist" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod", "SWRSokuRoll" },
                     Cover = "%resources%/gearbackground-r.png",
-                   CoverOverlayColor = "#6F002EA9"
+                    CoverOverlayColor = "#6F002EA9"
                 },
             };
             config.SokuModVersion = new Dictionary<string, string>
@@ -124,7 +125,7 @@ namespace SokuLauncher.Utils
         public bool CheckSokuDirAndFileExists(string sokuDir, string sokuFileName)
         {
             string sokuDirFullPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, $"{sokuDir}/"));
-            if (!Directory.Exists(sokuDirFullPath) || !File.Exists(Path.Combine(sokuDirFullPath, sokuFileName)))
+            if (!Directory.Exists(sokuDirFullPath) || !File.Exists(Path.Combine(sokuDirFullPath, sokuFileName ?? DEFAULT_SOKU_FILE_NAME)))
             {
                 return false;
             }
@@ -210,6 +211,49 @@ namespace SokuLauncher.Utils
             {
                 return SokuFileNames.FirstOrDefault();
             }
+        }
+
+        public static string SelectExeFile(string sokuDirPath)
+        {
+
+            string currentSokuDir = Path.GetFullPath(Path.Combine(Static.SelfFileDir, sokuDirPath));
+            string[] exeFiles = Directory.GetFiles(currentSokuDir, "*.exe");
+
+            if (exeFiles.Count() == 0)
+            {
+                MessageBox.Show("Executable file not found.");
+                return null;
+            }
+
+            SelectorWindowViewModel swvm = new SelectorWindowViewModel
+            {
+                Title = "Choose the executable file",
+                Desc = "Please select the file to be set as the default launcher.",
+                SelectorNodeList = new List<SelectorNodeModel>()
+            };
+
+            foreach (string file in exeFiles)
+            {
+                string fileName = Path.GetFileName(file);
+                var bitmapSource = Static.GetExtractAssociatedIcon(Path.Combine(currentSokuDir, fileName));
+                swvm.SelectorNodeList.Add(new SelectorNodeModel
+                {
+                    Title = fileName,
+                    Icon = bitmapSource
+                });
+            }
+
+            swvm.SelectorNodeList.First().Selected = true;
+
+            SelectorWindow selectorWindow = new SelectorWindow(swvm);
+            selectorWindow.ShowDialog();
+
+            if (selectorWindow.DialogResult == true)
+            {
+                return swvm.SelectorNodeList.FirstOrDefault(x => x.Selected)?.Title ?? "";
+            }
+
+            return null;
         }
     }
 }

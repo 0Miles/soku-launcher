@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using SokuLauncher.ViewModels;
+using System.Collections.Generic;
 
 namespace SokuLauncher.Models
 {
     internal class ConfigModel
     {
-        public List<ModSettingGroupModel> SokuModSettingGroups { get; set; } = new List<ModSettingGroupModel>();
+        public List<ModSettingGroupViewModel> SokuModSettingGroups { get; set; } = new List<ModSettingGroupViewModel>();
         public Dictionary<string, string> SokuModVersion { get; set; } = new Dictionary<string, string>();
         public List<string> SokuModAlias { get; set; } = new List<string>();
         public string SokuFileName { get; set; }
