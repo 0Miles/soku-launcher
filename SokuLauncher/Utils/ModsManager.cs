@@ -6,34 +6,37 @@ using System.Linq;
 
 namespace SokuLauncher.Utils
 {
-    internal class ModsManager
+    public class ModsManager
     {
         public List<ModInfoModel> ModInfoList { get; private set; } = new List<ModInfoModel> { };
-        public string SokuDir { get; private set; }
+        public string SokuDirFullPath { get; private set; }
+
+        public string DefaultModsDir { get; private set; }
         
         public ModsManager(string sokuDir = null)
         {
             if (sokuDir == null)
             {
-                SokuDir = Static.ConfigUtil.SokuDirFullPath;
+                SokuDirFullPath = Static.ConfigUtil.SokuDirFullPath;
             }
             else
             {
-                SokuDir = sokuDir;
+                SokuDirFullPath = sokuDir;
             }
+
+            DefaultModsDir = Path.Combine(SokuDirFullPath, "modules");
         }
 
         public void SearchModulesDir()
         {
             ModInfoList.Clear();
-            string modulesDirectory = Path.Combine(SokuDir, "modules");
 
-            if (!Directory.Exists(modulesDirectory))
+            if (!Directory.Exists(DefaultModsDir))
             {
-                throw new Exception("The 'modules' directory does not exist.");
+                return;
             }
 
-            string[] moduleDirectories = Directory.GetDirectories(modulesDirectory);
+            string[] moduleDirectories = Directory.GetDirectories(DefaultModsDir);
 
             foreach (string moduleDir in moduleDirectories)
             {
@@ -48,7 +51,7 @@ namespace SokuLauncher.Utils
 
         public void LoadSWRSToysSetting()
         {
-            string iniFilePath = Path.Combine(SokuDir, "SWRSToys.ini");
+            string iniFilePath = Path.Combine(SokuDirFullPath, "SWRSToys.ini");
 
             if (!File.Exists(iniFilePath))
             {
@@ -75,15 +78,16 @@ namespace SokuLauncher.Utils
                 if (isModuleSectionsStart && !string.IsNullOrEmpty(trimmedLine))
                 {
                     string[] splitedLine = trimmedLine.Split('=');
-                    if (splitedLine.Length > 1 && !splitedLine[0].StartsWith(";"))
+                    if (splitedLine.Length > 1)
                     {
+                        bool enabled = !splitedLine[0].StartsWith(";");
+
                         string[] splitedPath = splitedLine[1].Split(';');
-                        string fullPath = Path.Combine(SokuDir, splitedPath[0].Trim().Replace('/', '\\'));
-                        var modInfo = ModInfoList.FirstOrDefault(x => x.FullPath.ToLower() == fullPath.ToLower());
-                        if (modInfo != null)
-                        {
-                            modInfo.Enabled = true;
-                        }
+                        string fullPath = Path.Combine(SokuDirFullPath, splitedPath[0].Trim().Replace('/', '\\'));
+
+                        var modInfo = ModInfoList.FirstOrDefault(x => x.FullPath.ToLower() == fullPath.ToLower()) ?? new ModInfoModel(fullPath);
+
+                        modInfo.Enabled = enabled;
                     }
                 }
             }
@@ -128,20 +132,20 @@ namespace SokuLauncher.Utils
 
         public void SaveSWRSToysIni()
         {
-            Directory.SetCurrentDirectory(SokuDir);
-            string modLoaderSettingPath = Path.Combine(SokuDir, "ModLoaderSettings.json");
+            Directory.SetCurrentDirectory(SokuDirFullPath);
+            string modLoaderSettingPath = Path.Combine(SokuDirFullPath, "ModLoaderSettings.json");
             if (File.Exists(modLoaderSettingPath))
             {
                 File.Delete(modLoaderSettingPath);
             }
-            string iniFilePath = Path.Combine(SokuDir, "SWRSToys.ini");
+            string iniFilePath = Path.Combine(SokuDirFullPath, "SWRSToys.ini");
 
             using (StreamWriter writer = new StreamWriter(iniFilePath))
             {
                 writer.WriteLine("[Module]");
                 foreach (var modInfo in ModInfoList)
                 {
-                    writer.WriteLine((modInfo.Enabled ? "" : ";") + $"{modInfo.Name}={Static.GetRelativePath(modInfo.FullPath, SokuDir)}");
+                    writer.WriteLine((modInfo.Enabled ? "" : ";") + $"{modInfo.Name}={Static.GetRelativePath(modInfo.FullPath, SokuDirFullPath)}");
                 }
                 writer.Close();
             }
