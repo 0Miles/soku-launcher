@@ -13,7 +13,7 @@ namespace SokuLauncher.Utils
     public class UpdatesManager
     {
         private const string DEFAULT_VERSION_INFO_URL = "https://soku.latte.today/version.json";
-        private const string MOD_VERSION_FILENAME = "sokulauncher.version.txt";
+        private const string MOD_VERSION_FILENAME_SUFFIX = ".version.txt";
 
         public event Action<int> DownloadProgressChanged;
         public event Action<string> DownloadFileNameChanged;
@@ -51,8 +51,8 @@ namespace SokuLauncher.Utils
                 foreach (UpdateFileInfoModel lastestVersionInfo in latestVersionInfoList)
                 {
                     Version latestVersion = new Version(lastestVersionInfo.Version);
-
-                    Version currentVersion;
+                    
+                    Version currentVersion = null;
 
                     switch (lastestVersionInfo.Name)
                     {
@@ -66,22 +66,11 @@ namespace SokuLauncher.Utils
                             {
                                 lastestVersionInfo.Installed = false;
                             }
-                            
-                            string sWRSToysVersionFileName = Path.Combine(lastestVersionInfo.LocalFileDir, MOD_VERSION_FILENAME);
-
-                            string sWRSToysCurrentVersion = "0.0.0.0";
-                            if (File.Exists(sWRSToysVersionFileName))
-                            {
-                                sWRSToysCurrentVersion = File.ReadAllText(sWRSToysVersionFileName);
-                            }
-                            currentVersion = new Version(sWRSToysCurrentVersion);
-
                             break;
                         default:
                             var modInfo = ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
                             if (modInfo == null)
                             {
-                                //continue;
                                 Directory.CreateDirectory(ModsManager.DefaultModsDir);
                                 Directory.CreateDirectory(Path.Combine(ModsManager.DefaultModsDir, lastestVersionInfo.Name));
                                 lastestVersionInfo.LocalFileName = Path.Combine(ModsManager.DefaultModsDir, lastestVersionInfo.Name, lastestVersionInfo.FileName);
@@ -91,18 +80,19 @@ namespace SokuLauncher.Utils
                             {
                                 lastestVersionInfo.LocalFileName = modInfo.FullPath;
                             }
-
-                            string modVersionFileName = Path.Combine(lastestVersionInfo.LocalFileDir, MOD_VERSION_FILENAME);
-
-                            string modCurrentVersion = "0.0.0.0";
-                            if (File.Exists(modVersionFileName))
-                            {
-                                modCurrentVersion = File.ReadAllText(modVersionFileName);
-                            }
-
-                            currentVersion = new Version(modCurrentVersion);
-                            
                             break;
+                    }
+
+                    if (currentVersion == null)
+                    {
+                        string modVersionFileName = Path.Combine(lastestVersionInfo.LocalFileDir, $"{lastestVersionInfo.Name}{MOD_VERSION_FILENAME_SUFFIX}");
+                        string modCurrentVersion = "0.0.0.0";
+                        if (File.Exists(modVersionFileName))
+                        {
+                            modCurrentVersion = File.ReadAllText(modVersionFileName);
+                        }
+
+                        currentVersion = new Version(modCurrentVersion);
                     }
 
                     lastestVersionInfo.LocalFileVersion = currentVersion.ToString();
@@ -202,7 +192,7 @@ namespace SokuLauncher.Utils
                 }
             }
 
-            string modVersionFileName = Path.Combine(updateFileInfo.LocalFileDir, MOD_VERSION_FILENAME);
+            string modVersionFileName = Path.Combine(updateFileInfo.LocalFileDir, $"{updateFileInfo.Name}{MOD_VERSION_FILENAME_SUFFIX}");
             File.WriteAllText(modVersionFileName, updateFileInfo.Version);
             Directory.Delete(updateFileDir, true);
         }
