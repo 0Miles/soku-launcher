@@ -141,7 +141,7 @@
     <Compile Include="Utils\ModsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utils\ResourcesManager.cs" />
-    <Compile Include="Utils\UpdateManager.cs" />
+    <Compile Include="Utils\UpdatesManager.cs" />
     <Compile Include="ViewModels\ModSettingGroupViewModel.cs" />
     <Compile Include="ViewModels\MainWindwoViewModel.cs" />
     <Compile Include="ViewModels\ConfigWindowViewModel.cs" />

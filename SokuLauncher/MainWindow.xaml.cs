@@ -205,7 +205,9 @@ namespace SokuLauncher
                 SokuDirPath = Static.ConfigUtil.Config.SokuDirPath,
                 SokuFileName = Static.ConfigUtil.Config.SokuFileName,
                 SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups)),
-                SokuModAlias = new ObservableCollection<string>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModAlias))
+                SokuModAlias = new ObservableCollection<string>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModAlias)),
+                AutoCheckForUpdates = Static.ConfigUtil.Config.AutoCheckForUpdates,
+                VersionInfoUrl = Static.ConfigUtil.Config.VersionInfoUrl
             });
             
             ZoomOutHideWindow((s, _) => {

@@ -152,6 +152,7 @@ namespace SokuLauncher.Utils
                 { "SokuLobbiesMod", "0.5.0" },
             };
             config.SokuModAlias = new List<string> { "Giuroll=Giuroll-60F" };
+            config.VersionInfoUrl = "https://soku.latte.today/version.json";
             return config;
         }
 

@@ -58,9 +58,9 @@ namespace SokuLauncher
 
             try
             {
-                UpdateManager updateManager = new UpdateManager();
-                if (Static.ConfigUtil.Config.AutoCheckUpdate)
+                if (Static.ConfigUtil.Config.AutoCheckForUpdates)
                 {
+                    UpdatesManager updateManager = new UpdatesManager(Static.ConfigUtil.Config, Static.ModsManager, Static.ConfigUtil.SokuDirFullPath);
                     updateManager.CheckUpdate();
                     if (updateManager.AvailableUpdateList.Count > 0)
                     {
@@ -72,7 +72,7 @@ namespace SokuLauncher
                             foreach (var updateFileInfo in updateManager.AvailableUpdateList)
                             {
                                 updateManager.DownloadAndExtractFile(updateFileInfo);
-                                updateManager.ReplaceFile(updateFileInfo);
+                                updateManager.CopyAndReplaceFile(updateFileInfo);
                             }
                         }
                     }

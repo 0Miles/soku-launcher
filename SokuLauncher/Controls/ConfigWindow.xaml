@@ -373,7 +373,7 @@
                                 <RowDefinition />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
-                            
+
                             <Image Source="{Binding SokuFileIcon}" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding SokuFileIcon, Converter={StaticResource NullToVisibilityConverter}}"/>
                             <TextBox Grid.Row="1" Background="{x:Null}" Text="{Binding SokuFileName}" IsReadOnly="True" HorizontalAlignment="Center" BorderThickness="0" Margin="8" />
                         </Grid>
@@ -410,13 +410,18 @@
                             <TextBlock Grid.Row="3" Text="Modules Dir: " VerticalAlignment="Center" Margin="4" />
                             <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ModsDirFullPath}" Padding="4" Background="#F5F5F5" IsReadOnly="True" VerticalAlignment="Center" Margin="4"/>
 
-                            
+
                         </Grid>
                     </GroupBox>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Update">
-                <Grid />
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Version info URL:" Margin="8,0,0,0"/>
+                    <TextBox Text="{Binding VersionInfoUrl}" Padding="4" Margin="8" />
+                    <CheckBox IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8">Auto check for updates on startup</CheckBox>
+                    <Button Margin="8" Padding="8,4" HorizontalAlignment="Center">Check for updates now</Button>
+                </StackPanel>
             </TabItem>
         </TabControl>
         <StackPanel Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">

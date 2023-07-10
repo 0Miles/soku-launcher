@@ -91,9 +91,10 @@ namespace SokuLauncher.Controls
         {
             Static.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
             Static.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
-            Static.ConfigUtil.Config.AutoCheckUpdate = ViewModel.AutoCheckUpdate;
             Static.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
             Static.ConfigUtil.Config.SokuModAlias = ViewModel.SokuModAlias.ToList();
+            Static.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
+            Static.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
 
             Static.ConfigUtil.SaveConfig();
 

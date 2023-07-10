@@ -13,18 +13,25 @@ using System.Windows.Shell;
 
 namespace SokuLauncher.Utils
 {
-    internal class UpdateManager
+    internal class UpdatesManager
     {
-        private const string VERSION_URL = "http://127.0.0.1:5500/test.json";
+        private const string DEFAULT_VERSION_INFO_URL = "https://soku.latte.today/version.json";
 
         public event Action<int> DownloadProgressChanged;
         public List<UpdateFileInfoModel> AvailableUpdateList { get; private set; } = new List<UpdateFileInfoModel>();
 
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "update");
 
-        public UpdateManager()
+        private ConfigModel Config;
+        private ModsManager ModsManager;
+        private string SokuDirFullPath;
+
+        public UpdatesManager(ConfigModel config, ModsManager modsManager, string sokuDirFullPath)
         {
             Directory.CreateDirectory(UpdateTempDirPath);
+            Config = config;
+            ModsManager = modsManager;
+            SokuDirFullPath = sokuDirFullPath;
         }
 
         private Version GetFileCurrentVersion(string fileName)
@@ -37,7 +44,7 @@ namespace SokuLauncher.Utils
             try
             {
                 WebClient client = new WebClient();
-                string response = client.DownloadString(VERSION_URL);
+                string response = client.DownloadString(DEFAULT_VERSION_INFO_URL);
 
                 List<UpdateVersionInfoModel> latestVersionInfoList = JsonConvert.DeserializeObject<List<UpdateVersionInfoModel>>(response);
 
@@ -57,16 +64,16 @@ namespace SokuLauncher.Utils
                             break;
                         case "SWRSToys":
                             currentVersion = new Version("1.0.0.0");
-                            localFileName = Path.Combine(Static.ConfigUtil.SokuDirFullPath, "d3d9.dll");
+                            localFileName = Path.Combine(SokuDirFullPath, "d3d9.dll");
                             break;
                         default:
-                            Static.ConfigUtil.Config.SokuModVersion.TryGetValue(lastestVersionInfo.Name, out string modCurrentVersion);
+                            Config.SokuModVersion.TryGetValue(lastestVersionInfo.Name, out string modCurrentVersion);
                             if (modCurrentVersion == null)
                             {
                                 continue;
                             }
                             currentVersion = new Version(modCurrentVersion);
-                            var modInfo = Static.ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
+                            var modInfo = ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
                             if (modInfo == null)
                             {
                                 continue;
@@ -81,7 +88,10 @@ namespace SokuLauncher.Utils
                         {
                             FileName = lastestVersionInfo.FileName,
                             DownloadUrl = lastestVersionInfo.DownloadUrl,
+                            ExtraFiles = lastestVersionInfo.ExtraFiles,
+                            ConfigFiles = lastestVersionInfo.ConfigFiles,
                             LocalFileName = localFileName,
+                            LocalFileDir = Path.GetDirectoryName(localFileName),
                             Compressed = lastestVersionInfo.Compressed
                         });
                     }
@@ -119,35 +129,74 @@ namespace SokuLauncher.Utils
             }
         }
 
-        public void ReplaceFile(UpdateFileInfoModel updateFileInfo)
+        public void CopyAndReplaceFile(UpdateFileInfoModel updateFileInfo)
         {
-            string newVersionFileName = Path.Combine(UpdateTempDirPath, updateFileInfo.FileName);
-            if (File.Exists(newVersionFileName))
+
+            // replace main file
+            if (!string.IsNullOrWhiteSpace(updateFileInfo.FileName))
             {
-                if (updateFileInfo.LocalFileName == Static.SelfFileName)
+                string newVersionFileName = Path.Combine(UpdateTempDirPath, updateFileInfo.FileName);
+                if (File.Exists(newVersionFileName))
                 {
-                    // replace self
-                    string replaceBatPath = Path.Combine(UpdateTempDirPath, "replace.bat");
+                    if (updateFileInfo.LocalFileName == Static.SelfFileName)
+                    {
+                        // replace self
+                        string replaceBatPath = Path.Combine(UpdateTempDirPath, "replace.bat");
 
-                    string batContent = $"copy \"{newVersionFileName}\" \"{Static.SelfFileName}\" /Y{Environment.NewLine}";
-                    batContent += $"del \"{newVersionFileName}\"{Environment.NewLine}";
-                    batContent += $"start \"\" \"{Static.SelfFileName}\"{Environment.NewLine}";
-                    batContent += $"del \"{replaceBatPath}\"";
+                        string batContent = $"copy \"{newVersionFileName}\" \"{Static.SelfFileName}\" /Y{Environment.NewLine}";
+                        batContent += $"del \"{newVersionFileName}\"{Environment.NewLine}";
+                        batContent += $"start \"\" \"{Static.SelfFileName}\"{Environment.NewLine}";
+                        batContent += $"del \"{replaceBatPath}\"";
 
-                    File.WriteAllText(replaceBatPath, batContent);
+                        File.WriteAllText(replaceBatPath, batContent);
 
-                    Process.Start(replaceBatPath);
-                    Environment.Exit(0);
+                        Process.Start(replaceBatPath);
+                        Environment.Exit(0);
+                    }
+                    else
+                    {
+                        File.Copy(newVersionFileName, updateFileInfo.LocalFileName, true);
+                        File.Delete(newVersionFileName);
+                    }
                 }
                 else
                 {
-                    File.Copy(newVersionFileName, updateFileInfo.LocalFileName, true);
-                    File.Delete(newVersionFileName);
+                    throw new Exception("Can not copy file: " + updateFileInfo.FileName);
                 }
             }
-            else
+
+            // replace extra files
+            if (updateFileInfo.ExtraFiles != null)
             {
-                throw new Exception("File not found in the archive: " + updateFileInfo.FileName);
+                CopyFilesFromUpdateTempDir(updateFileInfo.ExtraFiles, updateFileInfo.LocalFileDir, true);
+            }
+
+            // copy config files
+            if (updateFileInfo.ConfigFiles != null)
+            {
+                CopyFilesFromUpdateTempDir(updateFileInfo.ConfigFiles, updateFileInfo.LocalFileDir);
+            }
+        }
+
+        private void CopyFilesFromUpdateTempDir(List<string> fileNames, string localFileDir, bool overwrite = false)
+        {
+            foreach (var fileName in fileNames)
+            {
+                string localFileName = Path.Combine(localFileDir, fileName);
+                string newVersionFileName = Path.Combine(UpdateTempDirPath, fileName);
+
+                if (File.Exists(newVersionFileName))
+                {
+                    if (overwrite || !File.Exists(localFileName))
+                    {
+                        File.Copy(newVersionFileName, localFileName, overwrite);
+                    }
+                    File.Delete(newVersionFileName);
+                }
+                else
+                {
+                    throw new Exception("Can not copy file: " + fileName);
+                }
             }
         }
     }
