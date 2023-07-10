@@ -100,7 +100,7 @@ namespace SokuLauncher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             SokuModSettingGroupListView.SelectedItem = null;
         }

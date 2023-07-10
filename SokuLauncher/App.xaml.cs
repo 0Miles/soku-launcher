@@ -41,7 +41,7 @@ namespace SokuLauncher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             try
@@ -53,7 +53,7 @@ namespace SokuLauncher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             try
@@ -64,7 +64,10 @@ namespace SokuLauncher
                     updateManager.CheckUpdate();
                     if (updateManager.AvailableUpdateList.Count > 0)
                     {
-                        if (MessageBox.Show("Update detected. Would you like to download the new version?", "Update", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        if (MessageBox.Show("Update detected. Would you like to download the new version?",
+                                "Update",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
                             foreach (var updateFileInfo in updateManager.AvailableUpdateList)
                             {
@@ -77,7 +80,7 @@ namespace SokuLauncher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             mainWindow.Show();
