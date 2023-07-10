@@ -130,7 +130,6 @@
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\ReverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\RelativePathConverter.cs" />
-    <Compile Include="Models\ModSettingOptionModel.cs" />
     <Compile Include="Models\ModSettingInfoModel.cs" />
     <Compile Include="Models\ModInfoModel.cs" />
     <Compile Include="Models\SelectorNodeModel.cs" />

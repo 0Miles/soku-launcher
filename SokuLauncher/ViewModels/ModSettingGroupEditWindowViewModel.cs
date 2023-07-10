@@ -8,11 +8,11 @@ namespace SokuLauncher.ViewModels
 {
     public class ModSettingGroupEditWindowViewModel: ViewModelBase
     {
-        public List<ModSettingOptionModel> Options { get; set; } = new List<ModSettingOptionModel>
+        public List<ModSettingInfoModel> Options { get; set; } = new List<ModSettingInfoModel>
         {
-            new ModSettingOptionModel { Name = "Enable", Enabled = "true"},
-            new ModSettingOptionModel { Name = "Disable", Enabled = "false"},
-            new ModSettingOptionModel { Name = "Constant", Enabled = "null" }
+            new ModSettingInfoModel { Name = "Enable", Enabled = "true"},
+            new ModSettingInfoModel { Name = "Disable", Enabled = "false"},
+            new ModSettingInfoModel { Name = "Constant", Enabled = "null" }
         };
 
         private List<ModSettingInfoModel> _ModSettingInfoList;
