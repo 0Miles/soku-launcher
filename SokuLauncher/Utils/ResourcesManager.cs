@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SokuLauncher.Utils
 {
-    internal class ResourceManager
+    internal class ResourcesManager
     {
         private string ResourceTempDirPath;
         private Dictionary<string, string> videoPaths;
 
         public IReadOnlyDictionary<string, string> VideoPaths => videoPaths;
 
-        public ResourceManager()
+        public ResourcesManager()
         {
             ResourceTempDirPath = Path.Combine(Static.TempDirPath, "Resources");
             videoPaths = new Dictionary<string, string>();

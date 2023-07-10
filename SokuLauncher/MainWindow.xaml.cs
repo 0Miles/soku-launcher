@@ -201,6 +201,7 @@ namespace SokuLauncher
         {
             ConfigWindow configWindow = new ConfigWindow(new ConfigWindowViewModel
             {
+                ModsManager = new ModsManager(),
                 SokuDirPath = Static.ConfigUtil.Config.SokuDirPath,
                 SokuFileName = Static.ConfigUtil.Config.SokuFileName,
                 SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups)),

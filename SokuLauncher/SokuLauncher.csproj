@@ -138,11 +138,10 @@
     <Compile Include="Models\UpdateVersionInfoModel.cs" />
     <Compile Include="Static.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
-    <Compile Include="Utils\ListViewHelper.cs" />
     <Compile Include="Utils\ModsManager.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Utils\ResourceManager.cs" />
-    <Compile Include="Utils\UpdateUtil.cs" />
+    <Compile Include="Utils\ResourcesManager.cs" />
+    <Compile Include="Utils\UpdateManager.cs" />
     <Compile Include="ViewModels\ModSettingGroupViewModel.cs" />
     <Compile Include="ViewModels\MainWindwoViewModel.cs" />
     <Compile Include="ViewModels\ConfigWindowViewModel.cs" />

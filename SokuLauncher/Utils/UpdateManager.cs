@@ -13,7 +13,7 @@ using System.Windows.Shell;
 
 namespace SokuLauncher.Utils
 {
-    internal class UpdateUtil
+    internal class UpdateManager
     {
         private const string VERSION_URL = "http://127.0.0.1:5500/test.json";
 
@@ -22,7 +22,7 @@ namespace SokuLauncher.Utils
 
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "update");
 
-        public UpdateUtil()
+        public UpdateManager()
         {
             Directory.CreateDirectory(UpdateTempDirPath);
         }

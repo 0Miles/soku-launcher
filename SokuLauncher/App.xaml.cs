@@ -24,8 +24,8 @@ namespace SokuLauncher
                 Directory.CreateDirectory(Static.TempDirPath);
                 Directory.CreateDirectory(Path.Combine(Static.TempDirPath, "Resources"));
 
-                Static.ResourcesManager = new ResourceManager();
-                Static.ResourcesManager.CopyVideoResources();
+                ResourcesManager resourcesManager = new ResourcesManager();
+                resourcesManager.CopyVideoResources();
             }
             catch (Exception ex)
             {
@@ -38,8 +38,6 @@ namespace SokuLauncher
                 Static.ConfigUtil.ReadConfig();
 
                 Static.ModsManager = new ModsManager();
-                Static.ModsManager.SearchModulesDir();
-                Static.ModsManager.LoadSWRSToysSetting();
             }
             catch (Exception ex)
             {
@@ -48,18 +46,18 @@ namespace SokuLauncher
 
             try
             {
-                Static.UpdateUtil = new UpdateUtil();
+                UpdateManager updateManager = new UpdateManager();
                 if (Static.ConfigUtil.Config.AutoCheckUpdate)
                 {
-                    Static.UpdateUtil.CheckUpdate();
-                    if (Static.UpdateUtil.AvailableUpdateList.Count > 0)
+                    updateManager.CheckUpdate();
+                    if (updateManager.AvailableUpdateList.Count > 0)
                     {
                         if (MessageBox.Show("Update detected. Would you like to download the new version?", "Update", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                         {
-                            foreach (var updateFileInfo in Static.UpdateUtil.AvailableUpdateList)
+                            foreach (var updateFileInfo in updateManager.AvailableUpdateList)
                             {
-                                Static.UpdateUtil.DownloadAndExtractFile(updateFileInfo);
-                                Static.UpdateUtil.ReplaceFile(updateFileInfo);
+                                updateManager.DownloadAndExtractFile(updateFileInfo);
+                                updateManager.ReplaceFile(updateFileInfo);
                             }
                         }
                     }

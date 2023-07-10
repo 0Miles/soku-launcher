@@ -13,6 +13,8 @@ namespace SokuLauncher.ViewModels
 {
     public class ConfigWindowViewModel : ViewModelBase
     {
+        public ModsManager ModsManager { get; set; }
+
         private bool _Saveable;
         public bool Saveable
         {

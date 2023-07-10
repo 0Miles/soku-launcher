@@ -3,14 +3,10 @@ using SokuLauncher.Controls;
 using SokuLauncher.Models;
 using SokuLauncher.ViewModels;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace SokuLauncher.Utils
 {
@@ -21,7 +17,12 @@ namespace SokuLauncher.Utils
         const string DEFAULT_SOKU_DIR = ".";
         const string SOKU_FILE_NAME_REGEX = @"th123(?:\s+)?\-?(?:\s+)?(?:\w+)?\.exe";
         public ConfigModel Config { get; set; } = new ConfigModel();
-        public string SokuDirFullPath { get; set; }
+        public string SokuDirFullPath {
+            get
+            {
+                return Path.GetFullPath(Path.Combine(Static.SelfFileDir, $"{Config.SokuDirPath}/"));
+            }
+        }
 
         public void ReadConfig()
         {
@@ -52,8 +53,6 @@ namespace SokuLauncher.Utils
                     SaveConfig();
                 }
             }
-
-            SokuDirFullPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, $"{Config.SokuDirPath}/"));
         }
 
         public void SaveConfig()

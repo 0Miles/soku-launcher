@@ -18,9 +18,7 @@ namespace SokuLauncher
     internal static class Static
     {
         public static ConfigUtil ConfigUtil { get; internal set; }
-        public static UpdateUtil UpdateUtil { get; internal set; }
         public static ModsManager ModsManager { get; internal set; }
-        public static ResourceManager ResourcesManager { get; internal set; }
         public static string TempDirPath { get; internal set; }
         public static string SelfFileName { get; internal set; } = System.Reflection.Assembly.GetEntryAssembly().Location;
         public static string SelfFileDir { get

@@ -79,6 +79,10 @@ namespace SokuLauncher.Controls
                     ViewModel.SokuDirPath = selectedDirPath;
                     ViewModel.SokuFileName = selectedFileName;
                     GetSokuFileIcon();
+
+                    ViewModel.ModsManager.SokuDirFullPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
+                    ViewModel.ModsManager.SearchModulesDir();
+                    ViewModel.ModsManager.LoadSWRSToysSetting();
                 }
             }
         }
@@ -90,13 +94,20 @@ namespace SokuLauncher.Controls
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            Static.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
+            Static.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
+            Static.ConfigUtil.Config.AutoCheckUpdate = ViewModel.AutoCheckUpdate;
             Static.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
             Static.ConfigUtil.Config.SokuModAlias = ViewModel.SokuModAlias.ToList();
-            Static.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
-            Static.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
-            Static.ConfigUtil.Config.AutoCheckUpdate = ViewModel.AutoCheckUpdate;
 
             Static.ConfigUtil.SaveConfig();
+
+            if (Static.ModsManager.SokuDirFullPath != Static.ConfigUtil.SokuDirFullPath)
+            {
+                Static.ModsManager.SokuDirFullPath = Static.ConfigUtil.SokuDirFullPath;
+                Static.ModsManager.SearchModulesDir();
+                Static.ModsManager.LoadSWRSToysSetting();
+            }
             ViewModel.Saveable = false;
         }
 
@@ -478,7 +489,7 @@ namespace SokuLauncher.Controls
         private void ModSettingGroupSelectModsButton_Click(object sender, RoutedEventArgs e)
         {
             ModSettingGroupEditWindowViewModel msgewvm = new ModSettingGroupEditWindowViewModel();
-            msgewvm.ModSettingInfoList = Static.ModsManager.ModInfoList
+            msgewvm.ModSettingInfoList = ViewModel.ModsManager.ModInfoList
                     .Select(x => new ModSettingInfoModel
                     {
                         Name = x.Name,

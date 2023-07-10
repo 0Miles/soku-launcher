@@ -9,22 +9,39 @@ namespace SokuLauncher.Utils
     public class ModsManager
     {
         public List<ModInfoModel> ModInfoList { get; private set; } = new List<ModInfoModel> { };
-        public string SokuDirFullPath { get; private set; }
-
         public string DefaultModsDir { get; private set; }
-        
-        public ModsManager(string sokuDir = null)
+
+        private string _SokuDirFullPath;
+        public string SokuDirFullPath
         {
-            if (sokuDir == null)
+            get
+            {
+                return _SokuDirFullPath;
+            }
+            set
+            {
+                if (value != _SokuDirFullPath)
+                {
+                    _SokuDirFullPath = value;
+
+                    DefaultModsDir = Path.Combine(SokuDirFullPath, "modules");
+                }
+            }
+        }
+
+        public ModsManager(string sokuDirFullPath = null)
+        {
+            if (sokuDirFullPath == null)
             {
                 SokuDirFullPath = Static.ConfigUtil.SokuDirFullPath;
             }
             else
             {
-                SokuDirFullPath = sokuDir;
+                SokuDirFullPath = sokuDirFullPath;
             }
 
-            DefaultModsDir = Path.Combine(SokuDirFullPath, "modules");
+            SearchModulesDir();
+            LoadSWRSToysSetting();
         }
 
         public void SearchModulesDir()
