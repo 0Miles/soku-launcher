@@ -74,7 +74,7 @@ namespace SokuLauncher.Utils
 
             if (!File.Exists(iniFilePath))
             {
-                throw new Exception("The 'SWRSToys.ini' file does not exist.");
+                return;
             }
 
             string[] lines = File.ReadAllLines(iniFilePath);

@@ -56,7 +56,7 @@
                                                 <Grid Grid.Column="1" Visibility="{Binding Installed, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Bottom" Margin="0,8" >
                                                     <TextBlock Text="{Binding LocalFileVersion}" Foreground="DarkGray" Visibility="{Binding FullPath, Converter={StaticResource StringToVisibilityConverter}}" />
                                                 </Grid>
-                                                <TextBlock Grid.Column="1" Text="Not Installed" Foreground="DarkRed" Visibility="{Binding Installed, Converter={StaticResource ReverseBooleanToVisibilityConverter}}" />
+                                                <TextBlock Grid.Column="1" Text="Not Installed" Foreground="DarkRed" VerticalAlignment="Bottom" Margin="0,8" Visibility="{Binding Installed, Converter={StaticResource ReverseBooleanToVisibilityConverter}}" />
 
                                                 <TextBlock Grid.Column="2" Text=" => " Foreground="LightGray" VerticalAlignment="Bottom" Margin="0,8" />
 
@@ -73,9 +73,16 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
-        <StackPanel Grid.Row="2" Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>
-            <Button Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click">OK</Button>
-        </StackPanel>
+        <Grid Grid.Row="2" Margin="8" HorizontalAlignment="Stretch" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" Visibility="{Binding AutoUpdates, Converter={StaticResource BooleanToVisibilityConverter}}" >Auto check for updates on startup</CheckBox>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Orientation="Horizontal">
+                <Button Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click" >OK</Button>
+                <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

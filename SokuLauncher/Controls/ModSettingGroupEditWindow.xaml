@@ -74,8 +74,8 @@
             </ListView.ItemContainerStyle>
         </ListView>
         <StackPanel Grid.Row="2" Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>
             <Button Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click">OK</Button>
+            <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>
         </StackPanel>
     </Grid>
 </Window>
