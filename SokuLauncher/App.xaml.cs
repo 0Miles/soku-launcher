@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,17 @@ namespace SokuLauncher
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            var currentProcess = Process.GetCurrentProcess();
+            var currentExecutable = currentProcess.MainModule.FileName;
+
+            var runningProcesses = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(currentExecutable));
+
+            if (runningProcesses.Length > 1)
+            {
+                Environment.Exit(0);
+            }
+
 
             MainWindow mainWindow = new MainWindow();
 
