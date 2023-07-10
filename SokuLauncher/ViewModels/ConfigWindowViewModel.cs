@@ -1,8 +1,10 @@
 ﻿using SokuLauncher.Models;
+using SokuLauncher.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -85,7 +87,29 @@ namespace SokuLauncher.ViewModels
                 _SokuFileName = value;
                 Saveable = true;
                 RaisePropertyChanged("SokuFileName");
+                RaisePropertyChanged("SokuFileNameFullPath");
             }
+        }
+
+        public string SokuDirFullPath
+        {
+            get
+            {
+                return Path.GetFullPath(Path.Combine(Static.SelfFileDir, SokuDirPath));
+            }
+            set { }
+        }
+        public string SokuFileNameFullPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(SokuFileName))
+                {
+                    return null;
+                }
+                return Path.GetFullPath(Path.Combine(Path.Combine(Static.SelfFileDir, SokuDirPath), SokuFileName));
+            }
+            set { }
         }
 
         private string _SokuDirPath;
@@ -100,6 +124,8 @@ namespace SokuLauncher.ViewModels
                 _SokuDirPath = value;
                 Saveable = true;
                 RaisePropertyChanged("SokuDirPath");
+                RaisePropertyChanged("SokuDirFullPath");
+                RaisePropertyChanged("SokuFileNameFullPath");
             }
         }
 

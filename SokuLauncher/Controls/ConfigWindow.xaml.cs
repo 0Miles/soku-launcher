@@ -52,40 +52,34 @@ namespace SokuLauncher.Controls
             mainWindow.Show();
         }
 
-        private void SokuDirButton_Click(object sender, RoutedEventArgs e)
-        {
-            string prev = ViewModel.SokuDirPath;
-            System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderDialog.SelectedPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
-
-            System.Windows.Forms.DialogResult result = folderDialog.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                string selectedFolder = folderDialog.SelectedPath;
-                string relativePath = Static.GetRelativePath(selectedFolder, Static.SelfFileDir);
-                if (!relativePath.StartsWith("../../"))
-                {
-                    selectedFolder = relativePath;
-                }
-
-                if (prev != selectedFolder)
-                {
-                    ViewModel.SokuDirPath = selectedFolder;
-                    ViewModel.SokuFileName = ConfigUtil.SelectSokuFile(ViewModel.SokuDirPath);
-                    GetSokuFileIcon();
-                }
-            }
-        }
-
         private void SokuFileNameButton_Click(object sender, RoutedEventArgs e)
         {
-            string sokuFileName = ConfigUtil.SelectExeFile(ViewModel.SokuDirPath);
+            string fullSokuDirPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
 
-            if (sokuFileName != null && sokuFileName != ViewModel.SokuFileName)
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = fullSokuDirPath;
+
+            openFileDialog.Filter = "Executable files (*.exe)|*.exe";
+            openFileDialog.FileName = ViewModel.SokuFileName;
+
+            bool? result = openFileDialog.ShowDialog();
+
+            if (result == true)
             {
-                ViewModel.SokuFileName = sokuFileName;
-                GetSokuFileIcon();
+                string selectedFileName = Path.GetFileName(openFileDialog.FileName);
+                string selectedDirPath = Path.GetDirectoryName(openFileDialog.FileName);
+                string relativePath = Static.GetRelativePath(selectedDirPath, Static.SelfFileDir);
+                if (!relativePath.StartsWith("../../"))
+                {
+                    selectedDirPath = relativePath;
+                }
+
+                if (selectedDirPath != ViewModel.SokuDirPath || selectedFileName != ViewModel.SokuFileName)
+                {
+                    ViewModel.SokuDirPath = selectedDirPath;
+                    ViewModel.SokuFileName = selectedFileName;
+                    GetSokuFileIcon();
+                }
             }
         }
 
