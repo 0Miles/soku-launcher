@@ -15,7 +15,7 @@ namespace SokuLauncher.Models
         public bool Compressed { get; set; }
 
         // local info
-        public bool Installed { get; set; } = false;
+        public bool Installed { get; set; } = true;
         public string LocalFileVersion { get; set; }
         public string LocalFileName { get; set; }
         public string LocalFileDir {

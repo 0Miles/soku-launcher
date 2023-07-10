@@ -62,14 +62,20 @@ namespace SokuLauncher.Utils
                             break;
                         case "SWRSToys":
                             lastestVersionInfo.LocalFileName = Path.Combine(SokuDirFullPath, "d3d9.dll");
-                            if (ModsManager.SWRSToysD3d9Exist)
+                            if (!ModsManager.SWRSToysD3d9Exist)
                             {
-                                currentVersion = new Version("1.0.0.0");
+                                lastestVersionInfo.Installed = false;
                             }
-                            else
+                            
+                            string sWRSToysVersionFileName = Path.Combine(lastestVersionInfo.LocalFileDir, MOD_VERSION_FILENAME);
+
+                            string modCurrentVersion = "0.0.0.0";
+                            if (File.Exists(sWRSToysVersionFileName))
                             {
-                                currentVersion = new Version("0.0.0.0");
+                                modCurrentVersion = File.ReadAllText(sWRSToysVersionFileName);
                             }
+                            currentVersion = new Version(modCurrentVersion);
+
                             break;
                         default:
                             var modInfo = ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
@@ -79,11 +85,11 @@ namespace SokuLauncher.Utils
                                 Directory.CreateDirectory(ModsManager.DefaultModsDir);
                                 Directory.CreateDirectory(Path.Combine(ModsManager.DefaultModsDir, lastestVersionInfo.Name));
                                 lastestVersionInfo.LocalFileName = Path.Combine(ModsManager.DefaultModsDir, lastestVersionInfo.Name, lastestVersionInfo.FileName);
+                                lastestVersionInfo.Installed = false;
                             }
                             else
                             {
                                 lastestVersionInfo.LocalFileName = modInfo.FullPath;
-                                lastestVersionInfo.Installed = true;
                             }
 
                             string modVersionFileName = Path.Combine(lastestVersionInfo.LocalFileDir, MOD_VERSION_FILENAME);
