@@ -134,7 +134,6 @@
     <Compile Include="Models\ModInfoModel.cs" />
     <Compile Include="Models\SelectorNodeModel.cs" />
     <Compile Include="Models\UpdateFileModel.cs" />
-    <Compile Include="Models\UpdateVersionInfoModel.cs" />
     <Compile Include="Static.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
     <Compile Include="Utils\ModsManager.cs" />

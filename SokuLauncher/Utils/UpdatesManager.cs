@@ -46,10 +46,10 @@ namespace SokuLauncher.Utils
                 WebClient client = new WebClient();
                 string response = client.DownloadString(DEFAULT_VERSION_INFO_URL);
 
-                List<UpdateVersionInfoModel> latestVersionInfoList = JsonConvert.DeserializeObject<List<UpdateVersionInfoModel>>(response);
+                List<UpdateFileInfoModel> latestVersionInfoList = JsonConvert.DeserializeObject<List<UpdateFileInfoModel>>(response);
 
                 AvailableUpdateList.Clear();
-                foreach (UpdateVersionInfoModel lastestVersionInfo in latestVersionInfoList)
+                foreach (UpdateFileInfoModel lastestVersionInfo in latestVersionInfoList)
                 {
                     Version latestVersion = new Version(lastestVersionInfo.Version);
 
