@@ -35,7 +35,12 @@ namespace SokuLauncher.Utils
 
         private Version GetFileCurrentVersion(string fileName)
         {
-            return new Version(FileVersionInfo.GetVersionInfo(fileName).FileVersion);
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
+            if (fileVersionInfo?.FileVersion != null)
+            {
+                return new Version(fileVersionInfo.FileVersion);
+            }
+            return null;
         }
 
         public void CheckUpdate()
@@ -51,7 +56,7 @@ namespace SokuLauncher.Utils
                 foreach (UpdateFileInfoModel lastestVersionInfo in latestVersionInfoList)
                 {
                     Version latestVersion = new Version(lastestVersionInfo.Version);
-                    
+
                     Version currentVersion = null;
 
                     switch (lastestVersionInfo.Name)
@@ -62,7 +67,11 @@ namespace SokuLauncher.Utils
                             break;
                         case "SWRSToys":
                             lastestVersionInfo.LocalFileName = Path.Combine(SokuDirFullPath, "d3d9.dll");
-                            if (!ModsManager.SWRSToysD3d9Exist)
+                            if (ModsManager.SWRSToysD3d9Exist)
+                            {
+                                currentVersion = GetFileCurrentVersion(lastestVersionInfo.LocalFileName);
+                            }
+                            else
                             {
                                 lastestVersionInfo.Installed = false;
                             }
@@ -79,6 +88,7 @@ namespace SokuLauncher.Utils
                             else
                             {
                                 lastestVersionInfo.LocalFileName = modInfo.FullPath;
+                                currentVersion = GetFileCurrentVersion(lastestVersionInfo.LocalFileName);
                             }
                             break;
                     }
