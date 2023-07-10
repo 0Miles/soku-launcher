@@ -56,18 +56,12 @@ namespace SokuLauncher.Controls
         {
             string fullSokuDirPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
 
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = fullSokuDirPath;
+            string fileName = ConfigUtil.OpenExeFileDialog(fullSokuDirPath);
 
-            openFileDialog.Filter = "Executable files (*.exe)|*.exe";
-            openFileDialog.FileName = ViewModel.SokuFileName;
-
-            bool? result = openFileDialog.ShowDialog();
-
-            if (result == true)
+            if (fileName != null)
             {
-                string selectedFileName = Path.GetFileName(openFileDialog.FileName);
-                string selectedDirPath = Path.GetDirectoryName(openFileDialog.FileName);
+                string selectedFileName = Path.GetFileName(fileName);
+                string selectedDirPath = Path.GetDirectoryName(fileName);
                 string relativePath = Static.GetRelativePath(selectedDirPath, Static.SelfFileDir);
                 if (!relativePath.StartsWith("../../"))
                 {

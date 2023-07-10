@@ -8,15 +8,15 @@ using System.Windows.Media;
 
 namespace SokuLauncher.Controls
 {
-    public partial class SelectorWindow : Window
+    public partial class SelectSokuFileWindow : Window
     {
-        public SelectorWindowViewModel ViewModel { get; set; }
-        public SelectorWindow(SelectorWindowViewModel viewModel = null)
+        public SelectSokuFileWindowViewModel ViewModel { get; set; }
+        public SelectSokuFileWindow(SelectSokuFileWindowViewModel viewModel = null)
         {
             ViewModel = viewModel;
             if (ViewModel == null)
             {
-                ViewModel = new SelectorWindowViewModel();
+                ViewModel = new SelectSokuFileWindowViewModel();
             }
             DataContext = ViewModel;
 

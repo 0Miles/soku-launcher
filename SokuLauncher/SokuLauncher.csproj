@@ -148,8 +148,8 @@
     <Compile Include="ViewModels\ModSettingGroupEditWindowViewModel.cs" />
     <Compile Include="ViewModels\SelectorWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="Controls\SelectorWindow.xaml.cs">
-      <DependentUpon>SelectorWindow.xaml</DependentUpon>
+    <Compile Include="Controls\SelectSokuFileWindow.xaml.cs">
+      <DependentUpon>SelectSokuFileWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ConfigWindow.xaml">
       <SubType>Designer</SubType>
@@ -175,7 +175,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\SelectorWindow.xaml">
+    <Page Include="Controls\SelectSokuFileWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

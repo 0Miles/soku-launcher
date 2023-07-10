@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace SokuLauncher.ViewModels
 {
-    public class SelectorWindowViewModel: ViewModelBase
+    public class SelectSokuFileWindowViewModel: ViewModelBase
     {
         public bool IsMutiSelect { get; set; } = false;
 
