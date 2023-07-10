@@ -12,6 +12,8 @@ using SokuLauncher.Models;
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
+using SokuLauncher.Controls;
+using System.Windows;
 
 namespace SokuLauncher
 {
@@ -76,6 +78,39 @@ namespace SokuLauncher
 
             string jsonString = JsonConvert.SerializeObject(source);
             return JsonConvert.DeserializeObject<T>(jsonString);
+        }
+
+        public static void CheckForUpdates(UpdatesManager updatesManager, bool stillness = true)
+        {
+            updatesManager.CheckUpdate();
+            if (updatesManager.AvailableUpdateList.Count > 0)
+            {
+                UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
+                {
+                    Desc = "The following mods have updates available. Please check the mods you want to update.",
+                    AvailableUpdateList = updatesManager.AvailableUpdateList
+                };
+
+                if (updateSelectionWindow.ShowDialog() == true)
+                {
+                    var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
+
+                    UpdatingWindow updatingWindow = new UpdatingWindow
+                    {
+                        UpdatesManager = updatesManager,
+                        AvailableUpdateList = selectedUpdates,
+                        Stillness = stillness
+                    };
+                    updatingWindow.Show();
+                }
+            }
+            else
+            {
+                if (!stillness)
+                {
+                    MessageBox.Show("All available mods have been updated to the latest version", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
         }
     }
 }

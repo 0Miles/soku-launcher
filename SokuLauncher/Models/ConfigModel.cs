@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SokuLauncher.Models
 {
-    internal class ConfigModel
+    public class ConfigModel
     {
         public List<ModSettingGroupViewModel> SokuModSettingGroups { get; set; } = new List<ModSettingGroupViewModel>();
         public List<string> SokuModAlias { get; set; } = new List<string>();

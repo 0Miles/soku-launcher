@@ -10,12 +10,13 @@ using System.Net;
 
 namespace SokuLauncher.Utils
 {
-    internal class UpdatesManager
+    public class UpdatesManager
     {
         private const string DEFAULT_VERSION_INFO_URL = "https://soku.latte.today/version.json";
         private const string MOD_VERSION_FILENAME = "sokulauncher.version.txt";
 
         public event Action<int> DownloadProgressChanged;
+        public event Action<string> DownloadFileNameChanged;
         public List<UpdateFileInfoModel> AvailableUpdateList { get; private set; } = new List<UpdateFileInfoModel>();
 
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "Update");
@@ -82,6 +83,7 @@ namespace SokuLauncher.Utils
                             else
                             {
                                 lastestVersionInfo.LocalFileName = modInfo.FullPath;
+                                lastestVersionInfo.Installed = true;
                             }
 
                             string modVersionFileName = Path.Combine(lastestVersionInfo.LocalFileDir, MOD_VERSION_FILENAME);
@@ -127,6 +129,7 @@ namespace SokuLauncher.Utils
 
                 using (WebClient client = new WebClient())
                 {
+                    DownloadFileNameChanged?.Invoke(updateFileInfo.Name);
                     client.DownloadProgressChanged += (sender, e) => DownloadProgressChanged?.Invoke(e.ProgressPercentage);
                     client.DownloadFile(updateFileInfo.DownloadUrl, downloadToTempFilePath);
                 }

@@ -122,6 +122,12 @@
     <Compile Include="Controls\ModSettingGroupEditWindow.xaml.cs">
       <DependentUpon>ModSettingGroupEditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UpdateSelectionWindow.xaml.cs">
+      <DependentUpon>UpdateSelectionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UpdatingWindow.xaml.cs">
+      <DependentUpon>UpdatingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\IsLastItemConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\PathToBackgroundConverter.cs" />
@@ -160,6 +166,14 @@
     <Page Include="Controls\ModSettingGroupEditWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\UpdateSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UpdatingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

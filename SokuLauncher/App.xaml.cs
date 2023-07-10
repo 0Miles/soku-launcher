@@ -1,4 +1,5 @@
-﻿using SokuLauncher.Utils;
+﻿using SokuLauncher.Controls;
+using SokuLauncher.Utils;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -60,23 +62,8 @@ namespace SokuLauncher
             {
                 if (Static.ConfigUtil.Config.AutoCheckForUpdates)
                 {
-                    UpdatesManager updateManager = new UpdatesManager(Static.ConfigUtil.Config, Static.ModsManager, Static.ConfigUtil.SokuDirFullPath);
-                    updateManager.CheckUpdate();
-                    if (updateManager.AvailableUpdateList.Count > 0)
-                    {
-                        if (MessageBox.Show("Update detected. Would you like to download the new version?",
-                                "Update",
-                                MessageBoxButton.YesNo,
-                                MessageBoxImage.Question) == MessageBoxResult.Yes)
-                        {
-                            foreach (var updateFileInfo in updateManager.AvailableUpdateList)
-                            {
-                                updateManager.DownloadAndExtractFile(updateFileInfo);
-                                updateManager.CopyAndReplaceFile(updateFileInfo);
-
-                            }
-                        }
-                    }
+                    UpdatesManager updatesManager = new UpdatesManager(Static.ConfigUtil.Config, Static.ModsManager, Static.ConfigUtil.SokuDirFullPath);
+                    Static.CheckForUpdates(updatesManager);
                 }
             }
             catch (Exception ex)

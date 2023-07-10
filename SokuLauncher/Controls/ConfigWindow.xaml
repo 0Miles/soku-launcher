@@ -282,7 +282,7 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBox Text="{Binding SelectedSokuModSettingGroup.Name }" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"  TextChanged="TextBoxSetSaveableTrue_TextChanged"/>
+                                        <TextBox Text="{Binding SelectedSokuModSettingGroup.Name }" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" TextChanged="TextBoxSetSaveableTrue_TextChanged"/>
                                         <Button Grid.Column="1" Margin="8,0" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Click="PickColorButton_Click" Tag="NameColor">
                                             <Border Background="{Binding SelectedSokuModSettingGroup.NameColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
                                         </Button>
@@ -418,9 +418,9 @@
             <TabItem Header="Update">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock Text="Version info URL:" Margin="8,0,0,0"/>
-                    <TextBox Text="{Binding VersionInfoUrl}" Padding="4" Margin="8" />
+                    <TextBox Text="{Binding VersionInfoUrl}" Padding="4" Margin="8" TextChanged="TextBoxSetSaveableTrue_TextChanged" />
                     <CheckBox IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8">Auto check for updates on startup</CheckBox>
-                    <Button Margin="8" Padding="8,4" HorizontalAlignment="Center">Check for updates now</Button>
+                    <Button Margin="8" Padding="8,4" HorizontalAlignment="Center" Click="CheckForUpdatesButton_Click">Check for updates now</Button>
                 </StackPanel>
             </TabItem>
         </TabControl>

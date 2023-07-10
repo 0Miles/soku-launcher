@@ -54,9 +54,7 @@ namespace SokuLauncher.Controls
 
         private void SokuFileNameButton_Click(object sender, RoutedEventArgs e)
         {
-            string fullSokuDirPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
-
-            string fileName = ConfigUtil.OpenExeFileDialog(fullSokuDirPath);
+            string fileName = ConfigUtil.OpenExeFileDialog(ViewModel.SokuDirFullPath);
 
             if (fileName != null)
             {
@@ -535,6 +533,21 @@ namespace SokuLauncher.Controls
                 ViewModel.SelectedSokuModSettingGroup.DisableMods = msgewvm.DisableMods;
                 ViewModel.Saveable = true;
             }
+        }
+
+        private void CheckForUpdatesButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigModel config = new ConfigModel
+            {
+                SokuDirPath = ViewModel.SokuDirPath,
+                SokuFileName = ViewModel.SokuFileName,
+                SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
+                SokuModAlias = ViewModel.SokuModAlias.ToList(),
+                AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
+                VersionInfoUrl = ViewModel.VersionInfoUrl
+            };
+            UpdatesManager updatesManager = new UpdatesManager(config, ViewModel.ModsManager, ViewModel.SokuDirFullPath);
+            Static.CheckForUpdates(updatesManager, false);
         }
     }
 }

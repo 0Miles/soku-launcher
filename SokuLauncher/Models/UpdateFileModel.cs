@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SokuLauncher.Models
 {
-    internal class UpdateFileInfoModel
+    public class UpdateFileInfoModel
     {
         public string Name { get; set; }
         public string Desc { get; set; }
@@ -15,6 +15,7 @@ namespace SokuLauncher.Models
         public bool Compressed { get; set; }
 
         // local info
+        public bool Installed { get; set; } = false;
         public string LocalFileVersion { get; set; }
         public string LocalFileName { get; set; }
         public string LocalFileDir {
@@ -23,5 +24,8 @@ namespace SokuLauncher.Models
                 return Path.GetDirectoryName(LocalFileName);
             }
         }
+
+        // for update ui
+        public bool Selected { get; set; } = true;
     }
 }
