@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace SokuLauncher.Models
 {
@@ -12,7 +13,15 @@ namespace SokuLauncher.Models
         public string DownloadUrl { get; set; }
         public string Version { get; set; }
         public bool Compressed { get; set; }
+
+        // local info
+        public string LocalFileVersion { get; set; }
         public string LocalFileName { get; set; }
-        public string LocalFileDir { get; set; }
+        public string LocalFileDir {
+            get
+            {
+                return Path.GetDirectoryName(LocalFileName);
+            }
+        }
     }
 }

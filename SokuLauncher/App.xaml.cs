@@ -73,6 +73,7 @@ namespace SokuLauncher
                             {
                                 updateManager.DownloadAndExtractFile(updateFileInfo);
                                 updateManager.CopyAndReplaceFile(updateFileInfo);
+
                             }
                         }
                     }

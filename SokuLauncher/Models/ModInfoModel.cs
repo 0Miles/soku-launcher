@@ -23,7 +23,7 @@ namespace SokuLauncher.Models
                 }
                 return _SameDirModPathList;
             }
-        }        
+        } 
 
         public ModInfoModel(string dllFilePath)
         {

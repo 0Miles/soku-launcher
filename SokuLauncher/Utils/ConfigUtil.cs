@@ -145,12 +145,6 @@ namespace SokuLauncher.Utils
                     CoverOverlayColor = "#6F002EA9"
                 },
             };
-            config.SokuModVersion = new Dictionary<string, string>
-            {
-                { "Giuroll", "0.4.1" },
-                { "Giuroll-62F", "0.4.1" },
-                { "SokuLobbiesMod", "0.5.0" },
-            };
             config.SokuModAlias = new List<string> { "Giuroll=Giuroll-60F" };
             config.VersionInfoUrl = "https://soku.latte.today/version.json";
             return config;

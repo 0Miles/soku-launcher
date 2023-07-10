@@ -7,20 +7,18 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Shell;
 
 namespace SokuLauncher.Utils
 {
     internal class UpdatesManager
     {
         private const string DEFAULT_VERSION_INFO_URL = "https://soku.latte.today/version.json";
+        private const string MOD_VERSION_FILENAME = "sokulauncher.version.txt";
 
         public event Action<int> DownloadProgressChanged;
         public List<UpdateFileInfoModel> AvailableUpdateList { get; private set; } = new List<UpdateFileInfoModel>();
 
-        private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "update");
+        private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "Update");
 
         private ConfigModel Config;
         private ModsManager ModsManager;
@@ -44,7 +42,7 @@ namespace SokuLauncher.Utils
             try
             {
                 WebClient client = new WebClient();
-                string response = client.DownloadString(DEFAULT_VERSION_INFO_URL);
+                string response = client.DownloadString(Config.VersionInfoUrl ?? DEFAULT_VERSION_INFO_URL);
 
                 List<UpdateFileInfoModel> latestVersionInfoList = JsonConvert.DeserializeObject<List<UpdateFileInfoModel>>(response);
 
@@ -53,47 +51,57 @@ namespace SokuLauncher.Utils
                 {
                     Version latestVersion = new Version(lastestVersionInfo.Version);
 
-                    string localFileName;
                     Version currentVersion;
 
                     switch (lastestVersionInfo.Name)
                     {
                         case "SokuLauncher":
                             currentVersion = GetFileCurrentVersion(Static.SelfFileName);
-                            localFileName = Static.SelfFileName;
+                            lastestVersionInfo.LocalFileName = Static.SelfFileName;
                             break;
                         case "SWRSToys":
-                            currentVersion = new Version("1.0.0.0");
-                            localFileName = Path.Combine(SokuDirFullPath, "d3d9.dll");
+                            lastestVersionInfo.LocalFileName = Path.Combine(SokuDirFullPath, "d3d9.dll");
+                            if (ModsManager.SWRSToysD3d9Exist)
+                            {
+                                currentVersion = new Version("1.0.0.0");
+                            }
+                            else
+                            {
+                                currentVersion = new Version("0.0.0.0");
+                            }
                             break;
                         default:
-                            Config.SokuModVersion.TryGetValue(lastestVersionInfo.Name, out string modCurrentVersion);
-                            if (modCurrentVersion == null)
-                            {
-                                continue;
-                            }
-                            currentVersion = new Version(modCurrentVersion);
                             var modInfo = ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
                             if (modInfo == null)
                             {
-                                continue;
+                                //continue;
+                                Directory.CreateDirectory(ModsManager.DefaultModsDir);
+                                Directory.CreateDirectory(Path.Combine(ModsManager.DefaultModsDir, lastestVersionInfo.Name));
+                                lastestVersionInfo.LocalFileName = Path.Combine(ModsManager.DefaultModsDir, lastestVersionInfo.Name, lastestVersionInfo.FileName);
                             }
-                            localFileName = modInfo.FullPath;
+                            else
+                            {
+                                lastestVersionInfo.LocalFileName = modInfo.FullPath;
+                            }
+
+                            string modVersionFileName = Path.Combine(lastestVersionInfo.LocalFileDir, MOD_VERSION_FILENAME);
+
+                            string modCurrentVersion = "0.0.0.0";
+                            if (File.Exists(modVersionFileName))
+                            {
+                                modCurrentVersion = File.ReadAllText(modVersionFileName);
+                            }
+
+                            currentVersion = new Version(modCurrentVersion);
+                            
                             break;
                     }
 
+                    lastestVersionInfo.LocalFileVersion = currentVersion.ToString();
+
                     if (currentVersion != null && latestVersion > currentVersion)
                     {
-                        AvailableUpdateList.Add(new UpdateFileInfoModel
-                        {
-                            FileName = lastestVersionInfo.FileName,
-                            DownloadUrl = lastestVersionInfo.DownloadUrl,
-                            ExtraFiles = lastestVersionInfo.ExtraFiles,
-                            ConfigFiles = lastestVersionInfo.ConfigFiles,
-                            LocalFileName = localFileName,
-                            LocalFileDir = Path.GetDirectoryName(localFileName),
-                            Compressed = lastestVersionInfo.Compressed
-                        });
+                        AvailableUpdateList.Add(lastestVersionInfo);
                     }
                 }
             }
@@ -107,8 +115,15 @@ namespace SokuLauncher.Utils
         {
             try
             {
+                string updateFileDir = Path.Combine(UpdateTempDirPath, updateFileInfo.Name);
+                if (Directory.Exists(updateFileDir))
+                {
+                    Directory.Delete(updateFileDir, true);
+                }
+                Directory.CreateDirectory(updateFileDir);
+
                 string remoteFileName = Path.GetFileName(updateFileInfo.DownloadUrl);
-                string downloadToTempFilePath = Path.Combine(UpdateTempDirPath, remoteFileName);
+                string downloadToTempFilePath = Path.Combine(updateFileDir, remoteFileName);
 
                 using (WebClient client = new WebClient())
                 {
@@ -118,7 +133,7 @@ namespace SokuLauncher.Utils
 
                 if (updateFileInfo.Compressed)
                 {
-                    ZipFile.ExtractToDirectory(downloadToTempFilePath, UpdateTempDirPath);
+                    ZipFile.ExtractToDirectory(downloadToTempFilePath, updateFileDir);
                     File.Delete(downloadToTempFilePath);
                 }
 
@@ -131,17 +146,30 @@ namespace SokuLauncher.Utils
 
         public void CopyAndReplaceFile(UpdateFileInfoModel updateFileInfo)
         {
+            string updateFileDir = Path.Combine(UpdateTempDirPath, updateFileInfo.Name);
+
+            // replace extra files
+            if (updateFileInfo.ExtraFiles != null)
+            {
+                CopyFilesFromUpdateTempDir(updateFileDir, updateFileInfo.ExtraFiles, updateFileInfo.LocalFileDir, true);
+            }
+
+            // copy config files
+            if (updateFileInfo.ConfigFiles != null)
+            {
+                CopyFilesFromUpdateTempDir(updateFileDir, updateFileInfo.ConfigFiles, updateFileInfo.LocalFileDir);
+            }
 
             // replace main file
             if (!string.IsNullOrWhiteSpace(updateFileInfo.FileName))
             {
-                string newVersionFileName = Path.Combine(UpdateTempDirPath, updateFileInfo.FileName);
+                string newVersionFileName = Path.Combine(updateFileDir, updateFileInfo.FileName);
                 if (File.Exists(newVersionFileName))
                 {
                     if (updateFileInfo.LocalFileName == Static.SelfFileName)
                     {
                         // replace self
-                        string replaceBatPath = Path.Combine(UpdateTempDirPath, "replace.bat");
+                        string replaceBatPath = Path.Combine(updateFileDir, "replace.bat");
 
                         string batContent = $"copy \"{newVersionFileName}\" \"{Static.SelfFileName}\" /Y{Environment.NewLine}";
                         batContent += $"del \"{newVersionFileName}\"{Environment.NewLine}";
@@ -165,25 +193,17 @@ namespace SokuLauncher.Utils
                 }
             }
 
-            // replace extra files
-            if (updateFileInfo.ExtraFiles != null)
-            {
-                CopyFilesFromUpdateTempDir(updateFileInfo.ExtraFiles, updateFileInfo.LocalFileDir, true);
-            }
-
-            // copy config files
-            if (updateFileInfo.ConfigFiles != null)
-            {
-                CopyFilesFromUpdateTempDir(updateFileInfo.ConfigFiles, updateFileInfo.LocalFileDir);
-            }
+            string modVersionFileName = Path.Combine(updateFileInfo.LocalFileDir, MOD_VERSION_FILENAME);
+            File.WriteAllText(modVersionFileName, updateFileInfo.Version);
+            Directory.Delete(updateFileDir, true);
         }
 
-        private void CopyFilesFromUpdateTempDir(List<string> fileNames, string localFileDir, bool overwrite = false)
+        private void CopyFilesFromUpdateTempDir(string fileDir, List<string> fileNames, string localFileDir, bool overwrite = false)
         {
             foreach (var fileName in fileNames)
             {
                 string localFileName = Path.Combine(localFileDir, fileName);
-                string newVersionFileName = Path.Combine(UpdateTempDirPath, fileName);
+                string newVersionFileName = Path.Combine(fileDir, fileName);
 
                 if (File.Exists(newVersionFileName))
                 {
