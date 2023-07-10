@@ -69,12 +69,12 @@ namespace SokuLauncher.Utils
                             
                             string sWRSToysVersionFileName = Path.Combine(lastestVersionInfo.LocalFileDir, MOD_VERSION_FILENAME);
 
-                            string modCurrentVersion = "0.0.0.0";
+                            string sWRSToysCurrentVersion = "0.0.0.0";
                             if (File.Exists(sWRSToysVersionFileName))
                             {
-                                modCurrentVersion = File.ReadAllText(sWRSToysVersionFileName);
+                                sWRSToysCurrentVersion = File.ReadAllText(sWRSToysVersionFileName);
                             }
-                            currentVersion = new Version(modCurrentVersion);
+                            currentVersion = new Version(sWRSToysCurrentVersion);
 
                             break;
                         default:
