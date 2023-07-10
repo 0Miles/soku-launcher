@@ -107,9 +107,37 @@ namespace SokuLauncher.ViewModels
             {
                 if (string.IsNullOrEmpty(SokuFileName))
                 {
-                    return null;
+                    return "";
                 }
                 return Path.GetFullPath(Path.Combine(Path.Combine(Static.SelfFileDir, SokuDirPath), SokuFileName));
+            }
+            set { }
+        }
+
+        public void UpdateModsPathInfo()
+        {
+            RaisePropertyChanged("ModsDirFullPath");
+            RaisePropertyChanged("SWRSToysD3d9Exist");
+        }
+
+        public string ModsDirFullPath
+        {
+            get
+            {
+                if (!Directory.Exists(ModsManager.DefaultModsDir))
+                {
+                    return "";
+                }
+                return ModsManager.DefaultModsDir;
+            }
+            set { }
+        }
+
+        public bool SWRSToysD3d9Exist
+        {
+            get
+            {
+                return ModsManager.SWRSToysD3d9Exist;
             }
             set { }
         }

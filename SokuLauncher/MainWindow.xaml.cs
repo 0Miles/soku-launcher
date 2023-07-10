@@ -70,7 +70,7 @@ namespace SokuLauncher
 
                 if (string.IsNullOrWhiteSpace(Static.ConfigUtil.Config.SokuFileName))
                 {
-                    throw new Exception($"The game executable does not exist.");
+                    throw new Exception($"th123 executable file not set");
                 }
 
                 string sokuFile = Path.Combine(Static.ConfigUtil.SokuDirFullPath, Static.ConfigUtil.Config.SokuFileName);

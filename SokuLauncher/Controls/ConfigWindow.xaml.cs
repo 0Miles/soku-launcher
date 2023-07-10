@@ -83,6 +83,7 @@ namespace SokuLauncher.Controls
                     ViewModel.ModsManager.SokuDirFullPath = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
                     ViewModel.ModsManager.SearchModulesDir();
                     ViewModel.ModsManager.LoadSWRSToysSetting();
+                    ViewModel.UpdateModsPathInfo();
                 }
             }
         }

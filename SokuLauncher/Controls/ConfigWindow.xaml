@@ -12,6 +12,8 @@
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <converters:ReverseStringToVisibilityConverter x:Key="ReverseStringToVisibilityConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <converters:ReverseBooleanToVisibilityConverter x:Key="ReverseBooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ControlTemplate x:Key="NoMouseOverButtonTemplate" TargetType="Button">
             <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
@@ -376,7 +378,7 @@
                             <TextBox Grid.Row="1" Background="{x:Null}" Text="{Binding SokuFileName}" IsReadOnly="True" HorizontalAlignment="Center" BorderThickness="0" Margin="8" />
                         </Grid>
                     </Border>
-                    <TextBlock Text="Game executable file not found." HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding SokuFileName, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
+                    <TextBlock Text="th123 executable file not set" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding SokuFileName, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
                     <Button Content="Select" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,8,8,16" Padding="8,4" Click="SokuFileNameButton_Click" Cursor="Hand" ></Button>
 
                     <GroupBox Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="8" Padding="8,16" Visibility="{Binding SokuFileName, Converter={StaticResource StringToVisibilityConverter}}">
@@ -395,12 +397,20 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <TextBlock Grid.Row="0" Text="Dir: " VerticalAlignment="Top" Margin="4" />
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SokuDirFullPath}" TextWrapping="Wrap" BorderThickness="0" IsReadOnly="True" VerticalAlignment="Top" Margin="4"/>
-                            
-                            <TextBlock Grid.Row="1" Text="FileName: " VerticalAlignment="Top" Margin="4" />
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SokuFileNameFullPath}" TextWrapping="Wrap" BorderThickness="0" IsReadOnly="True" VerticalAlignment="Top" Margin="4"/>
+                            <TextBlock Grid.Row="0" Text="Soku File: " VerticalAlignment="Center" Margin="4" />
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SokuFileNameFullPath}" Padding="4" Background="#F5F5F5" IsReadOnly="True" VerticalAlignment="Center" Margin="4"/>
 
+                            <TextBlock Grid.Row="1" Text="Soku Dir: " VerticalAlignment="Center" Margin="4" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SokuDirFullPath}" Padding="4" Background="#F5F5F5" IsReadOnly="True" VerticalAlignment="Center" Margin="4"/>
+
+                            <TextBlock Grid.Row="2" Text="SWRSToys: " VerticalAlignment="Center" Margin="4" />
+                            <TextBlock Grid.Row="2" Text="Ready" Foreground="Green" Grid.Column="1" VerticalAlignment="Center" Margin="4,8" Visibility="{Binding SWRSToysD3d9Exist, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                            <TextBlock Grid.Row="2" Text="Not found" Foreground="DarkRed" Grid.Column="1" VerticalAlignment="Center" Margin="4,8" Visibility="{Binding SWRSToysD3d9Exist, Converter={StaticResource ReverseBooleanToVisibilityConverter}}"></TextBlock>
+
+                            <TextBlock Grid.Row="3" Text="Modules Dir: " VerticalAlignment="Center" Margin="4" />
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ModsDirFullPath}" Padding="4" Background="#F5F5F5" IsReadOnly="True" VerticalAlignment="Center" Margin="4"/>
+
+                            
                         </Grid>
                     </GroupBox>
                 </StackPanel>

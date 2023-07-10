@@ -15,7 +15,7 @@ namespace SokuLauncher.Utils
         const string CONFIG_FILE_NAME = "SokuLauncher.json";
         const string DEFAULT_SOKU_FILE_NAME = "th123.exe";
         const string DEFAULT_SOKU_DIR = ".";
-        const string SOKU_FILE_NAME_REGEX = @"th123(?:\s+)?\-?(?:\s+)?(?:\w+)?\.exe";
+        const string SOKU_FILE_NAME_REGEX = @"th123(?:[\s\w-()]+)?\.exe";
         public ConfigModel Config { get; set; } = new ConfigModel();
         public string SokuDirFullPath {
             get
@@ -33,7 +33,10 @@ namespace SokuLauncher.Utils
                 Config = GenerateConfig();
                 if (Config.SokuDirPath != null)
                 {
-                    SaveConfig();
+                    if (Config.SokuFileName != null)
+                    {
+                        SaveConfig();
+                    }
                 }
                 else
                 {
@@ -179,7 +182,7 @@ namespace SokuLauncher.Utils
                 SelectorWindowViewModel swvm = new SelectorWindowViewModel
                 {
                     Title = "Choose the executable file",
-                    Desc = "Multiple th123 executable files found. Please select the file to be set as the default launcher.",
+                    Desc = "Multiple th123 executable files found. Please select one as the launcher target.",
                     SelectorNodeList = new List<SelectorNodeModel>()
                 };
 
@@ -203,7 +206,7 @@ namespace SokuLauncher.Utils
                 }
                 else
                 {
-                    return DEFAULT_SOKU_FILE_NAME;
+                    return null;
                 }
             }
             else

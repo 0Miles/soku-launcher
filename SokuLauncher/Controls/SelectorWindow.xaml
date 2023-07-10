@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:SelectorWindowViewModel}"
         mc:Ignorable="d" Loaded="Window_Loaded"
-        Title="{Binding Title}" Width="250" SizeToContent="Height" WindowStartupLocation="CenterScreen">
+        Title="{Binding Title}" MaxWidth="350" MinHeight="320" MaxHeight="520" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
@@ -21,6 +21,7 @@
         <ListView Grid.Row="1"
                   x:Name="SelectorListView"
                   ItemsSource="{Binding SelectorNodeList}"
+                  ScrollViewer.CanContentScroll="False"
                   Margin="8">
             <ListView.ItemTemplate>
                 <DataTemplate>

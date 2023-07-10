@@ -10,6 +10,7 @@ namespace SokuLauncher.Utils
     {
         public List<ModInfoModel> ModInfoList { get; private set; } = new List<ModInfoModel> { };
         public string DefaultModsDir { get; private set; }
+        public bool SWRSToysD3d9Exist { get; private set; }
 
         private string _SokuDirFullPath;
         public string SokuDirFullPath
@@ -25,6 +26,7 @@ namespace SokuLauncher.Utils
                     _SokuDirFullPath = value;
 
                     DefaultModsDir = Path.Combine(SokuDirFullPath, "modules");
+                    SWRSToysD3d9Exist = File.Exists(Path.Combine(SokuDirFullPath, "d3d9.dll"));
                 }
             }
         }
