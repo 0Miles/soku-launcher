@@ -78,6 +78,8 @@ namespace SokuLauncher
                     List<string> CheckModes = settingGroup.EnableMods.Select(x => x).ToList();
                     CheckModes.Add("SokuModLoader");
                     Static.UpdatesManager.CheckForInstallable(CheckModes);
+                    Static.ModsManager.SearchModulesDir();
+                    Static.ModsManager.LoadSWRSToysSetting();
                 }
 
                 foreach (var enableMod in settingGroup.EnableMods ?? new List<string>())

@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -164,7 +165,10 @@ namespace SokuLauncher.Utils
                             var modInfo = ModsManager.GetModInfoByModName(updateFileInfo.Name);
                             if (modInfo == null || !File.Exists(modInfo.FullPath))
                             {
-                                updateFileInfo.LocalFileName = Path.Combine(ModsManager.DefaultModsDir, updateFileInfo.Name, updateFileInfo.FileName);
+                                string fileNameForbiddenCharactersPattern = @"[\\/:*?""<>|]";
+                                string fileName = Regex.Replace(updateFileInfo.Name, fileNameForbiddenCharactersPattern, "_");
+
+                                updateFileInfo.LocalFileName = Path.Combine(ModsManager.DefaultModsDir, updateFileInfo.Name, $"{fileName}{Path.GetExtension(updateFileInfo.FileName)}");
                                 updateFileInfo.Installed = false;
                             }
                             else
@@ -289,6 +293,10 @@ namespace SokuLauncher.Utils
                     }
                     else
                     {
+                        if (updateFileInfo.FileName.ToLower() != Path.GetFileName(updateFileInfo.LocalFileName).ToLower())
+                        {
+                            File.Move(newVersionFileName, Path.Combine(updateWorkingDir, Path.GetFileName(updateFileInfo.LocalFileName)));
+                        }
                         CopyDirectory(updateWorkingDir, updateFileInfo.LocalFileDir);
                     }
                 }
