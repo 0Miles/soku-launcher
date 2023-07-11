@@ -15,17 +15,17 @@
         "ConfigFiles": [
             "giuroll.ini"
         ],
-        "DownloadUrl": "https://cdn.discordapp.com/attachments/1113775565778989096/1128028980096815215/giuroll_0_5_1.zip",
+        "DownloadUrl": "https://github.com/Giufinn/giuroll/releases/download/0.5.1/giuroll_0_5_1.zip",
         "Compressed": true
     },
     {
         "Name": "Giuroll-62F",
-        "Version": "0.4.1.0",
-        "FileName": "giuroll-62F.dll",
+        "Version": "0.5.1.0",
+        "FileName": "giuroll.dll",
         "ConfigFiles": [
             "giuroll.ini"
         ],
-        "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1128341814043222066/giuroll-62F.zip",
+        "DownloadUrl": "https://github.com/Giufinn/giuroll/releases/download/0.5.1CN/giuroll_0_5_1cn.zip",
         "Compressed": true
     },
     {
