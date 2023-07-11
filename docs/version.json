@@ -1,8 +1,16 @@
 [
     {
+        "Name": "SokuLauncher",
+        "Desc": "Fixed crash when opening ColorPicker",
+        "Version": "1.1.4.0",
+        "FileName": "SokuLauncher.exe",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v1.1.4.0/SokuLauncher.zip",
+        "Compressed": true
+    },
+    {
         "Name": "Giuroll",
         "Desc": "PRE-RELEASE BUILD, VERSION 0.5.1\nYOU CAN NOW SPECTATE FROM DIFFERENT NETCODES\nNEW .INI ENTRY\nNOT COMPATIBLE WITH PAST VERSIONS BEFORE 5.0\nThis mod fixes any FPS issues related to Windows 10 (most users affected), online mode stuttering, and one-sided rollback.",
-        "Version": "0.5.0.0",
+        "Version": "0.5.1.0",
         "FileName": "giuroll.dll",
         "ConfigFiles": ["giuroll.ini"],
         "DownloadUrl": "https://cdn.discordapp.com/attachments/1113775565778989096/1128028980096815215/giuroll_0_5_1.zip",
