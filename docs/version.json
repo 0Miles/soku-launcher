@@ -21,7 +21,7 @@
     {
         "Name": "Giuroll-62F",
         "Version": "0.4.1.0",
-        "FileName": "giuroll.dll",
+        "FileName": "giuroll-62F.dll",
         "ConfigFiles": [
             "giuroll.ini"
         ],
