@@ -2,9 +2,9 @@
     {
         "Name": "SokuLauncher",
         "Desc": "New Features\n - Auto check for installable mods before launching the game",
-        "Version": "1.2.0.0",
+        "Version": "1.2.1.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v1.2.0.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v1.2.1.0/SokuLauncher.zip",
         "Compressed": true
     },
     {
