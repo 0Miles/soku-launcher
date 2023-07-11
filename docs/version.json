@@ -20,6 +20,7 @@
     },
     {
         "Name": "Giuroll-62F",
+        "Desc": "PRE-RELEASE BUILD, VERSION 0.5.1\nYOU CAN NOW SPECTATE FROM DIFFERENT NETCODES\nNEW .INI ENTRY\nNOT COMPATIBLE WITH PAST VERSIONS BEFORE 5.0\nThis mod fixes any FPS issues related to Windows 10 (most users affected), online mode stuttering, and one-sided rollback.",
         "Version": "0.5.1.0",
         "FileName": "giuroll.dll",
         "ConfigFiles": [
@@ -37,6 +38,7 @@
     },
     {
         "Name": "Autopunch",
+        "Desc": "This program lets you host & connect to friends to play peer-to-peer games without having to open or redirect any port. This does not add any latency to the connection compared to redirecting ports manually.",
         "Version": "0.0.0.0",
         "FileName": "Autopunch.dll",
         "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1128312700619997214/Autopunch.zip",
@@ -54,6 +56,7 @@
     },
     {
         "Name": "InGameHostlist",
+        "Desc": "A module that adds hostlist bot integration directly into Hisoutensoku.",
         "Version": "0.0.0.0",
         "FileName": "InGameHostlist.dll",
         "ConfigFIles": [
