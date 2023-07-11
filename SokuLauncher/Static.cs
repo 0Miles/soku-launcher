@@ -105,7 +105,7 @@ namespace SokuLauncher
                         AvailableUpdateList = selectedUpdates,
                         Stillness = isAutoUpdates
                     };
-                    updatingWindow.Show();
+                    updatingWindow.ShowDialog();
                 }
                 if (isAutoUpdates)
                 {

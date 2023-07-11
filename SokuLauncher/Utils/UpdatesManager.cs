@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace SokuLauncher.Utils
 {
@@ -16,7 +17,6 @@ namespace SokuLauncher.Utils
         private const string MOD_VERSION_FILENAME_SUFFIX = ".version.txt";
 
         public event Action<int> DownloadProgressChanged;
-        public event Action<string> DownloadFileNameChanged;
         public List<UpdateFileInfoModel> AvailableUpdateList { get; private set; } = new List<UpdateFileInfoModel>();
 
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "Update");
@@ -119,7 +119,7 @@ namespace SokuLauncher.Utils
             }
         }
 
-        public void DownloadAndExtractFile(UpdateFileInfoModel updateFileInfo)
+        public async Task DownloadAndExtractFile(UpdateFileInfoModel updateFileInfo)
         {
             try
             {
@@ -135,9 +135,8 @@ namespace SokuLauncher.Utils
 
                 using (WebClient client = new WebClient())
                 {
-                    DownloadFileNameChanged?.Invoke(updateFileInfo.Name);
                     client.DownloadProgressChanged += (sender, e) => DownloadProgressChanged?.Invoke(e.ProgressPercentage);
-                    client.DownloadFile(updateFileInfo.DownloadUrl, downloadToTempFilePath);
+                    await client.DownloadFileTaskAsync(updateFileInfo.DownloadUrl, downloadToTempFilePath);
                 }
 
                 if (updateFileInfo.Compressed)

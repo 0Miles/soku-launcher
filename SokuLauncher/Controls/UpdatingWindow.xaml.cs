@@ -1,25 +1,12 @@
 ﻿using SokuLauncher.Models;
 using SokuLauncher.Utils;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SokuLauncher.Controls
 {
-    /// <summary>
-    /// UpdatingWindow.xaml 的互動邏輯
-    /// </summary>
     public partial class UpdatingWindow : Window, INotifyPropertyChanged
     {
         public UpdatingWindow()
@@ -75,13 +62,17 @@ namespace SokuLauncher.Controls
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            await Task.Delay(100);
             foreach (var updateFileInfo in AvailableUpdateList)
             {
-                UpdatesManager.DownloadProgressChanged += (progress) => Progress = progress;
-                UpdatesManager.DownloadFileNameChanged += (status) => Status = status;
-                UpdatesManager.DownloadAndExtractFile(updateFileInfo);
+                UpdatesManager.DownloadProgressChanged += (progress) => {
+                    Progress = progress;
+                    Status = $"{updateFileInfo.Name} {progress}%";
+                };
+                await UpdatesManager.DownloadAndExtractFile(updateFileInfo);
+                Status = $"{updateFileInfo.Name} updating...";
                 UpdatesManager.CopyAndReplaceFile(updateFileInfo);
             }
             Close();
