@@ -404,7 +404,7 @@ namespace SokuLauncher.Controls
 
 
             var dialog = new ColorPickerDialog(color);
-            dialog.Owner = Owner;
+            dialog.Owner = this;
 
             var res = dialog.ShowDialog();
 
