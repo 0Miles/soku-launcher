@@ -1,10 +1,10 @@
 [
     {
         "Name": "SokuLauncher",
-        "Desc": "Fixed update version comparison error and compressed file handling",
-        "Version": "1.1.7.0",
+        "Desc": "New Features\n - Auto check for installable mods before launching the game",
+        "Version": "1.2.0.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v1.1.7.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v1.2.0.0/SokuLauncher.zip",
         "Compressed": true
     },
     {
@@ -19,8 +19,17 @@
         "Compressed": true
     },
     {
+        "Name": "Giuroll-62F",
+        "Version": "0.4.1.0",
+        "FileName": "giuroll.dll",
+        "ConfigFiles": [
+            "giuroll.ini"
+        ],
+        "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1128341814043222066/giuroll-62F.zip",
+        "Compressed": true
+    },
+    {
         "Name": "SokuLobbiesMod",
-        "Desc": "Online lobbies",
         "Version": "0.5.0.0",
         "FileName": "SokuLobbiesMod.dll",
         "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1128307883021451456/SokuLobbiesMod.zip",
@@ -53,6 +62,13 @@
         ],
         "UpdateWorkingDir": "./InGameHostlist",
         "DownloadUrl": "https://github.com/SokuDev/InGameHostlist/releases/download/v1.3.3/InGameHostlist.zip",
+        "Compressed": true
+    },
+    {
+        "Name": "SokuModLoader",
+        "Version": "0.3.1.0",
+        "FileName": "d3d9.dll",
+        "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1128341050008809472/d3d9.zip",
         "Compressed": true
     }
 ]
