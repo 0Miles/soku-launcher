@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:converters="clr-namespace:SokuLauncher.Converters" xmlns:controls="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindwoViewModel}"
         mc:Ignorable="d"
-        x:Name="SokuLauncherMainWindow" Background="{x:Null}" AllowsTransparency="True" WindowStyle="None" Topmost="True" Activated="SokuLauncherMainWindow_Activated"
+        x:Name="SokuLauncherMainWindow" Background="{x:Null}" AllowsTransparency="True" WindowStyle="None" Activated="SokuLauncherMainWindow_Activated"
         Title="SokuLauncher" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight" Icon="/Resources/icon.ico">
     <Window.Resources>
         <ControlTemplate x:Key="NoMouseOverButtonTemplate" TargetType="Button">

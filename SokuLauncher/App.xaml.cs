@@ -60,10 +60,11 @@ namespace SokuLauncher
 
             try
             {
+                Static.UpdatesManager = new UpdatesManager(Static.ConfigUtil, Static.ModsManager);
                 if (Static.ConfigUtil.Config.AutoCheckForUpdates)
                 {
-                    UpdatesManager updatesManager = new UpdatesManager(Static.ConfigUtil.Config, Static.ModsManager, Static.ConfigUtil.SokuDirFullPath);
-                    Static.CheckForUpdates(updatesManager);
+                    Static.UpdatesManager.GetVersionInfoJson();
+                    Static.UpdatesManager.CheckForUpdates();
                 }
             }
             catch (Exception ex)

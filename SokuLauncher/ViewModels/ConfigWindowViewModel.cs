@@ -187,6 +187,21 @@ namespace SokuLauncher.ViewModels
                 RaisePropertyChanged("AutoCheckForUpdates");
             }
         }
+        
+        private bool _AutoCheckForInstallable;
+        public bool AutoCheckForInstallable
+        {
+            get
+            {
+                return _AutoCheckForInstallable;
+            }
+            set
+            {
+                _AutoCheckForInstallable = value;
+                Saveable = true;
+                RaisePropertyChanged("AutoCheckForInstallable");
+            }
+        }
 
         private string _VersionInfoUrl;
         public string VersionInfoUrl

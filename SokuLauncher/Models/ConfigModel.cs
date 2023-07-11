@@ -10,6 +10,7 @@ namespace SokuLauncher.Models
         public string SokuFileName { get; set; }
         public string SokuDirPath { get; set; }
         public bool AutoCheckForUpdates { get; set; } = true;
+        public bool AutoCheckForInstallable { get; set; } = true;
         public string VersionInfoUrl { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace SokuLauncher.Controls
         public List<UpdateFileInfoModel> AvailableUpdateList { get; set; }
         public string Desc { get; set; }
 
-        public bool AutoUpdates { get; set; }
+        public bool IsAutoCheckForUpdatesCheckBoxShow { get; set; } = false;
 
         public bool AutoCheckForUpdates { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SokuLauncher.Controls;
 using SokuLauncher.Models;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SokuLauncher.Utils
 {
@@ -18,82 +20,164 @@ namespace SokuLauncher.Utils
 
         public event Action<int> DownloadProgressChanged;
         public List<UpdateFileInfoModel> AvailableUpdateList { get; private set; } = new List<UpdateFileInfoModel>();
+        public string VersionInfoJson { get; private set; }
 
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "Update");
 
-        private ConfigModel Config;
+        private ConfigUtil ConfigUtil;
         private ModsManager ModsManager;
-        private string SokuDirFullPath;
 
-        public UpdatesManager(ConfigModel config, ModsManager modsManager, string sokuDirFullPath)
+        public UpdatesManager(ConfigUtil configUtil, ModsManager modsManager)
         {
             Directory.CreateDirectory(UpdateTempDirPath);
-            Config = config;
+            ConfigUtil = configUtil;
             ModsManager = modsManager;
-            SokuDirFullPath = sokuDirFullPath;
         }
 
-        private Version GetFileCurrentVersion(string fileName)
-        {
-            var fileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
-            if (fileVersionInfo?.FileVersion != null)
-            {
-                return new Version(fileVersionInfo.FileVersion);
-            }
-            return null;
-        }
-
-        public void CheckUpdate()
+        public void CheckForUpdates(bool isAutoUpdates = true)
         {
             try
             {
-                WebClient client = new WebClient();
-                string response = client.DownloadString(Config.VersionInfoUrl ?? DEFAULT_VERSION_INFO_URL);
+                GetAvailableUpdateList();
+                if (AvailableUpdateList.Count > 0)
+                {
+                    UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
+                    {
+                        Desc = "The following mods have updates available. Please check the mods you want to update.",
+                        AvailableUpdateList = AvailableUpdateList,
+                        IsAutoCheckForUpdatesCheckBoxShow = isAutoUpdates,
+                        AutoCheckForUpdates = ConfigUtil.Config.AutoCheckForUpdates
+                    };
 
-                List<UpdateFileInfoModel> latestVersionInfoList = JsonConvert.DeserializeObject<List<UpdateFileInfoModel>>(response);
+                    if (updateSelectionWindow.ShowDialog() == true)
+                    {
+                        var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
+
+                        UpdatingWindow updatingWindow = new UpdatingWindow
+                        {
+                            UpdatesManager = this,
+                            AvailableUpdateList = selectedUpdates,
+                            Stillness = isAutoUpdates
+                        };
+                        updatingWindow.ShowDialog();
+                    }
+                    if (isAutoUpdates)
+                    {
+                        if (ConfigUtil.Config.AutoCheckForUpdates != updateSelectionWindow.AutoCheckForUpdates)
+                        {
+                            ConfigUtil.Config.AutoCheckForUpdates = updateSelectionWindow.AutoCheckForUpdates;
+                            ConfigUtil.SaveConfig();
+                        }
+                    }
+                }
+                else
+                {
+                    if (!isAutoUpdates)
+                    {
+                        MessageBox.Show("All available mods have been updated to the latest version", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void CheckForInstallable(List<string> modsToCheckList)
+        {
+            try
+            {
+                GetAvailableUpdateList(false, true, modsToCheckList);
+                if (AvailableUpdateList.Count > 0)
+                {
+                    UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
+                    {
+                        Desc = "The following mods are missing. Please install to make sure the game works correctly.",
+                        AvailableUpdateList = AvailableUpdateList,
+                        IsAutoCheckForUpdatesCheckBoxShow = false
+                    };
+
+                    if (updateSelectionWindow.ShowDialog() == true)
+                    {
+                        var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
+
+                        UpdatingWindow updatingWindow = new UpdatingWindow
+                        {
+                            UpdatesManager = this,
+                            AvailableUpdateList = selectedUpdates,
+                            Stillness = false
+                        };
+                        updatingWindow.ShowDialog();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void GetVersionInfoJson()
+        {
+            using (WebClient client = new WebClient())
+            {
+                VersionInfoJson = client.DownloadString(ConfigUtil.Config.VersionInfoUrl ?? DEFAULT_VERSION_INFO_URL);
+            }
+        }
+
+        public void GetAvailableUpdateList(bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null)
+        {
+            try
+            {
+                List<UpdateFileInfoModel> latestVersionInfoList = JsonConvert.DeserializeObject<List<UpdateFileInfoModel>>(VersionInfoJson);
 
                 AvailableUpdateList.Clear();
-                foreach (UpdateFileInfoModel lastestVersionInfo in latestVersionInfoList)
+                foreach (UpdateFileInfoModel updateFileInfo in latestVersionInfoList)
                 {
-                    Version latestVersion = new Version(lastestVersionInfo.Version);
+                    if (modsToCheckList != null && modsToCheckList.FirstOrDefault(x => x.ToLower() == updateFileInfo.Name.ToLower()) == null)
+                    {
+                        continue;
+                    }
 
+                    Version latestVersion = new Version(updateFileInfo.Version);
                     Version currentVersion = null;
 
-                    switch (lastestVersionInfo.Name)
+                    switch (updateFileInfo.Name)
                     {
                         case "SokuLauncher":
                             currentVersion = GetFileCurrentVersion(Static.SelfFileName);
-                            lastestVersionInfo.LocalFileName = Static.SelfFileName;
+                            updateFileInfo.LocalFileName = Static.SelfFileName;
                             break;
                         case "SokuModLoader":
-                            lastestVersionInfo.LocalFileName = Path.Combine(SokuDirFullPath, "d3d9.dll");
+                            updateFileInfo.LocalFileName = Path.Combine(ConfigUtil.SokuDirFullPath, "d3d9.dll");
                             if (ModsManager.SWRSToysD3d9Exist)
                             {
-                                currentVersion = GetFileCurrentVersion(lastestVersionInfo.LocalFileName);
+                                currentVersion = GetFileCurrentVersion(updateFileInfo.LocalFileName);
                             }
                             else
                             {
-                                lastestVersionInfo.Installed = false;
+                                updateFileInfo.Installed = false;
                             }
                             break;
                         default:
-                            var modInfo = ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
+                            var modInfo = ModsManager.GetModInfoByModName(updateFileInfo.Name);
                             if (modInfo == null || !File.Exists(modInfo.FullPath))
                             {
-                                lastestVersionInfo.LocalFileName = Path.Combine(ModsManager.DefaultModsDir, lastestVersionInfo.Name, lastestVersionInfo.FileName);
-                                lastestVersionInfo.Installed = false;
+                                updateFileInfo.LocalFileName = Path.Combine(ModsManager.DefaultModsDir, updateFileInfo.Name, updateFileInfo.FileName);
+                                updateFileInfo.Installed = false;
                             }
                             else
                             {
-                                lastestVersionInfo.LocalFileName = modInfo.FullPath;
-                                currentVersion = GetFileCurrentVersion(lastestVersionInfo.LocalFileName);
+                                updateFileInfo.LocalFileName = modInfo.FullPath;
+                                currentVersion = GetFileCurrentVersion(updateFileInfo.LocalFileName);
                             }
                             break;
                     }
 
                     if (currentVersion == null)
                     {
-                        string modVersionFileName = Path.Combine(lastestVersionInfo.LocalFileDir, $"{lastestVersionInfo.Name}{MOD_VERSION_FILENAME_SUFFIX}");
+                        string modVersionFileName = Path.Combine(updateFileInfo.LocalFileDir, $"{updateFileInfo.Name}{MOD_VERSION_FILENAME_SUFFIX}");
                         string modCurrentVersion = "0.0.0.0";
                         if (File.Exists(modVersionFileName))
                         {
@@ -108,11 +192,12 @@ namespace SokuLauncher.Utils
                         currentVersion = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build, 0);
                     }
 
-                    lastestVersionInfo.LocalFileVersion = currentVersion.ToString();
+                    updateFileInfo.LocalFileVersion = currentVersion.ToString();
 
-                    if (currentVersion != null && latestVersion > currentVersion)
+                    if (checkForUpdates && latestVersion > currentVersion && updateFileInfo.Installed ||
+                        checkForInstallable && !updateFileInfo.Installed)
                     {
-                        AvailableUpdateList.Add(lastestVersionInfo);
+                        AvailableUpdateList.Add(updateFileInfo);
                     }
                 }
             }
@@ -216,6 +301,16 @@ namespace SokuLauncher.Utils
             string modVersionFileName = Path.Combine(updateFileInfo.LocalFileDir, $"{updateFileInfo.Name}{MOD_VERSION_FILENAME_SUFFIX}");
             File.WriteAllText(modVersionFileName, updateFileInfo.Version);
             Directory.Delete(updateFileDir, true);
+        }
+        
+        private Version GetFileCurrentVersion(string fileName)
+        {
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
+            if (fileVersionInfo?.FileVersion != null)
+            {
+                return new Version(fileVersionInfo.FileVersion);
+            }
+            return null;
         }
 
         private static void CopyDirectory(string sourceDir, string destinationDir, bool recursive = true)

@@ -11,7 +11,7 @@ using System.Windows;
 
 namespace SokuLauncher.Utils
 {
-    internal class ConfigUtil
+    public class ConfigUtil
     {
         const string CONFIG_FILE_NAME = "SokuLauncher.json";
         const string DEFAULT_SOKU_FILE_NAME = "th123.exe";

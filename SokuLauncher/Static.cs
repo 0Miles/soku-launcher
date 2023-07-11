@@ -21,6 +21,7 @@ namespace SokuLauncher
     {
         public static ConfigUtil ConfigUtil { get; internal set; }
         public static ModsManager ModsManager { get; internal set; }
+        public static UpdatesManager UpdatesManager { get; internal set; }
         public static string TempDirPath { get; internal set; }
         public static string SelfFileName { get; internal set; } = System.Reflection.Assembly.GetEntryAssembly().Location;
         public static string SelfFileDir
@@ -80,56 +81,6 @@ namespace SokuLauncher
 
             string jsonString = JsonConvert.SerializeObject(source);
             return JsonConvert.DeserializeObject<T>(jsonString);
-        }
-
-        public static void CheckForUpdates(UpdatesManager updatesManager, bool isAutoUpdates = true)
-        {
-            try
-            {
-                updatesManager.CheckUpdate();
-                if (updatesManager.AvailableUpdateList.Count > 0)
-                {
-                    UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
-                    {
-                        Desc = "The following mods have updates available. Please check the mods you want to update.",
-                        AvailableUpdateList = updatesManager.AvailableUpdateList,
-                        AutoUpdates = isAutoUpdates,
-                        AutoCheckForUpdates = ConfigUtil.Config.AutoCheckForUpdates
-                    };
-
-                    if (updateSelectionWindow.ShowDialog() == true)
-                    {
-                        var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
-
-                        UpdatingWindow updatingWindow = new UpdatingWindow
-                        {
-                            UpdatesManager = updatesManager,
-                            AvailableUpdateList = selectedUpdates,
-                            Stillness = isAutoUpdates
-                        };
-                        updatingWindow.ShowDialog();
-                    }
-                    if (isAutoUpdates)
-                    {
-                        if (ConfigUtil.Config.AutoCheckForUpdates != updateSelectionWindow.AutoCheckForUpdates)
-                        {
-                            ConfigUtil.Config.AutoCheckForUpdates = updateSelectionWindow.AutoCheckForUpdates;
-                            ConfigUtil.SaveConfig();
-                        }
-                    }
-                }
-                else
-                {
-                    if (!isAutoUpdates)
-                    {
-                        MessageBox.Show("All available mods have been updated to the latest version", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
     }
 }

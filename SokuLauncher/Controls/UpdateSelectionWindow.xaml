@@ -78,7 +78,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <CheckBox IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" Visibility="{Binding AutoUpdates, Converter={StaticResource BooleanToVisibilityConverter}}" >Auto check for updates on startup</CheckBox>
+            <CheckBox IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" Visibility="{Binding IsAutoCheckForUpdatesCheckBoxShow, Converter={StaticResource BooleanToVisibilityConverter}}" >Auto check for updates on startup</CheckBox>
             <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Orientation="Horizontal">
                 <Button Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click" >OK</Button>
                 <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>

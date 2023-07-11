@@ -66,14 +66,19 @@ namespace SokuLauncher
             if (ViewModel.SelectedSokuModSettingGroup == null) return;
             try
             {
-                var settingGroup = ViewModel.SelectedSokuModSettingGroup;
-
                 if (string.IsNullOrWhiteSpace(Static.ConfigUtil.Config.SokuFileName))
                 {
                     throw new Exception($"th123 executable file not set");
                 }
 
-                string sokuFile = Path.Combine(Static.ConfigUtil.SokuDirFullPath, Static.ConfigUtil.Config.SokuFileName);
+                var settingGroup = ViewModel.SelectedSokuModSettingGroup;
+
+                if (Static.ConfigUtil.Config.AutoCheckForInstallable)
+                {
+                    List<string> CheckModes = settingGroup.EnableMods.Select(x => x).ToList();
+                    CheckModes.Add("SokuModLoader");
+                    Static.UpdatesManager.CheckForInstallable(CheckModes);
+                }
 
                 foreach (var enableMod in settingGroup.EnableMods ?? new List<string>())
                 {
@@ -85,6 +90,8 @@ namespace SokuLauncher
                 }
                 Static.ModsManager.DisableDuplicateEnabledMods();
                 Static.ModsManager.SaveSWRSToysIni();
+
+                string sokuFile = Path.Combine(Static.ConfigUtil.SokuDirFullPath, Static.ConfigUtil.Config.SokuFileName);
 
                 if (!File.Exists(sokuFile))
                 {
@@ -207,6 +214,7 @@ namespace SokuLauncher
                 SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups)),
                 SokuModAlias = new ObservableCollection<string>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModAlias)),
                 AutoCheckForUpdates = Static.ConfigUtil.Config.AutoCheckForUpdates,
+                AutoCheckForInstallable = Static.ConfigUtil.Config.AutoCheckForInstallable,
                 VersionInfoUrl = Static.ConfigUtil.Config.VersionInfoUrl
             });
             

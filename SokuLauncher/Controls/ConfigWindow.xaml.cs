@@ -92,6 +92,7 @@ namespace SokuLauncher.Controls
             Static.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
             Static.ConfigUtil.Config.SokuModAlias = ViewModel.SokuModAlias.ToList();
             Static.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
+            Static.ConfigUtil.Config.AutoCheckForInstallable = ViewModel.AutoCheckForInstallable;
             Static.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
 
             Static.ConfigUtil.SaveConfig();
@@ -535,17 +536,21 @@ namespace SokuLauncher.Controls
 
         private void CheckForUpdatesButton_Click(object sender, RoutedEventArgs e)
         {
-            ConfigModel config = new ConfigModel
-            {
-                SokuDirPath = ViewModel.SokuDirPath,
-                SokuFileName = ViewModel.SokuFileName,
-                SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
-                SokuModAlias = ViewModel.SokuModAlias.ToList(),
-                AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
-                VersionInfoUrl = ViewModel.VersionInfoUrl
+            ConfigUtil configUtil = new ConfigUtil {
+                Config = new ConfigModel
+                    {
+                        SokuDirPath = ViewModel.SokuDirPath,
+                        SokuFileName = ViewModel.SokuFileName,
+                        SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
+                        SokuModAlias = ViewModel.SokuModAlias.ToList(),
+                        AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
+                        AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
+                        VersionInfoUrl = ViewModel.VersionInfoUrl
+                    }
             };
-            UpdatesManager updatesManager = new UpdatesManager(config, ViewModel.ModsManager, ViewModel.SokuDirFullPath);
-            Static.CheckForUpdates(updatesManager, false);
+            UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
+            updatesManager.GetVersionInfoJson();
+            updatesManager.CheckForUpdates(false);
         }
     }
 }
