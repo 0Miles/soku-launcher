@@ -84,44 +84,51 @@ namespace SokuLauncher
 
         public static void CheckForUpdates(UpdatesManager updatesManager, bool isAutoUpdates = true)
         {
-            updatesManager.CheckUpdate();
-            if (updatesManager.AvailableUpdateList.Count > 0)
+            try
             {
-                UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
+                updatesManager.CheckUpdate();
+                if (updatesManager.AvailableUpdateList.Count > 0)
                 {
-                    Desc = "The following mods have updates available. Please check the mods you want to update.",
-                    AvailableUpdateList = updatesManager.AvailableUpdateList,
-                    AutoUpdates = isAutoUpdates,
-                    AutoCheckForUpdates = ConfigUtil.Config.AutoCheckForUpdates
-                };
-
-                if (updateSelectionWindow.ShowDialog() == true)
-                {
-                    var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
-
-                    UpdatingWindow updatingWindow = new UpdatingWindow
+                    UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
                     {
-                        UpdatesManager = updatesManager,
-                        AvailableUpdateList = selectedUpdates,
-                        Stillness = isAutoUpdates
+                        Desc = "The following mods have updates available. Please check the mods you want to update.",
+                        AvailableUpdateList = updatesManager.AvailableUpdateList,
+                        AutoUpdates = isAutoUpdates,
+                        AutoCheckForUpdates = ConfigUtil.Config.AutoCheckForUpdates
                     };
-                    updatingWindow.ShowDialog();
-                }
-                if (isAutoUpdates)
-                {
-                    if (ConfigUtil.Config.AutoCheckForUpdates != updateSelectionWindow.AutoCheckForUpdates)
+
+                    if (updateSelectionWindow.ShowDialog() == true)
                     {
-                        ConfigUtil.Config.AutoCheckForUpdates = updateSelectionWindow.AutoCheckForUpdates;
-                        ConfigUtil.SaveConfig();
+                        var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
+
+                        UpdatingWindow updatingWindow = new UpdatingWindow
+                        {
+                            UpdatesManager = updatesManager,
+                            AvailableUpdateList = selectedUpdates,
+                            Stillness = isAutoUpdates
+                        };
+                        updatingWindow.ShowDialog();
+                    }
+                    if (isAutoUpdates)
+                    {
+                        if (ConfigUtil.Config.AutoCheckForUpdates != updateSelectionWindow.AutoCheckForUpdates)
+                        {
+                            ConfigUtil.Config.AutoCheckForUpdates = updateSelectionWindow.AutoCheckForUpdates;
+                            ConfigUtil.SaveConfig();
+                        }
+                    }
+                }
+                else
+                {
+                    if (!isAutoUpdates)
+                    {
+                        MessageBox.Show("All available mods have been updated to the latest version", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                if (!isAutoUpdates)
-                {
-                    MessageBox.Show("All available mods have been updated to the latest version", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

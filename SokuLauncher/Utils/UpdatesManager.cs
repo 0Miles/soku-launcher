@@ -65,7 +65,7 @@ namespace SokuLauncher.Utils
                             currentVersion = GetFileCurrentVersion(Static.SelfFileName);
                             lastestVersionInfo.LocalFileName = Static.SelfFileName;
                             break;
-                        case "SWRSToys":
+                        case "SokuModLoader":
                             lastestVersionInfo.LocalFileName = Path.Combine(SokuDirFullPath, "d3d9.dll");
                             if (ModsManager.SWRSToysD3d9Exist)
                             {
@@ -78,10 +78,8 @@ namespace SokuLauncher.Utils
                             break;
                         default:
                             var modInfo = ModsManager.GetModInfoByModName(lastestVersionInfo.Name);
-                            if (modInfo == null)
+                            if (modInfo == null || !File.Exists(modInfo.FullPath))
                             {
-                                Directory.CreateDirectory(ModsManager.DefaultModsDir);
-                                Directory.CreateDirectory(Path.Combine(ModsManager.DefaultModsDir, lastestVersionInfo.Name));
                                 lastestVersionInfo.LocalFileName = Path.Combine(ModsManager.DefaultModsDir, lastestVersionInfo.Name, lastestVersionInfo.FileName);
                                 lastestVersionInfo.Installed = false;
                             }
@@ -103,6 +101,11 @@ namespace SokuLauncher.Utils
                         }
 
                         currentVersion = new Version(modCurrentVersion);
+                    }
+
+                    if (currentVersion.Revision == -1)
+                    {
+                        currentVersion = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build, 0);
                     }
 
                     lastestVersionInfo.LocalFileVersion = currentVersion.ToString();
@@ -155,23 +158,33 @@ namespace SokuLauncher.Utils
         public void CopyAndReplaceFile(UpdateFileInfoModel updateFileInfo)
         {
             string updateFileDir = Path.Combine(UpdateTempDirPath, updateFileInfo.Name);
-
-            // replace extra files
-            if (updateFileInfo.ExtraFiles != null)
+            string updateWorkingDir = updateFileDir;
+            if (!string.IsNullOrWhiteSpace(updateFileInfo.UpdateWorkingDir))
             {
-                CopyFilesFromUpdateTempDir(updateFileDir, updateFileInfo.ExtraFiles, updateFileInfo.LocalFileDir, true);
+                updateWorkingDir = Path.GetFullPath(Path.Combine(updateFileDir, updateFileInfo.UpdateWorkingDir));
             }
 
-            // copy config files
+            // backup config files
             if (updateFileInfo.ConfigFiles != null)
             {
-                CopyFilesFromUpdateTempDir(updateFileDir, updateFileInfo.ConfigFiles, updateFileInfo.LocalFileDir);
+                foreach (var fileName in updateFileInfo.ConfigFiles)
+                {
+                    string localFileName = Path.Combine(updateFileInfo.LocalFileDir, fileName);
+                    string tempFileName = Path.Combine(updateWorkingDir, fileName);
+                    string tempFileFileDir = Path.GetDirectoryName(fileName);
+
+                    if (File.Exists(localFileName))
+                    {
+                        Directory.CreateDirectory(Path.Combine(updateWorkingDir, tempFileFileDir));
+                        File.Copy(localFileName, tempFileName, true);
+                    }
+                }
             }
 
             // replace main file
             if (!string.IsNullOrWhiteSpace(updateFileInfo.FileName))
             {
-                string newVersionFileName = Path.Combine(updateFileDir, updateFileInfo.FileName);
+                string newVersionFileName = Path.Combine(updateWorkingDir, updateFileInfo.FileName);
                 if (File.Exists(newVersionFileName))
                 {
                     if (updateFileInfo.LocalFileName == Static.SelfFileName)
@@ -191,8 +204,8 @@ namespace SokuLauncher.Utils
                     }
                     else
                     {
-                        File.Copy(newVersionFileName, updateFileInfo.LocalFileName, true);
-                        File.Delete(newVersionFileName);
+                        CopyDirectory(updateWorkingDir, updateFileInfo.LocalFileDir);
+                        Directory.Delete(updateWorkingDir, true);
                     }
                 }
                 else
@@ -206,24 +219,25 @@ namespace SokuLauncher.Utils
             Directory.Delete(updateFileDir, true);
         }
 
-        private void CopyFilesFromUpdateTempDir(string fileDir, List<string> fileNames, string localFileDir, bool overwrite = false)
+        private static void CopyDirectory(string sourceDir, string destinationDir, bool recursive = true)
         {
-            foreach (var fileName in fileNames)
-            {
-                string localFileName = Path.Combine(localFileDir, fileName);
-                string newVersionFileName = Path.Combine(fileDir, fileName);
+            var dir = new DirectoryInfo(sourceDir);
+            if (!dir.Exists) throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
 
-                if (File.Exists(newVersionFileName))
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            Directory.CreateDirectory(destinationDir);
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                string targetFilePath = Path.Combine(destinationDir, file.Name);
+                File.Copy(file.FullName, targetFilePath, true);
+            }
+
+            if (recursive)
+            {
+                foreach (DirectoryInfo subDir in dirs)
                 {
-                    if (overwrite || !File.Exists(localFileName))
-                    {
-                        File.Copy(newVersionFileName, localFileName, overwrite);
-                    }
-                    File.Delete(newVersionFileName);
-                }
-                else
-                {
-                    throw new Exception("Can not copy file: " + fileName);
+                    string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+                    CopyDirectory(subDir.FullName, newDestinationDir, true);
                 }
             }
         }

@@ -8,11 +8,11 @@ namespace SokuLauncher.Models
         public string Name { get; set; }
         public string Desc { get; set; }
         public string FileName { get; set; }
-        public List<string> ExtraFiles { get; set; }
         public List<string> ConfigFiles { get; set; }
         public string DownloadUrl { get; set; }
         public string Version { get; set; }
         public bool Compressed { get; set; }
+        public string UpdateWorkingDir { get; set; }
 
         // local info
         public bool Installed { get; set; } = true;
