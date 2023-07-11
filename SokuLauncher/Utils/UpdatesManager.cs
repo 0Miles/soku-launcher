@@ -205,7 +205,6 @@ namespace SokuLauncher.Utils
                     else
                     {
                         CopyDirectory(updateWorkingDir, updateFileInfo.LocalFileDir);
-                        Directory.Delete(updateWorkingDir, true);
                     }
                 }
                 else
