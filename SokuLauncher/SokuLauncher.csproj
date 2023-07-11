@@ -70,14 +70,8 @@
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Egorozh.ColorPicker.Core, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Egorozh.ColorPicker.Core.1.0.1\lib\net47\Egorozh.ColorPicker.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Egorozh.ColorPicker.WPF, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Egorozh.ColorPicker.WPF.5.0.0\lib\net47\Egorozh.ColorPicker.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="Egorozh.ColorPicker.WPF.Dialog, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Egorozh.ColorPicker.WPF.Dialog.5.0.0\lib\net47\Egorozh.ColorPicker.WPF.Dialog.dll</HintPath>
+    <Reference Include="Dsafa.WpfColorPicker, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dsafa.WpfColorPicker.1.3.0\lib\net462\Dsafa.WpfColorPicker.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -106,6 +100,9 @@
     </Reference>
     <Reference Include="PresentationFramework">
       <Private>False</Private>
+    </Reference>
+    <Reference Include="WpfScreenHelper, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfScreenHelper.2.1.0\lib\net40\WpfScreenHelper.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

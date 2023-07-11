@@ -11,8 +11,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Button = System.Windows.Controls.Button;
-using Egorozh.ColorPicker.Dialog;
 using Microsoft.Win32;
+using Dsafa.WpfColorPicker;
 
 namespace SokuLauncher.Controls
 {
@@ -402,11 +402,9 @@ namespace SokuLauncher.Controls
                     return;
             }
 
-            var dialog = new ColorPickerDialog
-            {
-                Owner = Owner,
-                Color = color
-            };
+
+            var dialog = new ColorPickerDialog(color);
+            dialog.Owner = Owner;
 
             var res = dialog.ShowDialog();
 
