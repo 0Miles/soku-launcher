@@ -54,8 +54,7 @@
     },
     {
         "Name": "InGameHostlist",
-        "Desc": "Added localization support through th123intl.\nLocalization files can be found in ./localization, and should be added to the intl pack to use.\nDoesn't support non-ascii characters.\n\nThanks to Čchārah for the Livvi Karelian translation.",
-        "Version": "1.3.3.0",
+        "Version": "0.0.0.0",
         "FileName": "InGameHostlist.dll",
         "ConfigFIles": [
             "InGameHostlist.ini"
@@ -66,7 +65,7 @@
     },
     {
         "Name": "SokuModLoader",
-        "Version": "0.3.1.0",
+        "Version": "0.0.0.0",
         "FileName": "d3d9.dll",
         "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1128341050008809472/d3d9.zip",
         "Compressed": true
