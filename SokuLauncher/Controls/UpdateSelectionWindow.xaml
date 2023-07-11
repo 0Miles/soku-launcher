@@ -62,7 +62,7 @@
 
                                                 <TextBlock Grid.Column="3" Text="{Binding Version}" Foreground="Green" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,8" />
                                             </Grid>
-                                            <TextBox Margin="8" IsReadOnly="True" Text="{Binding Desc}" BorderThickness="0"/>
+                                            <TextBox Margin="8" IsReadOnly="True" Text="{Binding Desc}" TextWrapping="Wrap" BorderThickness="0" MaxWidth="420"/>
                                         </StackPanel>
                                         <CheckBox Grid.Column="1" IsChecked="{Binding Selected}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="16" />
                                     </Grid>
