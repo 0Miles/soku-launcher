@@ -138,7 +138,6 @@ namespace SokuLauncher.Utils
                     {
                         client.Encoding = Encoding.UTF8;
                         client.DownloadProgressChanged += (sender, e) => DownloadProgressChanged?.Invoke(e.ProgressPercentage);
-                        await client.DownloadFileTaskAsync("http://localhost:5500/SokuLobbiesMod.zip", "./SokuLobbiesMod.zip");
                         VersionInfoJson = await client.DownloadStringTaskAsync(string.IsNullOrWhiteSpace(ConfigUtil.Config.VersionInfoUrl) ? DEFAULT_VERSION_INFO_URL : ConfigUtil.Config.VersionInfoUrl);
                     }
                 });
