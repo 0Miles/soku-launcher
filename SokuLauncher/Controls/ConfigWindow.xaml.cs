@@ -13,6 +13,7 @@ using System.Windows.Media.Animation;
 using Button = System.Windows.Controls.Button;
 using Microsoft.Win32;
 using Dsafa.WpfColorPicker;
+using System.Threading;
 
 namespace SokuLauncher.Controls
 {
@@ -94,6 +95,7 @@ namespace SokuLauncher.Controls
             Static.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
             Static.ConfigUtil.Config.AutoCheckForInstallable = ViewModel.AutoCheckForInstallable;
             Static.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
+            Static.ConfigUtil.Config.Language = ViewModel.Language;
 
             Static.ConfigUtil.SaveConfig();
 
@@ -534,10 +536,17 @@ namespace SokuLauncher.Controls
             }
         }
 
-        private void CheckForUpdatesButton_Click(object sender, RoutedEventArgs e)
+        private bool IsCheckingForUpdates = false;
+
+        private async void CheckForUpdatesButton_Click(object sender, RoutedEventArgs e)
         {
-            ConfigUtil configUtil = new ConfigUtil {
-                Config = new ConfigModel
+            if (!IsCheckingForUpdates)
+            {
+                IsCheckingForUpdates = true;
+
+                ConfigUtil configUtil = new ConfigUtil
+                {
+                    Config = new ConfigModel
                     {
                         SokuDirPath = ViewModel.SokuDirPath,
                         SokuFileName = ViewModel.SokuFileName,
@@ -545,12 +554,15 @@ namespace SokuLauncher.Controls
                         SokuModAlias = ViewModel.SokuModAlias.ToList(),
                         AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
                         AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
-                        VersionInfoUrl = ViewModel.VersionInfoUrl
+                        VersionInfoUrl = ViewModel.VersionInfoUrl,
+                        Language = ViewModel.Language
                     }
-            };
-            UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
-            updatesManager.GetVersionInfoJson();
-            updatesManager.CheckForUpdates(false);
+                };
+                UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
+                await updatesManager.GetVersionInfoJson();
+                updatesManager.CheckForUpdates(false);
+                IsCheckingForUpdates = false;
+            }
         }
     }
 }

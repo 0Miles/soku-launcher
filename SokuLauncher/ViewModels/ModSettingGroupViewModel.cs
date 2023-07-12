@@ -1,4 +1,5 @@
-﻿using SokuLauncher.Models;
+﻿using Newtonsoft.Json;
+using SokuLauncher.Models;
 using System.Collections.Generic;
 
 namespace SokuLauncher.ViewModels
@@ -164,6 +165,60 @@ namespace SokuLauncher.ViewModels
                     RaisePropertyChanged("DisableMods");
                 }
 
+            }
+        }
+
+        private int _Progress = 0;
+        [JsonIgnore]
+        public int Progress
+        {
+            get
+            {
+                return _Progress;
+            }
+            set
+            {
+                if (value != _Progress)
+                {
+                    _Progress = value;
+                    RaisePropertyChanged("Progress");
+                }
+            }
+        }
+
+        private bool _IsShowProgress = false;
+        [JsonIgnore]
+        public bool IsShowProgress
+        {
+            get
+            {
+                return _IsShowProgress;
+            }
+            set
+            {
+                if (value != _IsShowProgress)
+                {
+                    _IsShowProgress = value;
+                    RaisePropertyChanged("IsShowProgress");
+                }
+            }
+        }
+
+        private string _Status = "";
+        [JsonIgnore]
+        public string Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                if (value != _Status)
+                {
+                    _Status = value;
+                    RaisePropertyChanged("Status");
+                }
             }
         }
     }

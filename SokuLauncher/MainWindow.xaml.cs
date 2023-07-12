@@ -61,9 +61,12 @@ namespace SokuLauncher
             ZoomOutHideWindow((s, _) => { Close(); });
         }
 
-        private void SokuModSettingGroupsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private bool IsSokuModSettingGroupsSelectionChangedProcessing = false;
+
+        private async void SokuModSettingGroupsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ViewModel.SelectedSokuModSettingGroup == null) return;
+            if (IsSokuModSettingGroupsSelectionChangedProcessing || ViewModel.SelectedSokuModSettingGroup == null) return;
+            IsSokuModSettingGroupsSelectionChangedProcessing = true;
             try
             {
                 if (string.IsNullOrWhiteSpace(Static.ConfigUtil.Config.SokuFileName))
@@ -77,9 +80,24 @@ namespace SokuLauncher
                 {
                     List<string> CheckModes = settingGroup.EnableMods.Select(x => x).ToList();
                     CheckModes.Add("SokuModLoader");
-                    Static.UpdatesManager.CheckForInstallable(CheckModes);
+                    ViewModel.SelectedSokuModSettingGroup.IsShowProgress = true;
+                    if (string.IsNullOrWhiteSpace(Static.UpdatesManager.VersionInfoJson))
+                    {
+                        ViewModel.SelectedSokuModSettingGroup.IsShowProgress = true;
+                        Static.UpdatesManager.DownloadProgressChanged += (progress) => {
+                            ViewModel.SelectedSokuModSettingGroup.Progress = progress;
+                            ViewModel.SelectedSokuModSettingGroup.Status = $"Checking version info {progress}%";
+                        };
+                        await Static.UpdatesManager.GetVersionInfoJson();
+                    }
+                    Static.UpdatesManager.DownloadProgressChanged += (progress) => {
+                        ViewModel.SelectedSokuModSettingGroup.Progress = progress;
+                        ViewModel.SelectedSokuModSettingGroup.Status = $"Download mods {progress}%";
+                    };
+                    await Static.UpdatesManager.CheckForInstallable(CheckModes);
                     Static.ModsManager.SearchModulesDir();
                     Static.ModsManager.LoadSWRSToysSetting();
+                    ViewModel.SelectedSokuModSettingGroup.IsShowProgress = false;
                 }
 
                 foreach (var enableMod in settingGroup.EnableMods ?? new List<string>())
@@ -112,6 +130,7 @@ namespace SokuLauncher
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             SokuModSettingGroupListView.SelectedItem = null;
+            IsSokuModSettingGroupsSelectionChangedProcessing = false;
         }
 
         private void ZoomInHideWindow(EventHandler callBack)
@@ -217,7 +236,8 @@ namespace SokuLauncher
                 SokuModAlias = new ObservableCollection<string>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModAlias)),
                 AutoCheckForUpdates = Static.ConfigUtil.Config.AutoCheckForUpdates,
                 AutoCheckForInstallable = Static.ConfigUtil.Config.AutoCheckForInstallable,
-                VersionInfoUrl = Static.ConfigUtil.Config.VersionInfoUrl
+                VersionInfoUrl = Static.ConfigUtil.Config.VersionInfoUrl,
+                Language = Static.ConfigUtil.Config.Language
             });
             
             ZoomOutHideWindow((s, _) => {

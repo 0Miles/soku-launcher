@@ -9,6 +9,7 @@
         <converters:RelativePathConverter x:Key="RelativePathConverter" />
         <converters:PathToBackgroundConverter x:Key="PathToBackgroundConverter" />
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
         <Style x:Key="WrapperGridStyle" TargetType="{x:Type Grid}">
             <Setter Property="RenderTransform">
@@ -69,7 +70,7 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <Grid MouseEnter="WrapperGrid_MouseEnter" MouseLeave="WrapperGrid_MouseLeave" Style="{StaticResource WrapperGridStyle}" Background="Black" >
+    <Grid FlowDirection="LeftToRight" MouseEnter="WrapperGrid_MouseEnter" MouseLeave="WrapperGrid_MouseLeave" Style="{StaticResource WrapperGridStyle}" Background="Black" >
         <Grid x:Name="CoverGrid" Background="{Binding Cover, Converter={StaticResource PathToBackgroundConverter}}">
             <MediaElement
                 x:Name="CoverMediaElement"
@@ -96,5 +97,8 @@
                 <TextBlock Grid.Row="1" Text="{Binding Desc}" IsHitTestVisible="False" Foreground="{Binding DescColor}" FontSize="16" TextWrapping="Wrap" FlowDirection="LeftToRight" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,16" Visibility="{Binding Desc, Converter={StaticResource StringToVisibilityConverter}}" />
             </Grid>
         </Border>
+        <ProgressBar Value="{Binding Progress}" Background="#CF000000" Foreground="#5A339900" BorderThickness="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding IsShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <TextBlock Text="{Binding Status}" IsHitTestVisible="False" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding IsShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
     </Grid>
 </UserControl>

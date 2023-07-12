@@ -217,6 +217,21 @@ namespace SokuLauncher.ViewModels
                 RaisePropertyChanged("VersionInfoUrl");
             }
         }
+        
+        private string _Language;
+        public string Language
+        {
+            get
+            {
+                return _Language;
+            }
+            set
+            {
+                _Language = value;
+                Saveable = true;
+                RaisePropertyChanged("Language");
+            }
+        }
 
     }
 }

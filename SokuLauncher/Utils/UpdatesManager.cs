@@ -21,8 +21,11 @@ namespace SokuLauncher.Utils
         private const string MOD_VERSION_FILENAME_SUFFIX = ".version.txt";
 
         public event Action<int> DownloadProgressChanged;
+
         public List<UpdateFileInfoModel> AvailableUpdateList { get; private set; } = new List<UpdateFileInfoModel>();
         public string VersionInfoJson { get; private set; }
+        public bool IsVersionInfoJsonDownloading { get; private set; } = false;
+        public Task VersionInfoJsonDownloadTask { get; private set; }
         public string ReplaceBatPath { get; private set; }
 
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "Update");
@@ -87,7 +90,7 @@ namespace SokuLauncher.Utils
             }
         }
 
-        public void CheckForInstallable(List<string> modsToCheckList)
+        public async Task CheckForInstallable(List<string> modsToCheckList)
         {
             try
             {
@@ -105,13 +108,11 @@ namespace SokuLauncher.Utils
                     {
                         var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
 
-                        UpdatingWindow updatingWindow = new UpdatingWindow
+                        foreach (var updateFileInfo in AvailableUpdateList)
                         {
-                            UpdatesManager = this,
-                            AvailableUpdateList = selectedUpdates,
-                            Stillness = false
-                        };
-                        updatingWindow.ShowDialog();
+                            await DownloadAndExtractFile(updateFileInfo);
+                            CopyAndReplaceFile(updateFileInfo);
+                        }
                     }
                 }
             }
@@ -121,13 +122,34 @@ namespace SokuLauncher.Utils
             }
         }
 
-        public void GetVersionInfoJson()
+        public async Task GetVersionInfoJson()
         {
-            using (WebClient client = new WebClient())
+            if (IsVersionInfoJsonDownloading)
             {
-                client.Encoding = Encoding.UTF8;
-                VersionInfoJson = client.DownloadString(string.IsNullOrWhiteSpace(ConfigUtil.Config.VersionInfoUrl) ? DEFAULT_VERSION_INFO_URL : ConfigUtil.Config.VersionInfoUrl);
+                await VersionInfoJsonDownloadTask;
+                return;
             }
+            IsVersionInfoJsonDownloading = true;
+            try
+            {
+                VersionInfoJsonDownloadTask = Task.Run(async () =>
+                {
+                    using (WebClient client = new WebClient())
+                    {
+                        client.Encoding = Encoding.UTF8;
+                        client.DownloadProgressChanged += (sender, e) => DownloadProgressChanged?.Invoke(e.ProgressPercentage);
+                        await client.DownloadFileTaskAsync("http://localhost:5500/SokuLobbiesMod.zip", "./SokuLobbiesMod.zip");
+                        VersionInfoJson = await client.DownloadStringTaskAsync(string.IsNullOrWhiteSpace(ConfigUtil.Config.VersionInfoUrl) ? DEFAULT_VERSION_INFO_URL : ConfigUtil.Config.VersionInfoUrl);
+                    }
+                });
+                await VersionInfoJsonDownloadTask;
+            }
+            catch (Exception ex)
+            {
+                IsVersionInfoJsonDownloading = false;
+                throw ex;
+            }
+
         }
 
         public void GetAvailableUpdateList(bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null)
@@ -207,9 +229,9 @@ namespace SokuLauncher.Utils
 
                         if (updateFileInfo.I18nDesc != null)
                         {
-                            string localDesc = 
+                            string localDesc =
                                 updateFileInfo.I18nDesc.FirstOrDefault(x => x.Language == ConfigUtil.Config.Language)?.Content
-                                ?? updateFileInfo.I18nDesc.FirstOrDefault(x => x.Language.Split('-')[0] == ConfigUtil.Config.Language.Split('-')[0])?.Content;
+                                ?? updateFileInfo.I18nDesc.FirstOrDefault(x => x.Language != null && x.Language.Split('-')[0] == ConfigUtil.Config.Language.Split('-')[0])?.Content;
                             if (!string.IsNullOrWhiteSpace(localDesc))
                             {
                                 updateFileInfo.Desc = localDesc;
@@ -326,7 +348,7 @@ namespace SokuLauncher.Utils
             File.WriteAllText(modVersionFileName, updateFileInfo.Version);
             Directory.Delete(updateFileDir, true);
         }
-        
+
         private Version GetFileCurrentVersion(string fileName)
         {
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);

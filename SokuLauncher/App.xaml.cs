@@ -11,6 +11,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace SokuLauncher
 {
@@ -59,19 +60,26 @@ namespace SokuLauncher
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            try
+            Task.Run(async () =>
             {
-                Static.UpdatesManager = new UpdatesManager(Static.ConfigUtil, Static.ModsManager);
-                if (Static.ConfigUtil.Config.AutoCheckForUpdates)
+                try
                 {
-                    Static.UpdatesManager.GetVersionInfoJson();
-                    Static.UpdatesManager.CheckForUpdates();
+                    Static.UpdatesManager = new UpdatesManager(Static.ConfigUtil, Static.ModsManager);
+                    if (Static.ConfigUtil.Config.AutoCheckForUpdates)
+                    {
+                        await Static.UpdatesManager.GetVersionInfoJson();
+
+                        Dispatcher.Invoke(() =>
+                        {
+                            Static.UpdatesManager.CheckForUpdates();
+                        });
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            });
 
             mainWindow.Show();
         }

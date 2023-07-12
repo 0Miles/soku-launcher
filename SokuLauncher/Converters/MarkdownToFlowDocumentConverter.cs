@@ -12,7 +12,7 @@ namespace SokuLauncher.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var content = value as string;
+            var content = value as string ?? "";
             var doc = MarkdownXaml.ToFlowDocument(content,
                 new MarkdownPipelineBuilder()
                 .UseXamlSupportedExtensions()
