@@ -1,15 +1,21 @@
 [
     {
         "Name": "SokuLauncher",
-        "Desc": "If the version before v1.2.2.0 fails to update the main program, please go to Mega to download the new version\n\nhttps://mega.nz/folder/c7MCnBAL#nhBC_OmUoEOKuOzZu3rAgg",
-        "Version": "1.2.2.0",
+        "Desc": "If fails to update the main program, please go to Mega to download the new version  \nhttps://mega.nz/folder/c7MCnBAL#nhBC_OmUoEOKuOzZu3rAgg",
+        "I18nDesc": [
+            {
+                "Language": "zh-TW",
+                "Content": "若主程式更新失敗，請至Mega下載新版本  \nhttps://mega.nz/folder/c7MCnBAL#nhBC_OmUoEOKuOzZu3rAgg"
+            }
+        ],
+        "Version": "1.2.3.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v1.2.2.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v1.2.3.0/SokuLauncher.zip",
         "Compressed": true
     },
     {
         "Name": "Giuroll",
-        "Desc": "PRE-RELEASE BUILD, VERSION 0.5.1\nYOU CAN NOW SPECTATE FROM DIFFERENT NETCODES\nNEW .INI ENTRY\nNOT COMPATIBLE WITH PAST VERSIONS BEFORE 5.0\nThis mod fixes any FPS issues related to Windows 10 (most users affected), online mode stuttering, and one-sided rollback.",
+        "Desc": "PRE-RELEASE BUILD, VERSION 0.5.1  \nYOU CAN NOW SPECTATE FROM DIFFERENT NETCODES  \nNEW .INI ENTRY  \nNOT COMPATIBLE WITH PAST VERSIONS BEFORE 5.0  \nThis mod fixes any FPS issues related to Windows 10 (most users affected), online mode stuttering, and one-sided rollback.",
         "Version": "0.5.1.0",
         "FileName": "giuroll.dll",
         "ConfigFiles": [
@@ -20,7 +26,7 @@
     },
     {
         "Name": "Giuroll-62F",
-        "Desc": "PRE-RELEASE BUILD, VERSION 0.5.1\nYOU CAN NOW SPECTATE FROM DIFFERENT NETCODES\nNEW .INI ENTRY\nNOT COMPATIBLE WITH PAST VERSIONS BEFORE 5.0\nThis mod fixes any FPS issues related to Windows 10 (most users affected), online mode stuttering, and one-sided rollback.",
+        "Desc": "PRE-RELEASE BUILD, VERSION 0.5.1  \nYOU CAN NOW SPECTATE FROM DIFFERENT NETCODES  \nNEW .INI ENTRY  \nNOT COMPATIBLE WITH PAST VERSIONS BEFORE 5.0  \nThis mod fixes any FPS issues related to Windows 10 (most users affected), online mode stuttering, and one-sided rollback.",
         "Version": "0.5.1.0",
         "FileName": "giuroll.dll",
         "ConfigFiles": [
