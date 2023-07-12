@@ -1,7 +1,9 @@
 ﻿using SokuLauncher.Models;
 using SokuLauncher.Utils;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -76,6 +78,11 @@ namespace SokuLauncher.Controls
                 UpdatesManager.CopyAndReplaceFile(updateFileInfo);
             }
             Close();
+            if (UpdatesManager.ReplaceBatPath != null)
+            {
+                Process.Start(UpdatesManager.ReplaceBatPath);
+                Environment.Exit(0);
+            }
             if (!Stillness)
             {
                 MessageBox.Show("All updates completed", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);

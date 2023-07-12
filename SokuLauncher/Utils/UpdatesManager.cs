@@ -22,6 +22,7 @@ namespace SokuLauncher.Utils
         public event Action<int> DownloadProgressChanged;
         public List<UpdateFileInfoModel> AvailableUpdateList { get; private set; } = new List<UpdateFileInfoModel>();
         public string VersionInfoJson { get; private set; }
+        public string ReplaceBatPath { get; private set; }
 
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "Update");
 
@@ -281,15 +282,16 @@ namespace SokuLauncher.Utils
                         // replace self
                         string replaceBatPath = Path.Combine(updateFileDir, "replace.bat");
 
-                        string batContent = $"copy \"{newVersionFileName}\" \"{Static.SelfFileName}\" /Y{Environment.NewLine}";
+                        string batContent = $"echo Waiting update SokuLauncher...";
+                        batContent += $"@ping 127.0.0.1 -n 5 -w 1000 > nul{Environment.NewLine}";
+                        batContent += $"copy \"{newVersionFileName}\" \"{Static.SelfFileName}\" /Y{Environment.NewLine}";
                         batContent += $"del \"{newVersionFileName}\"{Environment.NewLine}";
                         batContent += $"start \"\" \"{Static.SelfFileName}\"{Environment.NewLine}";
                         batContent += $"del \"{replaceBatPath}\"";
 
                         File.WriteAllText(replaceBatPath, batContent);
-
-                        Process.Start(replaceBatPath);
-                        Environment.Exit(0);
+                        ReplaceBatPath = replaceBatPath;
+                        return;
                     }
                     else
                     {
