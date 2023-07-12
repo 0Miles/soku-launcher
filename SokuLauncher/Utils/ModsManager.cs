@@ -108,7 +108,12 @@ namespace SokuLauncher.Utils
                         string[] splitedPath = splitedLine[1].Split(';');
                         string fullPath = Path.Combine(SokuDirFullPath, splitedPath[0].Trim().Replace('/', '\\'));
 
-                        var modInfo = ModInfoList.FirstOrDefault(x => x.FullPath.ToLower() == fullPath.ToLower()) ?? new ModInfoModel(fullPath);
+                        var modInfo = ModInfoList.FirstOrDefault(x => x.FullPath.ToLower() == fullPath.ToLower());
+                        if (modInfo == null)
+                        {
+                            modInfo = new ModInfoModel(fullPath);
+                            ModInfoList.Add(modInfo);
+                        }
 
                         modInfo.Enabled = enabled;
                     }
