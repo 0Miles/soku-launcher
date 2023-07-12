@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -124,6 +125,7 @@ namespace SokuLauncher.Utils
         {
             using (WebClient client = new WebClient())
             {
+                client.Encoding = Encoding.UTF8;
                 VersionInfoJson = client.DownloadString(ConfigUtil.Config.VersionInfoUrl ?? DEFAULT_VERSION_INFO_URL);
             }
         }
@@ -202,6 +204,18 @@ namespace SokuLauncher.Utils
                     if (checkForUpdates && latestVersion > currentVersion && updateFileInfo.Installed ||
                         checkForInstallable && !updateFileInfo.Installed)
                     {
+
+                        if (updateFileInfo.I18nDesc != null)
+                        {
+                            string localDesc = 
+                                updateFileInfo.I18nDesc.FirstOrDefault(x => x.Language == ConfigUtil.Config.Language)?.Content
+                                ?? updateFileInfo.I18nDesc.FirstOrDefault(x => x.Language.Split('-')[0] == ConfigUtil.Config.Language.Split('-')[0])?.Content;
+                            if (!string.IsNullOrWhiteSpace(localDesc))
+                            {
+                                updateFileInfo.Desc = localDesc;
+                            }
+                        }
+
                         AvailableUpdateList.Add(updateFileInfo);
                     }
                 }

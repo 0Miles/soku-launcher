@@ -7,6 +7,7 @@ namespace SokuLauncher.Models
     {
         public string Name { get; set; }
         public string Desc { get; set; }
+        public List<I18nContentModel> I18nDesc { get; set; }
         public string FileName { get; set; }
         public List<string> ConfigFiles { get; set; }
         public string DownloadUrl { get; set; }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -26,7 +27,7 @@ namespace SokuLauncher
 
             if (runningProcesses.Length > 1)
             {
-                Environment.Exit(0);
+                Application.Current.Shutdown();
             }
 
 

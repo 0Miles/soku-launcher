@@ -4,14 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:converters="clr-namespace:SokuLauncher.Converters"
+        xmlns:md="clr-namespace:Neo.Markdig.Xaml;assembly=Neo.Markdig.Xaml"
         mc:Ignorable="d"
-        Title="Update Selection" MaxHeight="720" MinHeight="320" Width="520" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterScreen">
+        Title="Update Selection" MaxHeight="720" MinHeight="320" Width="540" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <converters:ReverseStringToVisibilityConverter x:Key="ReverseStringToVisibilityConverter" />
         <converters:ReverseBooleanToVisibilityConverter x:Key="ReverseBooleanToVisibilityConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <converters:MarkdownToFlowDocumentConverter x:Key="MarkdownToFlowDocumentConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -26,7 +28,6 @@
                   x:Name="SelectorListView"
                   ItemsSource="{Binding AvailableUpdateList}"
                   VerticalContentAlignment="Center"
-                  Focusable="False"
                   Margin="8,8,8,8" Grid.ColumnSpan="2">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -62,7 +63,12 @@
 
                                                 <TextBlock Grid.Column="3" Text="{Binding Version}" Foreground="Green" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,8" />
                                             </Grid>
-                                            <TextBox Margin="8" IsReadOnly="True" Text="{Binding Desc}" TextWrapping="Wrap" BorderThickness="0" MaxWidth="420"/>
+                                            
+                                            <FlowDocumentScrollViewer Margin="8" Document="{Binding Desc, Converter={StaticResource MarkdownToFlowDocumentConverter}}" Padding="0" BorderThickness="0" VerticalScrollBarVisibility="Auto" MaxWidth="420">
+                                                <FlowDocumentScrollViewer.CommandBindings>
+                                                    <CommandBinding Command="{x:Static md:MarkdownXaml.Hyperlink}" Executed="CommandBinding_Executed" />
+                                                </FlowDocumentScrollViewer.CommandBindings>
+                                            </FlowDocumentScrollViewer>
                                         </StackPanel>
                                         <CheckBox Grid.Column="1" IsChecked="{Binding Selected}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="16" />
                                     </Grid>

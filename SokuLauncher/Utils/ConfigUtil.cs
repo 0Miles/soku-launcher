@@ -4,6 +4,7 @@ using SokuLauncher.Controls;
 using SokuLauncher.Models;
 using SokuLauncher.ViewModels;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -100,6 +101,8 @@ namespace SokuLauncher.Utils
         private ConfigModel GenerateConfig()
         {
             ConfigModel config = new ConfigModel();
+
+            config.Language = CultureInfo.CurrentCulture.Name;
 
             config.SokuDirPath = FindSokuDir();
 

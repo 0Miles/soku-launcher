@@ -1,6 +1,11 @@
 ﻿using SokuLauncher.Models;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
+using System.Windows.Input;
+
 namespace SokuLauncher.Controls
 {
     public partial class UpdateSelectionWindow : Window
@@ -26,6 +31,12 @@ namespace SokuLauncher.Controls
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+        }
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo { FileName = ((Uri)e.Parameter).AbsoluteUri, UseShellExecute = true });
+            e.Handled = true;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SokuLauncher.ViewModels;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace SokuLauncher.Models
 {
@@ -12,5 +13,6 @@ namespace SokuLauncher.Models
         public bool AutoCheckForUpdates { get; set; } = true;
         public bool AutoCheckForInstallable { get; set; } = true;
         public string VersionInfoUrl { get; set; }
+        public string Language { get; set; } = CultureInfo.CurrentCulture.Name;
     }
 }

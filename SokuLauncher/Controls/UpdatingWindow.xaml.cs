@@ -67,25 +67,33 @@ namespace SokuLauncher.Controls
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await Task.Delay(100);
-            foreach (var updateFileInfo in AvailableUpdateList)
+            try
             {
-                UpdatesManager.DownloadProgressChanged += (progress) => {
-                    Progress = progress;
-                    Status = $"{updateFileInfo.Name} {progress}%";
-                };
-                await UpdatesManager.DownloadAndExtractFile(updateFileInfo);
-                Status = $"{updateFileInfo.Name} updating...";
-                UpdatesManager.CopyAndReplaceFile(updateFileInfo);
+                foreach (var updateFileInfo in AvailableUpdateList)
+                {
+                    UpdatesManager.DownloadProgressChanged += (progress) => {
+                        Progress = progress;
+                        Status = $"{updateFileInfo.Name} {progress}%";
+                    };
+                    await UpdatesManager.DownloadAndExtractFile(updateFileInfo);
+                    Status = $"{updateFileInfo.Name} updating...";
+                    UpdatesManager.CopyAndReplaceFile(updateFileInfo);
+                }
+                Close();
+                if (UpdatesManager.ReplaceBatPath != null)
+                {
+                    Process.Start(UpdatesManager.ReplaceBatPath);
+                    Application.Current.Shutdown();
+                }
+                if (!Stillness)
+                {
+                    MessageBox.Show("All updates completed", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
-            Close();
-            if (UpdatesManager.ReplaceBatPath != null)
+            catch (Exception ex)
             {
-                Process.Start(UpdatesManager.ReplaceBatPath);
-                Environment.Exit(0);
-            }
-            if (!Stillness)
-            {
-                MessageBox.Show("All updates completed", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(ex.Message, "Updates", MessageBoxButton.OK, MessageBoxImage.Error);
+                Close();
             }
         }
     }
