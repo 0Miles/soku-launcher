@@ -49,6 +49,16 @@ namespace SokuLauncher.Utils
 
                 Config = JsonConvert.DeserializeObject<ConfigModel>(json) ?? new ConfigModel();
 
+                // default values
+                if (string.IsNullOrWhiteSpace(Config.Language))
+                {
+                    Config.Language = CultureInfo.CurrentCulture.Name;
+                }
+                if (Config.SokuModAlias == null || Config.SokuModAlias.Count == 0)
+                {
+                    Config.SokuModAlias = new List<string> { "Giuroll=Giuroll-60F" };
+                }
+
                 if (!CheckSokuDirAndFileExists(Config.SokuDirPath, Config.SokuFileName))
                 {
                     Config.SokuDirPath = FindSokuDir() ?? DEFAULT_SOKU_DIR;
@@ -117,7 +127,7 @@ namespace SokuLauncher.Utils
                 {
                     Name = "Giuroll",
                     Desc = "Enable SokuLobbies and Giuroll",
-                    EnableMods = new List<string> { "Giuroll", "Giuroll-60F", "SokuLobbiesMod" },
+                    EnableMods = new List<string> { "Giuroll", "Giuroll-60F", "SokuLobbiesMod", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll-62F", "SWRSokuRoll", "InGameHostlist" },
                     Cover = "%tmp%/SokuLauncher/Resources/cover1.mp4"
                 },
@@ -125,7 +135,7 @@ namespace SokuLauncher.Utils
                 {
                     Name = "Giuroll CN",
                     Desc = "Enable SokuLobbies and Giuroll-62F",
-                    EnableMods = new List<string> { "Giuroll-62F", "SokuLobbiesMod" },
+                    EnableMods = new List<string> { "Giuroll-62F", "SokuLobbiesMod", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "SWRSokuRoll", "InGameHostlist" },
                     Cover = "%tmp%/SokuLauncher/Resources/cover2.mp4"
                 },
@@ -133,7 +143,7 @@ namespace SokuLauncher.Utils
                 {
                     Name = "SokuRoll",
                     Desc = "Enable InGameHostlist and SokuRoll 1.3",
-                    EnableMods = new List<string> { "SWRSokuRoll", "InGameHostlist" },
+                    EnableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod" },
                     Cover = "%resources%/gearbackground.png",
                     CoverOverlayColor = "#6FA92E00"
@@ -142,7 +152,7 @@ namespace SokuLauncher.Utils
                 {
                     Name = "No Roll",
                     Desc = "Enable InGameHostlist, No any Roll",
-                    EnableMods = new List<string> { "InGameHostlist" },
+                    EnableMods = new List<string> { "InGameHostlist", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod", "SWRSokuRoll" },
                     Cover = "%resources%/gearbackground-r.png",
                     CoverOverlayColor = "#6F002EA9"

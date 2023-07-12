@@ -126,7 +126,7 @@ namespace SokuLauncher.Utils
             using (WebClient client = new WebClient())
             {
                 client.Encoding = Encoding.UTF8;
-                VersionInfoJson = client.DownloadString(ConfigUtil.Config.VersionInfoUrl ?? DEFAULT_VERSION_INFO_URL);
+                VersionInfoJson = client.DownloadString(string.IsNullOrWhiteSpace(ConfigUtil.Config.VersionInfoUrl) ? DEFAULT_VERSION_INFO_URL : ConfigUtil.Config.VersionInfoUrl);
             }
         }
 
@@ -303,7 +303,7 @@ namespace SokuLauncher.Utils
                         batContent += $"start \"\" \"{Static.SelfFileName}\"{Environment.NewLine}";
                         batContent += $"del \"{replaceBatPath}\"";
 
-                        File.WriteAllText(replaceBatPath, batContent);
+                        File.WriteAllText(replaceBatPath, batContent, Encoding.Default);
                         ReplaceBatPath = replaceBatPath;
                         return;
                     }
