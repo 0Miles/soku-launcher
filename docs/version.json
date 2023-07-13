@@ -1,7 +1,7 @@
 [
     {
         "Name": "SokuLauncher",
-        "Desc": "If fails to update the main program, please go to Mega to download the new version  \nhttps://mega.nz/folder/c7MCnBAL#nhBC_OmUoEOKuOzZu3rAgg",
+        "Desc": "If fails to update the main program, please go to Mega to download the new version.  \nhttps://mega.nz/folder/c7MCnBAL#nhBC_OmUoEOKuOzZu3rAgg",
         "I18nDesc": [
             {
                 "Language": "zh-TW",
@@ -37,6 +37,7 @@
     },
     {
         "Name": "SokuLobbiesMod",
+        "Desc": "Multiplayer online lobby.",
         "Version": "0.5.0.0",
         "FileName": "SokuLobbiesMod.dll",
         "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1128307883021451456/SokuLobbiesMod.zip",
@@ -52,6 +53,7 @@
     },
     {
         "Name": "SWRSokuRoll",
+        "Desc": "The Roll Mod used in SokuReplay ranked battles.",
         "Version": "0.0.0.0",
         "FileName": "SWRSokuRoll.dll",
         "ConfigFIles": [
@@ -74,6 +76,7 @@
     },
     {
         "Name": "SokuModLoader",
+        "Desc": "A module loader with an accompanying module switch UI.",
         "Version": "0.0.0.0",
         "FileName": "d3d9.dll",
         "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1128341050008809472/d3d9.zip",
