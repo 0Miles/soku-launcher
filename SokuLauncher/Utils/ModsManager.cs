@@ -1,8 +1,10 @@
-﻿using SokuLauncher.Models;
+﻿using Newtonsoft.Json;
+using SokuLauncher.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace SokuLauncher.Utils
 {
@@ -45,9 +47,6 @@ namespace SokuLauncher.Utils
             {
                 SokuDirFullPath = sokuDirFullPath;
             }
-
-            SearchModulesDir();
-            LoadSWRSToysSetting();
         }
 
         public void SearchModulesDir()
@@ -74,40 +73,17 @@ namespace SokuLauncher.Utils
 
         public void LoadSWRSToysSetting()
         {
-            string iniFilePath = Path.Combine(SokuDirFullPath, "SWRSToys.ini");
-
-            if (!File.Exists(iniFilePath))
+            string modLoaderSettingsPath = Path.Combine(SokuDirFullPath, "ModLoaderSettings.json");
+            if (File.Exists(modLoaderSettingsPath))
             {
-                return;
-            }
-
-            string[] lines = File.ReadAllLines(iniFilePath);
-
-            bool isModuleSectionsStart = false;
-
-            foreach (string line in lines)
-            {
-                string trimmedLine = line.Trim();
-
-                if (trimmedLine.ToLower() == "[module]")
+                try
                 {
-                    isModuleSectionsStart = true;
-                }
-                else if (trimmedLine.StartsWith("[") && trimmedLine.ToLower() != "[module]")
-                {
-                    break;
-                }
+                    var json = File.ReadAllText(modLoaderSettingsPath);
+                    var modLoaderSettings = JsonConvert.DeserializeObject<ModLoaderSettingsModel>(json);
 
-                if (isModuleSectionsStart && !string.IsNullOrEmpty(trimmedLine))
-                {
-                    string[] splitedLine = trimmedLine.Split('=');
-                    if (splitedLine.Length > 1)
+                    foreach (var module in modLoaderSettings.Modules)
                     {
-                        bool enabled = !splitedLine[0].StartsWith(";");
-
-                        string[] splitedPath = splitedLine[1].Split(';');
-                        string fullPath = Path.Combine(SokuDirFullPath, splitedPath[0].Trim().Replace('/', '\\'));
-
+                        string fullPath = Path.Combine(SokuDirFullPath, module.Key.Trim().Replace('/', '\\'));
                         var modInfo = ModInfoList.FirstOrDefault(x => x.FullPath.ToLower() == fullPath.ToLower());
                         if (modInfo == null)
                         {
@@ -115,8 +91,67 @@ namespace SokuLauncher.Utils
                             ModInfoList.Add(modInfo);
                         }
 
-                        modInfo.Enabled = enabled;
+                        modInfo.Enabled = module.Value.Enabled;
                     }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Read ModLoaderSettings.json failed: {ex.Message}");
+                }
+            }
+            else
+            {
+                try
+                {
+                    string iniFilePath = Path.Combine(SokuDirFullPath, "SWRSToys.ini");
+
+                    if (!File.Exists(iniFilePath))
+                    {
+                        return;
+                    }
+
+                    string[] lines = File.ReadAllLines(iniFilePath);
+
+                    bool isModuleSectionsStart = false;
+
+                    foreach (string line in lines)
+                    {
+                        string trimmedLine = line.Trim();
+
+                        if (trimmedLine.ToLower() == "[module]")
+                        {
+                            isModuleSectionsStart = true;
+                        }
+                        else if (trimmedLine.StartsWith("[") && trimmedLine.ToLower() != "[module]")
+                        {
+                            break;
+                        }
+
+                        if (isModuleSectionsStart && !string.IsNullOrEmpty(trimmedLine))
+                        {
+                            string[] splitedLine = trimmedLine.Split('=');
+                            if (splitedLine.Length > 1)
+                            {
+                                bool enabled = !splitedLine[0].StartsWith(";");
+
+                                string[] splitedPath = splitedLine[1].Split(';');
+                                string fullPath = Path.Combine(SokuDirFullPath, splitedPath[0].Trim().Replace('/', '\\'));
+
+                                var modInfo = ModInfoList.FirstOrDefault(x => x.FullPath.ToLower() == fullPath.ToLower());
+                                if (modInfo == null)
+                                {
+                                    modInfo = new ModInfoModel(fullPath);
+                                    ModInfoList.Add(modInfo);
+                                }
+
+                                modInfo.Enabled = enabled;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Read SWRSToys.ini failed: {ex.Message}");
                 }
             }
         }
@@ -161,11 +196,27 @@ namespace SokuLauncher.Utils
         public void SaveSWRSToysIni()
         {
             Directory.SetCurrentDirectory(SokuDirFullPath);
-            string modLoaderSettingPath = Path.Combine(SokuDirFullPath, "ModLoaderSettings.json");
-            if (File.Exists(modLoaderSettingPath))
+            
+            string modLoaderSettingsPath = Path.Combine(SokuDirFullPath, "ModLoaderSettings.json");
+            if (File.Exists(modLoaderSettingsPath))
             {
-                File.Delete(modLoaderSettingPath);
+                File.Delete(modLoaderSettingsPath);
+                //ModLoaderSettingsModel modLoaderSettingsModel = new ModLoaderSettingsModel
+                //    {
+                //        Modules = ModInfoList
+                //           .Select(modInfo =>
+                //                new KeyValuePair<string, ModLoaderSettingsModuleModel>(
+                //                    Static.GetRelativePath(modInfo.FullPath, SokuDirFullPath),
+                //                    new ModLoaderSettingsModuleModel
+                //                    {
+                //                        Enabled = modInfo.Enabled
+                //                    }
+                //                ))
+                //           .ToDictionary(x => x.Key, x => x.Value)
+                //    };
+                //File.WriteAllText(modLoaderSettingsPath, JsonConvert.SerializeObject(modLoaderSettingsModel));
             }
+
             string iniFilePath = Path.Combine(SokuDirFullPath, "SWRSToys.ini");
 
             using (StreamWriter writer = new StreamWriter(iniFilePath))

@@ -53,6 +53,8 @@ namespace SokuLauncher
                 Static.ConfigUtil.ReadConfig();
 
                 Static.ModsManager = new ModsManager();
+                Static.ModsManager.SearchModulesDir();
+                Static.ModsManager.LoadSWRSToysSetting();
             }
             catch (Exception ex)
             {

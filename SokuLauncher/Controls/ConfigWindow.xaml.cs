@@ -19,7 +19,7 @@ namespace SokuLauncher.Controls
 {
     public partial class ConfigWindow : Window
     {
-        ConfigWindowViewModel ViewModel;
+        public ConfigWindowViewModel ViewModel;
         public ConfigWindow(ConfigWindowViewModel viewModel = null)
         {
             ViewModel = viewModel;

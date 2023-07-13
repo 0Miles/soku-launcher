@@ -248,6 +248,8 @@ namespace SokuLauncher
                 VersionInfoUrl = Static.ConfigUtil.Config.VersionInfoUrl,
                 Language = Static.ConfigUtil.Config.Language
             });
+            configWindow.ViewModel.ModsManager.SearchModulesDir();
+            configWindow.ViewModel.ModsManager.LoadSWRSToysSetting();
 
             ZoomOutHideWindow((s, _) =>
             {
