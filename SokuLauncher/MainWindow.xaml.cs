@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -27,7 +28,7 @@ namespace SokuLauncher
             }
             DataContext = ViewModel;
 
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void WrapPanel_Loaded(object sender, RoutedEventArgs e)
@@ -78,25 +79,28 @@ namespace SokuLauncher
 
                 if (Static.ConfigUtil.Config.AutoCheckForInstallable)
                 {
-                    List<string> CheckModes = settingGroup.EnableMods.Select(x => x).ToList();
-                    CheckModes.Add("SokuModLoader");
                     ViewModel.SelectedSokuModSettingGroup.IsShowProgress = true;
-                    if (string.IsNullOrWhiteSpace(Static.UpdatesManager.VersionInfoJson))
+                    try
                     {
-                        ViewModel.SelectedSokuModSettingGroup.IsShowProgress = true;
-                        Static.UpdatesManager.DownloadProgressChanged += (progress) => {
-                            ViewModel.SelectedSokuModSettingGroup.Progress = progress;
-                            ViewModel.SelectedSokuModSettingGroup.Status = $"Checking version info {progress}%";
-                        };
-                        await Static.UpdatesManager.GetVersionInfoJson();
+                        ViewModel.SelectedSokuModSettingGroup.Status = "Check version info...";
+                        await Task.Delay(200);
+                        Static.UpdatesManager.DownloadProgressChanged += (progress) => ViewModel.SelectedSokuModSettingGroup.Progress = progress;
+                        Static.UpdatesManager.StatusChanged += (status) => ViewModel.SelectedSokuModSettingGroup.Status = status;
+                        if (string.IsNullOrWhiteSpace(Static.UpdatesManager.VersionInfoJson))
+                        {
+                            await Static.UpdatesManager.GetVersionInfoJson();
+                        }
+
+                        List<string> CheckModes = settingGroup.EnableMods.Select(x => x).ToList();
+                        CheckModes.Add("SokuModLoader");
+                        await Static.UpdatesManager.CheckForInstallable(CheckModes);
+                        Static.ModsManager.SearchModulesDir();
+                        Static.ModsManager.LoadSWRSToysSetting();
                     }
-                    Static.UpdatesManager.DownloadProgressChanged += (progress) => {
-                        ViewModel.SelectedSokuModSettingGroup.Progress = progress;
-                        ViewModel.SelectedSokuModSettingGroup.Status = $"Download mods {progress}%";
-                    };
-                    await Static.UpdatesManager.CheckForInstallable(CheckModes);
-                    Static.ModsManager.SearchModulesDir();
-                    Static.ModsManager.LoadSWRSToysSetting();
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     ViewModel.SelectedSokuModSettingGroup.IsShowProgress = false;
                 }
 
@@ -122,7 +126,7 @@ namespace SokuLauncher
                 {
                     Directory.SetCurrentDirectory(Static.ConfigUtil.SokuDirFullPath);
                     Process.Start(sokuFile);
-                    Close();
+                    Application.Current.Shutdown();
                 });
             }
             catch (Exception ex)
@@ -227,6 +231,11 @@ namespace SokuLauncher
 
         private void ConfigButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Static.ConfigUtil.Config.AutoCheckForUpdates && string.IsNullOrWhiteSpace(Static.UpdatesManager.VersionInfoJson))
+            {
+                Static.UpdatesManager.StopCheckForUpdates();
+            }
+
             ConfigWindow configWindow = new ConfigWindow(new ConfigWindowViewModel
             {
                 ModsManager = new ModsManager(),
@@ -239,8 +248,9 @@ namespace SokuLauncher
                 VersionInfoUrl = Static.ConfigUtil.Config.VersionInfoUrl,
                 Language = Static.ConfigUtil.Config.Language
             });
-            
-            ZoomOutHideWindow((s, _) => {
+
+            ZoomOutHideWindow((s, _) =>
+            {
                 configWindow.Show();
                 Close();
             });

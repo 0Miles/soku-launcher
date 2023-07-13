@@ -1,6 +1,7 @@
 ﻿using SokuLauncher.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -8,12 +9,18 @@ using System.Windows.Input;
 
 namespace SokuLauncher.Controls
 {
-    public partial class UpdateSelectionWindow : Window
+    public partial class UpdateSelectionWindow : Window, INotifyPropertyChanged
     {
         public UpdateSelectionWindow()
         {
             InitializeComponent();
             DataContext = this;
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public List<UpdateFileInfoModel> AvailableUpdateList { get; set; }

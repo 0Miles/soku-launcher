@@ -21,6 +21,7 @@ namespace SokuLauncher.Utils
         private const string MOD_VERSION_FILENAME_SUFFIX = ".version.txt";
 
         public event Action<int> DownloadProgressChanged;
+        public event Action<string> StatusChanged;
 
         public List<UpdateFileInfoModel> AvailableUpdateList { get; private set; } = new List<UpdateFileInfoModel>();
         public string VersionInfoJson { get; private set; }
@@ -40,6 +41,12 @@ namespace SokuLauncher.Utils
             ModsManager = modsManager;
         }
 
+        private bool IsStopCheckForUpdates = false;
+        public void StopCheckForUpdates()
+        {
+            IsStopCheckForUpdates = true;
+        }
+
         public void CheckForUpdates(bool isAutoUpdates = true)
         {
             try
@@ -55,18 +62,14 @@ namespace SokuLauncher.Utils
                         AutoCheckForUpdates = ConfigUtil.Config.AutoCheckForUpdates
                     };
 
-                    if (updateSelectionWindow.ShowDialog() == true)
+                    if (IsStopCheckForUpdates)
                     {
-                        var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
-
-                        UpdatingWindow updatingWindow = new UpdatingWindow
-                        {
-                            UpdatesManager = this,
-                            AvailableUpdateList = selectedUpdates,
-                            Stillness = isAutoUpdates
-                        };
-                        updatingWindow.ShowDialog();
+                        IsStopCheckForUpdates = false;
+                        return;
                     }
+
+                    bool isRunUpdate = updateSelectionWindow.ShowDialog() == true;
+
                     if (isAutoUpdates)
                     {
                         if (ConfigUtil.Config.AutoCheckForUpdates != updateSelectionWindow.AutoCheckForUpdates)
@@ -74,6 +77,46 @@ namespace SokuLauncher.Utils
                             ConfigUtil.Config.AutoCheckForUpdates = updateSelectionWindow.AutoCheckForUpdates;
                             ConfigUtil.SaveConfig();
                         }
+                    }
+
+                    if (isRunUpdate)
+                    {
+
+                        var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
+
+                        UpdatingWindow updatingWindow = new UpdatingWindow
+                        {
+                            UpdatesManager = this,
+                            AvailableUpdateList = selectedUpdates
+                        };
+
+                        _ = Task.Run(async () =>
+                        {
+                            try
+                            {
+                                foreach (var updateFileInfo in AvailableUpdateList)
+                                {
+                                    await DownloadAndExtractFile(updateFileInfo);
+                                    CopyAndReplaceFile(updateFileInfo);
+                                }
+                                updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
+                                if (ReplaceBatPath != null)
+                                {
+                                    Process.Start(ReplaceBatPath);
+                                    updatingWindow.Dispatcher.Invoke(() => Application.Current.Shutdown());
+                                }
+                                if (!isAutoUpdates)
+                                {
+                                    MessageBox.Show("All updates completed", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, "Updates", MessageBoxButton.OK, MessageBoxImage.Error);
+                                updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
+                            }
+                        });
+                        updatingWindow.ShowDialog();
                     }
                 }
                 else
@@ -127,28 +170,32 @@ namespace SokuLauncher.Utils
             if (IsVersionInfoJsonDownloading)
             {
                 await VersionInfoJsonDownloadTask;
-                return;
             }
-            IsVersionInfoJsonDownloading = true;
-            try
+            else
             {
-                VersionInfoJsonDownloadTask = Task.Run(async () =>
+                IsVersionInfoJsonDownloading = true;
+                try
                 {
-                    using (WebClient client = new WebClient())
+                    VersionInfoJsonDownloadTask = Task.Run(async () =>
                     {
-                        client.Encoding = Encoding.UTF8;
-                        client.DownloadProgressChanged += (sender, e) => DownloadProgressChanged?.Invoke(e.ProgressPercentage);
-                        VersionInfoJson = await client.DownloadStringTaskAsync(string.IsNullOrWhiteSpace(ConfigUtil.Config.VersionInfoUrl) ? DEFAULT_VERSION_INFO_URL : ConfigUtil.Config.VersionInfoUrl);
-                    }
-                });
-                await VersionInfoJsonDownloadTask;
+                        using (WebClient client = new WebClient())
+                        {
+                            client.Encoding = Encoding.UTF8;
+                            client.DownloadProgressChanged += (sender, e) =>
+                            {
+                                DownloadProgressChanged?.Invoke(e.ProgressPercentage);
+                                StatusChanged?.Invoke("Check version info... " + $"{e.ProgressPercentage}%");
+                            };
+                            VersionInfoJson = await client.DownloadStringTaskAsync(string.IsNullOrWhiteSpace(ConfigUtil.Config.VersionInfoUrl) ? DEFAULT_VERSION_INFO_URL : ConfigUtil.Config.VersionInfoUrl);
+                        }
+                    });
+                    await VersionInfoJsonDownloadTask;
+                }
+                finally
+                {
+                    IsVersionInfoJsonDownloading = false;
+                }
             }
-            catch (Exception ex)
-            {
-                IsVersionInfoJsonDownloading = false;
-                throw ex;
-            }
-
         }
 
         public void GetAvailableUpdateList(bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null)
@@ -263,12 +310,17 @@ namespace SokuLauncher.Utils
 
                 using (WebClient client = new WebClient())
                 {
-                    client.DownloadProgressChanged += (sender, e) => DownloadProgressChanged?.Invoke(e.ProgressPercentage);
+                    client.DownloadProgressChanged += (sender, e) =>
+                    {
+                        DownloadProgressChanged?.Invoke(e.ProgressPercentage);
+                        StatusChanged?.Invoke($"Downloading {updateFileInfo.Name}... " + $"{e.ProgressPercentage}%");
+                    };
                     await client.DownloadFileTaskAsync(updateFileInfo.DownloadUrl, downloadToTempFilePath);
                 }
 
                 if (updateFileInfo.Compressed)
                 {
+                    StatusChanged?.Invoke($"Extracting {updateFileInfo.Name}... ");
                     ZipFile.ExtractToDirectory(downloadToTempFilePath, updateFileDir);
                     File.Delete(downloadToTempFilePath);
                 }
@@ -282,6 +334,7 @@ namespace SokuLauncher.Utils
 
         public void CopyAndReplaceFile(UpdateFileInfoModel updateFileInfo)
         {
+            StatusChanged?.Invoke($"Updating {updateFileInfo.Name}... ");
             string updateFileDir = Path.Combine(UpdateTempDirPath, updateFileInfo.Name);
             string updateWorkingDir = updateFileDir;
             if (!string.IsNullOrWhiteSpace(updateFileInfo.UpdateWorkingDir))

@@ -421,7 +421,7 @@
                     <TextBox Text="{Binding VersionInfoUrl}" Padding="4" Margin="8" TextChanged="TextBoxSetSaveableTrue_TextChanged" />
                     <CheckBox IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8">Auto check for updates on startup</CheckBox>
                     <CheckBox IsChecked="{Binding AutoCheckForInstallable}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8">Auto check for installable mods before launching the game</CheckBox>
-                    <Button Margin="8" Padding="8,4" HorizontalAlignment="Center" Click="CheckForUpdatesButton_Click">Check for updates now</Button>
+                    <Button Content="{Binding CheckForUpdatesButtonText}" Margin="8" Padding="8,4" HorizontalAlignment="Center" Click="CheckForUpdatesButton_Click"></Button>
                 </StackPanel>
             </TabItem>
         </TabControl>

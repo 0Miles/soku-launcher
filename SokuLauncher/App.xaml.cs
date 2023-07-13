@@ -28,9 +28,8 @@ namespace SokuLauncher
 
             if (runningProcesses.Length > 1)
             {
-                Application.Current.Shutdown();
+                Current.Shutdown();
             }
-
 
             MainWindow mainWindow = new MainWindow();
 
@@ -68,11 +67,7 @@ namespace SokuLauncher
                     if (Static.ConfigUtil.Config.AutoCheckForUpdates)
                     {
                         await Static.UpdatesManager.GetVersionInfoJson();
-
-                        Dispatcher.Invoke(() =>
-                        {
-                            Static.UpdatesManager.CheckForUpdates();
-                        });
+                        Dispatcher.Invoke(() => Static.UpdatesManager.CheckForUpdates());
                     }
                 }
                 catch (Exception ex)

@@ -559,7 +559,11 @@ namespace SokuLauncher.Controls
                     }
                 };
                 UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
+                Action<string> changeButtonStatus = (status) => ViewModel.CheckForUpdatesButtonText = status;
+                updatesManager.StatusChanged += changeButtonStatus;
                 await updatesManager.GetVersionInfoJson();
+                updatesManager.StatusChanged -= changeButtonStatus;
+                ViewModel.CheckForUpdatesButtonText = "Check for updates now";
                 updatesManager.CheckForUpdates(false);
                 IsCheckingForUpdates = false;
             }

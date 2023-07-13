@@ -233,5 +233,20 @@ namespace SokuLauncher.ViewModels
             }
         }
 
+        private string _CheckForUpdatesButtonText = "Check for updates now";
+        public string CheckForUpdatesButtonText
+        {
+            get
+            {
+                return _CheckForUpdatesButtonText;
+            }
+            set
+            {
+                _CheckForUpdatesButtonText = value;
+                Saveable = true;
+                RaisePropertyChanged("CheckForUpdatesButtonText");
+            }
+        }
+
     }
 }

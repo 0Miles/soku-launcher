@@ -24,8 +24,6 @@ namespace SokuLauncher.Controls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public bool Stillness { get; set; } = true;
-
         public UpdatesManager UpdatesManager { get; set; }
 
         public List<UpdateFileInfoModel> AvailableUpdateList { get; set; }
@@ -64,37 +62,10 @@ namespace SokuLauncher.Controls
             }
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await Task.Delay(100);
-            try
-            {
-                foreach (var updateFileInfo in AvailableUpdateList)
-                {
-                    UpdatesManager.DownloadProgressChanged += (progress) => {
-                        Progress = progress;
-                        Status = $"{updateFileInfo.Name} {progress}%";
-                    };
-                    await UpdatesManager.DownloadAndExtractFile(updateFileInfo);
-                    Status = $"{updateFileInfo.Name} updating...";
-                    UpdatesManager.CopyAndReplaceFile(updateFileInfo);
-                }
-                Close();
-                if (UpdatesManager.ReplaceBatPath != null)
-                {
-                    Process.Start(UpdatesManager.ReplaceBatPath);
-                    Application.Current.Shutdown();
-                }
-                if (!Stillness)
-                {
-                    MessageBox.Show("All updates completed", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Updates", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close();
-            }
+            UpdatesManager.DownloadProgressChanged += (progress) => Progress = progress;
+            UpdatesManager.StatusChanged += (status) => Status = status;
         }
     }
 }

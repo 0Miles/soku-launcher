@@ -11,6 +11,30 @@
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
+        <Style x:Key="FadeInOutGrid" TargetType="Grid">
+            <Setter Property="Opacity" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Duration="0:0:.2" To="0" Storyboard.TargetProperty="Opacity"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+                <Trigger Property="Visibility" Value="Collapsed">
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Duration="0:0:.2" To="1" Storyboard.TargetProperty="Opacity"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <Style x:Key="WrapperGridStyle" TargetType="{x:Type Grid}">
             <Setter Property="RenderTransform">
                 <Setter.Value>
@@ -97,8 +121,10 @@
                 <TextBlock Grid.Row="1" Text="{Binding Desc}" IsHitTestVisible="False" Foreground="{Binding DescColor}" FontSize="16" TextWrapping="Wrap" FlowDirection="LeftToRight" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,16" Visibility="{Binding Desc, Converter={StaticResource StringToVisibilityConverter}}" />
             </Grid>
         </Border>
-        <ProgressBar Value="{Binding Progress}" Background="#CF000000" Foreground="#5A339900" BorderThickness="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding IsShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        <TextBlock Text="{Binding Status}" IsHitTestVisible="False" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding IsShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <Grid Style="{StaticResource FadeInOutGrid}"  Visibility="{Binding IsShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <ProgressBar Value="{Binding Progress}" Background="#CF000000" Foreground="#5A339900" BorderThickness="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+            <TextBlock Text="{Binding Status}" IsHitTestVisible="False" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
 
     </Grid>
 </UserControl>
