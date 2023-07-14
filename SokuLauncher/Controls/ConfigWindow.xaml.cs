@@ -97,21 +97,26 @@ namespace SokuLauncher.Controls
                     ViewModel.ModsManager.ExecuteDelete();
                     ViewModel.ModsManager.SearchModulesDir();
                     ViewModel.ModsManager.LoadSWRSToysSetting();
-                    ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Delete failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+                ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
             }
 
+            if (Static.ConfigUtil.Config.VersionInfoUrl != ViewModel.VersionInfoUrl)
+            {
+                Static.UpdatesManager.ClearVersionInfoJson();
+            }
+
+            Static.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
             Static.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
             Static.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
             Static.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
             Static.ConfigUtil.Config.SokuModAlias = ViewModel.SokuModAlias.ToList();
             Static.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
             Static.ConfigUtil.Config.AutoCheckForInstallable = ViewModel.AutoCheckForInstallable;
-            Static.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
             Static.ConfigUtil.Config.Language = ViewModel.Language;
 
             Static.ConfigUtil.SaveConfig();
@@ -122,6 +127,7 @@ namespace SokuLauncher.Controls
                 Static.ModsManager.SearchModulesDir();
                 Static.ModsManager.LoadSWRSToysSetting();
             }
+
             ViewModel.Saveable = false;
             Directory.SetCurrentDirectory(Static.SelfFileDir);
         }

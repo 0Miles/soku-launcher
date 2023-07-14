@@ -200,10 +200,20 @@ namespace SokuLauncher.Utils
 
         public void GetAvailableUpdateList(bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null)
         {
+            List<UpdateFileInfoModel> latestVersionInfoList;
             try
             {
-                List<UpdateFileInfoModel> latestVersionInfoList = JsonConvert.DeserializeObject<List<UpdateFileInfoModel>>(VersionInfoJson);
+                latestVersionInfoList = JsonConvert.DeserializeObject<List<UpdateFileInfoModel>>(VersionInfoJson);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Parsing VersionInfo failed: {ex}", "Update", MessageBoxButton.OK, MessageBoxImage.Error);
+                VersionInfoJson = null;
+                return;
+            }
 
+            try
+            {
                 AvailableUpdateList.Clear();
                 foreach (UpdateFileInfoModel updateFileInfo in latestVersionInfoList)
                 {
@@ -399,6 +409,11 @@ namespace SokuLauncher.Utils
             string modVersionFileName = Path.Combine(updateFileInfo.LocalFileDir, $"{updateFileInfo.Name}{MOD_VERSION_FILENAME_SUFFIX}");
             File.WriteAllText(modVersionFileName, updateFileInfo.Version);
             Directory.Delete(updateFileDir, true);
+        }
+
+        public void ClearVersionInfoJson()
+        {
+            VersionInfoJson = null;
         }
 
         private Version GetFileCurrentVersion(string fileName)
