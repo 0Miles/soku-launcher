@@ -236,20 +236,25 @@ namespace SokuLauncher
                 Static.UpdatesManager.StopCheckForUpdates();
             }
 
-            ConfigWindow configWindow = new ConfigWindow(new ConfigWindowViewModel
-            {
-                ModsManager = new ModsManager(),
-                SokuDirPath = Static.ConfigUtil.Config.SokuDirPath,
-                SokuFileName = Static.ConfigUtil.Config.SokuFileName,
-                SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups)),
-                SokuModAlias = new ObservableCollection<string>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModAlias)),
-                AutoCheckForUpdates = Static.ConfigUtil.Config.AutoCheckForUpdates,
-                AutoCheckForInstallable = Static.ConfigUtil.Config.AutoCheckForInstallable,
-                VersionInfoUrl = Static.ConfigUtil.Config.VersionInfoUrl,
-                Language = Static.ConfigUtil.Config.Language
-            });
-            configWindow.ViewModel.ModsManager.SearchModulesDir();
-            configWindow.ViewModel.ModsManager.LoadSWRSToysSetting();
+            ModsManager configModsManager = new ModsManager();
+            configModsManager.SearchModulesDir();
+            configModsManager.LoadSWRSToysSetting();
+
+            ConfigWindow configWindow = new ConfigWindow(
+                new ConfigWindowViewModel
+                {
+                    ModsManager = configModsManager,
+                    ModInfoList = new ObservableCollection<ModInfoModel>(configModsManager.ModInfoList),
+                    SokuDirPath = Static.ConfigUtil.Config.SokuDirPath,
+                    SokuFileName = Static.ConfigUtil.Config.SokuFileName,
+                    SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups)),
+                    SokuModAlias = new ObservableCollection<string>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModAlias)),
+                    AutoCheckForUpdates = Static.ConfigUtil.Config.AutoCheckForUpdates,
+                    AutoCheckForInstallable = Static.ConfigUtil.Config.AutoCheckForInstallable,
+                    VersionInfoUrl = Static.ConfigUtil.Config.VersionInfoUrl,
+                    Language = Static.ConfigUtil.Config.Language
+                }
+            );
 
             ZoomOutHideWindow((s, _) =>
             {

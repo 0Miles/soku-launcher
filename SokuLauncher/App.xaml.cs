@@ -1,4 +1,5 @@
 ﻿using SokuLauncher.Controls;
+using SokuLauncher.Models;
 using SokuLauncher.Utils;
 using System;
 using System.Collections.Generic;

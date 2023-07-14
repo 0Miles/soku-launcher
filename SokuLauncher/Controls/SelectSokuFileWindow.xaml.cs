@@ -10,13 +10,13 @@ namespace SokuLauncher.Controls
 {
     public partial class SelectSokuFileWindow : Window
     {
-        public SelectSokuFileWindowViewModel ViewModel { get; set; }
-        public SelectSokuFileWindow(SelectSokuFileWindowViewModel viewModel = null)
+        public SelectorWindowViewModel ViewModel { get; set; }
+        public SelectSokuFileWindow(SelectorWindowViewModel viewModel = null)
         {
             ViewModel = viewModel;
             if (ViewModel == null)
             {
-                ViewModel = new SelectSokuFileWindowViewModel();
+                ViewModel = new SelectorWindowViewModel();
             }
             DataContext = ViewModel;
 
@@ -25,32 +25,12 @@ namespace SokuLauncher.Controls
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var selectorNode in ViewModel.SelectorNodeList)
-            {
-                selectorNode.Selected = false;
-            }
-            foreach (var selectedItem in SelectorListView.SelectedItems)
-            {
-                (selectedItem as SelectorNodeModel).Selected = true;
-            }
             DialogResult = true;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             SelectorListView.SelectionMode = ViewModel.IsMutiSelect ? SelectionMode.Multiple : SelectionMode.Single;
-            
-            if (ViewModel.IsMutiSelect)
-            {
-                foreach (var selectorNode in ViewModel.SelectorNodeList.Where(x => x.Selected))
-                {
-                    SelectorListView.SelectedItems.Add(selectorNode);
-                }
-            }
-            else
-            {
-                SelectorListView.SelectedItem = ViewModel.SelectorNodeList.FirstOrDefault(x => x.Selected);
-            }
             SelectorListView.Focus();
         }
     }

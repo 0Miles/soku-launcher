@@ -4,36 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:converters="clr-namespace:SokuLauncher.Converters" xmlns:viewModels="clr-namespace:SokuLauncher.ViewModels" d:DataContext="{d:DesignInstance Type=viewModels:ModSettingGroupViewModel}"
-             mc:Ignorable="d">
+             mc:Ignorable="d" d:Width="420" d:Height="150">
     <UserControl.Resources>
         <converters:RelativePathConverter x:Key="RelativePathConverter" />
         <converters:PathToBackgroundConverter x:Key="PathToBackgroundConverter" />
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-
-        <Style x:Key="FadeInOutGrid" TargetType="Grid">
-            <Setter Property="Opacity" Value="0"/>
-            <Style.Triggers>
-                <Trigger Property="Visibility" Value="Visible">
-                    <Trigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Duration="0:0:.2" To="0" Storyboard.TargetProperty="Opacity"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </Trigger.EnterActions>
-                </Trigger>
-                <Trigger Property="Visibility" Value="Collapsed">
-                    <Trigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation Duration="0:0:.2" To="1" Storyboard.TargetProperty="Opacity"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </Trigger.ExitActions>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
 
         <Style x:Key="WrapperGridStyle" TargetType="{x:Type Grid}">
             <Setter Property="RenderTransform">
@@ -121,9 +97,32 @@
                 <TextBlock Grid.Row="1" Text="{Binding Desc}" IsHitTestVisible="False" Foreground="{Binding DescColor}" FontSize="16" TextWrapping="Wrap" FlowDirection="LeftToRight" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,16" Visibility="{Binding Desc, Converter={StaticResource StringToVisibilityConverter}}" />
             </Grid>
         </Border>
-        <Grid Style="{StaticResource FadeInOutGrid}"  Visibility="{Binding IsShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid Visibility="{Binding IsShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <ProgressBar Value="{Binding Progress}" Background="#CF000000" Foreground="#5A339900" BorderThickness="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
             <TextBlock Text="{Binding Status}" IsHitTestVisible="False" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Opacity" Value="0"/>
+                    <Style.Triggers>
+                        <Trigger Property="Visibility" Value="Visible">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:.2" To="1" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:.2" To="0" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
         </Grid>
 
     </Grid>

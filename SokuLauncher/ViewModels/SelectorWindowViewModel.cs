@@ -1,12 +1,13 @@
 ﻿using SokuLauncher.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace SokuLauncher.ViewModels
 {
-    public class SelectSokuFileWindowViewModel: ViewModelBase
+    public class SelectorWindowViewModel: ViewModelBase
     {
         public bool IsMutiSelect { get; set; } = false;
 
@@ -44,8 +45,8 @@ namespace SokuLauncher.ViewModels
             }
         }
 
-        private List<SelectorNodeModel> _SelectorNodeList;
-        public List<SelectorNodeModel> SelectorNodeList
+        private ObservableCollection<SelectorNodeModel> _SelectorNodeList;
+        public ObservableCollection<SelectorNodeModel> SelectorNodeList
         {
             get
             {

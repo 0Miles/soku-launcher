@@ -15,6 +15,20 @@ namespace SokuLauncher.ViewModels
     {
         public ModsManager ModsManager { get; set; }
 
+        private ObservableCollection<ModInfoModel> _ModInfoList;
+        public ObservableCollection<ModInfoModel> ModInfoList
+        {
+            get
+            {
+                return _ModInfoList;
+            }
+            set
+            {
+                _ModInfoList = value;
+                RaisePropertyChanged("ModInfoList");
+            }
+        }
+
         private bool _Saveable;
         public bool Saveable
         {

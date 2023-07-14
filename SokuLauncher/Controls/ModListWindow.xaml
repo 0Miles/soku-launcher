@@ -1,0 +1,19 @@
+﻿<Window x:Class="SokuLauncher.Controls.ModListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="clr-namespace:SokuLauncher.Controls"
+        mc:Ignorable="d" Title="Mod Setting"
+        Height="620" Width="600" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:ModListUserControl ModInfoList="{Binding ModInfoList}"/>
+        <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <Button Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click">OK</Button>
+            <!--<Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>-->
+        </StackPanel>
+    </Grid>
+</Window>

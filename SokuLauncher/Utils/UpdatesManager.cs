@@ -54,6 +54,12 @@ namespace SokuLauncher.Utils
                 GetAvailableUpdateList();
                 if (AvailableUpdateList.Count > 0)
                 {
+                    if (IsStopCheckForUpdates)
+                    {
+                        IsStopCheckForUpdates = false;
+                        return;
+                    }
+
                     UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
                     {
                         Desc = "The following mods have updates available. Please check the mods you want to update.",
@@ -61,12 +67,6 @@ namespace SokuLauncher.Utils
                         IsAutoCheckForUpdatesCheckBoxShow = isAutoUpdates,
                         AutoCheckForUpdates = ConfigUtil.Config.AutoCheckForUpdates
                     };
-
-                    if (IsStopCheckForUpdates)
-                    {
-                        IsStopCheckForUpdates = false;
-                        return;
-                    }
 
                     bool isRunUpdate = updateSelectionWindow.ShowDialog() == true;
 

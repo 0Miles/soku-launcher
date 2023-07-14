@@ -131,6 +131,12 @@
     <Compile Include="Controls\ConfigWindow.xaml.cs">
       <DependentUpon>ConfigWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ModListUserControl.xaml.cs">
+      <DependentUpon>ModListUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ModListWindow.xaml.cs">
+      <DependentUpon>ModListWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ModSettingGroupUserControl.xaml.cs">
       <DependentUpon>ModSettingGroupUserControl.xaml</DependentUpon>
     </Compile>
@@ -145,8 +151,11 @@
     </Compile>
     <Compile Include="Converters\MarkdownToFlowDocumentConverter.cs" />
     <Compile Include="Converters\IsLastItemConverter.cs" />
+    <Compile Include="Converters\ListCountToBoolenConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\PathToBackgroundConverter.cs" />
+    <Compile Include="Converters\FileNameConverter.cs" />
+    <Compile Include="Converters\ReverseBooleanConverter.cs" />
     <Compile Include="Converters\ReverseStringToVisibilityConverter.cs" />
     <Compile Include="Converters\IsFirstItemConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
@@ -176,6 +185,14 @@
     <Page Include="Controls\ConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ModListUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ModListWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\ModSettingGroupUserControl.xaml">
       <SubType>Designer</SubType>

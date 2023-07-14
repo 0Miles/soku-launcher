@@ -76,10 +76,10 @@
     },
     {
         "Name": "SokuModLoader",
-        "Desc": "A module loader with an accompanying module switch UI.",
+        "Desc": "Necessary tool for injecting mods into games.",
         "Version": "0.0.0.0",
         "FileName": "d3d9.dll",
-        "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1128341050008809472/d3d9.zip",
+        "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1129357956803219516/d3d9.zip",
         "Compressed": true
     }
 ]

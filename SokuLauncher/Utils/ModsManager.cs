@@ -11,6 +11,9 @@ namespace SokuLauncher.Utils
     public class ModsManager
     {
         public List<ModInfoModel> ModInfoList { get; private set; } = new List<ModInfoModel> { };
+
+        public List<string> ToBeDeletedDirList = new List<string> { };
+
         public string DefaultModsDir { get; private set; }
         public bool SWRSToysD3d9Exist {
             get
@@ -52,6 +55,7 @@ namespace SokuLauncher.Utils
         public void SearchModulesDir()
         {
             ModInfoList.Clear();
+            ToBeDeletedDirList.Clear();
 
             if (!Directory.Exists(DefaultModsDir))
             {
@@ -66,7 +70,7 @@ namespace SokuLauncher.Utils
 
                 foreach (string dllFilePath in dllFiles)
                 {
-                    ModInfoList.Add(new ModInfoModel(dllFilePath));
+                    ModInfoList.Add(new ModInfoModel(dllFilePath, SokuDirFullPath));
                 }
             }
         }
@@ -84,10 +88,14 @@ namespace SokuLauncher.Utils
                     foreach (var module in modLoaderSettings.Modules)
                     {
                         string fullPath = Path.Combine(SokuDirFullPath, module.Key.Trim().Replace('/', '\\'));
+                        if (!File.Exists(fullPath))
+                        {
+                            continue;
+                        }
                         var modInfo = ModInfoList.FirstOrDefault(x => x.FullPath.ToLower() == fullPath.ToLower());
                         if (modInfo == null)
                         {
-                            modInfo = new ModInfoModel(fullPath);
+                            modInfo = new ModInfoModel(fullPath, SokuDirFullPath);
                             ModInfoList.Add(modInfo);
                         }
 
@@ -137,10 +145,15 @@ namespace SokuLauncher.Utils
                                 string[] splitedPath = splitedLine[1].Split(';');
                                 string fullPath = Path.Combine(SokuDirFullPath, splitedPath[0].Trim().Replace('/', '\\'));
 
+                                if (!File.Exists(fullPath))
+                                {
+                                    continue;
+                                }
+
                                 var modInfo = ModInfoList.FirstOrDefault(x => x.FullPath.ToLower() == fullPath.ToLower());
                                 if (modInfo == null)
                                 {
-                                    modInfo = new ModInfoModel(fullPath);
+                                    modInfo = new ModInfoModel(fullPath, SokuDirFullPath);
                                     ModInfoList.Add(modInfo);
                                 }
 
@@ -206,7 +219,7 @@ namespace SokuLauncher.Utils
                 //        Modules = ModInfoList
                 //           .Select(modInfo =>
                 //                new KeyValuePair<string, ModLoaderSettingsModuleModel>(
-                //                    Static.GetRelativePath(modInfo.FullPath, SokuDirFullPath),
+                //                    modInfo.RelativePath,
                 //                    new ModLoaderSettingsModuleModel
                 //                    {
                 //                        Enabled = modInfo.Enabled
@@ -224,10 +237,19 @@ namespace SokuLauncher.Utils
                 writer.WriteLine("[Module]");
                 foreach (var modInfo in ModInfoList)
                 {
-                    writer.WriteLine((modInfo.Enabled ? "" : ";") + $"{modInfo.Name}={Static.GetRelativePath(modInfo.FullPath, SokuDirFullPath)}");
+                    writer.WriteLine((modInfo.Enabled ? "" : ";") + $"{modInfo.Name}={modInfo.RelativePath}");
                 }
                 writer.Close();
             }
+        }
+
+        public void ExecuteDelete()
+        {
+            foreach(string path in ToBeDeletedDirList)
+            {
+                Directory.Delete(path, true);
+            }
+            ToBeDeletedDirList.Clear();
         }
     }
 }

@@ -218,11 +218,11 @@ namespace SokuLauncher.Utils
             if (SokuFileNames.Count > 1)
             {
 
-                SelectSokuFileWindowViewModel swvm = new SelectSokuFileWindowViewModel
+                SelectorWindowViewModel swvm = new SelectorWindowViewModel
                 {
                     Title = "Choose game file",
                     Desc = "Multiple th123 executable files found. Please select one as the launcher target.",
-                    SelectorNodeList = new List<SelectorNodeModel>()
+                    SelectorNodeList = new System.Collections.ObjectModel.ObservableCollection<SelectorNodeModel>()
                 };
 
                 foreach (string fileName in SokuFileNames)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
         mc:Ignorable="d" Closing="Window_Closing"
-        Title="Config" MinWidth="260" MinHeight="320" Width="500" Height="720" WindowStartupLocation="CenterScreen">
+        Title="Config" MinWidth="260" MinHeight="320" Width="620" Height="720" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:IsFirstItemConverter x:Key="IsFirstItemConverter"/>
         <converters:IsLastItemConverter x:Key="IsLastItemConverter"/>
@@ -27,8 +27,8 @@
         </ControlTemplate>
     </Window.Resources>
     <Grid>
-        <TabControl Margin="8,18,8,8" FocusVisualStyle="{x:Null}">
-            <TabItem Header="Edit Mods">
+        <TabControl x:Name="MainTabControl" Margin="8,18,8,8" FocusVisualStyle="{x:Null}">
+            <TabItem Header="Launcher">
                 <Grid ClipToBounds="True">
                     <Grid x:Name="SokuModSettingGroupsGrid">
                         <Grid.RowDefinitions>
@@ -364,22 +364,24 @@
                     </Grid>
                 </Grid>
             </TabItem>
+            <TabItem Header="Mod">
+                <local:ModListUserControl ModInfoList="{Binding ModInfoList}" SelectionChanged="ModListUserControl_SelectionChanged" ModDeleted="ModListUserControl_ModDeleted" ModUndeleted="ModListUserControl_ModUndeleted"/>
+            </TabItem>
             <TabItem Header="Path">
-                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center">
-
-                    <Border Padding="8,8,8,0" Visibility="{Binding SokuFileName, Converter={StaticResource StringToVisibilityConverter}}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Border Padding="8,8,8,0">
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
-
                             <Image Source="{Binding SokuFileIcon}" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding SokuFileIcon, Converter={StaticResource NullToVisibilityConverter}}"/>
-                            <TextBox Grid.Row="1" Background="{x:Null}" Text="{Binding SokuFileName}" IsReadOnly="True" HorizontalAlignment="Center" BorderThickness="0" Margin="8" />
+                            <TextBox Grid.Row="1" Background="{x:Null}" Text="{Binding SokuFileName}" IsReadOnly="True" HorizontalAlignment="Center" BorderThickness="0" Margin="8"  Visibility="{Binding SokuFileName, Converter={StaticResource StringToVisibilityConverter}}"/>
+                            <TextBlock Text="th123 executable file not set" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding SokuFileName, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
+                            <Button Grid.Row="2" Content="Select" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,8,8,16" Padding="8,4" Click="SokuFileNameButton_Click" Cursor="Hand" ></Button>
                         </Grid>
                     </Border>
-                    <TextBlock Text="th123 executable file not set" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding SokuFileName, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
-                    <Button Content="Select" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,8,8,16" Padding="8,4" Click="SokuFileNameButton_Click" Cursor="Hand" ></Button>
 
                     <GroupBox Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="8" Padding="8,16" Visibility="{Binding SokuFileName, Converter={StaticResource StringToVisibilityConverter}}">
                         <GroupBox.Header>

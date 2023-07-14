@@ -77,6 +77,7 @@ namespace SokuLauncher.Controls
                     ViewModel.ModsManager.SearchModulesDir();
                     ViewModel.ModsManager.LoadSWRSToysSetting();
                     ViewModel.UpdateModsPathInfo();
+                    ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
                 }
             }
         }
@@ -88,6 +89,22 @@ namespace SokuLauncher.Controls
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            ViewModel.ModsManager.SaveSWRSToysIni();
+            if (ViewModel.ModsManager.ToBeDeletedDirList.Count > 0)
+            {
+                try
+                {
+                    ViewModel.ModsManager.ExecuteDelete();
+                    ViewModel.ModsManager.SearchModulesDir();
+                    ViewModel.ModsManager.LoadSWRSToysSetting();
+                    ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Delete failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
             Static.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
             Static.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
             Static.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
@@ -106,6 +123,7 @@ namespace SokuLauncher.Controls
                 Static.ModsManager.LoadSWRSToysSetting();
             }
             ViewModel.Saveable = false;
+            Directory.SetCurrentDirectory(Static.SelfFileDir);
         }
 
         private void SokuModSettingGroupsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -567,6 +585,25 @@ namespace SokuLauncher.Controls
                 updatesManager.CheckForUpdates(false);
                 IsCheckingForUpdates = false;
             }
+        }
+
+        private void ModListUserControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MainTabControl.SelectedIndex == 1)
+            {
+                ViewModel.Saveable = true;
+            }
+        }
+
+        private void ModListUserControl_ModDeleted(object modDir, RoutedEventArgs arg2)
+        {
+            ViewModel.ModsManager.ToBeDeletedDirList.Add(modDir as string);
+            ViewModel.Saveable = true;
+        }
+        private void ModListUserControl_ModUndeleted(object modDir, RoutedEventArgs arg2)
+        {
+            ViewModel.ModsManager.ToBeDeletedDirList.Remove(modDir as string);
+            ViewModel.Saveable = true;
         }
     }
 }
