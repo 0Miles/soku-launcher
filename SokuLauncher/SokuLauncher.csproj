@@ -134,9 +134,6 @@
     <Compile Include="Controls\ModListUserControl.xaml.cs">
       <DependentUpon>ModListUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ModListWindow.xaml.cs">
-      <DependentUpon>ModListWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ModSettingGroupUserControl.xaml.cs">
       <DependentUpon>ModSettingGroupUserControl.xaml</DependentUpon>
     </Compile>
@@ -189,10 +186,6 @@
     <Page Include="Controls\ModListUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ModListWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\ModSettingGroupUserControl.xaml">
       <SubType>Designer</SubType>
