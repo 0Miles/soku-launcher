@@ -129,7 +129,7 @@ namespace SokuLauncher.Utils
                     Desc = "Enable SokuLobbies and Giuroll",
                     EnableMods = new List<string> { "Giuroll", "Giuroll-60F", "SokuLobbiesMod", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll-62F", "SWRSokuRoll", "InGameHostlist" },
-                    Cover = "%tmp%/SokuLauncher/Resources/cover1.mp4"
+                    Cover = "%resources%/cover1.png"
                 },
                 new ModSettingGroupViewModel
                 {
@@ -137,7 +137,7 @@ namespace SokuLauncher.Utils
                     Desc = "Enable SokuLobbies and Giuroll-62F",
                     EnableMods = new List<string> { "Giuroll-62F", "SokuLobbiesMod", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "SWRSokuRoll", "InGameHostlist" },
-                    Cover = "%tmp%/SokuLauncher/Resources/cover2.mp4"
+                    Cover = "%resources%/cover2.png"
                 },
                 new ModSettingGroupViewModel
                 {
