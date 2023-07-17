@@ -15,13 +15,13 @@
     },
     {
         "Name": "Giuroll",
-        "Desc": "PRE-RELEASE BUILD, VERSION 0.5.1  \nYOU CAN NOW SPECTATE FROM DIFFERENT NETCODES  \nNEW .INI ENTRY  \nNOT COMPATIBLE WITH PAST VERSIONS BEFORE 5.0  \nThis mod fixes any FPS issues related to Windows 10 (most users affected), online mode stuttering, and one-sided rollback.",
-        "Version": "0.5.1.0",
+        "Desc": "**PRE-RELEASE BUILD, VERSION 0.5.2**  \n**YOU CAN NOW SPECTATE FROM DIFFERENT NETCODES**  \n**EVEN MORE .INI ENTRIES**  \n**NOT COMPATIBLE WITH PAST VERSIONS BEFORE 5.0**  \nThis mod fixes any FPS issues related to Windows 10 (most users affected), online mode stuttering, and one-sided rollback.  \n  \n**It also allows you to rewind replays with the q keys.**  \nInstalled like any other SWRSToys mod.  \nIncompatible with Sokuroll (must be disabled).  \nReport any issues to [@Giufin](https://discordapp.com/users/278469240879841280).  \n  \n**MOST MODS SEEM TO BE COMPATIBLE, EXCEPT DESYNC-PROTECTOR AND HOST-IN-BACKGROUND, BUT IN CASE OF CRASHES OR OTHER ISSUES DISABLE AS MANY MODS AS YOU CAN**  \nFor more information: [https://github.com/Giufinn/giuroll](https://github.com/Giufinn/giuroll)",
+        "Version": "0.5.2.0",
         "FileName": "giuroll.dll",
         "ConfigFiles": [
             "giuroll.ini"
         ],
-        "DownloadUrl": "https://github.com/Giufinn/giuroll/releases/download/0.5.1/giuroll_0_5_1.zip",
+        "DownloadUrl": "https://cdn.discordapp.com/attachments/1113775565778989096/1130169875214647396/giuroll_0_5_2.zip",
         "Compressed": true
     },
     {
