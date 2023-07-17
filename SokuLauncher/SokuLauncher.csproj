@@ -262,10 +262,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\cover1.mp4" />
-    <EmbeddedResource Include="Resources\cover2.mp4" />
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +272,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\gearbackground-r.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cover1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cover2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
