@@ -94,7 +94,7 @@ namespace SokuLauncher.Utils
                         {
                             try
                             {
-                                foreach (var updateFileInfo in AvailableUpdateList)
+                                foreach (var updateFileInfo in selectedUpdates)
                                 {
                                     await DownloadAndExtractFile(updateFileInfo);
                                     CopyAndReplaceFile(updateFileInfo);
@@ -151,7 +151,7 @@ namespace SokuLauncher.Utils
                     {
                         var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
 
-                        foreach (var updateFileInfo in AvailableUpdateList)
+                        foreach (var updateFileInfo in selectedUpdates)
                         {
                             await DownloadAndExtractFile(updateFileInfo);
                             CopyAndReplaceFile(updateFileInfo);
