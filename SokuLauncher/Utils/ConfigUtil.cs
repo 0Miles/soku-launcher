@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SokuLauncher.Controls;
 using SokuLauncher.Models;
 using SokuLauncher.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -175,23 +176,30 @@ namespace SokuLauncher.Utils
 
         private string FindSokuDir()
         {
-            List<string> directoriesToSearch = new List<string> {
-                    Static.SelfFileDir,
-                    Path.Combine(Static.SelfFileDir, "..") }
-                .Concat(Directory.GetDirectories(Static.SelfFileDir, "*", SearchOption.AllDirectories))
-                .ToList();
-
-            foreach (string directory in directoriesToSearch)
+            try
             {
-                string[] exeFiles = Directory.GetFiles(directory, "*.exe");
-                foreach (string file in exeFiles)
+                List<string> directoriesToSearch = new List<string> {
+                        Static.SelfFileDir,
+                        Path.Combine(Static.SelfFileDir, "..") }
+                    .Concat(Directory.GetDirectories(Static.SelfFileDir, "*", SearchOption.TopDirectoryOnly))
+                    .ToList();
+
+                foreach (string directory in directoriesToSearch)
                 {
-                    string fileName = Path.GetFileName(file);
-                    if (Regex.IsMatch(fileName, SOKU_FILE_NAME_REGEX))
+                    string[] exeFiles = Directory.GetFiles(directory, "*.exe");
+                    foreach (string file in exeFiles)
                     {
-                        return Static.GetRelativePath(directory, Static.SelfFileDir);
+                        string fileName = Path.GetFileName(file);
+                        if (Regex.IsMatch(fileName, SOKU_FILE_NAME_REGEX))
+                        {
+                            return Static.GetRelativePath(directory, Static.SelfFileDir);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             return null;
@@ -200,15 +208,24 @@ namespace SokuLauncher.Utils
         public static List<string> FindSokuFiles(string directory)
         {
             List<string> result = new List<string>();
-            string[] exeFiles = Directory.GetFiles(directory, "*.exe");
-            foreach (string file in exeFiles)
+
+            try
             {
-                string fileName = Path.GetFileName(file);
-                if (Regex.IsMatch(fileName, SOKU_FILE_NAME_REGEX))
+                string[] exeFiles = Directory.GetFiles(directory, "*.exe");
+                foreach (string file in exeFiles)
                 {
-                    result.Add(fileName);
+                    string fileName = Path.GetFileName(file);
+                    if (Regex.IsMatch(fileName, SOKU_FILE_NAME_REGEX))
+                    {
+                        result.Add(fileName);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             return result;
         }
 
