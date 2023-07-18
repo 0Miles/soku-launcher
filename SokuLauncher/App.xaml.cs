@@ -1,15 +1,8 @@
-﻿using SokuLauncher.Controls;
-using SokuLauncher.Models;
-using SokuLauncher.Utils;
+﻿using SokuLauncher.Utils;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -32,21 +25,22 @@ namespace SokuLauncher
                 Current.Shutdown();
             }
 
+            Static.TempDirPath = Path.Combine(Path.GetTempPath(), "SokuLauncher");
+            
             MainWindow mainWindow = new MainWindow();
 
-            try
-            {
-                Static.TempDirPath = Path.Combine(Path.GetTempPath(), "SokuLauncher");
-                Directory.CreateDirectory(Static.TempDirPath);
-                Directory.CreateDirectory(Path.Combine(Static.TempDirPath, "Resources"));
+            //try
+            //{
+            //    Directory.CreateDirectory(Static.TempDirPath);
+            //    Directory.CreateDirectory(Path.Combine(Static.TempDirPath, "Resources"));
 
-                ResourcesManager resourcesManager = new ResourcesManager();
-                resourcesManager.CopyVideoResources();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            //    ResourcesManager resourcesManager = new ResourcesManager();
+            //    resourcesManager.CopyVideoResources();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //}
 
             try
             {
@@ -62,11 +56,14 @@ namespace SokuLauncher
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+            Static.UpdatesManager = new UpdatesManager(Static.ConfigUtil, Static.ModsManager);
+
+            mainWindow.Show();
+
             Task.Run(async () =>
             {
                 try
                 {
-                    Static.UpdatesManager = new UpdatesManager(Static.ConfigUtil, Static.ModsManager);
                     if (Static.ConfigUtil.Config.AutoCheckForUpdates)
                     {
                         await Static.UpdatesManager.GetVersionInfoJson();
@@ -78,8 +75,6 @@ namespace SokuLauncher
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             });
-
-            mainWindow.Show();
         }
     }
 }
