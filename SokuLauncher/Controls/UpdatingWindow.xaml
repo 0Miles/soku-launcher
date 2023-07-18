@@ -8,7 +8,7 @@
         Title="Updating" Height="100" Width="380" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Topmost="True"
         Loaded="Window_Loaded">
     <StackPanel>
-        <ProgressBar Value="{Binding Progress}" HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Center" Margin="8,8,8,0"/>
+        <ProgressBar Value="{Binding Progress}" IsIndeterminate="{Binding IsIndeterminate}"  HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Center" Margin="8,8,8,0"/>
         <TextBlock Text="{Binding Status }" Margin="8" />
     </StackPanel>
 </Window>

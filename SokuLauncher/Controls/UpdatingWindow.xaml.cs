@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
 
 namespace SokuLauncher.Controls
 {
@@ -61,11 +63,30 @@ namespace SokuLauncher.Controls
                 }
             }
         }
+        private bool _IsIndeterminate = false;
+        public bool IsIndeterminate
+        {
+            get
+            {
+                return _IsIndeterminate;
+            }
+            set
+            {
+                if (value != _IsIndeterminate)
+                {
+                    _IsIndeterminate = value;
+                    RaisePropertyChanged("IsIndeterminate");
+                }
+            }
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            UpdatesManager.DownloadProgressChanged += (progress) => Progress = progress;
-            UpdatesManager.StatusChanged += (status) => Status = status;
+            if (UpdatesManager != null)
+            {
+                UpdatesManager.DownloadProgressChanged += (progress) => Progress = progress;
+                UpdatesManager.StatusChanged += (status) => Status = status;
+            }
         }
     }
 }

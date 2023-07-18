@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -27,7 +28,7 @@ namespace SokuLauncher.Utils
         public string VersionInfoJson { get; private set; }
         public bool IsVersionInfoJsonDownloading { get; private set; } = false;
         public Task VersionInfoJsonDownloadTask { get; private set; }
-        public string ReplaceBatPath { get; private set; }
+        public string UpdateSokuLauncherFilePath { get; private set; }
 
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "Update");
 
@@ -100,10 +101,26 @@ namespace SokuLauncher.Utils
                                     CopyAndReplaceFile(updateFileInfo);
                                 }
                                 updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
-                                if (ReplaceBatPath != null)
+                                if (UpdateSokuLauncherFilePath != null)
                                 {
-                                    Process.Start(ReplaceBatPath);
-                                    updatingWindow.Dispatcher.Invoke(() => Application.Current.Shutdown());
+                                    var processInfo = new ProcessStartInfo
+                                    {
+                                        UseShellExecute = true,
+                                        FileName = UpdateSokuLauncherFilePath,
+                                        Verb = "runas"
+                                    };
+
+                                    try
+                                    {
+                                        Directory.SetCurrentDirectory(Path.GetDirectoryName(UpdateSokuLauncherFilePath));
+                                        Process.Start(processInfo);
+                                        Environment.Exit(0);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show(ex.Message);
+                                        Directory.SetCurrentDirectory(Static.SelfFileDir);
+                                    }
                                 }
                                 if (!isAutoUpdates)
                                 {
@@ -377,18 +394,9 @@ namespace SokuLauncher.Utils
                 {
                     if (updateFileInfo.LocalFileName == Static.SelfFileName)
                     {
-                        // replace self
-                        string replaceBatPath = Path.Combine(updateFileDir, "replace.bat");
-
-                        string batContent = $"echo Waiting update SokuLauncher...";
-                        batContent += $"@ping 127.0.0.1 -n 5 -w 1000 > nul{Environment.NewLine}";
-                        batContent += $"copy \"{newVersionFileName}\" \"{Static.SelfFileName}\" /Y{Environment.NewLine}";
-                        batContent += $"del \"{newVersionFileName}\"{Environment.NewLine}";
-                        batContent += $"start \"\" \"{Static.SelfFileName}\"{Environment.NewLine}";
-                        batContent += $"del \"{replaceBatPath}\"";
-
-                        File.WriteAllText(replaceBatPath, batContent, Encoding.Default);
-                        ReplaceBatPath = replaceBatPath;
+                        File.WriteAllText(Path.Combine(updateFileDir, "replace.txt"), Static.SelfFileName);
+                        UpdateSokuLauncherFilePath = Path.Combine(updateFileDir, "Updater.exe");
+                        File.Move(newVersionFileName, UpdateSokuLauncherFilePath);
                         return;
                     }
                     else
@@ -446,6 +454,56 @@ namespace SokuLauncher.Utils
                     string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
                     CopyDirectory(subDir.FullName, newDestinationDir, true);
                 }
+            }
+        }
+
+        public static async Task CheckSelfIsUpdating()
+        {
+            
+            string updateSokuLauncherDir = Path.Combine(Static.TempDirPath, "Update", "SokuLauncher");
+
+            if (Static.SelfFileDir == updateSokuLauncherDir)
+            {
+                string replaceTargetPath = File.ReadAllText("replace.txt");
+
+                UpdatingWindow updatingWindow = new UpdatingWindow
+                {
+                    UpdatesManager = null,
+                    IsIndeterminate = true,
+                    Status = "Wait SokuLauncher process close..."
+                };
+
+                updatingWindow.Show();
+
+                await Task.Delay(100);
+
+                string sokuLauncherProcessName = Path.GetFileNameWithoutExtension(replaceTargetPath);
+
+                bool hasSameProcess;
+                do
+                {
+                    await Task.Delay(1000);
+                    hasSameProcess = false;
+                    var runningProcesses = Process.GetProcesses();
+                    foreach (Process process in runningProcesses)
+                    {
+                        if (process.ProcessName == sokuLauncherProcessName)
+                        {
+                            process.Kill();
+                            hasSameProcess = true;
+                        }
+                    }
+                } while (hasSameProcess);
+
+                updatingWindow.Status = "Updating...";
+
+                await Task.Run(() => {
+                    File.Copy(Static.SelfFileName, replaceTargetPath, true);
+
+                    Directory.SetCurrentDirectory(Path.GetDirectoryName(replaceTargetPath));
+                    Process.Start(new ProcessStartInfo { FileName = replaceTargetPath, UseShellExecute = true });
+                    Environment.Exit(0);
+                });
             }
         }
     }

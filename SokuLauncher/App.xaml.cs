@@ -1,4 +1,5 @@
-﻿using SokuLauncher.Utils;
+﻿using SokuLauncher.Controls;
+using SokuLauncher.Utils;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -11,9 +12,11 @@ namespace SokuLauncher
 {
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            await UpdatesManager.CheckSelfIsUpdating();
 
             var currentProcess = Process.GetCurrentProcess();
             var currentExecutable = currentProcess.MainModule.FileName;
@@ -25,28 +28,18 @@ namespace SokuLauncher
                 Current.Shutdown();
             }
 
-            Static.TempDirPath = Path.Combine(Path.GetTempPath(), "SokuLauncher");
-            
-            MainWindow mainWindow = new MainWindow();
-
-            //try
-            //{
-            //    Directory.CreateDirectory(Static.TempDirPath);
-            //    Directory.CreateDirectory(Path.Combine(Static.TempDirPath, "Resources"));
-
-            //    ResourcesManager resourcesManager = new ResourcesManager();
-            //    resourcesManager.CopyVideoResources();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
-
             try
             {
                 Static.ConfigUtil = new ConfigUtil();
                 Static.ConfigUtil.ReadConfig();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
+            try
+            {
                 Static.ModsManager = new ModsManager();
                 Static.ModsManager.SearchModulesDir();
                 Static.ModsManager.LoadSWRSToysSetting();
@@ -58,9 +51,10 @@ namespace SokuLauncher
 
             Static.UpdatesManager = new UpdatesManager(Static.ConfigUtil, Static.ModsManager);
 
+            MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
 
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 try
                 {
