@@ -34,6 +34,7 @@ namespace SokuLauncher
 
         public static string GetRelativePath(string absolutePath, string baseDirPath)
         {
+            Directory.SetCurrentDirectory(SelfFileDir);
             if (absolutePath == baseDirPath)
             {
                 return ".";
@@ -59,6 +60,7 @@ namespace SokuLauncher
         {
             try
             {
+                Directory.SetCurrentDirectory(SelfFileDir);
                 Icon icon = Icon.ExtractAssociatedIcon(fileName);
                 BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
                     icon.Handle,

@@ -89,47 +89,54 @@ namespace SokuLauncher.Controls
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.ModsManager.SaveSWRSToysIni();
-            if (ViewModel.ModsManager.ToBeDeletedDirList.Count > 0)
+            try
             {
-                try
+                ViewModel.ModsManager.SaveSWRSToysIni();
+                if (ViewModel.ModsManager.ToBeDeletedDirList.Count > 0)
                 {
-                    ViewModel.ModsManager.ExecuteDelete();
-                    ViewModel.ModsManager.SearchModulesDir();
-                    ViewModel.ModsManager.LoadSWRSToysSetting();
+                    try
+                    {
+                        ViewModel.ModsManager.ExecuteDelete();
+                        ViewModel.ModsManager.SearchModulesDir();
+                        ViewModel.ModsManager.LoadSWRSToysSetting();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Delete failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
                 }
-                catch (Exception ex)
+
+                if (Static.ConfigUtil.Config.VersionInfoUrl != ViewModel.VersionInfoUrl)
                 {
-                    MessageBox.Show("Delete failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Static.UpdatesManager.ClearVersionInfoJson();
                 }
-                ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
-            }
 
-            if (Static.ConfigUtil.Config.VersionInfoUrl != ViewModel.VersionInfoUrl)
+                Static.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
+                Static.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
+                Static.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
+                Static.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
+                Static.ConfigUtil.Config.SokuModAlias = ViewModel.SokuModAlias.ToList();
+                Static.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
+                Static.ConfigUtil.Config.AutoCheckForInstallable = ViewModel.AutoCheckForInstallable;
+                Static.ConfigUtil.Config.Language = ViewModel.Language;
+
+                Static.ConfigUtil.SaveConfig();
+
+                if (Static.ModsManager.SokuDirFullPath != Static.ConfigUtil.SokuDirFullPath)
+                {
+                    Static.ModsManager.SokuDirFullPath = Static.ConfigUtil.SokuDirFullPath;
+                    Static.ModsManager.SearchModulesDir();
+                    Static.ModsManager.LoadSWRSToysSetting();
+                }
+
+                ViewModel.Saveable = false;
+            }
+            catch (Exception ex)
             {
-                Static.UpdatesManager.ClearVersionInfoJson();
+                MessageBox.Show("Save config failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            Static.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
-            Static.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
-            Static.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
-            Static.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
-            Static.ConfigUtil.Config.SokuModAlias = ViewModel.SokuModAlias.ToList();
-            Static.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
-            Static.ConfigUtil.Config.AutoCheckForInstallable = ViewModel.AutoCheckForInstallable;
-            Static.ConfigUtil.Config.Language = ViewModel.Language;
-
-            Static.ConfigUtil.SaveConfig();
-
-            if (Static.ModsManager.SokuDirFullPath != Static.ConfigUtil.SokuDirFullPath)
-            {
-                Static.ModsManager.SokuDirFullPath = Static.ConfigUtil.SokuDirFullPath;
-                Static.ModsManager.SearchModulesDir();
-                Static.ModsManager.LoadSWRSToysSetting();
-            }
-
-            ViewModel.Saveable = false;
-            Directory.SetCurrentDirectory(Static.SelfFileDir);
+            
         }
 
         private void SokuModSettingGroupsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
