@@ -14,6 +14,7 @@ using Button = System.Windows.Controls.Button;
 using Microsoft.Win32;
 using Dsafa.WpfColorPicker;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SokuLauncher.Controls
 {
@@ -136,7 +137,6 @@ namespace SokuLauncher.Controls
             {
                 MessageBox.Show("Save config failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            
         }
 
         private void SokuModSettingGroupsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -601,11 +601,29 @@ namespace SokuLauncher.Controls
                         Language = ViewModel.Language
                     }
                 };
+
+                
+
                 UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
-                Action<string> changeButtonStatus = (status) => ViewModel.CheckForUpdatesButtonText = status;
-                updatesManager.StatusChanged += changeButtonStatus;
-                await updatesManager.GetVersionInfoJson();
-                updatesManager.StatusChanged -= changeButtonStatus;
+
+                var taskGetVersionInfoJson = updatesManager.GetVersionInfoJson();
+
+                Random random = new Random(Guid.NewGuid().GetHashCode());
+
+                for (int i = 0; i < 100; i++)
+                {
+                    ViewModel.CheckForUpdatesButtonText = $"Check version info... {i}%";
+                    await Task.Delay(random.Next(200));
+                    i += random.Next(5);
+                    
+                    if (taskGetVersionInfoJson.IsCompleted)
+                    {
+                        ViewModel.CheckForUpdatesButtonText = $"Check version info... 100%";
+                        await Task.Delay(100);
+                        break;
+                    }
+                }
+                await taskGetVersionInfoJson;
                 ViewModel.CheckForUpdatesButtonText = "Check for updates now";
                 updatesManager.CheckForUpdates(false);
                 IsCheckingForUpdates = false;
