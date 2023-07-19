@@ -284,8 +284,12 @@ namespace SokuLauncher.Controls
             e.Handled = true;
         }
 
+        private bool IsMovingModSettingGroup = false;
+
         private void MoveUpModSettingGroupButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsMovingModSettingGroup) return;
+            IsMovingModSettingGroup = true;
             Button button = (Button)sender;
             ModSettingGroupViewModel selectedMember = (ModSettingGroupViewModel)button.DataContext;
 
@@ -310,6 +314,7 @@ namespace SokuLauncher.Controls
                     ViewModel.Saveable = true;
                 }
                 listViewItem.RenderTransform = new TranslateTransform(0, 0);
+                IsMovingModSettingGroup = false;
             };
 
             listViewItem.RenderTransform = new TranslateTransform(0, 0);
@@ -320,6 +325,8 @@ namespace SokuLauncher.Controls
 
         private void MoveDownModSettingGroupButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsMovingModSettingGroup) return;
+            IsMovingModSettingGroup = true;
             Button button = (Button)sender;
             ModSettingGroupViewModel selectedMember = (ModSettingGroupViewModel)button.DataContext;
 
@@ -346,6 +353,7 @@ namespace SokuLauncher.Controls
                     ViewModel.SokuModSettingGroups[selectedIndex] = nextMember;
 
                     ViewModel.Saveable = true;
+                    IsMovingModSettingGroup = false;
                 }
                 Panel.SetZIndex(listViewItem, originZindex);
                 listViewItem.RenderTransform = new TranslateTransform(0, 0);
@@ -357,8 +365,11 @@ namespace SokuLauncher.Controls
             listViewItem.RenderTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation);
         }
 
+        private bool IsDeletingModSettingGroup = false;
         private void DeleteModSettingGroupButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsDeletingModSettingGroup) return;
+            IsDeletingModSettingGroup = true;
             Button button = (Button)sender;
             ModSettingGroupViewModel selectedMember = (ModSettingGroupViewModel)button.DataContext;
             var listViewItem = SokuModSettingGroupsListView.ItemContainerGenerator.ContainerFromItem(selectedMember) as ListViewItem;
@@ -384,6 +395,7 @@ namespace SokuLauncher.Controls
                 listViewItem.Opacity = 1;
                 ForceSokuModSettingGroupsListViewRefresh();
                 ViewModel.Saveable = true;
+                IsDeletingModSettingGroup = false;
             };
 
             listViewItem.RenderTransform = new ScaleTransform(1, 1);
