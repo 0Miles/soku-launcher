@@ -257,7 +257,6 @@ namespace SokuLauncher.ViewModels
             set
             {
                 _CheckForUpdatesButtonText = value;
-                Saveable = true;
                 RaisePropertyChanged("CheckForUpdatesButtonText");
             }
         }
