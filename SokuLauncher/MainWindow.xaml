@@ -35,12 +35,13 @@
             Background="{x:Null}"
             Focusable="False"
             IsTabStop="False"
+            MaxWidth="{Binding MainWrapMaxWidth}"
             KeyboardNavigation.DirectionalNavigation="None"
             Keyboard.PreviewKeyDown="SokuModSettingGroupListView_PreviewKeyDown"
             SelectionChanged="SokuModSettingGroupsListView_SelectionChanged">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Vertical" FlowDirection="RightToLeft"  MaxHeight="830" ScrollViewer.CanContentScroll="False" Loaded="WrapPanel_Loaded" />
+                    <WrapPanel Orientation="Vertical" FlowDirection="RightToLeft" MaxHeight="{Binding MainWrapMaxHeight}" ScrollViewer.CanContentScroll="False" Loaded="WrapPanel_Loaded" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             <ListView.ItemContainerStyle>
