@@ -64,6 +64,10 @@ namespace SokuLauncher.Utils
                 {
                     Config.SokuDirPath = FindSokuDir() ?? DEFAULT_SOKU_DIR;
                     Config.SokuFileName = SelectSokuFile(Config.SokuDirPath);
+                    if (Config.SokuFileName != null)
+                    {
+                        SaveConfig();
+                    }
                 }
             }
 
