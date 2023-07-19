@@ -1,0 +1,62 @@
+name: Build and Release
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_release:
+    runs-on: windows-latest
+    env:
+        PROJECT_NAME: SokuLauncher
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+    
+      - name: Run semantic-release
+        run: |
+            npm init -y
+            npm i semantic-release @semantic-release/exec @semantic-release/changelog
+            npx semantic-release
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for new version
+        id: check_for_new_version
+        run: |
+            $hasNewVersion = Test-Path -Path version.txt
+            echo "hasNewVersion=$hasNewVersion" >> $env:GITHUB_OUTPUT
+
+      - name: Update AssemblyInfo.cs
+        if: steps.check_for_new_version.outputs.hasNewVersion == 'True'
+        run: |
+            $version = (Get-Content version.txt).Trim()
+            echo "RELEASE_VERSION=$version" >> $env:GITHUB_ENV
+            $assemblyInfoPath = "${{ env.PROJECT_NAME }}\Properties\AssemblyInfo.cs"
+            (Get-Content $assemblyInfoPath) -replace '(?<=\[assembly: AssemblyVersion\(")\d+\.\d+\.\d+\.\d+(?="\)\])', $version -replace '(?<=\[assembly: AssemblyFileVersion\(")\d+\.\d+\.\d+\.\d+(?="\)\])', $version | Set-Content $assemblyInfoPath
+
+      - name: Setup msbuild
+        if: steps.check_for_new_version.outputs.hasNewVersion == 'True'
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Restore nuget packages
+        if: steps.check_for_new_version.outputs.hasNewVersion == 'True'
+        run: nuget restore ${{ env.PROJECT_NAME }}.sln
+    
+      - name: Build
+        if: steps.check_for_new_version.outputs.hasNewVersion == 'True'
+        run: msbuild ${{ env.PROJECT_NAME }}.sln -p:Configuration=Release
+
+      - name: Archive Files
+        if: steps.check_for_new_version.outputs.hasNewVersion == 'True'
+        run: Compress-Archive -Path README.md,${{ env.PROJECT_NAME }}\bin\Release\${{ env.PROJECT_NAME }}.exe -DestinationPath ${{ env.PROJECT_NAME }}.zip
+
+      - name: Release
+        if: steps.check_for_new_version.outputs.hasNewVersion == 'True'
+        uses: softprops/action-gh-release@v1
+        with:
+            name: v${{ env.RELEASE_VERSION }}
+            tag_name: v${{ env.RELEASE_VERSION }}
+            token: ${{ secrets.MY_TOKEN }}
+            body_path: ./changelog.md
+            files: ${{ env.PROJECT_NAME }}.zip

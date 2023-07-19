@@ -1,0 +1,23 @@
+{
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        [
+            "@semantic-release/changelog",
+            {
+                "changelogFile": "changelog.md"
+            }
+        ],
+        [
+            "@semantic-release/exec",
+            {
+                "verifyReleaseCmd": "echo ${nextRelease.version}.0 > version.txt",
+                "successCmd": "powershell -Command \"(Get-Content changelog.md | Select-Object -Skip 3) | Set-Content changelog.md\""
+            }
+        ]
+    ],
+    "branches": [
+        "main"
+    ],
+    "tagFormat": "v${version}.0"
+}

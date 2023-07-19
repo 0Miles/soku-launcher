@@ -1,0 +1,29 @@
+name: Update version info
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  update_version_info:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+            token: ${{ secrets.MY_TOKEN }}
+
+      - name: Update version.json
+        run: node scripts/updateVersionInfo.js ${{ github.event.release.name }}
+      
+      - name: Git commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+            commit_message: "docs: update version.json"
+            commit_user_name: Miles
+            commit_user_email: git@miles.tw
+            commit_author: Miles <git@miles.tw>
+            branch: main
+            

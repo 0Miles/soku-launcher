@@ -1,5 +1,7 @@
 # SokuLauncher
-
+[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+  
+  
 Configuring mods(SWRSToys) before launching the game and provide automatic mod updates and download missing modules.  
 
 ### Launch and apply module configuration
