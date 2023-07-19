@@ -28,6 +28,8 @@ namespace SokuLauncher
                 Current.Shutdown();
             }
 
+            MainWindow mainWindow = new MainWindow();
+
             try
             {
                 Static.ConfigUtil = new ConfigUtil();
@@ -51,7 +53,6 @@ namespace SokuLauncher
 
             Static.UpdatesManager = new UpdatesManager(Static.ConfigUtil, Static.ModsManager);
 
-            MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
 
             _ = Task.Run(async () =>
