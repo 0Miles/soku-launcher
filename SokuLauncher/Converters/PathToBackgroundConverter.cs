@@ -16,14 +16,47 @@ namespace SokuLauncher.Converters
         {
             if (value is string originPath && new string[] { "png", "jpg", "jpeg", "bmp" }.Any(x => originPath.ToLower().EndsWith(x)))
             {
-                var relativePathConverter = new RelativePathConverter();
-                string path = relativePathConverter.Convert(originPath, null, null, null) as string;
-
-                return new ImageBrush()
+                try
                 {
-                    ImageSource = new BitmapImage(new Uri(path)),
-                    Stretch = Stretch.UniformToFill,
-                };
+                    var relativePathConverter = new RelativePathConverter();
+                    string path = relativePathConverter.Convert(originPath, null, null, null) as string;
+
+                    if (path.StartsWith("pack://application"))
+                    {
+                        return new ImageBrush()
+                        {
+                            ImageSource = new BitmapImage(new Uri(path)),
+                            Stretch = Stretch.UniformToFill,
+                        };
+                    }
+                    else
+                    {
+                        BitmapImage bitmap;
+                        using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+                        {
+                            bitmap = new BitmapImage();
+
+                            bitmap.BeginInit();
+                            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmap.StreamSource = stream;
+                            bitmap.EndInit();
+
+                            bitmap.Freeze();
+
+                            stream.Close();
+                        }
+
+                        return new ImageBrush()
+                        {
+                            ImageSource = bitmap,
+                            Stretch = Stretch.UniformToFill,
+                        };
+                    }
+                }
+                catch
+                {
+
+                }
             }
             return null;
         }
