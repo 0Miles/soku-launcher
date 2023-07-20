@@ -483,14 +483,35 @@ namespace SokuLauncher.Controls
 
             openFileDialog.Filter = "Image files (*.png,*.jpg,*.jpeg,*.gif,*.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp|Video files (*.mp4,*.avi,*.wmv)|*.mp4;*.avi;*.wmv";
             openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
-            openFileDialog.FileName = ViewModel.SokuFileName;
 
             bool? result = openFileDialog.ShowDialog();
+
 
             if (result == true)
             {
                 string selectedFileName = openFileDialog.FileName;
-                string relativePath = Static.GetRelativePath(openFileDialog.FileName, Static.SelfFileDir);
+                string ext = Path.GetExtension(selectedFileName);
+
+                if (new List<string> { ".png", ".jpg", ".jpeg", ".bmp"}.Contains(ext.ToLower()))
+                {
+                    CropWindow cropWindow = new CropWindow();
+                    cropWindow.ImagePath = selectedFileName;
+                    if (cropWindow.ShowDialog() == true)
+                    {
+                        ViewModel.SelectedSokuModSettingGroup.CoverOrigin = openFileDialog.FileName;
+                        selectedFileName = cropWindow.FileName;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    ViewModel.SelectedSokuModSettingGroup.CoverOrigin = null;
+                }
+
+                string relativePath = Static.GetRelativePath(selectedFileName, Static.SelfFileDir);
                 if (!relativePath.StartsWith("../../"))
                 {
                     selectedFileName = relativePath;
@@ -501,6 +522,42 @@ namespace SokuLauncher.Controls
                     ViewModel.SelectedSokuModSettingGroup.Cover = selectedFileName;
                     ViewModel.Saveable = true;
                 }
+            }
+        }
+
+        private void CropBackgroundButton_Click(object sender, RoutedEventArgs e)
+        {
+            string coverDir = Path.Combine(Static.LocalDirPath, "Cover");
+            string coverOriginFileName = ViewModel.SelectedSokuModSettingGroup.CoverOrigin;
+
+            if (Path.GetDirectoryName(ViewModel.SelectedSokuModSettingGroup.Cover) == coverDir && File.Exists(coverOriginFileName))
+            {
+                string selectedFileName = coverOriginFileName;
+                string ext = Path.GetExtension(coverOriginFileName);
+
+                CropWindow cropWindow = new CropWindow();
+                cropWindow.ImagePath = selectedFileName;
+                if (cropWindow.ShowDialog() == true)
+                {
+                    ViewModel.SelectedSokuModSettingGroup.CoverOrigin = coverOriginFileName;
+                    selectedFileName = cropWindow.FileName;
+                }
+                else
+                {
+                    return;
+                }
+
+                if (ViewModel.SelectedSokuModSettingGroup.Cover != selectedFileName)
+                {
+                    ViewModel.SelectedSokuModSettingGroup.Cover = selectedFileName;
+                    ViewModel.Saveable = true;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Origin image not found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ViewModel.SelectedSokuModSettingGroup.CoverOrigin = null;
+                ViewModel.Saveable = true;
             }
         }
 

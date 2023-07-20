@@ -260,6 +260,5 @@ namespace SokuLauncher.ViewModels
                 RaisePropertyChanged("CheckForUpdatesButtonText");
             }
         }
-
     }
 }

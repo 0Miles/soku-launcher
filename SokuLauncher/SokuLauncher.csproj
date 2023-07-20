@@ -131,6 +131,9 @@
     <Compile Include="Controls\ConfigWindow.xaml.cs">
       <DependentUpon>ConfigWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CropWindow.xaml.cs">
+      <DependentUpon>CropWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ModListUserControl.xaml.cs">
       <DependentUpon>ModListUserControl.xaml</DependentUpon>
     </Compile>
@@ -180,6 +183,10 @@
       <DependentUpon>SelectSokuFileWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ConfigWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CropWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

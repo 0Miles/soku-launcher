@@ -60,6 +60,25 @@ namespace SokuLauncher.ViewModels
             }
         }
 
+
+        private string _CoverOrigin;
+        public string CoverOrigin
+        {
+            get
+            {
+                return _CoverOrigin;
+            }
+            set
+            {
+                if (_CoverOrigin != value)
+                {
+                    _CoverOrigin = value;
+                    RaisePropertyChanged("CoverOrigin");
+                }
+
+            }
+        }
+
         private string _CoverOverlayColor = "#00000000";
         public string CoverOverlayColor
         {

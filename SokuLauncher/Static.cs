@@ -23,6 +23,7 @@ namespace SokuLauncher
         public static ModsManager ModsManager { get; internal set; }
         public static UpdatesManager UpdatesManager { get; internal set; }
         public static string TempDirPath { get; internal set; } = Path.Combine(Path.GetTempPath(), "SokuLauncher");
+        public static string LocalDirPath { get; internal set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SokuLauncher");
         public static string SelfFileName { get; internal set; } = System.Reflection.Assembly.GetEntryAssembly().Location;
         public static string SelfFileDir
         {
