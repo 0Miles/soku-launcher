@@ -667,46 +667,54 @@ namespace SokuLauncher.Controls
             {
                 IsCheckingForUpdates = true;
 
-                ConfigUtil configUtil = new ConfigUtil
+                try
                 {
-                    Config = new ConfigModel
+                    ConfigUtil configUtil = new ConfigUtil
                     {
-                        SokuDirPath = ViewModel.SokuDirPath,
-                        SokuFileName = ViewModel.SokuFileName,
-                        SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
-                        SokuModAlias = ViewModel.SokuModAlias.ToList(),
-                        AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
-                        AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
-                        VersionInfoUrl = ViewModel.VersionInfoUrl,
-                        Language = ViewModel.Language
-                    }
-                };
+                        Config = new ConfigModel
+                        {
+                            SokuDirPath = ViewModel.SokuDirPath,
+                            SokuFileName = ViewModel.SokuFileName,
+                            SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
+                            SokuModAlias = ViewModel.SokuModAlias.ToList(),
+                            AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
+                            AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
+                            VersionInfoUrl = ViewModel.VersionInfoUrl,
+                            Language = ViewModel.Language
+                        }
+                    };
 
+                    UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
 
+                    var taskGetVersionInfoJson = updatesManager.GetVersionInfoJson();
 
-                UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
+                    Random random = new Random(Guid.NewGuid().GetHashCode());
 
-                var taskGetVersionInfoJson = updatesManager.GetVersionInfoJson();
-
-                Random random = new Random(Guid.NewGuid().GetHashCode());
-
-                for (int i = 0; i < 100; i++)
-                {
-                    ViewModel.CheckForUpdatesButtonText = $"Check version info... {i}%";
-                    await Task.Delay(random.Next(200));
-                    i += random.Next(5);
-
-                    if (taskGetVersionInfoJson.IsCompleted)
+                    for (int i = 0; i < 100; i++)
                     {
-                        ViewModel.CheckForUpdatesButtonText = $"Check version info... 100%";
-                        await Task.Delay(100);
-                        break;
+                        ViewModel.CheckForUpdatesButtonText = $"Check version info... {i}%";
+                        await Task.Delay(random.Next(200));
+                        i += random.Next(5);
+
+                        if (taskGetVersionInfoJson.IsCompleted)
+                        {
+                            ViewModel.CheckForUpdatesButtonText = $"Check version info... 100%";
+                            await Task.Delay(100);
+                            break;
+                        }
                     }
+                    await taskGetVersionInfoJson;
+                    ViewModel.CheckForUpdatesButtonText = "Check for updates now";
+                    updatesManager.CheckForUpdates(false);
                 }
-                await taskGetVersionInfoJson;
-                ViewModel.CheckForUpdatesButtonText = "Check for updates now";
-                updatesManager.CheckForUpdates(false);
-                IsCheckingForUpdates = false;
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    IsCheckingForUpdates = false;
+                }
             }
         }
 
