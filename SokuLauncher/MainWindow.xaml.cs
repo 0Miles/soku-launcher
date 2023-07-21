@@ -132,8 +132,7 @@ namespace SokuLauncher
                     ViewModel.SelectedSokuModSettingGroup.IsShowProgress = true;
                     try
                     {
-                        ViewModel.SelectedSokuModSettingGroup.Status = "Check version info...";
-                        await Task.Delay(200);
+                        
 
                         void DownloadProgressChanged(int progress) => ViewModel.SelectedSokuModSettingGroup.Progress = progress;
                         void StatusChanged(string status) => ViewModel.SelectedSokuModSettingGroup.Status = status;
@@ -141,6 +140,8 @@ namespace SokuLauncher
                         ViewModel.UpdatesManager.StatusChanged += StatusChanged;
                         if (string.IsNullOrWhiteSpace(ViewModel.UpdatesManager.VersionInfoJson))
                         {
+                            ViewModel.SelectedSokuModSettingGroup.Status = "Check version info...";
+                            await Task.Delay(200);
                             await ViewModel.UpdatesManager.GetVersionInfoJson();
                         }
 
