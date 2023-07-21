@@ -86,7 +86,7 @@
                                             <ControlTemplate TargetType="{x:Type ListViewItem}">
                                                 <Grid>
                                                     <Grid Margin="-168,-60,0,0">
-                                                        <local:ModSettingGroupUserControl VerticalAlignment="Bottom" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4" Cursor="Hand">
+                                                        <local:ModSettingGroupUserControl ModSettingGroup="{Binding}" VerticalAlignment="Bottom" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4" Cursor="Hand">
                                                             <local:ModSettingGroupUserControl.RenderTransform>
                                                                 <ScaleTransform ScaleX=".6" ScaleY=".6"></ScaleTransform>
                                                             </local:ModSettingGroupUserControl.RenderTransform>
@@ -302,7 +302,7 @@
                                     </Grid>
                                 </StackPanel>
                                 <TextBlock Text="Appearance: " HorizontalAlignment="Left" Margin="8" />
-                                <local:ModSettingGroupUserControl DataContext="{Binding SelectedSokuModSettingGroup}" VerticalAlignment="Top" HorizontalAlignment="Center" Width="420" Height="150" Margin="16,8" />
+                                <local:ModSettingGroupUserControl ModSettingGroup="{Binding SelectedSokuModSettingGroup}" VerticalAlignment="Top" HorizontalAlignment="Center" Width="420" Height="150" Margin="16,8" />
                                 <StackPanel Width="428">
                                     <Grid>
                                         <Grid.ColumnDefinitions>

@@ -19,9 +19,6 @@ namespace SokuLauncher
 {
     internal static class Static
     {
-        public static ConfigUtil ConfigUtil { get; internal set; }
-        public static ModsManager ModsManager { get; internal set; }
-        public static UpdatesManager UpdatesManager { get; internal set; }
         public static string TempDirPath { get; internal set; } = Path.Combine(Path.GetTempPath(), "SokuLauncher");
         public static string LocalDirPath { get; internal set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SokuLauncher");
         public static string SelfFileName { get; internal set; } = System.Reflection.Assembly.GetEntryAssembly().Location;
@@ -65,7 +62,7 @@ namespace SokuLauncher
                 Icon icon = Icon.ExtractAssociatedIcon(fileName);
                 BitmapSource bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
                     icon.Handle,
-                    System.Windows.Int32Rect.Empty,
+                    Int32Rect.Empty,
                     BitmapSizeOptions.FromWidthAndHeight(icon.Width, icon.Height));
                 icon.Dispose();
 

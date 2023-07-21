@@ -126,9 +126,9 @@ namespace SokuLauncher.Utils
                 config.SokuFileName = SelectSokuFile(config.SokuDirPath);
             }
 
-            config.SokuModSettingGroups = new List<ModSettingGroupViewModel>
+            config.SokuModSettingGroups = new List<ModSettingGroupModel>
             {
-                new ModSettingGroupViewModel
+                new ModSettingGroupModel
                 {
                     Name = "Giuroll",
                     Desc = "Enable SokuLobbies and Giuroll",
@@ -136,7 +136,7 @@ namespace SokuLauncher.Utils
                     DisableMods = new List<string> { "Giuroll-62F", "SWRSokuRoll", "InGameHostlist" },
                     Cover = "%resources%/cover1.png"
                 },
-                new ModSettingGroupViewModel
+                new ModSettingGroupModel
                 {
                     Name = "Giuroll CN",
                     Desc = "Enable SokuLobbies and Giuroll-62F",
@@ -144,7 +144,7 @@ namespace SokuLauncher.Utils
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "SWRSokuRoll", "InGameHostlist" },
                     Cover = "%resources%/cover2.png"
                 },
-                new ModSettingGroupViewModel
+                new ModSettingGroupModel
                 {
                     Name = "SokuRoll",
                     Desc = "Enable InGameHostlist and SokuRoll 1.3",
@@ -153,7 +153,7 @@ namespace SokuLauncher.Utils
                     Cover = "%resources%/gearbackground.png",
                     CoverOverlayColor = "#6FA92E00"
                 },
-                new ModSettingGroupViewModel
+                new ModSettingGroupModel
                 {
                     Name = "No Roll",
                     Desc = "Enable InGameHostlist, No any Roll",

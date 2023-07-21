@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
-using SokuLauncher.Models;
+using SokuLauncher.ViewModels;
 using System.Collections.Generic;
 
-namespace SokuLauncher.ViewModels
+namespace SokuLauncher.Models
 {
-    public class ModSettingGroupViewModel: ViewModelBase
+    public class ModSettingGroupModel: ViewModelBase
     {
         private string _Name;
         public string Name

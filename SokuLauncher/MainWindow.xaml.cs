@@ -18,7 +18,6 @@ namespace SokuLauncher
 {
     public partial class MainWindow : Window
     {
-        MainWindwoViewModel ViewModel { get; set; }
         public MainWindow(MainWindwoViewModel viewModel = null)
         {
             ViewModel = viewModel;
@@ -26,34 +25,85 @@ namespace SokuLauncher
             {
                 ViewModel = new MainWindwoViewModel();
             }
-            DataContext = ViewModel;
+
+            try
+            {
+                ViewModel.ConfigUtil = new ConfigUtil();
+                ViewModel.ConfigUtil.ReadConfig();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            try
+            {
+                ViewModel.ModsManager = new ModsManager(ViewModel.ConfigUtil.SokuDirFullPath);
+                ViewModel.ModsManager.SearchModulesDir();
+                ViewModel.ModsManager.LoadSWRSToysSetting();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            ViewModel.UpdatesManager = new UpdatesManager(ViewModel.ConfigUtil, ViewModel.ModsManager);
 
             InitializeComponent();
         }
 
+        private MainWindwoViewModel _ViewModel;
+        public MainWindwoViewModel ViewModel
+        {
+            get
+            {
+                return _ViewModel;
+            }
+            set
+            {
+                if (_ViewModel != value)
+                {
+                    _ViewModel = value;
+                    DataContext = _ViewModel;
+                }
+            }
+        }
+
+        private WrapPanel LauncherButtonsWrapPanel;
+
         private void WrapPanel_Loaded(object sender, RoutedEventArgs e)
         {
             WrapPanel wrapPanel = sender as WrapPanel;
+            LauncherButtonsWrapPanel = wrapPanel;
+        }
 
-            DoubleAnimation fadeInAnimation = new DoubleAnimation
+        private void ShowLauncherButtons()
+        {
+            if (LauncherButtonsWrapPanel != null)
             {
-                To = 1,
-                Duration = TimeSpan.FromMilliseconds(500),
-                EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseInOut }
-            };
-            DoubleAnimation moveAnimation = new DoubleAnimation(0, new Duration(TimeSpan.FromMilliseconds(1000)));
-            moveAnimation.EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut };
 
-            for (int i = 0; i < wrapPanel.Children.Count; i++)
-            {
-                fadeInAnimation.BeginTime = TimeSpan.FromMilliseconds(200 + i * 100);
-                moveAnimation.BeginTime = TimeSpan.FromMilliseconds(200 + i * 100);
+                for (int i = 0; i < LauncherButtonsWrapPanel.Children.Count; i++)
+                {
+                    DoubleAnimation fadeInAnimation = new DoubleAnimation
+                    {
+                        To = 1,
+                        Duration = TimeSpan.FromMilliseconds(500),
+                        EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseInOut }
+                    };
+                    DoubleAnimation moveAnimation = new DoubleAnimation
+                    {
+                        To = 0,
+                        Duration = TimeSpan.FromMilliseconds(1000),
+                        EasingFunction = new QuarticEase() { EasingMode = EasingMode.EaseOut }
+                    };
+                    fadeInAnimation.BeginTime = TimeSpan.FromMilliseconds(200 + i * 100);
+                    moveAnimation.BeginTime = TimeSpan.FromMilliseconds(200 + i * 100);
 
-                wrapPanel.Children[i].Opacity = 0;
-                wrapPanel.Children[i].BeginAnimation(OpacityProperty, fadeInAnimation);
+                    LauncherButtonsWrapPanel.Children[i].BeginAnimation(OpacityProperty, fadeInAnimation);
 
-                wrapPanel.Children[i].RenderTransform = new TranslateTransform(0, -50);
-                wrapPanel.Children[i].RenderTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation, HandoffBehavior.Compose);
+                    LauncherButtonsWrapPanel.Children[i].RenderTransform = new TranslateTransform(0, -50);
+                    LauncherButtonsWrapPanel.Children[i].RenderTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation, HandoffBehavior.Compose);
+                }
             }
         }
 
@@ -70,32 +120,38 @@ namespace SokuLauncher
             IsSokuModSettingGroupsSelectionChangedProcessing = true;
             try
             {
-                if (string.IsNullOrWhiteSpace(Static.ConfigUtil.Config.SokuFileName))
+                if (string.IsNullOrWhiteSpace(ViewModel.ConfigUtil.Config.SokuFileName))
                 {
                     throw new Exception($"th123 executable file not set");
                 }
 
                 var settingGroup = ViewModel.SelectedSokuModSettingGroup;
 
-                if (Static.ConfigUtil.Config.AutoCheckForInstallable)
+                if (ViewModel.ConfigUtil.Config.AutoCheckForInstallable)
                 {
                     ViewModel.SelectedSokuModSettingGroup.IsShowProgress = true;
                     try
                     {
                         ViewModel.SelectedSokuModSettingGroup.Status = "Check version info...";
                         await Task.Delay(200);
-                        Static.UpdatesManager.DownloadProgressChanged += (progress) => ViewModel.SelectedSokuModSettingGroup.Progress = progress;
-                        Static.UpdatesManager.StatusChanged += (status) => ViewModel.SelectedSokuModSettingGroup.Status = status;
-                        if (string.IsNullOrWhiteSpace(Static.UpdatesManager.VersionInfoJson))
+
+                        void DownloadProgressChanged(int progress) => ViewModel.SelectedSokuModSettingGroup.Progress = progress;
+                        void StatusChanged(string status) => ViewModel.SelectedSokuModSettingGroup.Status = status;
+                        ViewModel.UpdatesManager.DownloadProgressChanged += DownloadProgressChanged;
+                        ViewModel.UpdatesManager.StatusChanged += StatusChanged;
+                        if (string.IsNullOrWhiteSpace(ViewModel.UpdatesManager.VersionInfoJson))
                         {
-                            await Static.UpdatesManager.GetVersionInfoJson();
+                            await ViewModel.UpdatesManager.GetVersionInfoJson();
                         }
 
                         List<string> CheckModes = settingGroup.EnableMods.Select(x => x).ToList();
                         CheckModes.Add("SokuModLoader");
-                        await Static.UpdatesManager.CheckForInstallable(CheckModes);
-                        Static.ModsManager.SearchModulesDir();
-                        Static.ModsManager.LoadSWRSToysSetting();
+                        await ViewModel.UpdatesManager.CheckForInstallable(CheckModes);
+                        ViewModel.ModsManager.SearchModulesDir();
+                        ViewModel.ModsManager.LoadSWRSToysSetting();
+
+                        ViewModel.UpdatesManager.DownloadProgressChanged -= DownloadProgressChanged;
+                        ViewModel.UpdatesManager.StatusChanged -= StatusChanged;
                     }
                     catch (Exception ex)
                     {
@@ -106,25 +162,25 @@ namespace SokuLauncher
 
                 foreach (var enableMod in settingGroup.EnableMods ?? new List<string>())
                 {
-                    Static.ModsManager.ChangeModEnabled(enableMod, true);
+                    ViewModel.ModsManager.ChangeModEnabled(enableMod, true);
                 }
                 foreach (var disableMod in settingGroup.DisableMods ?? new List<string>())
                 {
-                    Static.ModsManager.ChangeModEnabled(disableMod, false);
+                    ViewModel.ModsManager.ChangeModEnabled(disableMod, false);
                 }
-                Static.ModsManager.DisableDuplicateEnabledMods();
-                Static.ModsManager.SaveSWRSToysIni();
+                ViewModel.ModsManager.DisableDuplicateEnabledMods();
+                ViewModel.ModsManager.SaveSWRSToysIni();
 
-                string sokuFile = Path.Combine(Static.ConfigUtil.SokuDirFullPath, Static.ConfigUtil.Config.SokuFileName);
+                string sokuFile = Path.Combine(ViewModel.ConfigUtil.SokuDirFullPath, ViewModel.ConfigUtil.Config.SokuFileName);
 
                 if (!File.Exists(sokuFile))
                 {
-                    throw new Exception($"The '{Static.ConfigUtil.Config.SokuFileName}' file does not exist.");
+                    throw new Exception($"The '{ViewModel.ConfigUtil.Config.SokuFileName}' file does not exist.");
                 }
 
                 ZoomInHideWindow((s, _) =>
                 {
-                    Directory.SetCurrentDirectory(Static.ConfigUtil.SokuDirFullPath);
+                    Directory.SetCurrentDirectory(ViewModel.ConfigUtil.SokuDirFullPath);
                     Process.Start(sokuFile);
                     Application.Current.Shutdown();
                 });
@@ -226,40 +282,50 @@ namespace SokuLauncher
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ViewModel.SokuModSettingGroups = Static.ConfigUtil.Config.SokuModSettingGroups;
+            ViewModel.SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(ViewModel.ConfigUtil.Config.SokuModSettingGroups);
         }
 
         private void ConfigButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Static.ConfigUtil.Config.AutoCheckForUpdates && string.IsNullOrWhiteSpace(Static.UpdatesManager.VersionInfoJson))
+            if (ViewModel.ConfigUtil.Config.AutoCheckForUpdates && string.IsNullOrWhiteSpace(ViewModel.UpdatesManager.VersionInfoJson))
             {
-                Static.UpdatesManager.StopCheckForUpdates();
+                ViewModel.UpdatesManager.StopCheckForUpdates();
             }
 
-            ModsManager configModsManager = new ModsManager();
+            ModsManager configModsManager = new ModsManager(ViewModel.ConfigUtil.SokuDirFullPath);
             configModsManager.SearchModulesDir();
             configModsManager.LoadSWRSToysSetting();
 
             ConfigWindow configWindow = new ConfigWindow(
+                this,
                 new ConfigWindowViewModel
                 {
                     ModsManager = configModsManager,
                     ModInfoList = new ObservableCollection<ModInfoModel>(configModsManager.ModInfoList),
-                    SokuDirPath = Static.ConfigUtil.Config.SokuDirPath,
-                    SokuFileName = Static.ConfigUtil.Config.SokuFileName,
-                    SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModSettingGroups)),
-                    SokuModAlias = new ObservableCollection<string>(Static.DeepCopy(Static.ConfigUtil.Config.SokuModAlias)),
-                    AutoCheckForUpdates = Static.ConfigUtil.Config.AutoCheckForUpdates,
-                    AutoCheckForInstallable = Static.ConfigUtil.Config.AutoCheckForInstallable,
-                    VersionInfoUrl = Static.ConfigUtil.Config.VersionInfoUrl,
-                    Language = Static.ConfigUtil.Config.Language
+                    SokuDirPath = ViewModel.ConfigUtil.Config.SokuDirPath,
+                    SokuFileName = ViewModel.ConfigUtil.Config.SokuFileName,
+                    SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModSettingGroups)),
+                    SokuModAlias = new ObservableCollection<string>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModAlias)),
+                    AutoCheckForUpdates = ViewModel.ConfigUtil.Config.AutoCheckForUpdates,
+                    AutoCheckForInstallable = ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
+                    VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
+                    Language = ViewModel.ConfigUtil.Config.Language
                 }
             );
-
+            configModsManager = null;
             ZoomOutHideWindow((s, _) =>
             {
+                DoubleAnimation fadeInAnimation = new DoubleAnimation
+                {
+                    To = 0,
+                    Duration = TimeSpan.FromMilliseconds(0)
+                };
+                for (int i = 0; i < LauncherButtonsWrapPanel.Children.Count; i++)
+                {
+                    LauncherButtonsWrapPanel.Children[i].BeginAnimation(OpacityProperty, fadeInAnimation);
+                }
+                Hide();
                 configWindow.Show();
-                Close();
             });
         }
 
@@ -267,13 +333,25 @@ namespace SokuLauncher
         {
             if (MainGrid.Opacity == 0)
             {
+                CenterWindow();
+                for (int i = 0; i < LauncherButtonsWrapPanel.Children.Count; i++)
+                {
+                    LauncherButtonsWrapPanel.Children[i].Opacity = 0;
+                }
+                ShowLauncherButtons();
                 ZoomOutShowWindow((s, _) => { });
             }
+        }
+        private void CenterWindow()
+        {
+            SokuLauncherMainWindow.Left = (SystemParameters.WorkArea.Right - SokuLauncherMainWindow.ActualWidth) / 2;
+            SokuLauncherMainWindow.Top = (SystemParameters.WorkArea.Bottom - SokuLauncherMainWindow.ActualHeight) / 2;
         }
 
         private void SokuModSettingGroupListView_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             e.Handled = true;
         }
+
     }
 }

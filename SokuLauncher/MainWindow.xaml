@@ -46,11 +46,10 @@
             </ListView.ItemsPanel>
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="Opacity" Value="0"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                <controls:ModSettingGroupUserControl VerticalAlignment="Center" Width="420" Height="150" Margin="8" Cursor="Hand"/>
+                                <controls:ModSettingGroupUserControl ModSettingGroup="{Binding}"  VerticalAlignment="Center" Width="420" Height="150" Margin="8" Cursor="Hand"/>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>

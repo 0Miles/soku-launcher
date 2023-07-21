@@ -44,8 +44,8 @@ namespace SokuLauncher.ViewModels
         }
 
 
-        private ObservableCollection<ModSettingGroupViewModel> _SokuModSettingGroups;
-        public ObservableCollection<ModSettingGroupViewModel> SokuModSettingGroups
+        private ObservableCollection<ModSettingGroupModel> _SokuModSettingGroups;
+        public ObservableCollection<ModSettingGroupModel> SokuModSettingGroups
         {
             get
             {
@@ -59,8 +59,8 @@ namespace SokuLauncher.ViewModels
             }
         }
 
-        private ModSettingGroupViewModel _SelectedSokuModSettingGroup;
-        public ModSettingGroupViewModel SelectedSokuModSettingGroup
+        private ModSettingGroupModel _SelectedSokuModSettingGroup;
+        public ModSettingGroupModel SelectedSokuModSettingGroup
         {
             get
             {

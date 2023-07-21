@@ -32,8 +32,8 @@ namespace SokuLauncher.Utils
 
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "Update");
 
-        private ConfigUtil ConfigUtil;
-        private ModsManager ModsManager;
+        public ConfigUtil ConfigUtil { get; set; }
+        public ModsManager ModsManager { get; set; }
 
         public UpdatesManager(ConfigUtil configUtil, ModsManager modsManager)
         {

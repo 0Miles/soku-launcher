@@ -40,16 +40,9 @@ namespace SokuLauncher.Utils
             }
         }
 
-        public ModsManager(string sokuDirFullPath = null)
+        public ModsManager(string sokuDirFullPath)
         {
-            if (sokuDirFullPath == null)
-            {
-                SokuDirFullPath = Static.ConfigUtil.SokuDirFullPath;
-            }
-            else
-            {
-                SokuDirFullPath = sokuDirFullPath;
-            }
+            SokuDirFullPath = sokuDirFullPath;
         }
 
         public void SearchModulesDir()
@@ -184,7 +177,7 @@ namespace SokuLauncher.Utils
 
         public void DisableDuplicateEnabledMods()
         {
-            foreach (string alias in Static.ConfigUtil.Config.SokuModAlias ?? new List<string>())
+            foreach (string alias in new List<string> { "Giuroll=Giuroll-60F" })
             {
                 string[] sameModNames = alias.Split('=');
                 bool hasOneEnable = false;

@@ -1,18 +1,42 @@
-﻿using SokuLauncher.ViewModels;
-using System;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using SokuLauncher.Models;
 
 namespace SokuLauncher.Controls
 {
     public partial class ModSettingGroupUserControl : UserControl
     {
-
         public ModSettingGroupUserControl()
         {
             InitializeComponent();
+        }
+
+        public event Action<object, SelectionChangedEventArgs> SelectionChanged;
+        public event Action<object, RoutedEventArgs> ModDeleted;
+        public event Action<object, RoutedEventArgs> ModUndeleted;
+
+        public static DependencyProperty ModSettingGroupProperty =
+            DependencyProperty.Register(
+                "ModSettingGroup",
+                typeof(ModSettingGroupModel),
+                typeof(ModSettingGroupUserControl),
+                new PropertyMetadata(new ModSettingGroupModel())
+            );
+
+        public ModSettingGroupModel ModSettingGroup
+        {
+            get
+            {
+                return (ModSettingGroupModel)(GetValue(ModSettingGroupProperty));
+            }
+            set
+            {
+                SetValue(ModSettingGroupProperty, value);
+            }
         }
 
         private void CoverMediaElement_Loaded(object sender, RoutedEventArgs e)
@@ -51,7 +75,7 @@ namespace SokuLauncher.Controls
         {
             get
             {
-                if ((DataContext as ModSettingGroupViewModel)?.Cover != null && new string[] { "mp4", "avi", "wmv", "gif" }.Any(x => (DataContext as ModSettingGroupViewModel)?.Cover.ToLower().EndsWith(x) ?? false))
+                if ((DataContext as ModSettingGroupModel)?.Cover != null && new string[] { "mp4", "avi", "wmv", "gif" }.Any(x => (DataContext as ModSettingGroupModel)?.Cover.ToLower().EndsWith(x) ?? false))
                 {
                     return true;
                 }

@@ -173,7 +173,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Utils\ResourcesManager.cs" />
     <Compile Include="Utils\UpdatesManager.cs" />
-    <Compile Include="ViewModels\ModSettingGroupViewModel.cs" />
+    <Compile Include="Models\ModSettingGroupModel.cs" />
     <Compile Include="ViewModels\MainWindwoViewModel.cs" />
     <Compile Include="ViewModels\ConfigWindowViewModel.cs" />
     <Compile Include="ViewModels\ModSettingGroupEditWindowViewModel.cs" />

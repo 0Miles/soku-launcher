@@ -1,14 +1,20 @@
 ﻿using SokuLauncher.Models;
+using SokuLauncher.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace SokuLauncher.ViewModels
 {
     public class MainWindwoViewModel : ViewModelBase
     {
-        private List<ModSettingGroupViewModel> _SokuModSettingGroups;
-        public List<ModSettingGroupViewModel> SokuModSettingGroups
+        public ConfigUtil ConfigUtil { get; set; }
+        public ModsManager ModsManager { get; set; }
+        public UpdatesManager UpdatesManager { get; set; }
+
+        private ObservableCollection<ModSettingGroupModel> _SokuModSettingGroups;
+        public ObservableCollection<ModSettingGroupModel> SokuModSettingGroups
         {
             get
             {
@@ -20,7 +26,7 @@ namespace SokuLauncher.ViewModels
                 RaisePropertyChanged("SokuModSettingGroups");
             }
         }
-        public ModSettingGroupViewModel SelectedSokuModSettingGroup { get; set; }
+        public ModSettingGroupModel SelectedSokuModSettingGroup { get; set; }
 
         public double MainWrapMaxHeight
         {

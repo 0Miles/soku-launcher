@@ -20,15 +20,33 @@ namespace SokuLauncher.Controls
 {
     public partial class ConfigWindow : Window
     {
-        public ConfigWindowViewModel ViewModel;
-        public ConfigWindow(ConfigWindowViewModel viewModel = null)
+        private ConfigWindowViewModel _ViewModel;
+        public ConfigWindowViewModel ViewModel
         {
+            get
+            {
+                return _ViewModel;
+            }
+            set
+            {
+                if (_ViewModel != value)
+                {
+                    _ViewModel = value;
+                    DataContext = _ViewModel;
+                }
+            }
+        }
+
+        public WeakReference<MainWindow> MainWindow;
+
+        public ConfigWindow(MainWindow mainWindow, ConfigWindowViewModel viewModel = null)
+        {
+            MainWindow = new WeakReference<MainWindow>(mainWindow);
             ViewModel = viewModel;
             if (ViewModel == null)
             {
                 ViewModel = new ConfigWindowViewModel();
             }
-            DataContext = ViewModel;
             InitializeComponent();
             GetSokuFileIcon();
             ViewModel.Saveable = false;
@@ -46,12 +64,10 @@ namespace SokuLauncher.Controls
                 }
             }
 
-            MainWindow mainWindow = new MainWindow
+            if (MainWindow.TryGetTarget(out MainWindow target))
             {
-                WindowState = WindowState.Normal,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen
-            };
-            mainWindow.Show();
+                target.Show();
+            }
         }
 
         private void SokuFileNameButton_Click(object sender, RoutedEventArgs e)
@@ -108,28 +124,35 @@ namespace SokuLauncher.Controls
                     ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
                 }
 
-                if (Static.ConfigUtil.Config.VersionInfoUrl != ViewModel.VersionInfoUrl)
+                if (MainWindow.TryGetTarget(out MainWindow target))
                 {
-                    Static.UpdatesManager.ClearVersionInfoJson();
+                    if (target.ViewModel.ConfigUtil.Config.VersionInfoUrl != ViewModel.VersionInfoUrl)
+                    {
+                        target.ViewModel.UpdatesManager.ClearVersionInfoJson();
+                    }
+
+                    target.ViewModel.SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(ViewModel.SokuModSettingGroups);
+
+                    target.ViewModel.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
+                    target.ViewModel.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
+                    target.ViewModel.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
+                    target.ViewModel.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
+                    target.ViewModel.ConfigUtil.Config.SokuModAlias = ViewModel.SokuModAlias.ToList();
+                    target.ViewModel.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
+                    target.ViewModel.ConfigUtil.Config.AutoCheckForInstallable = ViewModel.AutoCheckForInstallable;
+                    target.ViewModel.ConfigUtil.Config.Language = ViewModel.Language;
+
+                    target.ViewModel.ConfigUtil.SaveConfig();
+
+                    if (target.ViewModel.ModsManager.SokuDirFullPath != target.ViewModel.ConfigUtil.SokuDirFullPath)
+                    {
+                        target.ViewModel.ModsManager.SokuDirFullPath = target.ViewModel.ConfigUtil.SokuDirFullPath;
+                        target.ViewModel.ModsManager.SearchModulesDir();
+                        target.ViewModel.ModsManager.LoadSWRSToysSetting();
+                    }
                 }
 
-                Static.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
-                Static.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
-                Static.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
-                Static.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
-                Static.ConfigUtil.Config.SokuModAlias = ViewModel.SokuModAlias.ToList();
-                Static.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
-                Static.ConfigUtil.Config.AutoCheckForInstallable = ViewModel.AutoCheckForInstallable;
-                Static.ConfigUtil.Config.Language = ViewModel.Language;
-
-                Static.ConfigUtil.SaveConfig();
-
-                if (Static.ModsManager.SokuDirFullPath != Static.ConfigUtil.SokuDirFullPath)
-                {
-                    Static.ModsManager.SokuDirFullPath = Static.ConfigUtil.SokuDirFullPath;
-                    Static.ModsManager.SearchModulesDir();
-                    Static.ModsManager.LoadSWRSToysSetting();
-                }
+                
 
                 ViewModel.Saveable = false;
             }
@@ -291,7 +314,7 @@ namespace SokuLauncher.Controls
             if (IsMovingModSettingGroup) return;
             IsMovingModSettingGroup = true;
             Button button = (Button)sender;
-            ModSettingGroupViewModel selectedMember = (ModSettingGroupViewModel)button.DataContext;
+            ModSettingGroupModel selectedMember = (ModSettingGroupModel)button.DataContext;
 
             var listViewItem = SokuModSettingGroupsListView.ItemContainerGenerator.ContainerFromItem(selectedMember) as ListViewItem;
 
@@ -307,7 +330,7 @@ namespace SokuLauncher.Controls
                 int selectedIndex = ViewModel.SokuModSettingGroups.IndexOf(selectedMember);
                 if (selectedIndex > 0)
                 {
-                    ModSettingGroupViewModel previousMember = ViewModel.SokuModSettingGroups[selectedIndex - 1];
+                    ModSettingGroupModel previousMember = ViewModel.SokuModSettingGroups[selectedIndex - 1];
                     ViewModel.SokuModSettingGroups[selectedIndex - 1] = selectedMember;
                     ViewModel.SokuModSettingGroups[selectedIndex] = previousMember;
 
@@ -328,7 +351,7 @@ namespace SokuLauncher.Controls
             if (IsMovingModSettingGroup) return;
             IsMovingModSettingGroup = true;
             Button button = (Button)sender;
-            ModSettingGroupViewModel selectedMember = (ModSettingGroupViewModel)button.DataContext;
+            ModSettingGroupModel selectedMember = (ModSettingGroupModel)button.DataContext;
 
             var listViewItem = SokuModSettingGroupsListView.ItemContainerGenerator.ContainerFromItem(selectedMember) as ListViewItem;
 
@@ -348,7 +371,7 @@ namespace SokuLauncher.Controls
                 if (selectedIndex < ViewModel.SokuModSettingGroups.Count - 1)
                 {
 
-                    ModSettingGroupViewModel nextMember = ViewModel.SokuModSettingGroups[selectedIndex + 1];
+                    ModSettingGroupModel nextMember = ViewModel.SokuModSettingGroups[selectedIndex + 1];
                     ViewModel.SokuModSettingGroups[selectedIndex + 1] = selectedMember;
                     ViewModel.SokuModSettingGroups[selectedIndex] = nextMember;
 
@@ -371,7 +394,7 @@ namespace SokuLauncher.Controls
             if (IsDeletingModSettingGroup) return;
             IsDeletingModSettingGroup = true;
             Button button = (Button)sender;
-            ModSettingGroupViewModel selectedMember = (ModSettingGroupViewModel)button.DataContext;
+            ModSettingGroupModel selectedMember = (ModSettingGroupModel)button.DataContext;
             var listViewItem = SokuModSettingGroupsListView.ItemContainerGenerator.ContainerFromItem(selectedMember) as ListViewItem;
 
             DoubleAnimation fadeAnimation = new DoubleAnimation
@@ -408,7 +431,7 @@ namespace SokuLauncher.Controls
 
         private void AddModSettingGroupButton_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.SokuModSettingGroups.Add(new ModSettingGroupViewModel
+            ViewModel.SokuModSettingGroups.Add(new ModSettingGroupModel
             {
                 Name = "Untitle",
                 Desc = "Please enter description here...",
@@ -421,7 +444,7 @@ namespace SokuLauncher.Controls
 
         private void ForceSokuModSettingGroupsListViewRefresh()
         {
-            ObservableCollection<ModSettingGroupViewModel> tempCollection = new ObservableCollection<ModSettingGroupViewModel>(ViewModel.SokuModSettingGroups);
+            ObservableCollection<ModSettingGroupModel> tempCollection = new ObservableCollection<ModSettingGroupModel>(ViewModel.SokuModSettingGroups);
             SokuModSettingGroupsListView.ItemsSource = tempCollection;
             SokuModSettingGroupsListView.ItemsSource = ViewModel.SokuModSettingGroups;
         }
@@ -659,7 +682,7 @@ namespace SokuLauncher.Controls
                     }
                 };
 
-                
+
 
                 UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
 
@@ -672,7 +695,7 @@ namespace SokuLauncher.Controls
                     ViewModel.CheckForUpdatesButtonText = $"Check version info... {i}%";
                     await Task.Delay(random.Next(200));
                     i += random.Next(5);
-                    
+
                     if (taskGetVersionInfoJson.IsCompleted)
                     {
                         ViewModel.CheckForUpdatesButtonText = $"Check version info... 100%";
@@ -705,5 +728,6 @@ namespace SokuLauncher.Controls
             ViewModel.ModsManager.ToBeDeletedDirList.Remove(modDir as string);
             ViewModel.Saveable = true;
         }
+
     }
 }
