@@ -31,24 +31,21 @@ namespace SokuLauncher
 
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
-
-            _ = Task.Run(async () =>
+            if (mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForUpdates)
             {
-                try
+                _ = Task.Run(async () =>
                 {
-                    if (mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForUpdates)
+                    try
                     {
                         await mainWindow.ViewModel.UpdatesManager.GetVersionInfoJson();
                         Dispatcher.Invoke(() => mainWindow.ViewModel.UpdatesManager.CheckForUpdates());
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
-
-            
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                });
+            }
         }
     }
 }
