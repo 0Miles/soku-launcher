@@ -2,37 +2,37 @@
 [![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
   
   
-Configuring mods(SWRSToys) before launching the game and provide automatic mod updates and download missing modules.  
+Configuring mods(SWRSToys) before launching the game and provide automatic mod updates and download missing mods.  
 
 ### Launch and apply module configuration
-Just with a single click, SokuLauncher will automatically switch modules and launch the game.  
+Just with a single click, SokuLauncher will automatically switch mods and launch the game.  
 ![preview](./docs/preview.webp)
 
 ### Automatically install missing mods
-When missing modules are detected in the activation options, a prompt will pop up to download and install the modules.  
+When missing mods are detected before launch, a prompt to download and install the mods will pop up.
 ![preview](./docs/missingmods.webp)
 
 ## Install
-Download SokuLauncher and place it in the main directory of the game.  
+Download SokuLauncher and place it in the main directory of th123.  
 
-*If you are using a 32-bit operating system, please place SokuLauncher in the ``parent directory`` or ``subdirectory`` of the game's main directory.   
-Alternatively, you can place it elsewhere and set the location of the game executable in the Config.*
+*If you are using a 32-bit operating system, please place SokuLauncher in the ``parent directory`` or ``subdirectory`` of th123's main directory.   
+Alternatively, you can place it elsewhere and set the location of th123 executable in the Config.*
 
 ## Config
 ### Custom launcher
-You can customize the appearance of the launcher options and configure the modules at startup according to your preferences.  
+You can customize the appearance of the launcher and configure which mods to enable at launch.  
 ![preview](./docs/custom.webp)
   
-### Mod management
-Mods can be toggled on/off or removed in the settings page.  
+### Mod
+Mods can be turned on/off or deleted from this page.
 ![preview](./docs/switch.webp)
   
 ### Game startup path
 You can set the location of the game executable here.  
-This setting is necessary if you haven't placed the launcher near the game folder.
+This setting is necessary if you haven't placed SokuLauncher near th123 folder.
 ![preview](./docs/path.png)
   
 ### Update
-Version infor source and related update options.
+Version info source and related update options.
 SokuLauncher provides automatic update and installation of missing mods. If you don't need these features, you can also disable them here.
 ![preview](./docs/update.png)
