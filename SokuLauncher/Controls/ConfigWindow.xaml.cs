@@ -15,6 +15,7 @@ using Microsoft.Win32;
 using Dsafa.WpfColorPicker;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace SokuLauncher.Controls
 {
@@ -122,6 +123,17 @@ namespace SokuLauncher.Controls
                         MessageBox.Show("Delete failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
+                }
+
+                string coverDir = Path.Combine(Static.LocalDirPath, "Cover");
+                string[] allCoverPaths = Directory.GetFiles(coverDir, "*.png");
+                string[] usingCoverPaths = ViewModel.SokuModSettingGroups.Select(x => x.Cover).ToArray();
+                foreach (string path in allCoverPaths)
+                {
+                    if (!usingCoverPaths.Contains(path))
+                    {
+                        File.Delete(path);
+                    }
                 }
 
                 if (MainWindow.TryGetTarget(out MainWindow target))
@@ -556,7 +568,6 @@ namespace SokuLauncher.Controls
             if (Path.GetDirectoryName(ViewModel.SelectedSokuModSettingGroup.Cover) == coverDir && File.Exists(coverOriginFileName))
             {
                 string selectedFileName = coverOriginFileName;
-                string ext = Path.GetExtension(coverOriginFileName);
 
                 CropWindow cropWindow = new CropWindow();
                 cropWindow.ImagePath = selectedFileName;
