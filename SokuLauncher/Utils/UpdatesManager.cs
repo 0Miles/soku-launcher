@@ -424,7 +424,7 @@ namespace SokuLauncher.Utils
             VersionInfoJson = null;
         }
 
-        private Version GetFileCurrentVersion(string fileName)
+        public static Version GetFileCurrentVersion(string fileName)
         {
             var fileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
             if (fileVersionInfo?.FileVersion != null)

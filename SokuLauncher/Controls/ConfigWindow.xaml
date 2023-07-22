@@ -428,10 +428,16 @@
             </TabItem>
             <TabItem Header="Update">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Canvas Width="240" Height="147" Margin="0,0,0,60">
+                        <Image Source="\Resources\icon.ico" Width="72" Height="73" Canvas.Left="84" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <Image Grid.Column="1" Source="\Resources\title.png" Width="240" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.Top="91"/>
+
+                        <TextBlock Text="{Binding CurrentVersion, Mode=OneWay}" Foreground="#333333" FontSize="12" Canvas.Right="0" Canvas.Top="132" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    </Canvas>
                     <TextBlock Text="Version info URL:" Margin="8,0,0,0"/>
                     <TextBox Text="{Binding VersionInfoUrl}" Padding="4" Margin="8" TextChanged="TextBoxSetSaveableTrue_TextChanged" />
                     <CheckBox IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8">Auto check for updates on startup</CheckBox>
-                    <CheckBox IsChecked="{Binding AutoCheckForInstallable}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8">Auto check for installable mods before launching the game</CheckBox>
+                    <CheckBox IsChecked="{Binding AutoCheckForInstallable}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8">Auto check for installable mods before launching the game</CheckBox>
                     <Button Content="{Binding CheckForUpdatesButtonText}" Margin="8" Padding="8,4" HorizontalAlignment="Center" Click="CheckForUpdatesButton_Click"></Button>
                 </StackPanel>
             </TabItem>

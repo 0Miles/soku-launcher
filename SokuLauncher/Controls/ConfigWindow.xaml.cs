@@ -16,6 +16,7 @@ using Dsafa.WpfColorPicker;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace SokuLauncher.Controls
 {
@@ -748,5 +749,10 @@ namespace SokuLauncher.Controls
             ViewModel.Saveable = true;
         }
 
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
+        }
     }
 }

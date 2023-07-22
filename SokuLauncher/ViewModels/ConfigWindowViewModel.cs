@@ -260,5 +260,13 @@ namespace SokuLauncher.ViewModels
                 RaisePropertyChanged("CheckForUpdatesButtonText");
             }
         }
+    
+        public string CurrentVersion
+        {
+            get
+            {
+                return $"v{UpdatesManager.GetFileCurrentVersion(Static.SelfFileName)}";
+            }
+        }
     }
 }
