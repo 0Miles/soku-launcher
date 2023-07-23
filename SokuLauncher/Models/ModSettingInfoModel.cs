@@ -8,7 +8,8 @@ namespace SokuLauncher.Models
     public class ModSettingInfoModel
     {
         public string Name { get; set; }
-        public string FullPath { get; set; }
+        public string RelativePath { get; set; }
+        public string Icon { get; set; }
         public string Enabled { get; set; }
     }
 }
