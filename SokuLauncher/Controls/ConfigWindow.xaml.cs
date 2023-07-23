@@ -127,6 +127,7 @@ namespace SokuLauncher.Controls
                 }
 
                 string coverDir = Path.Combine(Static.LocalDirPath, "Cover");
+                Directory.CreateDirectory(coverDir);
                 string[] allCoverPaths = Directory.GetFiles(coverDir, "*.png");
                 string[] usingCoverPaths = ViewModel.SokuModSettingGroups.Select(x => x.Cover).ToArray();
                 foreach (string path in allCoverPaths)
