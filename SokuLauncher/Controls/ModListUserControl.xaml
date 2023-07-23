@@ -92,7 +92,7 @@
                                             </Grid.RowDefinitions>
 
                                             <Canvas Grid.Column="1" Width="32" Height="32" >
-                                                <Path Canvas.Left="4" Canvas.Top="4" Stroke="Gray" StrokeThickness="1.5" RenderTransformOrigin=".5,.5" HorizontalAlignment="Left" VerticalAlignment="Center"  Data="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0 M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z">
+                                                <Path Canvas.Left="4" Canvas.Top="4" Stroke="LightGray" StrokeThickness="1.5" RenderTransformOrigin=".5,.5" HorizontalAlignment="Left" VerticalAlignment="Center"  Data="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0 M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z">
                                                     <Path.RenderTransform>
                                                         <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
                                                     </Path.RenderTransform>
@@ -103,7 +103,7 @@
                                                                     <DataTrigger.EnterActions>
                                                                         <BeginStoryboard>
                                                                             <Storyboard>
-                                                                                <ColorAnimation Duration="0:0:.1" To="Green" Storyboard.TargetProperty="Stroke.Color"/>
+                                                                                <ColorAnimation Duration="0:0:.1" To="#FFA1B971" Storyboard.TargetProperty="Stroke.Color"/>
                                                                             </Storyboard>
                                                                         </BeginStoryboard>
                                                                     </DataTrigger.EnterActions>
@@ -111,7 +111,7 @@
                                                                     <DataTrigger.ExitActions>
                                                                         <BeginStoryboard>
                                                                             <Storyboard>
-                                                                                <ColorAnimation Duration="0:0:.2" To="Gray" Storyboard.TargetProperty="Stroke.Color"/>
+                                                                                <ColorAnimation Duration="0:0:.2" To="LightGray" Storyboard.TargetProperty="Stroke.Color"/>
                                                                             </Storyboard>
                                                                         </BeginStoryboard>
                                                                     </DataTrigger.ExitActions>

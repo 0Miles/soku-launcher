@@ -86,7 +86,20 @@
                                                             </TextBlock.Style>
                                                         </TextBlock>
                                                         <TextBlock Text=" → " Foreground="Gray"/>
-                                                        <TextBlock Text="{Binding Version}" Foreground="Green" FontWeight="Bold"/>
+                                                        <TextBlock FontWeight="Bold">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" Value="{Binding Version}" />
+                                                                    <Setter Property="Foreground" Value="Green" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Value="0.0.0.0" Binding="{Binding Version}">
+                                                                            <Setter Property="Text" Value="Unknown"/>
+                                                                            <Setter Property="Foreground" Value="Gray"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
                                                     </StackPanel>
                                                 </Canvas>
                                             </Grid>
