@@ -240,21 +240,16 @@ namespace SokuLauncher.Utils
                     }
 
                     Version latestVersion = new Version(updateFileInfo.Version);
-                    Version currentVersion = null;
 
                     switch (updateFileInfo.Name)
                     {
                         case "SokuLauncher":
-                            currentVersion = GetFileCurrentVersion(Static.SelfFileName);
                             updateFileInfo.LocalFileName = Static.SelfFileName;
+                            updateFileInfo.Icon = "%resources%/icon.ico";
                             break;
                         case "SokuModLoader":
                             updateFileInfo.LocalFileName = Path.Combine(ConfigUtil.SokuDirFullPath, "d3d9.dll");
-                            if (ModsManager.SWRSToysD3d9Exist)
-                            {
-                                currentVersion = GetFileCurrentVersion(updateFileInfo.LocalFileName);
-                            }
-                            else
+                            if (!ModsManager.SWRSToysD3d9Exist)
                             {
                                 updateFileInfo.Installed = false;
                             }
@@ -272,34 +267,17 @@ namespace SokuLauncher.Utils
                             else
                             {
                                 updateFileInfo.LocalFileName = modInfo.FullPath;
-                                currentVersion = GetFileCurrentVersion(updateFileInfo.LocalFileName);
+                                updateFileInfo.Icon = modInfo.Icon;
                             }
                             break;
                     }
 
-                    if (currentVersion == null)
-                    {
-                        string modVersionFileName = Path.Combine(updateFileInfo.LocalFileDir, $"{updateFileInfo.Name}{MOD_VERSION_FILENAME_SUFFIX}");
-                        string modCurrentVersion = "0.0.0.0";
-                        if (File.Exists(modVersionFileName))
-                        {
-                            modCurrentVersion = File.ReadAllText(modVersionFileName);
-                        }
-
-                        currentVersion = new Version(modCurrentVersion);
-                    }
-
-                    if (currentVersion.Revision == -1)
-                    {
-                        currentVersion = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build, 0);
-                    }
-
+                    Version currentVersion = GetCurrentVersion(updateFileInfo.LocalFileName);
                     updateFileInfo.LocalFileVersion = currentVersion.ToString();
 
                     if (checkForUpdates && latestVersion > currentVersion && updateFileInfo.Installed ||
                         checkForInstallable && !updateFileInfo.Installed)
                     {
-
                         if (updateFileInfo.I18nDesc != null)
                         {
                             string localDesc =
@@ -310,7 +288,6 @@ namespace SokuLauncher.Utils
                                 updateFileInfo.Desc = localDesc;
                             }
                         }
-
                         AvailableUpdateList.Add(updateFileInfo);
                     }
                 }
@@ -319,6 +296,36 @@ namespace SokuLauncher.Utils
             {
                 throw new Exception("Failed to check for updates: " + ex.Message);
             }
+        }
+
+        public static Version GetCurrentVersion(string fileName)
+        {
+            var fileVersionInfo = File.Exists(fileName) ? FileVersionInfo.GetVersionInfo(fileName) : null;
+
+            Version currentVersion;
+            if (fileVersionInfo?.FileVersion != null)
+            {
+                currentVersion = new Version(fileVersionInfo.FileVersion);
+            }
+            else
+            {
+                string modName = Path.GetFileNameWithoutExtension(fileName);
+                string modDir = Path.GetDirectoryName(fileName);
+                string modVersionFileName = Path.Combine(modDir, $"{modName}{MOD_VERSION_FILENAME_SUFFIX}");
+                string modCurrentVersion = "0.0.0.0";
+                if (File.Exists(modVersionFileName))
+                {
+                    modCurrentVersion = File.ReadAllText(modVersionFileName);
+                }
+                currentVersion = new Version(modCurrentVersion);
+            }
+
+            if (currentVersion.Revision == -1)
+            {
+                currentVersion = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build, 0);
+            }
+
+            return currentVersion;
         }
 
         public async Task DownloadAndExtractFile(UpdateFileInfoModel updateFileInfo)
@@ -414,24 +421,17 @@ namespace SokuLauncher.Utils
                 }
             }
 
-            string modVersionFileName = Path.Combine(updateFileInfo.LocalFileDir, $"{updateFileInfo.Name}{MOD_VERSION_FILENAME_SUFFIX}");
-            File.WriteAllText(modVersionFileName, updateFileInfo.Version);
+            string modVersionFileName = Path.Combine(updateFileInfo.LocalFileDir, $"{Path.GetFileNameWithoutExtension(updateFileInfo.LocalFileName)}{MOD_VERSION_FILENAME_SUFFIX}");
+            if (updateFileInfo.Version != "0.0.0.0")
+            {
+                File.WriteAllText(modVersionFileName, updateFileInfo.Version);
+            }
             Directory.Delete(updateFileDir, true);
         }
 
         public void ClearVersionInfoJson()
         {
             VersionInfoJson = null;
-        }
-
-        public static Version GetFileCurrentVersion(string fileName)
-        {
-            var fileVersionInfo = FileVersionInfo.GetVersionInfo(fileName);
-            if (fileVersionInfo?.FileVersion != null)
-            {
-                return new Version(fileVersionInfo.FileVersion);
-            }
-            return null;
         }
 
         private static void CopyDirectory(string sourceDir, string destinationDir, bool recursive = true)

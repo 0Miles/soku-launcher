@@ -11,6 +11,7 @@
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <converters:ReverseStringToVisibilityConverter x:Key="ReverseStringToVisibilityConverter" />
         <converters:ReverseBooleanToVisibilityConverter x:Key="ReverseBooleanToVisibilityConverter" />
+        <converters:PathToImageSourceConverter x:Key="PathToImageSourceConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
         <converters:MarkdownToFlowDocumentConverter x:Key="MarkdownToFlowDocumentConverter" />
@@ -47,22 +48,47 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" >
-                                            <Grid VerticalAlignment="Center">
+                                            <Grid VerticalAlignment="Center" Margin="8">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Text="{Binding Name}" FontSize="16" Margin="8" VerticalAlignment="Bottom"/>
-                                                <Grid Grid.Column="1" Visibility="{Binding Installed, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Bottom" Margin="0,8" >
-                                                    <TextBlock Text="{Binding LocalFileVersion}" Foreground="DarkGray" />
-                                                </Grid>
-                                                <TextBlock Grid.Column="1" Text="Not Installed" Foreground="DarkRed" VerticalAlignment="Bottom" Margin="0,8" Visibility="{Binding Installed, Converter={StaticResource ReverseBooleanToVisibilityConverter}}" />
 
-                                                <TextBlock Grid.Column="2" Text=" => " Foreground="LightGray" VerticalAlignment="Bottom" Margin="0,8" />
+                                                <Canvas Width="32" Height="32">
+                                                    <Path Canvas.Left="4" Canvas.Top="4" Stroke="LightGray" StrokeThickness="1.5" RenderTransformOrigin=".5,.5" HorizontalAlignment="Left" VerticalAlignment="Center"  Data="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0 M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z">
+                                                        <Path.RenderTransform>
+                                                            <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                                                        </Path.RenderTransform>
+                                                    </Path>
 
-                                                <TextBlock Grid.Column="3" Text="{Binding Version}" Foreground="Green" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,8" />
+                                                    <Image Width="32" Height="32" Source="{Binding Icon, Converter={StaticResource PathToImageSourceConverter} }"/>
+                                                </Canvas>
+
+                                                <Canvas Grid.Column="1" Width="380" Height="38" Margin="8,0">
+                                                    <TextBlock Text="{Binding Name}" FontSize="16" />
+
+                                                    <StackPanel Canvas.Top="20" Orientation="Horizontal">
+                                                        <TextBlock>
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" Value="{Binding LocalFileVersion, Mode=OneTime}" />
+                                                                    <Setter Property="Foreground" Value="Gray" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Value="0.0.0.0" Binding="{Binding LocalFileVersion}">
+                                                                            <Setter Property="Text" Value="Unknown"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Value="False" Binding="{Binding Installed}">
+                                                                            <Setter Property="Text" Value="Not Installed"/>
+                                                                            <Setter Property="Foreground" Value="DarkRed"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                        <TextBlock Text=" → " Foreground="Gray"/>
+                                                        <TextBlock Text="{Binding Version}" Foreground="Green" FontWeight="Bold"/>
+                                                    </StackPanel>
+                                                </Canvas>
                                             </Grid>
                                             
                                             <FlowDocumentScrollViewer Margin="8" Document="{Binding Desc, Converter={StaticResource MarkdownToFlowDocumentConverter}}" Padding="0" BorderThickness="0" VerticalScrollBarVisibility="Auto" MaxWidth="420">

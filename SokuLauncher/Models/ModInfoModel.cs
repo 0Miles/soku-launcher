@@ -73,6 +73,9 @@ namespace SokuLauncher.Models
             }
         }
 
+        public string Version { get; set; }
+
+        public string Icon { get; set; }
 
         public ModInfoModel(string dllFilePath, string sokuDir)
         {
@@ -80,6 +83,12 @@ namespace SokuLauncher.Models
             FullPath = dllFilePath;
             DirName = Path.GetDirectoryName(dllFilePath);
             RelativePath = Static.GetRelativePath(dllFilePath, sokuDir);
+
+            string icon = Path.Combine(DirName, "icon.png");
+            if (File.Exists(icon))
+            {
+                Icon = icon;
+            }
         }
     }
 }

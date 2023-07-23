@@ -2,6 +2,7 @@
 using SokuLauncher.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -63,7 +64,9 @@ namespace SokuLauncher.Utils
 
                 foreach (string dllFilePath in dllFiles)
                 {
-                    ModInfoList.Add(new ModInfoModel(dllFilePath, SokuDirFullPath));
+                    var modInfo = new ModInfoModel(dllFilePath, SokuDirFullPath);
+                    modInfo.Version = UpdatesManager.GetCurrentVersion(modInfo.FullPath).ToString();
+                    ModInfoList.Add(modInfo);
                 }
             }
         }

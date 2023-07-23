@@ -265,7 +265,7 @@ namespace SokuLauncher.ViewModels
         {
             get
             {
-                return $"v{UpdatesManager.GetFileCurrentVersion(Static.SelfFileName)}";
+                return $"v{UpdatesManager.GetCurrentVersion(Static.SelfFileName)}";
             }
         }
     }

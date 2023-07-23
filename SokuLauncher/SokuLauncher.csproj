@@ -153,6 +153,7 @@
     <Compile Include="Converters\IsLastItemConverter.cs" />
     <Compile Include="Converters\ListCountToBoolenConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\PathToImageSourceConverter.cs" />
     <Compile Include="Converters\PathToBackgroundConverter.cs" />
     <Compile Include="Converters\FileNameConverter.cs" />
     <Compile Include="Converters\ReverseBooleanConverter.cs" />
