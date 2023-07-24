@@ -306,7 +306,6 @@ namespace SokuLauncher
                     SokuDirPath = ViewModel.ConfigUtil.Config.SokuDirPath,
                     SokuFileName = ViewModel.ConfigUtil.Config.SokuFileName,
                     SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModSettingGroups)),
-                    SokuModAlias = new ObservableCollection<string>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModAlias)),
                     AutoCheckForUpdates = ViewModel.ConfigUtil.Config.AutoCheckForUpdates,
                     AutoCheckForInstallable = ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
                     VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,

@@ -55,10 +55,6 @@ namespace SokuLauncher.Utils
                 {
                     Config.Language = CultureInfo.CurrentCulture.Name;
                 }
-                if (Config.SokuModAlias == null || Config.SokuModAlias.Count == 0)
-                {
-                    Config.SokuModAlias = new List<string> { "Giuroll=Giuroll-60F" };
-                }
 
                 if (!CheckSokuDirAndFileExists(Config.SokuDirPath, Config.SokuFileName))
                 {
@@ -163,7 +159,6 @@ namespace SokuLauncher.Utils
                     CoverOverlayColor = "#6F002EA9"
                 },
             };
-            config.SokuModAlias = new List<string> { "Giuroll=Giuroll-60F" };
             config.VersionInfoUrl = "https://soku.latte.today/version.json";
             return config;
         }

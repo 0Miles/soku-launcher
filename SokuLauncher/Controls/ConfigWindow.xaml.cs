@@ -151,7 +151,6 @@ namespace SokuLauncher.Controls
                     target.ViewModel.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
                     target.ViewModel.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
                     target.ViewModel.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
-                    target.ViewModel.ConfigUtil.Config.SokuModAlias = ViewModel.SokuModAlias.ToList();
                     target.ViewModel.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
                     target.ViewModel.ConfigUtil.Config.AutoCheckForInstallable = ViewModel.AutoCheckForInstallable;
                     target.ViewModel.ConfigUtil.Config.Language = ViewModel.Language;
@@ -690,7 +689,6 @@ namespace SokuLauncher.Controls
                             SokuDirPath = ViewModel.SokuDirPath,
                             SokuFileName = ViewModel.SokuFileName,
                             SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
-                            SokuModAlias = ViewModel.SokuModAlias.ToList(),
                             AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
                             AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
                             VersionInfoUrl = ViewModel.VersionInfoUrl,

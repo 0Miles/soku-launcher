@@ -76,21 +76,6 @@ namespace SokuLauncher.ViewModels
             }
         }
         
-        private ObservableCollection<string> _SokuModAlias;
-        public ObservableCollection<string> SokuModAlias
-        {
-            get
-            {
-                return _SokuModAlias;
-            }
-            set
-            {
-                _SokuModAlias = value;
-                Saveable = true;
-                RaisePropertyChanged("SokuModAlias");
-            }
-        }
-        
         private string _SokuFileName;
         public string SokuFileName
         {
@@ -260,7 +245,7 @@ namespace SokuLauncher.ViewModels
                 RaisePropertyChanged("CheckForUpdatesButtonText");
             }
         }
-    
+        
         public string CurrentVersion
         {
             get
@@ -268,5 +253,12 @@ namespace SokuLauncher.ViewModels
                 return $"v{UpdatesManager.GetCurrentVersion(Static.SelfFileName)}";
             }
         }
+
+        public List<SelectorNodeModel> Options { get; set; } = new List<SelectorNodeModel>
+        {
+            new SelectorNodeModel { Title="中文(繁體)", Code="zh-tw"},
+            new SelectorNodeModel { Title = "中文(簡體)", Code = "zh-cn"},
+            new SelectorNodeModel { Title = "English", Code = "en" }
+        };
     }
 }
