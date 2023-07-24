@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:converters="clr-namespace:SokuLauncher.Converters"
         xmlns:md="clr-namespace:Neo.Markdig.Xaml;assembly=Neo.Markdig.Xaml"
         mc:Ignorable="d"
-        Title="Update Selection" MaxHeight="720" MinHeight="320" Width="560" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterScreen">
+        Title="{DynamicResource UpdateSelectionWindow-Title}" MaxHeight="720" MinHeight="320" Width="560" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <converters:ReverseStringToVisibilityConverter x:Key="ReverseStringToVisibilityConverter" />
@@ -23,7 +23,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock TextWrapping="Wrap"
-                   Margin="16,32,16,16"
+                   Margin="16,16,8,8"
                    Text="{Binding Desc}" />
         <ListView Grid.Row="1"
                   x:Name="SelectorListView"
@@ -75,10 +75,10 @@
                                                                     <Setter Property="Foreground" Value="Gray" />
                                                                     <Style.Triggers>
                                                                         <DataTrigger Value="0.0.0.0" Binding="{Binding LocalFileVersion}">
-                                                                            <Setter Property="Text" Value="Unknown"/>
+                                                                            <Setter Property="Text" Value="{DynamicResource Common-UnknownVersion}"/>
                                                                         </DataTrigger>
                                                                         <DataTrigger Value="False" Binding="{Binding Installed}">
-                                                                            <Setter Property="Text" Value="Not Installed"/>
+                                                                            <Setter Property="Text" Value="{DynamicResource Common-NotInstalled}"/>
                                                                             <Setter Property="Foreground" Value="DarkRed"/>
                                                                         </DataTrigger>
                                                                     </Style.Triggers>
@@ -93,7 +93,7 @@
                                                                     <Setter Property="Foreground" Value="Green" />
                                                                     <Style.Triggers>
                                                                         <DataTrigger Value="0.0.0.0" Binding="{Binding Version}">
-                                                                            <Setter Property="Text" Value="Unknown"/>
+                                                                            <Setter Property="Text" Value="{DynamicResource Common-UnknownVersion}"/>
                                                                             <Setter Property="Foreground" Value="Gray"/>
                                                                         </DataTrigger>
                                                                     </Style.Triggers>
@@ -124,10 +124,10 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <CheckBox IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" Visibility="{Binding IsAutoCheckForUpdatesCheckBoxShow, Converter={StaticResource BooleanToVisibilityConverter}}" >Auto check for updates on startup</CheckBox>
+            <CheckBox Content="{DynamicResource UpdateSelectionWindow-AutoCheckFouUpdatesCheckbox-Content}" IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" Visibility="{Binding IsAutoCheckForUpdatesCheckBoxShow, Converter={StaticResource BooleanToVisibilityConverter}}" ></CheckBox>
             <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Orientation="Horizontal">
-                <Button Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click" >OK</Button>
-                <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>
+                <Button Content="{DynamicResource Common-Button-OK}" Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click"/>
+                <Button Content="{DynamicResource Common-Button-Cancel}" Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

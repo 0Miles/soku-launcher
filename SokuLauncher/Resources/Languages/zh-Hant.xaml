@@ -1,0 +1,91 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <system:String x:Key="Common-ErrorMessageBox-Title">錯誤</system:String>
+    <system:String x:Key="Common-OpenExeFileDialog-Filter">執行檔 (*.exe)|*.exe</system:String>
+    <system:String x:Key="Common-ReadFileFailedMessage">讀取 {0} 失敗: {1}</system:String>
+    <system:String x:Key="Common-Button-OK">確定</system:String>
+    <system:String x:Key="Common-Button-Cancel">取消</system:String>
+    <system:String x:Key="Common-UnknownVersion">不明</system:String>
+    <system:String x:Key="Common-NotInstalled">未安裝</system:String>
+    <system:String x:Key="Common-ModuleNotFound">找不到模組</system:String>
+    <system:String x:Key="Common-Th123NotSet">th123 執行檔路徑未設定</system:String>
+    <system:String x:Key="Common-CheckVersionInfo">檢查版本資訊...</system:String>
+
+    <system:String x:Key="ConfigUtil-GameFileNotFound-Title">找不到遊戲檔案</system:String>
+    <system:String x:Key="ConfigUtil-GameFileNotFound-Message">若未設定遊戲執行檔路徑，將無法啟動遊戲\n要立刻設定嗎?</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Name">Giuroll</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Desc">啟用 SokuLobbies 與 Giuroll</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Name">Giuroll CN</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Desc">啟用 SokuLobbies 與 Giuroll-62F</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Name">SokuRoll</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Desc">啟用 InGameHostlist 與 SokuRoll 1.3</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name">No Roll</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Desc">啟用 InGameHostlist，不啟用任何 Roll</system:String>
+    <system:String x:Key="ConfigUtil-SelectSokuFileWindow-Title">選擇遊戲檔案</system:String>
+    <system:String x:Key="ConfigUtil-SelectSokuFileWindow-Desc">發現多個 th123 遊戲檔案，請選擇一個作為啟動目標</system:String>
+
+    <system:String x:Key="UpdatesManager-MessageBox-Title">更新</system:String>
+    <system:String x:Key="UpdatesManager-Updating">更新中</system:String>
+    <system:String x:Key="UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc">以下模組有可用更新，請確認您要更新的模組</system:String>
+    <system:String x:Key="UpdatesManager-CheckForUpdates-Completed">全部更新完成</system:String>
+    <system:String x:Key="UpdatesManager-CheckForUpdates-AllLatest">所有可用的模組均已更新至最新版本</system:String>
+    <system:String x:Key="UpdatesManager-CheckForInstallable-UpdateSelectionWindow-Desc">缺少以下模組，請安裝以確保遊戲正常運行</system:String>
+    <system:String x:Key="UpdatesManager-GetVersionInfoJson-Message">檢查版本資訊...</system:String>
+    <system:String x:Key="UpdatesManager-GetAvailableUpdateList-ParsingVersionInfoFailed">解析版本資訊失敗</system:String>
+    <system:String x:Key="UpdatesManager-GetAvailableUpdateList-UpdatesFailed">檢查更新失敗</system:String>
+    <system:String x:Key="UpdatesManager-DownloadAndExtractFile-Downloading">正在下載 {0}...</system:String>
+    <system:String x:Key="UpdatesManager-DownloadAndExtractFile-Extracting">正在解壓縮 {0}...</system:String>
+    <system:String x:Key="UpdatesManager-DownloadAndExtractFile-Failed">下載 {0} 失敗</system:String>
+    <system:String x:Key="UpdatesManager-CopyAndReplaceFile-CanNotCopyFile">無法複製檔案</system:String>
+    <system:String x:Key="UpdatesManager-CopyDirectory-SourceDirNotFound">未找到來源目錄</system:String>
+    <system:String x:Key="UpdatesManager-CheckSelfIsUpdating-WaitProcessClose">等待 SokuLauncher 處理程序關閉...</system:String>
+    
+    <system:String x:Key="UpdatingWindow-Title">更新中</system:String>
+    <system:String x:Key="UpdateSelectionWindow-Title">更新</system:String>
+    <system:String x:Key="UpdateSelectionWindow-AutoCheckFouUpdatesCheckbox-Content">啟動時自動檢查更新</system:String>
+    <system:String x:Key="ModSettingGroupEditWindow-Title">模組設定</system:String>
+    <system:String x:Key="ModListUserControl-NoMod">找不到模組</system:String>
+
+    <system:String x:Key="ConfigWindow-Title">設定</system:String>
+    <system:String x:Key="ConfigWindow-Tab-Launcher">啟動器</system:String>
+    <system:String x:Key="ConfigWindow-Tab-Mod">模組</system:String>
+    <system:String x:Key="ConfigWindow-Tab-Path">遊戲路徑</system:String>
+    <system:String x:Key="ConfigWindow-Tab-Update">更新</system:String>
+    <system:String x:Key="ConfigWindow-Button-Save">儲存</system:String>
+    <system:String x:Key="ConfigWindow-UnsavedChanges-Title">未儲存的改動</system:String>
+    <system:String x:Key="ConfigWindow-UnsavedChanges-Message">有未儲存的改動，要放棄這些改動嗎?</system:String>
+
+    <system:String x:Key="ConfigWindow-LauncherTab-Button-Add">新增</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-NewSokuModSettingGroup-Name">未命名</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-NewSokuModSettingGroup-Desc">請在這裡輸入描述...</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-BackToSelect">返回</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-Name">名稱:</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-Description">描述:</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-Appearance">外觀:</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-SelectCoverBackground">選擇封面背景</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-Crop">裁切</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-CoverColor">封面顏色: </system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-HoverColor">覆蓋顏色: </system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-SelectMods">選擇模組</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-EnableMods">啟用模組:</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-DisableMods">禁用模組:</system:String>
+
+    <system:String x:Key="ConfigWindow-PathTab-Browser">瀏覽</system:String>
+    <system:String x:Key="ConfigWindow-PathTab-Info">相關資訊</system:String>
+    <system:String x:Key="ConfigWindow-PathTab-Ready">就緒</system:String>
+    <system:String x:Key="ConfigWindow-PathTab-NotFound">未找到</system:String>
+
+    <system:String x:Key="ConfigWindow-UpdateTab-VersionInfoUrl">版本資訊URL:</system:String>
+    <system:String x:Key="ConfigWindow-UpdateTab-AutoCheckForUpdatesOnStartup">啟動時自動檢查更新</system:String>
+    <system:String x:Key="ConfigWindow-UpdateTab-AutoCheckForInstallableMods">啟動遊戲前自動檢查缺少模組</system:String>
+
+    <system:String x:Key="ConfigWindow-DeleteFailed">刪除失敗</system:String>
+    <system:String x:Key="ConfigWindow-SaveConfigFailed">儲存設定失敗</system:String>
+    <system:String x:Key="ConfigWindow-ImageAndVideoFilter">圖片 (*.png,*.jpg,*.jpeg,*.gif,*.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp|影片 (*.mp4,*.avi,*.wmv)|*.mp4;*.avi;*.wmv</system:String>
+    <system:String x:Key="ConfigWindow-OriginImageNotFound">原始圖片遺失</system:String>
+    <system:String x:Key="ConfigWindow-CheckFouUpdatesNow">立刻檢查更新</system:String>
+
+    <system:String x:Key="MainWindow-SokuFileNotFound">檔案 '{0}' 不存在.</system:String>
+</ResourceDictionary>

@@ -232,7 +232,7 @@ namespace SokuLauncher.ViewModels
             }
         }
 
-        private string _CheckForUpdatesButtonText = "Check for updates now";
+        private string _CheckForUpdatesButtonText;
         public string CheckForUpdatesButtonText
         {
             get
@@ -254,10 +254,10 @@ namespace SokuLauncher.ViewModels
             }
         }
 
-        public List<SelectorNodeModel> Options { get; set; } = new List<SelectorNodeModel>
+        public List<SelectorNodeModel> LanguageOptions { get; set; } = new List<SelectorNodeModel>
         {
-            new SelectorNodeModel { Title="中文(繁體)", Code="zh-tw"},
-            new SelectorNodeModel { Title = "中文(簡體)", Code = "zh-cn"},
+            new SelectorNodeModel { Title = "中文 (繁體)", Code = "zh-Hant"},
+            new SelectorNodeModel { Title = "中文 (简体)", Code = "zh-Hans"},
             new SelectorNodeModel { Title = "English", Code = "en" }
         };
     }

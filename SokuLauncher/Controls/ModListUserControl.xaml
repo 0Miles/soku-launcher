@@ -132,7 +132,7 @@
                                                             <Setter Property="Foreground" Value="Gray" />
                                                             <Style.Triggers>
                                                                 <DataTrigger Value="0.0.0.0" Binding="{Binding Version}">
-                                                                    <Setter Property="Text" Value="Unknown"/>
+                                                                    <Setter Property="Text" Value="{DynamicResource Common-UnknownVersion}"/>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -141,7 +141,7 @@
                                             </StackPanel>
                                             
                                             <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,8,0,4" Text="{Binding RelativePath}" TextWrapping="Wrap" Background="Transparent" Foreground="DarkGray" Visibility="{Binding FullPath, Converter={StaticResource StringToVisibilityConverter}}" />
-                                            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,8,0,4" Text="Module not found" Foreground="DarkRed" Visibility="{Binding FullPath, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
+                                            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,8,0,4" Text="{DynamicResource Common-ModuleNotFound}" Foreground="DarkRed" Visibility="{Binding FullPath, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
                                         </Grid>
                                     </Border>
                                     <Border Background="#CEEEEEEE" BorderThickness="0" Opacity="0" IsHitTestVisible="{Binding ToBeDeleted}" PreviewMouseDown="DeletedItemBorder_PreviewMouseDown">
@@ -182,7 +182,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
-        <TextBlock x:Name="ModNotFoundTextBlock" Text="Mod not found" FontSize="16" Foreground="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+        <TextBlock x:Name="ModNotFoundTextBlock" Text="{DynamicResource ModListUserControl-NoMod}" FontSize="16" Foreground="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
     </Grid>
 
 </UserControl>

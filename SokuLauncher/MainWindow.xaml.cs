@@ -33,7 +33,7 @@ namespace SokuLauncher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             try
@@ -44,7 +44,7 @@ namespace SokuLauncher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             ViewModel.UpdatesManager = new UpdatesManager(ViewModel.ConfigUtil, ViewModel.ModsManager);
@@ -122,7 +122,7 @@ namespace SokuLauncher
             {
                 if (string.IsNullOrWhiteSpace(ViewModel.ConfigUtil.Config.SokuFileName))
                 {
-                    throw new Exception($"th123 executable file not set");
+                    throw new Exception(Static.LanguageService.GetString("Common-Th123NotSet"));
                 }
 
                 var settingGroup = ViewModel.SelectedSokuModSettingGroup;
@@ -140,7 +140,7 @@ namespace SokuLauncher
                         ViewModel.UpdatesManager.StatusChanged += StatusChanged;
                         if (string.IsNullOrWhiteSpace(ViewModel.UpdatesManager.VersionInfoJson))
                         {
-                            ViewModel.SelectedSokuModSettingGroup.Status = "Check version info...";
+                            ViewModel.SelectedSokuModSettingGroup.Status = Static.LanguageService.GetString("Common-CheckVersionInfo");
                             await Task.Delay(200);
                             await ViewModel.UpdatesManager.GetVersionInfoJson();
                         }
@@ -156,7 +156,7 @@ namespace SokuLauncher
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     ViewModel.SelectedSokuModSettingGroup.IsShowProgress = false;
                 }
@@ -176,7 +176,7 @@ namespace SokuLauncher
 
                 if (!File.Exists(sokuFile))
                 {
-                    throw new Exception($"The '{ViewModel.ConfigUtil.Config.SokuFileName}' file does not exist.");
+                    throw new Exception(string.Format(Static.LanguageService.GetString("MainWindow-SokuFileNotFound"), ViewModel.ConfigUtil.Config.SokuFileName));
                 }
 
                 ZoomInHideWindow((s, _) =>
@@ -188,7 +188,7 @@ namespace SokuLauncher
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             SokuModSettingGroupListView.SelectedItem = null;
             IsSokuModSettingGroupsSelectionChangedProcessing = false;

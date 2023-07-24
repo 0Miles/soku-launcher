@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
         mc:Ignorable="d" Closing="Window_Closing"
-        Title="Config" MinWidth="260" MinHeight="320" Width="620" Height="720" WindowStartupLocation="CenterScreen">
+        Title="{DynamicResource ConfigWindow-Title}" MinWidth="480" MinHeight="320" Width="620" Height="720" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:IsFirstItemConverter x:Key="IsFirstItemConverter"/>
         <converters:IsLastItemConverter x:Key="IsLastItemConverter"/>
@@ -28,7 +28,7 @@
     </Window.Resources>
     <Grid>
         <TabControl x:Name="MainTabControl" Margin="8,18,8,8" FocusVisualStyle="{x:Null}">
-            <TabItem Header="Launcher">
+            <TabItem Header="{DynamicResource ConfigWindow-Tab-Launcher}">
                 <Grid ClipToBounds="True">
                     <Grid x:Name="SokuModSettingGroupsGrid">
                         <Grid.RowDefinitions>
@@ -45,7 +45,7 @@
                             <Button Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Cursor="Hand" Click="AddModSettingGroupButton_Click">
                                 <StackPanel Orientation="Horizontal" IsHitTestVisible="False">
                                     <Path Data="M12,5 V19 M5,12 H19" Stroke="Green" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Add" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-Button-Add}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <!--<Button Grid.Column="2" Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Cursor="Hand">
@@ -269,14 +269,14 @@
                                             </GeometryGroup>
                                         </Path.Data>
                                     </Path>
-                                    <TextBlock Grid.Column="1" Text="Back To Select" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Text="{DynamicResource ConfigWindow-LauncherTab-BackToSelect}" VerticalAlignment="Center" />
                                 </Grid>
                             </Button>
                         </Grid>
                         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}">
                             <StackPanel HorizontalAlignment="Stretch" MinWidth="450">
                                 <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4" VerticalAlignment="Center">
-                                    <TextBlock Text="Name: " HorizontalAlignment="Left" Margin="0,0,0,8" />
+                                    <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-Name}" HorizontalAlignment="Left" Margin="0,0,0,8" />
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
@@ -289,7 +289,7 @@
                                     </Grid>
                                 </StackPanel>
                                 <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4">
-                                    <TextBlock Text="Description: " HorizontalAlignment="Left" Margin="0,0,0,8" />
+                                    <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-Description}" HorizontalAlignment="Left" Margin="0,0,0,8" />
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
@@ -301,7 +301,7 @@
                                         </Button>
                                     </Grid>
                                 </StackPanel>
-                                <TextBlock Text="Appearance: " HorizontalAlignment="Left" Margin="8" />
+                                <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-Appearance}" HorizontalAlignment="Left" Margin="8" />
                                 <local:ModSettingGroupUserControl ModSettingGroup="{Binding SelectedSokuModSettingGroup}" VerticalAlignment="Top" HorizontalAlignment="Center" Width="420" Height="150" Margin="16,8" />
                                 <StackPanel Width="428">
                                     <Grid>
@@ -309,12 +309,9 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <Button Margin="4,0,4,0" Padding="6" Cursor="Hand" Click="SelectCoverBackgroundButton_Click">
-                                            Select cover background
-                                        </Button>
-                                        <Button Grid.Column="1" Margin="4,0,4,0" Padding="16,6" Cursor="Hand" Click="CropBackgroundButton_Click" Visibility="{Binding SelectedSokuModSettingGroup.CoverOrigin, Converter={StaticResource StringToVisibilityConverter}}">
-                                            Crop
-                                        </Button>
+                                        <Button Content="{DynamicResource ConfigWindow-LauncherTab-SelectCoverBackground}" Margin="4,0,4,0" Padding="6" Cursor="Hand" Click="SelectCoverBackgroundButton_Click"/>
+
+                                        <Button Content="{DynamicResource ConfigWindow-LauncherTab-Crop}" Grid.Column="1" Margin="4,0,4,0" Padding="16,6" Cursor="Hand" Click="CropBackgroundButton_Click" Visibility="{Binding SelectedSokuModSettingGroup.CoverOrigin, Converter={StaticResource StringToVisibilityConverter}}" />
                                     </Grid>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -322,13 +319,13 @@
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="8">
-                                            <TextBlock Text="Cover color: " HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                            <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-CoverColor}" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                             <Button HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Margin="8" Click="PickColorButton_Click" Tag="CoverOverlayColor">
                                                 <Border Background="{Binding SelectedSokuModSettingGroup.CoverOverlayColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
                                             </Button>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="8">
-                                            <TextBlock Text="Hover color: " HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                            <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-HoverColor}" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                             <Button HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" Cursor="Hand" Margin="8" Click="PickColorButton_Click" Tag="HoverColor">
                                                 <Border Background="{Binding SelectedSokuModSettingGroup.HoverColor}" Padding="8" Margin="2" IsHitTestVisible="False" BorderBrush="Black" BorderThickness="1" />
                                             </Button>
@@ -342,13 +339,11 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <Button Padding="16" Cursor="Hand" Click="ModSettingGroupSelectModsButton_Click">
-                                        Select mods
-                                    </Button>
+                                    <Button Content="{DynamicResource ConfigWindow-LauncherTab-SelectMods}" Padding="16" Cursor="Hand" Click="ModSettingGroupSelectModsButton_Click"/>
                                     <StackPanel Grid.Column="1">
                                         <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4" VerticalAlignment="Center">
-                                            <TextBlock Text="Enable mods: " HorizontalAlignment="Left" Margin="0,0,0,8" />
-                                            <ListView ItemsSource="{Binding SelectedSokuModSettingGroup.EnableMods}" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch">
+                                            <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-EnableMods}" HorizontalAlignment="Left" Margin="0,0,0,8" />
+                                            <ListView ItemsSource="{Binding SelectedSokuModSettingGroup.EnableMods}" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" MinHeight="32">
                                                 <ListView.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <WrapPanel Orientation="Horizontal"  MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" ScrollViewer.CanContentScroll="False" />
@@ -357,8 +352,8 @@
                                             </ListView>
                                         </StackPanel>
                                         <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4" VerticalAlignment="Center">
-                                            <TextBlock Text="Disable mods: " HorizontalAlignment="Left" Margin="0,0,0,8" />
-                                            <ListView ItemsSource="{Binding SelectedSokuModSettingGroup.DisableMods}" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch">
+                                            <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-EnableMods}" HorizontalAlignment="Left" Margin="0,0,0,8" />
+                                            <ListView ItemsSource="{Binding SelectedSokuModSettingGroup.DisableMods}" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" MinHeight="32">
                                                 <ListView.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <WrapPanel Orientation="Horizontal"  MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" ScrollViewer.CanContentScroll="False" />
@@ -373,10 +368,10 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Mod">
+            <TabItem Header="{DynamicResource ConfigWindow-Tab-Mod}">
                 <local:ModListUserControl ModInfoList="{Binding ModInfoList}" SelectionChanged="ModListUserControl_SelectionChanged" ModDeleted="ModListUserControl_ModDeleted" ModUndeleted="ModListUserControl_ModUndeleted"/>
             </TabItem>
-            <TabItem Header="Path">
+            <TabItem Header="{DynamicResource ConfigWindow-Tab-Path}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Border Padding="8,8,8,0">
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -387,14 +382,14 @@
                             </Grid.RowDefinitions>
                             <Image Source="{Binding SokuFileIcon}" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding SokuFileIcon, Converter={StaticResource NullToVisibilityConverter}}"/>
                             <TextBox Grid.Row="1" Background="{x:Null}" Text="{Binding SokuFileName}" IsReadOnly="True" HorizontalAlignment="Center" BorderThickness="0" Margin="8"  Visibility="{Binding SokuFileName, Converter={StaticResource StringToVisibilityConverter}}"/>
-                            <TextBlock Text="th123 executable file not set" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding SokuFileName, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
-                            <Button Grid.Row="2" Content="Select" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,8,8,16" Padding="8,4" Click="SokuFileNameButton_Click" Cursor="Hand" ></Button>
+                            <TextBlock Text="{DynamicResource Common-Th123NotSet}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding SokuFileName, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
+                            <Button Grid.Row="2" Content="{DynamicResource ConfigWindow-PathTab-Browser}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,8,8,16" Padding="8,4" Click="SokuFileNameButton_Click" Cursor="Hand" ></Button>
                         </Grid>
                     </Border>
 
                     <GroupBox Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="8" Padding="8,16" Visibility="{Binding SokuFileName, Converter={StaticResource StringToVisibilityConverter}}">
                         <GroupBox.Header>
-                            <TextBlock Text="Path" />
+                            <TextBlock Text="{DynamicResource ConfigWindow-PathTab-Info}" />
                         </GroupBox.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -415,8 +410,8 @@
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SokuDirFullPath}" Padding="4" Background="#F5F5F5" IsReadOnly="True" VerticalAlignment="Center" Margin="4"/>
 
                             <TextBlock Grid.Row="2" Text="SWRSToys: " VerticalAlignment="Center" Margin="4" />
-                            <TextBlock Grid.Row="2" Text="Ready" Foreground="Green" Grid.Column="1" VerticalAlignment="Center" Margin="4,8" Visibility="{Binding SWRSToysD3d9Exist, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
-                            <TextBlock Grid.Row="2" Text="Not found" Foreground="DarkRed" Grid.Column="1" VerticalAlignment="Center" Margin="4,8" Visibility="{Binding SWRSToysD3d9Exist, Converter={StaticResource ReverseBooleanToVisibilityConverter}}"></TextBlock>
+                            <TextBlock Grid.Row="2" Text="{DynamicResource ConfigWindow-PathTab-Ready}" Foreground="Green" Grid.Column="1" VerticalAlignment="Center" Margin="4,8" Visibility="{Binding SWRSToysD3d9Exist, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
+                            <TextBlock Grid.Row="2" Text="{DynamicResource ConfigWindow-PathTab-NotFound}" Foreground="DarkRed" Grid.Column="1" VerticalAlignment="Center" Margin="4,8" Visibility="{Binding SWRSToysD3d9Exist, Converter={StaticResource ReverseBooleanToVisibilityConverter}}"></TextBlock>
 
                             <TextBlock Grid.Row="3" Text="Modules Dir: " VerticalAlignment="Center" Margin="4" />
                             <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ModsDirFullPath}" Padding="4" Background="#F5F5F5" IsReadOnly="True" VerticalAlignment="Center" Margin="4"/>
@@ -426,7 +421,7 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Update">
+            <TabItem Header="{DynamicResource ConfigWindow-Tab-Update}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Canvas Width="240" Height="147" Margin="0,0,0,60">
                         <Image Source="\Resources\icon.ico" Width="72" Height="73" Canvas.Left="84" HorizontalAlignment="Left" VerticalAlignment="Center" />
@@ -434,16 +429,24 @@
 
                         <TextBlock Text="{Binding CurrentVersion, Mode=OneWay}" Foreground="#333333" FontSize="12" Canvas.Right="0" Canvas.Top="132" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                     </Canvas>
-                    <TextBlock Text="Version info URL:" Margin="8,0,0,0"/>
+                    <TextBlock Text="{DynamicResource ConfigWindow-UpdateTab-VersionInfoUrl}" Margin="8,0,0,0"/>
                     <TextBox Text="{Binding VersionInfoUrl}" Padding="4" Margin="8" TextChanged="TextBoxSetSaveableTrue_TextChanged" />
-                    <CheckBox IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8">Auto check for updates on startup</CheckBox>
-                    <CheckBox IsChecked="{Binding AutoCheckForInstallable}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8">Auto check for installable mods before launching the game</CheckBox>
-                    <Button Content="{Binding CheckForUpdatesButtonText}" Margin="8" Padding="8,4" HorizontalAlignment="Center" Click="CheckForUpdatesButton_Click"></Button>
+                    <CheckBox Content="{DynamicResource ConfigWindow-UpdateTab-AutoCheckForUpdatesOnStartup}" IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8"/>
+                    <CheckBox Content="{DynamicResource ConfigWindow-UpdateTab-AutoCheckForInstallableMods}" IsChecked="{Binding AutoCheckForInstallable}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8"/>
+                    <Button Content="{DynamicResource ConfigWindow-CheckFouUpdatesNow}" Margin="8" Padding="8,4" HorizontalAlignment="Center" Click="CheckForUpdatesButton_Click" Visibility="{Binding CheckForUpdatesButtonText, Converter={StaticResource ReverseStringToVisibilityConverter}}"></Button>
+                    <Button Content="{Binding CheckForUpdatesButtonText}" Margin="8" Padding="8,4" HorizontalAlignment="Center" IsEnabled="False" Visibility="{Binding CheckForUpdatesButtonText, Converter={StaticResource StringToVisibilityConverter}}"></Button>
                 </StackPanel>
             </TabItem>
         </TabControl>
         <StackPanel Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Button Padding="12,3" Margin="8,0,0,0" IsEnabled="{Binding Saveable}" Click="SaveButton_Click" Cursor="Hand">Save</Button>
+            <ComboBox Grid.Column="1" ItemsSource="{Binding LanguageOptions}" SelectedValue="{Binding Language}" SelectedValuePath="Code" Width="100" VerticalAlignment="Center" HorizontalAlignment="Center" SelectionChanged="LanguageComboBox_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Title}" ></TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Content="{DynamicResource ConfigWindow-Button-Save}" Padding="12,3" Margin="8,0,0,0" IsEnabled="{Binding Saveable}" Click="SaveButton_Click" Cursor="Hand" />
         </StackPanel>
     </Grid>
 </Window>

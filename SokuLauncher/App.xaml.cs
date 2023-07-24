@@ -1,10 +1,8 @@
-﻿using SokuLauncher.Controls;
-using SokuLauncher.Utils;
-using SokuLauncher.ViewModels;
+﻿using SokuLauncher.Utils;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -16,6 +14,8 @@ namespace SokuLauncher
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            LanguageService_OnChangeLanguage(ConfigUtil.GetLanguageCode(CultureInfo.CurrentCulture.Name));
 
             await UpdatesManager.CheckSelfIsUpdating();
 
@@ -42,15 +42,33 @@ namespace SokuLauncher
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 });
             }
         }
         public App()
         {
+            Static.LanguageService = new LanguageService();
+            Static.LanguageService.OnChangeLanguage += LanguageService_OnChangeLanguage;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Current.DispatcherUnhandledException += Application_DispatcherUnhandledException;
+        }
+
+        private void LanguageService_OnChangeLanguage(string languageCode)
+        {
+            switch (languageCode)
+            {
+                case "zh-Hant":
+                    Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/Resources/Languages/zh-Hant.xaml");
+                    break;
+                case "zh-Hans":
+                    Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/Resources/Languages/zh-Hans.xaml");
+                    break;
+                default:
+                    Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/Resources/Languages/en.xaml");
+                    break;
+            }
         }
 
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

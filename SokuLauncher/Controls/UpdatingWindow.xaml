@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SokuLauncher.Controls"
         mc:Ignorable="d"
-        Title="Updating" Height="100" Width="380" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Topmost="True"
+        Title="{DynamicResource UpdatingWindow-Title}" Height="100" Width="380" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Topmost="True"
         Loaded="Window_Loaded">
     <StackPanel>
         <ProgressBar Value="{Binding Progress}" IsIndeterminate="{Binding IsIndeterminate}"  HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Center" Margin="8,8,8,0"/>

@@ -1,18 +1,8 @@
-﻿using SokuLauncher.Utils;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Runtime.Versioning;
-using System.Threading;
-using SokuLauncher.Models;
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
-using SokuLauncher.Controls;
 using System.Windows;
 
 namespace SokuLauncher
@@ -22,6 +12,7 @@ namespace SokuLauncher
         public static string TempDirPath { get; internal set; } = Path.Combine(Path.GetTempPath(), "SokuLauncher");
         public static string LocalDirPath { get; internal set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SokuLauncher");
         public static string SelfFileName { get; internal set; } = System.Reflection.Assembly.GetEntryAssembly().Location;
+        public static LanguageService LanguageService { get; set; } = new LanguageService();
         public static string SelfFileDir
         {
             get

@@ -100,7 +100,7 @@ namespace SokuLauncher.Utils
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception($"Read ModLoaderSettings.json failed: {ex.Message}");
+                    throw new Exception(string.Format(Static.LanguageService.GetString("Common-ReadFileFailedMessage"), "ModLoaderSettings.json", ex.Message));
                 }
             }
             else
@@ -160,7 +160,7 @@ namespace SokuLauncher.Utils
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception($"Read SWRSToys.ini failed: {ex.Message}");
+                    throw new Exception(string.Format(Static.LanguageService.GetString("Common-ReadFileFailedMessage"), "SWRSToys.ini", ex.Message));
                 }
             }
         }

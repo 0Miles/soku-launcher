@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls"
         mc:Ignorable="d" SizeChanged="Window_SizeChanged"
-        Title="Crop" Height="520" Width="420" MinWidth="420" MinHeight="252" WindowStartupLocation="CenterScreen" >
+        Title="{DynamicResource CropWindow-Title}" Height="520" Width="420" MinWidth="420" MinHeight="252" WindowStartupLocation="CenterScreen" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -43,8 +43,8 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Orientation="Horizontal">
-                <Button Padding="12,7" Margin="8,0,0,0"  Click="CropButton_Click" >OK</Button>
-                <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>
+                <Button Content="{DynamicResource Common-Button-OK}" Padding="12,7" Margin="8,0,0,0"  Click="CropButton_Click" />
+                <Button Content="{DynamicResource Common-Button-Cancel}" Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ModSettingGroupEditWindowViewModel}"
-        mc:Ignorable="d" Loaded="Window_Loaded" x:Name="SokuLauncherModSettingGroupEditWindow" Title="Mod Setting"
+        mc:Ignorable="d" Loaded="Window_Loaded" x:Name="SokuLauncherModSettingGroupEditWindow" Title="{DynamicResource ModSettingGroupEditWindow-Title}"
         Height="550" Width="520" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
@@ -88,8 +88,8 @@
             </ListView.ItemContainerStyle>
         </ListView>
         <StackPanel Grid.Row="2" Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" >
-            <Button Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click">OK</Button>
-            <Button Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click">Cancel</Button>
+            <Button Content="{DynamicResource Common-Button-OK}" Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click"/>
+            <Button Content="{DynamicResource Common-Button-Cancel}" Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

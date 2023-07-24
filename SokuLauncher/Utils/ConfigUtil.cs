@@ -53,8 +53,9 @@ namespace SokuLauncher.Utils
                 // default values
                 if (string.IsNullOrWhiteSpace(Config.Language))
                 {
-                    Config.Language = CultureInfo.CurrentCulture.Name;
+                    Config.Language = GetLanguageCode(CultureInfo.CurrentCulture.Name);
                 }
+                Static.LanguageService.ChangeLanguagePublish(Config.Language);
 
                 if (!CheckSokuDirAndFileExists(Config.SokuDirPath, Config.SokuFileName))
                 {
@@ -71,8 +72,8 @@ namespace SokuLauncher.Utils
             {
                 if (string.IsNullOrWhiteSpace(Config.SokuFileName))
                 {
-                    if (MessageBox.Show("If you haven't set the path to the th123 executable file, you won't be able to launch the game. Would you like to set it now?",
-                            "Game file not found",
+                    if (MessageBox.Show(Static.LanguageService.GetString("ConfigUtil-GameFileNotFound-Message"),
+                            Static.LanguageService.GetString("ConfigUtil-GameFileNotFound-Title"),
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
@@ -113,7 +114,7 @@ namespace SokuLauncher.Utils
         {
             ConfigModel config = new ConfigModel();
 
-            config.Language = CultureInfo.CurrentCulture.Name;
+            config.Language = GetLanguageCode(CultureInfo.CurrentCulture.Name);
 
             config.SokuDirPath = FindSokuDir();
 
@@ -126,24 +127,24 @@ namespace SokuLauncher.Utils
             {
                 new ModSettingGroupModel
                 {
-                    Name = "Giuroll",
-                    Desc = "Enable SokuLobbies and Giuroll",
+                    Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Name"),
+                    Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Desc"),
                     EnableMods = new List<string> { "Giuroll", "Giuroll-60F", "SokuLobbiesMod", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll-62F", "SWRSokuRoll", "InGameHostlist" },
                     Cover = "%resources%/cover1.png"
                 },
                 new ModSettingGroupModel
                 {
-                    Name = "Giuroll CN",
-                    Desc = "Enable SokuLobbies and Giuroll-62F",
+                    Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Name"),
+                    Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Desc"),
                     EnableMods = new List<string> { "Giuroll-62F", "SokuLobbiesMod", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "SWRSokuRoll", "InGameHostlist" },
                     Cover = "%resources%/cover2.png"
                 },
                 new ModSettingGroupModel
                 {
-                    Name = "SokuRoll",
-                    Desc = "Enable InGameHostlist and SokuRoll 1.3",
+                    Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Name"),
+                    Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Desc"),
                     EnableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod" },
                     Cover = "%resources%/gearbackground.png",
@@ -151,8 +152,8 @@ namespace SokuLauncher.Utils
                 },
                 new ModSettingGroupModel
                 {
-                    Name = "No Roll",
-                    Desc = "Enable InGameHostlist, No any Roll",
+                    Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name"),
+                    Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Desc"),
                     EnableMods = new List<string> { "InGameHostlist", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod", "SWRSokuRoll" },
                     Cover = "%resources%/gearbackground-r.png",
@@ -198,10 +199,39 @@ namespace SokuLauncher.Utils
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             return null;
+        }
+
+        public static string GetLanguageCode(string cultureName)
+        {
+            switch (cultureName)
+            {
+                case "zh-TW":
+                case "zh-HK":
+                case "zh-MO":
+                case "zh-CHT":
+                case "zh-Hant":
+                case "zh-Hant-TW":
+                case "zh-Hant-MO":
+                case "zh-Hant-HK":
+                    return "zh-Hant";
+                case "zh-CN":
+                case "zh-SG":
+                case "zh-CHS":
+                case "zh-Hans":
+                case "zh-Hans-CN":
+                case "zh-Hans-MO":
+                case "zh-Hans-HK":
+                case "zh-Hans-SG":
+                    return "zh-Hans";
+                case "ja":
+                    return "ja";
+                default:
+                    return "en";
+            }
         }
 
         public static List<string> FindSokuFiles(string directory)
@@ -236,8 +266,8 @@ namespace SokuLauncher.Utils
 
                 SelectorWindowViewModel swvm = new SelectorWindowViewModel
                 {
-                    Title = "Choose game file",
-                    Desc = "Multiple th123 executable files found. Please select one as the launcher target.",
+                    Title = Static.LanguageService.GetString("ConfigUtil-SelectSokuFileWindow-Title"),
+                    Desc = Static.LanguageService.GetString("ConfigUtil-SelectSokuFileWindow-Desc"),
                     SelectorNodeList = new System.Collections.ObjectModel.ObservableCollection<SelectorNodeModel>()
                 };
 
@@ -271,7 +301,7 @@ namespace SokuLauncher.Utils
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = currentSokuDir;
 
-            openFileDialog.Filter = "Executable files (*.exe)|*.exe";
+            openFileDialog.Filter = Static.LanguageService.GetString("Common-OpenExeFileDialog-Filter");
 
             bool? result = openFileDialog.ShowDialog();
 

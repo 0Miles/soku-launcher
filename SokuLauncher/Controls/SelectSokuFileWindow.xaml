@@ -47,7 +47,7 @@
             </ListView.ItemTemplate>
         </ListView>
         <StackPanel Grid.Row="2" Margin="8" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Padding="12,7" Click="OKButton_Click">OK</Button>
+            <Button Content="{DynamicResource Common-Button-OK}" Padding="12,7" Click="OKButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

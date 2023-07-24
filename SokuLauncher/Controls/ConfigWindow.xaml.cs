@@ -58,8 +58,11 @@ namespace SokuLauncher.Controls
         {
             if (ViewModel.Saveable)
             {
-                if (MessageBox.Show("There are unsaved changes, do you want to discard changes?", "Unsaved changes", MessageBoxButton.YesNo, MessageBoxImage.Question)
-                    == MessageBoxResult.No)
+                if (MessageBox.Show(
+                        Static.LanguageService.GetString("ConfigWindow-UnsavedChanges-Message"),
+                        Static.LanguageService.GetString("ConfigWindow-UnsavedChanges-Title"),
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question) == MessageBoxResult.No)
                 {
                     e.Cancel = true;
                     return;
@@ -68,6 +71,7 @@ namespace SokuLauncher.Controls
 
             if (MainWindow.TryGetTarget(out MainWindow target))
             {
+                Static.LanguageService.ChangeLanguagePublish(target.ViewModel.ConfigUtil.Config.Language);
                 target.Show();
             }
         }
@@ -121,7 +125,7 @@ namespace SokuLauncher.Controls
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Delete failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Static.LanguageService.GetString("ConfigWindow-DeleteFailed") + ": " + ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
                 }
@@ -165,13 +169,11 @@ namespace SokuLauncher.Controls
                     }
                 }
 
-                
-
                 ViewModel.Saveable = false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Save config failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Static.LanguageService.GetString("ConfigWindow-SaveConfigFailed") + ": " + ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -446,8 +448,8 @@ namespace SokuLauncher.Controls
         {
             ViewModel.SokuModSettingGroups.Add(new ModSettingGroupModel
             {
-                Name = "Untitle",
-                Desc = "Please enter description here...",
+                Name = Static.LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Name"),
+                Desc = Static.LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Desc"),
                 Cover = "%resources%/gearbackground.png"
             });
 
@@ -517,7 +519,7 @@ namespace SokuLauncher.Controls
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            openFileDialog.Filter = "Image files (*.png,*.jpg,*.jpeg,*.gif,*.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp|Video files (*.mp4,*.avi,*.wmv)|*.mp4;*.avi;*.wmv";
+            openFileDialog.Filter = Static.LanguageService.GetString("ConfigWindow-ImageAndVideoFilter");
             openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
 
             bool? result = openFileDialog.ShowDialog();
@@ -590,7 +592,7 @@ namespace SokuLauncher.Controls
             }
             else
             {
-                MessageBox.Show("Origin image not found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Static.LanguageService.GetString("ConfigWindow-OriginImageNotFound"), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                 ViewModel.SelectedSokuModSettingGroup.CoverOrigin = null;
                 ViewModel.Saveable = true;
             }
@@ -704,24 +706,24 @@ namespace SokuLauncher.Controls
 
                     for (int i = 0; i < 100; i++)
                     {
-                        ViewModel.CheckForUpdatesButtonText = $"Check version info... {i}%";
+                        ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")} {i}%";
                         await Task.Delay(random.Next(200));
                         i += random.Next(5);
 
                         if (taskGetVersionInfoJson.IsCompleted)
                         {
-                            ViewModel.CheckForUpdatesButtonText = $"Check version info... 100%";
+                            ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")} 100%";
                             await Task.Delay(100);
                             break;
                         }
                     }
                     await taskGetVersionInfoJson;
-                    ViewModel.CheckForUpdatesButtonText = "Check for updates now";
+                    ViewModel.CheckForUpdatesButtonText = null;
                     updatesManager.CheckForUpdates(false);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally
                 {
@@ -753,6 +755,11 @@ namespace SokuLauncher.Controls
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Static.LanguageService.ChangeLanguagePublish(((sender as ComboBox).SelectedItem as SelectorNodeModel).Code);
         }
     }
 }

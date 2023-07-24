@@ -63,7 +63,7 @@ namespace SokuLauncher.Utils
 
                     UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
                     {
-                        Desc = "The following mods have updates available. Please check the mods you want to update.",
+                        Desc = Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
                         AvailableUpdateList = AvailableUpdateList,
                         IsAutoCheckForUpdatesCheckBoxShow = isAutoUpdates,
                         AutoCheckForUpdates = ConfigUtil.Config.AutoCheckForUpdates
@@ -124,12 +124,16 @@ namespace SokuLauncher.Utils
                                 }
                                 if (!isAutoUpdates)
                                 {
-                                    MessageBox.Show("All updates completed", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    MessageBox.Show(
+                                        Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
+                                        Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
+                                        MessageBoxButton.OK,
+                                        MessageBoxImage.Information);
                                 }
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show(ex.Message, "Updates", MessageBoxButton.OK, MessageBoxImage.Error);
+                                MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                                 updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
                             }
                         });
@@ -140,13 +144,17 @@ namespace SokuLauncher.Utils
                 {
                     if (!isAutoUpdates)
                     {
-                        MessageBox.Show("All available mods have been updated to the latest version", "Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(
+                            Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-AllLatest"),
+                            Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -159,7 +167,7 @@ namespace SokuLauncher.Utils
                 {
                     UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
                     {
-                        Desc = "The following mods are missing. Please install to make sure the game works correctly.",
+                        Desc = Static.LanguageService.GetString("UpdatesManager-CheckForInstallable-UpdateSelectionWindow-Desc"),
                         AvailableUpdateList = AvailableUpdateList,
                         IsAutoCheckForUpdatesCheckBoxShow = false
                     };
@@ -178,7 +186,7 @@ namespace SokuLauncher.Utils
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -201,7 +209,7 @@ namespace SokuLauncher.Utils
                             client.DownloadProgressChanged += (sender, e) =>
                             {
                                 DownloadProgressChanged?.Invoke(e.ProgressPercentage);
-                                StatusChanged?.Invoke("Check version info... " + $"{e.ProgressPercentage}%");
+                                StatusChanged?.Invoke(Static.LanguageService.GetString("UpdatesManager-GetVersionInfoJson-Message") + $" {e.ProgressPercentage}%");
                             };
                             VersionInfoJson = await client.DownloadStringTaskAsync(string.IsNullOrWhiteSpace(ConfigUtil.Config.VersionInfoUrl) ? DEFAULT_VERSION_INFO_URL : ConfigUtil.Config.VersionInfoUrl);
                         }
@@ -224,7 +232,11 @@ namespace SokuLauncher.Utils
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Parsing VersionInfo failed: {ex}", "Update", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    Static.LanguageService.GetString("UpdatesManager-GetAvailableUpdateList-ParsingVersionInfoFailed") + $": {ex}",
+                    Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
                 VersionInfoJson = null;
                 return;
             }
@@ -294,7 +306,7 @@ namespace SokuLauncher.Utils
             }
             catch (Exception ex)
             {
-                throw new Exception("Failed to check for updates: " + ex.Message);
+                throw new Exception(Static.LanguageService.GetString("UpdatesManager-GetAvailableUpdateList-UpdatesFailed") + ": " + ex.Message);
             }
         }
 
@@ -347,14 +359,14 @@ namespace SokuLauncher.Utils
                     client.DownloadProgressChanged += (sender, e) =>
                     {
                         DownloadProgressChanged?.Invoke(e.ProgressPercentage);
-                        StatusChanged?.Invoke($"Downloading {updateFileInfo.Name}... " + $"{e.ProgressPercentage}%");
+                        StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdatesManager-DownloadAndExtractFile-Downloading"), updateFileInfo.Name) + $" {e.ProgressPercentage}%");
                     };
                     await client.DownloadFileTaskAsync(updateFileInfo.DownloadUrl, downloadToTempFilePath);
                 }
 
                 if (updateFileInfo.Compressed)
                 {
-                    StatusChanged?.Invoke($"Extracting {updateFileInfo.Name}... ");
+                    StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdatesManager-DownloadAndExtractFile-Extracting"), updateFileInfo.Name));
                     ZipFile.ExtractToDirectory(downloadToTempFilePath, updateFileDir);
                     File.Delete(downloadToTempFilePath);
                 }
@@ -362,13 +374,13 @@ namespace SokuLauncher.Utils
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to download {updateFileInfo.FileName}: " + ex.Message);
+                throw new Exception(string.Format(Static.LanguageService.GetString("UpdatesManager-DownloadAndExtractFile-Failed"), updateFileInfo.FileName) + ": " + ex.Message);
             }
         }
 
         public void CopyAndReplaceFile(UpdateFileInfoModel updateFileInfo)
         {
-            StatusChanged?.Invoke($"Updating {updateFileInfo.Name}... ");
+            StatusChanged?.Invoke(Static.LanguageService.GetString("UpdatesManager-Updating") + $" {updateFileInfo.Name}...");
             string updateFileDir = Path.Combine(UpdateTempDirPath, updateFileInfo.Name);
             string updateWorkingDir = updateFileDir;
             if (!string.IsNullOrWhiteSpace(updateFileInfo.UpdateWorkingDir))
@@ -417,7 +429,7 @@ namespace SokuLauncher.Utils
                 }
                 else
                 {
-                    throw new Exception("Can not copy file: " + updateFileInfo.FileName);
+                    throw new Exception(Static.LanguageService.GetString("UpdatesManager-CopyAndReplaceFile-CanNotCopyFile") + ": " + updateFileInfo.FileName);
                 }
             }
 
@@ -437,7 +449,7 @@ namespace SokuLauncher.Utils
         private static void CopyDirectory(string sourceDir, string destinationDir, bool recursive = true)
         {
             var dir = new DirectoryInfo(sourceDir);
-            if (!dir.Exists) throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+            if (!dir.Exists) throw new DirectoryNotFoundException(Static.LanguageService.GetString("UpdatesManager-CopyDirectory-SourceDirNotFound") + $": {dir.FullName}");
 
             DirectoryInfo[] dirs = dir.GetDirectories();
             Directory.CreateDirectory(destinationDir);
@@ -470,7 +482,7 @@ namespace SokuLauncher.Utils
                 {
                     UpdatesManager = null,
                     IsIndeterminate = true,
-                    Status = "Wait SokuLauncher process close..."
+                    Status = Static.LanguageService.GetString("UpdatesManager-CheckSelfIsUpdating-WaitProcessClose")
                 };
 
                 updatingWindow.Show();
@@ -495,7 +507,7 @@ namespace SokuLauncher.Utils
                     }
                 } while (hasSameProcess);
 
-                updatingWindow.Status = "Updating...";
+                updatingWindow.Status = Static.LanguageService.GetString("UpdatesManager-Updating") + "...";
 
                 await Task.Run(() => {
                     File.Copy(Static.SelfFileName, replaceTargetPath, true);
