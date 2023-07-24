@@ -23,7 +23,7 @@ namespace SokuLauncher
             string path = assemblyName.Name + ".dll";
             if (assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false)
             {
-                path = String.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
+                path = string.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
             }
 
             using (Stream stream = executingAssembly.GetManifestResourceStream(path))
