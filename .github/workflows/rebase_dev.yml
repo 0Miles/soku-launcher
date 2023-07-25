@@ -1,0 +1,37 @@
+name: Rebase dev
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check_and_rebase:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+        
+        - name: Check and rebase
+          uses: actions/github-script@v6
+          with:
+            script: |
+                try {
+                    const devBranch = github.rest.repos.getBranch({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        branch: 'dev',
+                    });
+
+                    await github.rest.git.updateRef({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        ref: 'heads/dev',
+                        sha: process.env.GITHUB_SHA,
+                    });
+                    
+                } catch (ex) {
+                    process.exitCode = 0
+                }
+                
+        
+      
