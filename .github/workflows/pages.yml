@@ -2,6 +2,8 @@ name: Pages
 
 on:
   push:
+    branches:
+      - main
     paths:
       - 'docs/**'
 
