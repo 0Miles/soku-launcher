@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
         mc:Ignorable="d" Closing="Window_Closing"
-        Title="{DynamicResource ConfigWindow-Title}" MinWidth="480" MinHeight="320" Width="620" Height="720" WindowStartupLocation="CenterScreen">
+        Title="{DynamicResource ConfigWindow-Title}" MinWidth="500" MinHeight="520" Width="620" Height="720" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:IsFirstItemConverter x:Key="IsFirstItemConverter"/>
         <converters:IsLastItemConverter x:Key="IsLastItemConverter"/>
