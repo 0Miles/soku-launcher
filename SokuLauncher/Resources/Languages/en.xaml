@@ -48,6 +48,7 @@
     <system:String x:Key="UpdatingWindow-Title">Updating</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">Updates</system:String>
     <system:String x:Key="UpdateSelectionWindow-AutoCheckFouUpdatesCheckbox-Content">Auto check for updates on startup</system:String>
+    <system:String x:Key="CropWindow-Title">Crop</system:String>
     <system:String x:Key="ModSettingGroupEditWindow-Title">Mod Setting</system:String>
     <system:String x:Key="ModListUserControl-NoMod">Mod not found</system:String>
 
@@ -75,7 +76,7 @@
     <system:String x:Key="ConfigWindow-LauncherTab-EnableMods">Enable mods:</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-DisableMods">Disable mods:</system:String>
 
-    <system:String x:Key="ConfigWindow-PathTab-Browser">Browser</system:String>
+    <system:String x:Key="ConfigWindow-PathTab-Browse">Browse</system:String>
     <system:String x:Key="ConfigWindow-PathTab-Info">Info</system:String>
     <system:String x:Key="ConfigWindow-PathTab-Ready">Ready</system:String>
     <system:String x:Key="ConfigWindow-PathTab-NotFound">Not found</system:String>

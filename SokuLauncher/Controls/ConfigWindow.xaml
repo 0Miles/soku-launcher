@@ -383,7 +383,7 @@
                             <Image Source="{Binding SokuFileIcon}" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding SokuFileIcon, Converter={StaticResource NullToVisibilityConverter}}"/>
                             <TextBox Grid.Row="1" Background="{x:Null}" Text="{Binding SokuFileName}" IsReadOnly="True" HorizontalAlignment="Center" BorderThickness="0" Margin="8"  Visibility="{Binding SokuFileName, Converter={StaticResource StringToVisibilityConverter}}"/>
                             <TextBlock Text="{DynamicResource Common-Th123NotSet}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding SokuFileName, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
-                            <Button Grid.Row="2" Content="{DynamicResource ConfigWindow-PathTab-Browser}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,8,8,16" Padding="8,4" Click="SokuFileNameButton_Click" Cursor="Hand" ></Button>
+                            <Button Grid.Row="2" Content="{DynamicResource ConfigWindow-PathTab-Browse}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,8,8,16" Padding="16,4" Click="SokuFileNameButton_Click" Cursor="Hand" ></Button>
                         </Grid>
                     </Border>
 
@@ -433,8 +433,8 @@
                     <TextBox Text="{Binding VersionInfoUrl}" Padding="4" Margin="8" TextChanged="TextBoxSetSaveableTrue_TextChanged" />
                     <CheckBox Content="{DynamicResource ConfigWindow-UpdateTab-AutoCheckForUpdatesOnStartup}" IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8"/>
                     <CheckBox Content="{DynamicResource ConfigWindow-UpdateTab-AutoCheckForInstallableMods}" IsChecked="{Binding AutoCheckForInstallable}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8"/>
-                    <Button Content="{DynamicResource ConfigWindow-CheckFouUpdatesNow}" Margin="8" Padding="8,4" HorizontalAlignment="Center" Click="CheckForUpdatesButton_Click" Visibility="{Binding CheckForUpdatesButtonText, Converter={StaticResource ReverseStringToVisibilityConverter}}"></Button>
-                    <Button Content="{Binding CheckForUpdatesButtonText}" Margin="8" Padding="8,4" HorizontalAlignment="Center" IsEnabled="False" Visibility="{Binding CheckForUpdatesButtonText, Converter={StaticResource StringToVisibilityConverter}}"></Button>
+                    <Button Content="{DynamicResource ConfigWindow-CheckFouUpdatesNow}" Margin="8" Padding="16,4" HorizontalAlignment="Center" Click="CheckForUpdatesButton_Click" Visibility="{Binding CheckForUpdatesButtonText, Converter={StaticResource ReverseStringToVisibilityConverter}}"></Button>
+                    <Button Content="{Binding CheckForUpdatesButtonText}" Margin="8" Padding="16,4" HorizontalAlignment="Center" IsEnabled="False" Visibility="{Binding CheckForUpdatesButtonText, Converter={StaticResource StringToVisibilityConverter}}"></Button>
                 </StackPanel>
             </TabItem>
         </TabControl>

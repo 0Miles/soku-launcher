@@ -48,6 +48,7 @@
     <system:String x:Key="UpdatingWindow-Title">更新中</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">更新</system:String>
     <system:String x:Key="UpdateSelectionWindow-AutoCheckFouUpdatesCheckbox-Content">啟動時自動檢查更新</system:String>
+    <system:String x:Key="CropWindow-Title">裁切</system:String>
     <system:String x:Key="ModSettingGroupEditWindow-Title">模組設定</system:String>
     <system:String x:Key="ModListUserControl-NoMod">找不到模組</system:String>
 
@@ -75,7 +76,7 @@
     <system:String x:Key="ConfigWindow-LauncherTab-EnableMods">啟用模組:</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-DisableMods">停用模組:</system:String>
 
-    <system:String x:Key="ConfigWindow-PathTab-Browser">瀏覽</system:String>
+    <system:String x:Key="ConfigWindow-PathTab-Browse">瀏覽</system:String>
     <system:String x:Key="ConfigWindow-PathTab-Info">相關資訊</system:String>
     <system:String x:Key="ConfigWindow-PathTab-Ready">就緒</system:String>
     <system:String x:Key="ConfigWindow-PathTab-NotFound">未找到</system:String>
@@ -88,7 +89,7 @@
     <system:String x:Key="ConfigWindow-SaveConfigFailed">儲存設定失敗</system:String>
     <system:String x:Key="ConfigWindow-ImageAndVideoFilter">圖片 (*.png,*.jpg,*.jpeg,*.gif,*.bmp)|*.jpg;*.jpeg;*.png;*.gif;*.bmp|影片 (*.mp4,*.avi,*.wmv)|*.mp4;*.avi;*.wmv</system:String>
     <system:String x:Key="ConfigWindow-OriginImageNotFound">原始圖片遺失</system:String>
-    <system:String x:Key="ConfigWindow-CheckFouUpdatesNow">立刻檢查更新</system:String>
+    <system:String x:Key="ConfigWindow-CheckFouUpdatesNow">檢查更新</system:String>
 
     <system:String x:Key="MainWindow-SokuFileNotFound">檔案 '{0}' 不存在.</system:String>
 </ResourceDictionary>
