@@ -12,6 +12,9 @@
     <system:String x:Key="Common-ModuleNotFound">Module not found</system:String>
     <system:String x:Key="Common-Th123NotSet">th123 executable file path not set</system:String>
     <system:String x:Key="Common-CheckVersionInfo">Check version info...</system:String>
+    <system:String x:Key="Common-Enable">Enable</system:String>
+    <system:String x:Key="Common-Disable">Disable</system:String>
+    <system:String x:Key="Common-Constant">Constant</system:String>
 
     <system:String x:Key="ConfigUtil-GameFileNotFound-Title">Game file not found</system:String>
     <system:String x:Key="ConfigUtil-GameFileNotFound-Message">If you haven't set the path to the th123 executable file, you won't be able to launch the game. Would you like to set it now?</system:String>
@@ -68,7 +71,7 @@
     <system:String x:Key="ConfigWindow-LauncherTab-Crop">Crop</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-CoverColor">Cover color: </system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-HoverColor">Hover color: </system:String>
-    <system:String x:Key="ConfigWindow-LauncherTab-SelectMods">Select mods</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-Settings">Settings</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-EnableMods">Enable mods:</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-DisableMods">Disable mods:</system:String>
 

@@ -333,13 +333,13 @@
                                     </Grid>
                                 </StackPanel>
 
-                                <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Margin="8"/>
+                                <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Margin="8,8,8,0"/>
                                 <Grid Margin="8">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <Button Content="{DynamicResource ConfigWindow-LauncherTab-SelectMods}" Padding="16" Cursor="Hand" Click="ModSettingGroupSelectModsButton_Click"/>
+                                    <Button Content="{DynamicResource ConfigWindow-LauncherTab-Settings}" Margin="8,10,0,4" MinWidth="80" Padding="16" Cursor="Hand" Click="ModSettingGroupSelectModsButton_Click"/>
                                     <StackPanel Grid.Column="1">
                                         <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4" VerticalAlignment="Center">
                                             <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-EnableMods}" HorizontalAlignment="Left" Margin="0,0,0,8" />
@@ -352,7 +352,7 @@
                                             </ListView>
                                         </StackPanel>
                                         <StackPanel HorizontalAlignment="Stretch" Margin="8,8,8,4" VerticalAlignment="Center">
-                                            <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-EnableMods}" HorizontalAlignment="Left" Margin="0,0,0,8" />
+                                            <TextBlock Text="{DynamicResource ConfigWindow-LauncherTab-DisableMods}" HorizontalAlignment="Left" Margin="0,0,0,8" />
                                             <ListView ItemsSource="{Binding SelectedSokuModSettingGroup.DisableMods}" Padding="4" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" MinHeight="32">
                                                 <ListView.ItemsPanel>
                                                     <ItemsPanelTemplate>

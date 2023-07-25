@@ -12,6 +12,9 @@
     <system:String x:Key="Common-ModuleNotFound">找不到模組</system:String>
     <system:String x:Key="Common-Th123NotSet">th123 執行檔路徑未設定</system:String>
     <system:String x:Key="Common-CheckVersionInfo">檢查版本資訊...</system:String>
+    <system:String x:Key="Common-Enable">啟用</system:String>
+    <system:String x:Key="Common-Disable">停用</system:String>
+    <system:String x:Key="Common-Constant">保持不變</system:String>
 
     <system:String x:Key="ConfigUtil-GameFileNotFound-Title">找不到遊戲檔案</system:String>
     <system:String x:Key="ConfigUtil-GameFileNotFound-Message">若未設定遊戲執行檔路徑，將無法啟動遊戲\n要立刻設定嗎?</system:String>
@@ -68,9 +71,9 @@
     <system:String x:Key="ConfigWindow-LauncherTab-Crop">裁切</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-CoverColor">封面顏色: </system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-HoverColor">覆蓋顏色: </system:String>
-    <system:String x:Key="ConfigWindow-LauncherTab-SelectMods">選擇模組</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-Settings">設定</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-EnableMods">啟用模組:</system:String>
-    <system:String x:Key="ConfigWindow-LauncherTab-DisableMods">禁用模組:</system:String>
+    <system:String x:Key="ConfigWindow-LauncherTab-DisableMods">停用模組:</system:String>
 
     <system:String x:Key="ConfigWindow-PathTab-Browser">瀏覽</system:String>
     <system:String x:Key="ConfigWindow-PathTab-Info">相關資訊</system:String>

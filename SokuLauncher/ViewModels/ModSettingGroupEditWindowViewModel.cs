@@ -10,9 +10,9 @@ namespace SokuLauncher.ViewModels
     {
         public List<ModSettingInfoModel> Options { get; set; } = new List<ModSettingInfoModel>
         {
-            new ModSettingInfoModel { Name = "Enable", Enabled = "true"},
-            new ModSettingInfoModel { Name = "Disable", Enabled = "false"},
-            new ModSettingInfoModel { Name = "Constant", Enabled = "null" }
+            new ModSettingInfoModel { Name = Static.LanguageService.GetString("Common-Enable"), Enabled = "true"},
+            new ModSettingInfoModel { Name = Static.LanguageService.GetString("Common-Disable"), Enabled = "false"},
+            new ModSettingInfoModel { Name = Static.LanguageService.GetString("Common-Constant"), Enabled = "null" }
         };
 
         private List<ModSettingInfoModel> _ModSettingInfoList;

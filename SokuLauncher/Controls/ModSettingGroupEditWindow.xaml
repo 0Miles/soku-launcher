@@ -55,7 +55,7 @@
                                                 <TextBlock Canvas.Left="42" Text="{Binding Name}" FontSize="16"/>
                                             </Canvas>
                                             <TextBlock Text="{Binding RelativePath}" Margin="42,0,0,0" MaxWidth="310" TextWrapping="Wrap" Foreground="DarkGray" Visibility="{Binding RelativePath, Converter={StaticResource StringToVisibilityConverter}}" />
-                                            <TextBlock Text="Module not found" Margin="42,0,0,0" MaxWidth="310" TextWrapping="Wrap" Foreground="DarkRed" Visibility="{Binding RelativePath, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
+                                            <TextBlock Text="{DynamicResource Common-ModuleNotFound}" Margin="42,0,0,0" MaxWidth="310" TextWrapping="Wrap" Foreground="DarkRed" Visibility="{Binding RelativePath, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
                                         </StackPanel>
                                         <ComboBox Grid.Column="1" ItemsSource="{Binding DataContext.Options, ElementName=SokuLauncherModSettingGroupEditWindow}" SelectedValue="{Binding Enabled}" SelectedValuePath="Enabled" Width="100" VerticalAlignment="Center" HorizontalAlignment="Center">
                                             <ComboBox.ItemTemplate>
@@ -64,11 +64,11 @@
                                                         <TextBlock.Style>
                                                             <Style TargetType="TextBlock">
                                                                 <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding Name}" Value="Enable">
+                                                                    <DataTrigger Binding="{Binding Enabled}" Value="true">
                                                                         <Setter Property="Foreground" Value="Blue" />
                                                                         <Setter Property="FontWeight" Value="Bold" />
                                                                     </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Name}" Value="Disable">
+                                                                    <DataTrigger Binding="{Binding Enabled}" Value="false">
                                                                         <Setter Property="Foreground" Value="Red" />
                                                                         <Setter Property="FontWeight" Value="Bold" />
                                                                     </DataTrigger>
