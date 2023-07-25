@@ -51,6 +51,10 @@
     <system:String x:Key="CropWindow-Title">Crop</system:String>
     <system:String x:Key="ModSettingGroupEditWindow-Title">Mod Setting</system:String>
     <system:String x:Key="ModListUserControl-NoMod">Mod not found</system:String>
+    <system:String x:Key="ModListUserControl-OpenModFolder">Open folder</system:String>
+    <system:String x:Key="ModListUserControl-OpenConfigFile">Open config file</system:String>
+    <system:String x:Key="ModListUserControl-Delete">Delete</system:String>
+    <system:String x:Key="ModListUserControl-Undelete">Undelete</system:String>
 
     <system:String x:Key="ConfigWindow-Title">Config</system:String>
     <system:String x:Key="ConfigWindow-Tab-Launcher">Launcher</system:String>

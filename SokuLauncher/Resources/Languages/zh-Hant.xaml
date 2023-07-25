@@ -51,6 +51,10 @@
     <system:String x:Key="CropWindow-Title">裁切</system:String>
     <system:String x:Key="ModSettingGroupEditWindow-Title">模組設定</system:String>
     <system:String x:Key="ModListUserControl-NoMod">找不到模組</system:String>
+    <system:String x:Key="ModListUserControl-OpenModFolder">開啟資料夾</system:String>
+    <system:String x:Key="ModListUserControl-OpenConfigFile">開啟設定檔</system:String>
+    <system:String x:Key="ModListUserControl-Delete">刪除</system:String>
+    <system:String x:Key="ModListUserControl-Undelete">取消刪除</system:String>
 
     <system:String x:Key="ConfigWindow-Title">設定</system:String>
     <system:String x:Key="ConfigWindow-Tab-Launcher">啟動器</system:String>

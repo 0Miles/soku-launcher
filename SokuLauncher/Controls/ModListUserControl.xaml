@@ -38,8 +38,8 @@
                                 <Grid Margin="4">
                                     <Grid.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Header="Open folder" Click="OpenModFolder_Click" Tag="{Binding FullPath}" />
-                                            <MenuItem Header="Open config file" ItemsSource="{Binding ConfigFileList}" IsEnabled="{Binding ConfigFileList, Converter={StaticResource ListCountToBoolenConverter}}">
+                                            <MenuItem Header="{DynamicResource ModListUserControl-OpenModFolder}" Click="OpenModFolder_Click" Tag="{Binding FullPath}" />
+                                            <MenuItem Header="{DynamicResource ModListUserControl-OpenConfigFile}" ItemsSource="{Binding ConfigFileList}" IsEnabled="{Binding ConfigFileList, Converter={StaticResource ListCountToBoolenConverter}}">
                                                 <MenuItem.ItemContainerStyle>
                                                     <Style TargetType="MenuItem">
                                                         <Setter Property="Header" Value="{Binding Converter={StaticResource FileNameConverter}}"/>
@@ -49,8 +49,8 @@
                                                 </MenuItem.ItemContainerStyle>
                                             </MenuItem>
                                             <Separator/>
-                                            <MenuItem Header="Delete" Click="DeleteMod_Click" Tag="{Binding DirName}" Visibility="{Binding ToBeDeleted, Converter={StaticResource ReverseBooleanToVisibilityConverter}}" />
-                                            <MenuItem Header="Undelete" Click="UndeleteMod_Click" Tag="{Binding DirName}" Visibility="{Binding ToBeDeleted, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            <MenuItem Header="{DynamicResource ModListUserControl-Delete}" Click="DeleteMod_Click" Tag="{Binding DirName}" Visibility="{Binding ToBeDeleted, Converter={StaticResource ReverseBooleanToVisibilityConverter}}" />
+                                            <MenuItem Header="{DynamicResource ModListUserControl-Undelete}" Click="UndeleteMod_Click" Tag="{Binding DirName}" Visibility="{Binding ToBeDeleted, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         </ContextMenu>
                                     </Grid.ContextMenu>
                                     <Border Padding="16,8,8,8" Width="250" MaxHeight="110" CornerRadius="1" Background="#FFFAFAFA" BorderBrush="#FFF2F2F2" BorderThickness="2" Cursor="Hand">
