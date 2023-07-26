@@ -450,7 +450,9 @@ namespace SokuLauncher.Controls
             {
                 Name = Static.LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Name"),
                 Desc = Static.LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Desc"),
-                Cover = "%resources%/gearbackground.png"
+                Cover = "%resources%/gearbackground.png",
+                EnableMods = new List<string>(),
+                DisableMods = new List<string>()
             });
 
             ForceSokuModSettingGroupsListViewRefresh();

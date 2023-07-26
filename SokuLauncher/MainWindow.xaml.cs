@@ -145,7 +145,7 @@ namespace SokuLauncher
                             await ViewModel.UpdatesManager.GetVersionInfoJson();
                         }
 
-                        List<string> CheckModes = settingGroup.EnableMods.Select(x => x).ToList();
+                        List<string> CheckModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
                         CheckModes.Add("SokuModLoader");
                         await ViewModel.UpdatesManager.CheckForInstallable(CheckModes);
                         ViewModel.ModsManager.SearchModulesDir();
@@ -161,13 +161,19 @@ namespace SokuLauncher
                     ViewModel.SelectedSokuModSettingGroup.IsShowProgress = false;
                 }
 
-                foreach (var enableMod in settingGroup.EnableMods ?? new List<string>())
+                if (settingGroup.EnableMods != null)
                 {
-                    ViewModel.ModsManager.ChangeModEnabled(enableMod, true);
+                    foreach (var enableMod in settingGroup.EnableMods)
+                    {
+                        ViewModel.ModsManager.ChangeModEnabled(enableMod, true);
+                    }
                 }
-                foreach (var disableMod in settingGroup.DisableMods ?? new List<string>())
+                if (settingGroup.DisableMods != null)
                 {
-                    ViewModel.ModsManager.ChangeModEnabled(disableMod, false);
+                    foreach (var disableMod in settingGroup.DisableMods)
+                    {
+                        ViewModel.ModsManager.ChangeModEnabled(disableMod, false);
+                    }
                 }
                 ViewModel.ModsManager.DisableDuplicateEnabledMods();
                 ViewModel.ModsManager.SaveSWRSToysIni();
