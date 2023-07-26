@@ -171,6 +171,7 @@
     <Compile Include="Models\UpdateFileModel.cs" />
     <Compile Include="Static.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
+    <Compile Include="Utils\Debouncer.cs" />
     <Compile Include="Utils\ModsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utils\ResourcesManager.cs" />

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
         mc:Ignorable="d" Closing="Window_Closing"
-        Title="{DynamicResource ConfigWindow-Title}" MinWidth="500" MinHeight="520" Width="620" Height="720" WindowStartupLocation="CenterScreen">
+        Title="{DynamicResource ConfigWindow-Title}" MinWidth="500" MinHeight="520" Width="588" Height="720" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:IsFirstItemConverter x:Key="IsFirstItemConverter"/>
         <converters:IsLastItemConverter x:Key="IsLastItemConverter"/>
@@ -35,7 +35,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Grid Background="#FFEFEFEF" HorizontalAlignment="Stretch">
+                        <Grid Background="#FFEFEFEF" HorizontalAlignment="Stretch" Height="32">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
@@ -242,7 +242,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Grid HorizontalAlignment="Stretch" Background="#FFEFEFEF">
+                        <Grid HorizontalAlignment="Stretch" Background="#FFEFEFEF" Height="32">
                             <Button Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Click="BackToModSettingGroupsButton_Click" Cursor="Hand">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -250,25 +250,7 @@
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
 
-                                    <Path Stroke="DodgerBlue" Width="24" Height="24" Margin="0,0,8,0" VerticalAlignment="Center" StrokeThickness="1" Fill="{x:Null}">
-                                        <Path.Data>
-                                            <GeometryGroup>
-                                                <PathGeometry>
-                                                    <PathFigure StartPoint="9,14">
-                                                        <LineSegment Point="5,10" />
-                                                        <LineSegment Point="9,6" />
-                                                    </PathFigure>
-                                                </PathGeometry>
-                                                <PathGeometry>
-                                                    <PathFigure StartPoint="5,10">
-                                                        <LineSegment Point="16,10" />
-                                                        <ArcSegment Size="4,4" RotationAngle="0" IsLargeArc="False" SweepDirection="Clockwise" Point="16,18" />
-                                                        <LineSegment Point="15,18" />
-                                                    </PathFigure>
-                                                </PathGeometry>
-                                            </GeometryGroup>
-                                        </Path.Data>
-                                    </Path>
+                                    <Path Stroke="DodgerBlue" Width="24" Height="24" Margin="0,0,8,0" VerticalAlignment="Center" StrokeThickness="1" Fill="{x:Null}" Data="M9 14l-4 -4l4 -4 M5 10h11a4 4 0 1 1 0 8h-1" />
                                     <TextBlock Grid.Column="1" Text="{DynamicResource ConfigWindow-LauncherTab-BackToSelect}" VerticalAlignment="Center" />
                                 </Grid>
                             </Button>

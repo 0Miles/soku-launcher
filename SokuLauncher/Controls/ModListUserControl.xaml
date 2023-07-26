@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:converters="clr-namespace:SokuLauncher.Converters"
-             mc:Ignorable="d" Loaded="UserControl_Loaded"
+             mc:Ignorable="d" Loaded="UserControl_Loaded" x:Name="SokuLauncherModListUserControl"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
@@ -17,9 +17,44 @@
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
     </UserControl.Resources>
 
-    <Grid Margin="8">
-        <ListView x:Name="SelectorListView"
-                  ItemsSource="{Binding ModInfoList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ModListUserControl}}}"
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Background="#FFEFEFEF" HorizontalAlignment="Stretch" Height="32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <!--<Button Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Cursor="Hand" Click="InsatllButton_Click">
+                <StackPanel Orientation="Horizontal" IsHitTestVisible="False">
+                    <Path Stroke="Green" RenderTransformOrigin=".5,.5" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center" Data="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M14 7l6 0 M17 4l0 6">
+                        <Path.RenderTransform>
+                            <ScaleTransform ScaleX=".8" ScaleY=".8"/>
+                        </Path.RenderTransform>
+                    </Path>
+                    <TextBlock Text="{DynamicResource ModListUserControl-Button-Install}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>-->
+            <Border Grid.Column="2" Width="180" Margin="4" Height="22" BorderBrush="DarkGray" BorderThickness="1" Background="White" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="SearchTextBox" BorderThickness="0" Padding="2" Background="{x:Null}" TextChanged="SearchTextBox_TextChanged" PreviewKeyDown="SearchTextBox_PreviewKeyDown" />
+                    <Path Grid.Column="1" Margin="0,-2,0,0" Width="24" Height="24" Stroke="DarkGray" StrokeThickness="2" RenderTransformOrigin=".5,.5" Data="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0 M21 21l-6 -6">
+                        <Path.RenderTransform>
+                            <ScaleTransform ScaleX=".6" ScaleY=".6"/>
+                        </Path.RenderTransform>
+                    </Path>
+                </Grid>
+            </Border>
+        </Grid>
+        <ListView x:Name="SelectorListView" Grid.Row="1" BorderThickness="0"
+                  ItemsSource="{Binding FilteredModInfoList, ElementName=SokuLauncherModListUserControl}"
                   VerticalContentAlignment="Center"
                   PreviewMouseRightButtonDown="SelectorListView_PreviewMouseRightButtonDown"
                   SelectionMode="Multiple"
@@ -53,30 +88,15 @@
                                             <MenuItem Header="{DynamicResource ModListUserControl-Undelete}" Click="UndeleteMod_Click" Tag="{Binding DirName}" Visibility="{Binding ToBeDeleted, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         </ContextMenu>
                                     </Grid.ContextMenu>
-                                    <Border Padding="16,8,8,8" Width="250" MaxHeight="110" CornerRadius="1" Background="#FFFAFAFA" BorderBrush="#FFF2F2F2" BorderThickness="2" Cursor="Hand">
+                                    <Border Padding="16,8,8,8" Width="250" MaxHeight="110" CornerRadius="1" BorderThickness="2" Cursor="Hand">
                                         <Border.Style>
                                             <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#FFFAFAFA"/>
+                                                <Setter Property="BorderBrush" Value="#FFF2F2F2"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListViewItem}}}" Value="True">
-                                                        <Setter Property="BorderThickness" Value="2"/>
-
-                                                        <DataTrigger.EnterActions>
-                                                            <BeginStoryboard>
-                                                                <Storyboard>
-                                                                    <ColorAnimation Duration="0:0:.1" To="#FFE7F2CA" Storyboard.TargetProperty="Background.Color"/>
-                                                                    <ColorAnimation Duration="0:0:.2" To="#FFD6E3AF" Storyboard.TargetProperty="BorderBrush.Color"/>
-                                                                </Storyboard>
-                                                            </BeginStoryboard>
-                                                        </DataTrigger.EnterActions>
-
-                                                        <DataTrigger.ExitActions>
-                                                            <BeginStoryboard>
-                                                                <Storyboard>
-                                                                    <ColorAnimation Duration="0:0:.2" To="#FFFAFAFA" Storyboard.TargetProperty="Background.Color"/>
-                                                                    <ColorAnimation Duration="0:0:.1" To="#FFF2F2F2" Storyboard.TargetProperty="BorderBrush.Color"/>
-                                                                </Storyboard>
-                                                            </BeginStoryboard>
-                                                        </DataTrigger.ExitActions>
+                                                        <Setter Property="Background" Value="#FFE7F2CA"/>
+                                                        <Setter Property="BorderBrush" Value="#FFD6E3AF"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -182,7 +202,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
-        <TextBlock x:Name="ModNotFoundTextBlock" Text="{DynamicResource ModListUserControl-NoMod}" FontSize="16" Foreground="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+        <TextBlock Grid.Row="1" x:Name="ModNotFoundTextBlock" Text="{DynamicResource ModListUserControl-NoMod}" FontSize="16" Foreground="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
     </Grid>
 
 </UserControl>

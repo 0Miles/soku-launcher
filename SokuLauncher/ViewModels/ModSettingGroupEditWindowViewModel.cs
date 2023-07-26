@@ -1,6 +1,7 @@
 ﻿using SokuLauncher.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -28,7 +29,22 @@ namespace SokuLauncher.ViewModels
                 RaisePropertyChanged("ModSettingInfoList");
             }
         }
-        
+
+
+        private ObservableCollection<ModSettingInfoModel> _FilteredModSettingInfoList;
+        public ObservableCollection<ModSettingInfoModel> FilteredModSettingInfoList
+        {
+            get
+            {
+                return _FilteredModSettingInfoList;
+            }
+            set
+            {
+                _FilteredModSettingInfoList = value;
+                RaisePropertyChanged("FilteredModSettingInfoList");
+            }
+        }
+
         private List<string> _EnableMods;
         public List<string> EnableMods
         {
