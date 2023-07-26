@@ -627,7 +627,7 @@ namespace SokuLauncher.Controls
                     .Select(x => new ModSettingInfoModel
                     {
                         Name = x.Name,
-                        RelativePath = Static.GetRelativePath(x.FullPath, Static.SelfFileDir),
+                        RelativePath = x.RelativePath,
                         Icon = x.Icon,
                         Enabled = "null"
                     })
