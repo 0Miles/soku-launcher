@@ -16,14 +16,16 @@
     <system:String x:Key="Common-Disable">停用</system:String>
     <system:String x:Key="Common-Constant">保持不變</system:String>
 
+    <system:String x:Key="App-ModSettingGroupNotFound">找不到 {0}</system:String>
+
     <system:String x:Key="ConfigUtil-GameFileNotFound-Title">找不到遊戲檔案</system:String>
     <system:String x:Key="ConfigUtil-GameFileNotFound-Message">若未設定遊戲執行檔路徑，將無法啟動遊戲\n要立刻設定嗎?</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Name">Giuroll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Desc">啟用 SokuLobbies 與 Giuroll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Name">Giuroll CN</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Desc">啟用 SokuLobbies 與 Giuroll-62F</system:String>
-    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Name">SokuRoll</system:String>
-    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Desc">啟用 InGameHostlist 與 SokuRoll 1.3</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Name">原生</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Desc">關閉所有連線模組</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name">No Roll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Desc">啟用 InGameHostlist，不啟用任何 Roll</system:String>
     <system:String x:Key="ConfigUtil-SelectSokuFileWindow-Title">選擇遊戲檔案</system:String>
@@ -32,7 +34,7 @@
     <system:String x:Key="UpdatesManager-MessageBox-Title">更新</system:String>
     <system:String x:Key="UpdatesManager-Updating">更新中</system:String>
     <system:String x:Key="UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc">以下模組有可用更新，請確認您要更新的模組</system:String>
-    <system:String x:Key="UpdatesManager-CheckForUpdates-Completed">全部更新完成</system:String>
+    <system:String x:Key="UpdatesManager-CheckForUpdates-Completed">更新完成</system:String>
     <system:String x:Key="UpdatesManager-CheckForUpdates-AllLatest">所有可用的模組均已更新至最新版本</system:String>
     <system:String x:Key="UpdatesManager-CheckForInstallable-UpdateSelectionWindow-Desc">缺少以下模組，請安裝以確保遊戲正常運行</system:String>
     <system:String x:Key="UpdatesManager-GetVersionInfoJson-Message">檢查版本資訊...</system:String>
@@ -96,4 +98,7 @@
     <system:String x:Key="ConfigWindow-CheckFouUpdatesNow">檢查更新</system:String>
 
     <system:String x:Key="MainWindow-SokuFileNotFound">檔案 '{0}' 不存在.</system:String>
+    <system:String x:Key="ModSettingGroupPreview-Edit">編輯</system:String>
+    <system:String x:Key="ModSettingGroupPreview-CreateShortcut">在桌面建立捷徑</system:String>
+    <system:String x:Key="ModSettingGroupPreview-SelectShortcutIcon">選擇捷徑圖示</system:String>
 </ResourceDictionary>

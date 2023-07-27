@@ -50,6 +50,23 @@ namespace SokuLauncher.Utils
 
                 Config = JsonConvert.DeserializeObject<ConfigModel>(json) ?? new ConfigModel();
 
+                if (Config.SokuModSettingGroups != null)
+                {
+                    bool addId = false;
+                    foreach(var modSettingGroup in Config.SokuModSettingGroups)
+                    {
+                        if (string.IsNullOrWhiteSpace(modSettingGroup.Id))
+                        {
+                            modSettingGroup.Id = Guid.NewGuid().ToString();
+                            addId = true;
+                        }
+                    }
+                    if (addId)
+                    {
+                        SaveConfig();
+                    }
+                }
+
                 // default values
                 if (string.IsNullOrWhiteSpace(Config.Language))
                 {
@@ -127,6 +144,7 @@ namespace SokuLauncher.Utils
             {
                 new ModSettingGroupModel
                 {
+                    Id = "1d059cd2-1e74-430b-b84f-1d3ad6b67f6c",
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Name"),
                     Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Desc"),
                     EnableMods = new List<string> { "Giuroll", "Giuroll-60F", "SokuLobbiesMod", "Autopunch" },
@@ -135,6 +153,7 @@ namespace SokuLauncher.Utils
                 },
                 new ModSettingGroupModel
                 {
+                    Id = "7d9b118d-5f7a-48b0-8e35-272f0e51f0d6",
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Name"),
                     Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Desc"),
                     EnableMods = new List<string> { "Giuroll-62F", "SokuLobbiesMod", "Autopunch" },
@@ -143,21 +162,22 @@ namespace SokuLauncher.Utils
                 },
                 new ModSettingGroupModel
                 {
-                    Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Name"),
-                    Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Desc"),
-                    EnableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Autopunch" },
-                    DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod" },
-                    Cover = "%resources%/gearbackground.png",
-                    CoverOverlayColor = "#6FA92E00"
-                },
-                new ModSettingGroupModel
-                {
+                    Id = "31a56390-1f5b-4442-b4e2-7b23ce5683d7",
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name"),
                     Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Desc"),
                     EnableMods = new List<string> { "InGameHostlist", "Autopunch" },
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod", "SWRSokuRoll" },
                     Cover = "%resources%/gearbackground-r.png",
                     CoverOverlayColor = "#6F002EA9"
+                },
+                new ModSettingGroupModel
+                {
+                    Id = "3b9e5e71-6044-432c-b6c3-4c53d93e137d",
+                    Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Origin-Name"),
+                    Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Origin-Desc"),
+                    EnableMods = new List<string> { },
+                    DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod", "SWRSokuRoll", "InGameHostlist" },
+                    Cover = "%resources%/gearbackground.png"
                 },
             };
             config.VersionInfoUrl = "https://soku.latte.today/version.json";

@@ -1,5 +1,7 @@
 ﻿using SokuLauncher.Models;
+using SokuLauncher.Utils;
 using SokuLauncher.ViewModels;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,6 +13,7 @@ namespace SokuLauncher.Controls
     public partial class ModSettingGroupEditWindow : Window
     {
         public ModSettingGroupEditWindowViewModel ViewModel { get; set; }
+        private readonly Debouncer SearchDebouncer = new Debouncer(600);
         public ModSettingGroupEditWindow(ModSettingGroupEditWindowViewModel viewModel = null)
         {
             ViewModel = viewModel;
@@ -18,6 +21,9 @@ namespace SokuLauncher.Controls
             {
                 ViewModel = new ModSettingGroupEditWindowViewModel();
             }
+
+            ViewModel.FilteredModSettingInfoList = new ObservableCollection<ModSettingInfoModel>(ViewModel.ModSettingInfoList);
+
             DataContext = ViewModel;
 
             InitializeComponent();
@@ -32,12 +38,54 @@ namespace SokuLauncher.Controls
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            SearchMod();
             SelectorListView.Focus();
+        }
+
+        private void SearchMod()
+        {
+            string seachValue = SearchTextBox?.Text;
+            if (string.IsNullOrWhiteSpace(seachValue))
+            {
+                ViewModel.FilteredModSettingInfoList = new ObservableCollection<ModSettingInfoModel>(ViewModel.ModSettingInfoList);
+            }
+            else
+            {
+                ViewModel.FilteredModSettingInfoList = new ObservableCollection<ModSettingInfoModel>(ViewModel.ModSettingInfoList.Where(x => (x.Name?.ToLower().Contains(seachValue.ToLower()) ?? false) || (x.RelativePath?.ToLower().Contains(seachValue.ToLower()) ?? false)));
+            }
+
+            if (ViewModel.FilteredModSettingInfoList.Count == 0)
+            {
+                ModNotFoundTextBlock.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ModNotFoundTextBlock.Visibility = Visibility.Collapsed;
+            }
+
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+        }
+
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SearchDebouncer.Debouce(() =>
+            {
+                Dispatcher.Invoke(SearchMod);
+            });
+        }
+
+        private void SearchTextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case System.Windows.Input.Key.Escape:
+                    SearchTextBox.Text = "";
+                    break;
+            }
         }
     }
 }

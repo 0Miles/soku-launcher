@@ -17,6 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace SokuLauncher.Controls
 {
@@ -128,6 +129,7 @@ namespace SokuLauncher.Controls
                         MessageBox.Show(Static.LanguageService.GetString("ConfigWindow-DeleteFailed") + ": " + ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
+                    ConfigModListUserControl.SearchMod();
                 }
 
                 string coverDir = Path.Combine(Static.LocalDirPath, "Cover");
@@ -448,9 +450,12 @@ namespace SokuLauncher.Controls
         {
             ViewModel.SokuModSettingGroups.Add(new ModSettingGroupModel
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = Static.LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Name"),
                 Desc = Static.LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Desc"),
-                Cover = "%resources%/gearbackground.png"
+                Cover = "%resources%/gearbackground.png",
+                EnableMods = new List<string>(),
+                DisableMods = new List<string>()
             });
 
             ForceSokuModSettingGroupsListViewRefresh();
@@ -530,7 +535,7 @@ namespace SokuLauncher.Controls
                 string selectedFileName = openFileDialog.FileName;
                 string ext = Path.GetExtension(selectedFileName);
 
-                if (new List<string> { ".png", ".jpg", ".jpeg", ".bmp"}.Contains(ext.ToLower()))
+                if (new List<string> { ".png", ".jpg", ".jpeg", ".bmp" }.Contains(ext.ToLower()))
                 {
                     CropWindow cropWindow = new CropWindow();
                     cropWindow.ImagePath = selectedFileName;
@@ -625,7 +630,7 @@ namespace SokuLauncher.Controls
                     .Select(x => new ModSettingInfoModel
                     {
                         Name = x.Name,
-                        RelativePath = Static.GetRelativePath(x.FullPath, Static.SelfFileDir),
+                        RelativePath = x.RelativePath,
                         Icon = x.Icon,
                         Enabled = "null"
                     })
@@ -719,7 +724,7 @@ namespace SokuLauncher.Controls
                     }
                     await taskGetVersionInfoJson;
                     ViewModel.CheckForUpdatesButtonText = null;
-                    updatesManager.CheckForUpdates(false);
+                    _ = updatesManager.CheckForUpdates(false);
                 }
                 catch (Exception ex)
                 {
@@ -760,6 +765,42 @@ namespace SokuLauncher.Controls
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Static.LanguageService.ChangeLanguagePublish(((sender as ComboBox).SelectedItem as SelectorNodeModel).Code);
+        }
+
+        private void Edit_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var modSettingGroupId = (string)menuItem.Tag;
+            var selectedModSettingGroupd = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
+
+            ViewModel.SelectedSokuModSettingGroup = selectedModSettingGroupd;
+            ModSettingGroupEditGrid.Opacity = 0;
+            ModSettingGroupEditGrid.Visibility = Visibility.Visible;
+            HideSokuModSettingGroupsGridAnimation((s, _) =>
+            {
+                SokuModSettingGroupsGrid.Visibility = Visibility.Collapsed;
+            });
+            ShowModSettingGroupEditGridAnimation();
+        }
+
+        private void CreateShortcut_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var modSettingGroupId = (string)menuItem.Tag;
+            var selectedModSettingGroupd = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
+            if (selectedModSettingGroupd != null)
+            {
+                ModsManager.CreateShortcutOnDesktop(selectedModSettingGroupd);
+            }
+            else
+            {
+                MessageBox.Show(string.Format(Static.LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void SokuModSettingGroupsListView_PreviewMouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

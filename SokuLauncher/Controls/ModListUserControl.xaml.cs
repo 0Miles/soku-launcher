@@ -1,10 +1,13 @@
 ﻿using SokuLauncher.Models;
+using SokuLauncher.Utils;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,6 +15,7 @@ namespace SokuLauncher.Controls
 {
     public partial class ModListUserControl : UserControl
     {
+
         public ModListUserControl()
         {
             InitializeComponent();
@@ -21,6 +25,7 @@ namespace SokuLauncher.Controls
         public event Action<object, SelectionChangedEventArgs> SelectionChanged;
         public event Action<object, RoutedEventArgs> ModDeleted;
         public event Action<object, RoutedEventArgs> ModUndeleted;
+        private readonly Debouncer SearchDebouncer = new Debouncer(600);
 
         public static DependencyProperty ModInfoListProperty =
             DependencyProperty.Register(
@@ -42,6 +47,27 @@ namespace SokuLauncher.Controls
             }
         }
 
+
+        public static DependencyProperty FilteredModInfoListProperty =
+            DependencyProperty.Register(
+                "FilteredModInfoList",
+                typeof(ObservableCollection<ModInfoModel>),
+                typeof(ModListUserControl),
+                new PropertyMetadata(new ObservableCollection<ModInfoModel>())
+            );
+
+        public ObservableCollection<ModInfoModel> FilteredModInfoList
+        {
+            get
+            {
+                return (ObservableCollection<ModInfoModel>)(GetValue(FilteredModInfoListProperty));
+            }
+            set
+            {
+                SetValue(FilteredModInfoListProperty, value);
+            }
+        }
+
         public void SelectorListViewCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (ModInfoList != null && ModInfoList.Count > 0)
@@ -60,7 +86,31 @@ namespace SokuLauncher.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            SearchMod();
             SelectorListView.Focus();
+        }
+
+        public void SearchMod()
+        {
+            string seachValue = SearchTextBox?.Text;
+
+            if (string.IsNullOrWhiteSpace(seachValue))
+            {
+                FilteredModInfoList = new ObservableCollection<ModInfoModel>(ModInfoList);
+            }
+            else
+            {
+                FilteredModInfoList = new ObservableCollection<ModInfoModel>(ModInfoList.Where(x => (x.Name?.ToLower().Contains(seachValue.ToLower()) ?? false) || (x.RelativePath?.ToLower().Contains(seachValue.ToLower()) ?? false)));
+            }
+
+            if (FilteredModInfoList.Count == 0)
+            {
+                ModNotFoundTextBlock.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ModNotFoundTextBlock.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void SelectorListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -113,6 +163,24 @@ namespace SokuLauncher.Controls
         private void DeletedItemBorder_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             e.Handled = true;
+        }
+
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SearchDebouncer.Debouce(() =>
+            {
+                Dispatcher.Invoke(SearchMod);
+            });
+        }
+
+        private void SearchTextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case System.Windows.Input.Key.Escape:
+                    SearchTextBox.Text = "";
+                    break;
+            }
         }
     }
 }

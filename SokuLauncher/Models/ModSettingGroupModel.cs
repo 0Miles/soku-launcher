@@ -6,6 +6,24 @@ namespace SokuLauncher.Models
 {
     public class ModSettingGroupModel: ViewModelBase
     {
+        private string _Id;
+        public string Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    _Id = value;
+                    RaisePropertyChanged("Id");
+                }
+
+            }
+        }
+        
         private string _Name;
         public string Name
         {

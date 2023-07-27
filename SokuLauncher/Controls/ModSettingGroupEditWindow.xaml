@@ -13,13 +13,27 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition  Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Border HorizontalAlignment="Stretch" Height="22" Margin="8,8,8,0" BorderBrush="DarkGray" BorderThickness="1" Background="White" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="SearchTextBox" BorderThickness="0" Padding="2" Background="{x:Null}" TextChanged="SearchTextBox_TextChanged" PreviewKeyDown="SearchTextBox_PreviewKeyDown" />
+                <Path Grid.Column="1" Margin="0,-2,0,0" Width="24" Height="24" Stroke="DarkGray" StrokeThickness="2" RenderTransformOrigin=".5,.5" Data="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0 M21 21l-6 -6">
+                    <Path.RenderTransform>
+                        <ScaleTransform ScaleX=".6" ScaleY=".6"/>
+                    </Path.RenderTransform>
+                </Path>
+            </Grid>
+        </Border>
         <ListView Grid.Row="1"
                   x:Name="SelectorListView"
-                  ItemsSource="{Binding ModSettingInfoList}"
+                  ItemsSource="{Binding FilteredModSettingInfoList}"
                   VerticalContentAlignment="Center"
                   Focusable="False"
                   ScrollViewer.CanContentScroll="False"
@@ -87,6 +101,7 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
+        <TextBlock Grid.Row="1" x:Name="ModNotFoundTextBlock" Text="{DynamicResource ModListUserControl-NoMod}" FontSize="16" Foreground="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
         <StackPanel Grid.Row="2" Margin="8" Orientation="Horizontal" HorizontalAlignment="Right" >
             <Button Content="{DynamicResource Common-Button-OK}" Padding="12,7" Margin="8,0,0,0"  Click="OKButton_Click"/>
             <Button Content="{DynamicResource Common-Button-Cancel}" Padding="12,7" Margin="8,0,0,0" Click="CancelButton_Click"/>
