@@ -90,7 +90,7 @@ namespace SokuLauncher.Controls
             SelectorListView.Focus();
         }
 
-        private void SearchMod()
+        public void SearchMod()
         {
             string seachValue = SearchTextBox?.Text;
 

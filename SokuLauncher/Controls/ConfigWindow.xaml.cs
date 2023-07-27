@@ -128,6 +128,7 @@ namespace SokuLauncher.Controls
                         MessageBox.Show(Static.LanguageService.GetString("ConfigWindow-DeleteFailed") + ": " + ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
+                    ConfigModListUserControl.SearchMod();
                 }
 
                 string coverDir = Path.Combine(Static.LocalDirPath, "Cover");
@@ -448,6 +449,7 @@ namespace SokuLauncher.Controls
         {
             ViewModel.SokuModSettingGroups.Add(new ModSettingGroupModel
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = Static.LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Name"),
                 Desc = Static.LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Desc"),
                 Cover = "%resources%/gearbackground.png",
@@ -721,7 +723,7 @@ namespace SokuLauncher.Controls
                     }
                     await taskGetVersionInfoJson;
                     ViewModel.CheckForUpdatesButtonText = null;
-                    updatesManager.CheckForUpdates(false);
+                    _ = updatesManager.CheckForUpdates(false);
                 }
                 catch (Exception ex)
                 {

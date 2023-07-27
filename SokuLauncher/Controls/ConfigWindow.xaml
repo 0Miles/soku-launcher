@@ -351,7 +351,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="{DynamicResource ConfigWindow-Tab-Mod}">
-                <local:ModListUserControl ModInfoList="{Binding ModInfoList}" SelectionChanged="ModListUserControl_SelectionChanged" ModDeleted="ModListUserControl_ModDeleted" ModUndeleted="ModListUserControl_ModUndeleted"/>
+                <local:ModListUserControl x:Name="ConfigModListUserControl" ModInfoList="{Binding ModInfoList}" SelectionChanged="ModListUserControl_SelectionChanged" ModDeleted="ModListUserControl_ModDeleted" ModUndeleted="ModListUserControl_ModUndeleted"/>
             </TabItem>
             <TabItem Header="{DynamicResource ConfigWindow-Tab-Path}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
