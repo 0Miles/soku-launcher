@@ -15,6 +15,8 @@
     <system:String x:Key="Common-Enable">Enable</system:String>
     <system:String x:Key="Common-Disable">Disable</system:String>
     <system:String x:Key="Common-Constant">Constant</system:String>
+    
+    <system:String x:Key="App-ModSettingGroupNotFound">{0} not found</system:String>
 
     <system:String x:Key="ConfigUtil-GameFileNotFound-Title">Game file not found</system:String>
     <system:String x:Key="ConfigUtil-GameFileNotFound-Message">If you haven't set the path to the th123 executable file, you won't be able to launch the game. Would you like to set it now?</system:String>

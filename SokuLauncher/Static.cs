@@ -12,6 +12,7 @@ namespace SokuLauncher
         public static string TempDirPath { get; internal set; } = Path.Combine(Path.GetTempPath(), "SokuLauncher");
         public static string LocalDirPath { get; internal set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SokuLauncher");
         public static string SelfFileName { get; internal set; } = System.Reflection.Assembly.GetEntryAssembly().Location;
+        public static string[] StartupArgs { get; set; }
         public static LanguageService LanguageService { get; set; } = new LanguageService();
         public static string SelfFileDir
         {

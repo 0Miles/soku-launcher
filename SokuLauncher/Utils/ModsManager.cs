@@ -247,5 +247,25 @@ namespace SokuLauncher.Utils
             }
             ToBeDeletedDirList.Clear();
         }
+
+        public void ApplyModSettingGroup(ModSettingGroupModel settingGroup)
+        {
+            if (settingGroup.EnableMods != null)
+            {
+                foreach (var enableMod in settingGroup.EnableMods)
+                {
+                    ChangeModEnabled(enableMod, true);
+                }
+            }
+            if (settingGroup.DisableMods != null)
+            {
+                foreach (var disableMod in settingGroup.DisableMods)
+                {
+                    ChangeModEnabled(disableMod, false);
+                }
+            }
+            DisableDuplicateEnabledMods();
+            SaveSWRSToysIni();
+        }
     }
 }

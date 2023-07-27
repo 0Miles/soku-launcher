@@ -132,8 +132,6 @@ namespace SokuLauncher
                     ViewModel.SelectedSokuModSettingGroup.IsShowProgress = true;
                     try
                     {
-                        
-
                         void DownloadProgressChanged(int progress) => ViewModel.SelectedSokuModSettingGroup.Progress = progress;
                         void StatusChanged(string status) => ViewModel.SelectedSokuModSettingGroup.Status = status;
                         ViewModel.UpdatesManager.DownloadProgressChanged += DownloadProgressChanged;
@@ -145,9 +143,9 @@ namespace SokuLauncher
                             await ViewModel.UpdatesManager.GetVersionInfoJson();
                         }
 
-                        List<string> CheckModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
-                        CheckModes.Add("SokuModLoader");
-                        await ViewModel.UpdatesManager.CheckForInstallable(CheckModes);
+                        List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
+                        checkModes.Add("SokuModLoader");
+                        await ViewModel.UpdatesManager.CheckForInstallable(checkModes);
                         ViewModel.ModsManager.SearchModulesDir();
                         ViewModel.ModsManager.LoadSWRSToysSetting();
 
@@ -161,22 +159,7 @@ namespace SokuLauncher
                     ViewModel.SelectedSokuModSettingGroup.IsShowProgress = false;
                 }
 
-                if (settingGroup.EnableMods != null)
-                {
-                    foreach (var enableMod in settingGroup.EnableMods)
-                    {
-                        ViewModel.ModsManager.ChangeModEnabled(enableMod, true);
-                    }
-                }
-                if (settingGroup.DisableMods != null)
-                {
-                    foreach (var disableMod in settingGroup.DisableMods)
-                    {
-                        ViewModel.ModsManager.ChangeModEnabled(disableMod, false);
-                    }
-                }
-                ViewModel.ModsManager.DisableDuplicateEnabledMods();
-                ViewModel.ModsManager.SaveSWRSToysIni();
+                ViewModel.ModsManager.ApplyModSettingGroup(settingGroup);
 
                 string sokuFile = Path.Combine(ViewModel.ConfigUtil.SokuDirFullPath, ViewModel.ConfigUtil.Config.SokuFileName);
 

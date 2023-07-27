@@ -48,11 +48,11 @@ namespace SokuLauncher.Utils
             IsStopCheckForUpdates = true;
         }
 
-        public void CheckForUpdates(bool isAutoUpdates = true)
+        public async Task CheckForUpdates(bool isAutoUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool isShowUpdating = true, bool isShowComplatedMessage = true)
         {
             try
             {
-                GetAvailableUpdateList();
+                GetAvailableUpdateList(true, checkForInstallable, modsToCheckList);
                 if (AvailableUpdateList.Count > 0)
                 {
                     if (IsStopCheckForUpdates)
@@ -84,60 +84,7 @@ namespace SokuLauncher.Utils
                     {
 
                         var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
-
-                        UpdatingWindow updatingWindow = new UpdatingWindow
-                        {
-                            UpdatesManager = this,
-                            AvailableUpdateList = selectedUpdates
-                        };
-
-                        _ = Task.Run(async () =>
-                        {
-                            try
-                            {
-                                foreach (var updateFileInfo in selectedUpdates)
-                                {
-                                    await DownloadAndExtractFile(updateFileInfo);
-                                    CopyAndReplaceFile(updateFileInfo);
-                                }
-                                updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
-                                if (UpdateSokuLauncherFilePath != null)
-                                {
-                                    var processInfo = new ProcessStartInfo
-                                    {
-                                        UseShellExecute = true,
-                                        FileName = UpdateSokuLauncherFilePath,
-                                        Verb = "runas"
-                                    };
-
-                                    try
-                                    {
-                                        Directory.SetCurrentDirectory(Path.GetDirectoryName(UpdateSokuLauncherFilePath));
-                                        Process.Start(processInfo);
-                                        Environment.Exit(0);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBox.Show(ex.Message);
-                                        Directory.SetCurrentDirectory(Static.SelfFileDir);
-                                    }
-                                }
-                                if (!isAutoUpdates)
-                                {
-                                    MessageBox.Show(
-                                        Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
-                                        Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
-                                        MessageBoxButton.OK,
-                                        MessageBoxImage.Information);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
-                                updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
-                            }
-                        });
-                        updatingWindow.ShowDialog();
+                        await ExecuteUpdates(selectedUpdates, isShowUpdating, isShowComplatedMessage);
                     }
                 }
                 else
@@ -158,7 +105,7 @@ namespace SokuLauncher.Utils
             }
         }
 
-        public async Task CheckForInstallable(List<string> modsToCheckList)
+        public async Task CheckForInstallable(List<string> modsToCheckList, bool isShowUpdating = false, bool isShowComplatedMessage = false)
         {
             try
             {
@@ -175,12 +122,7 @@ namespace SokuLauncher.Utils
                     if (updateSelectionWindow.ShowDialog() == true)
                     {
                         var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
-
-                        foreach (var updateFileInfo in selectedUpdates)
-                        {
-                            await DownloadAndExtractFile(updateFileInfo);
-                            CopyAndReplaceFile(updateFileInfo);
-                        }
+                        await ExecuteUpdates(selectedUpdates, isShowUpdating, isShowComplatedMessage);
                     }
                 }
             }
@@ -188,6 +130,77 @@ namespace SokuLauncher.Utils
             {
                 MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        public async Task ExecuteUpdates(List<UpdateFileInfoModel> selectedUpdates, bool isShowUpdating, bool isShowComplatedMessage)
+        {
+            UpdatingWindow updatingWindow = new UpdatingWindow
+            {
+                UpdatesManager = this,
+                AvailableUpdateList = selectedUpdates
+            };
+
+            var updateTask = Task.Run(async () =>
+            {
+                try
+                {
+                    foreach (var updateFileInfo in selectedUpdates)
+                    {
+                        await DownloadAndExtractFile(updateFileInfo);
+                        CopyAndReplaceFile(updateFileInfo);
+                    }
+
+                    if (isShowUpdating)
+                    {
+                        updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
+                    }
+
+                    if (UpdateSokuLauncherFilePath != null)
+                    {
+                        var processInfo = new ProcessStartInfo
+                        {
+                            UseShellExecute = true,
+                            FileName = UpdateSokuLauncherFilePath,
+                            Verb = "runas"
+                        };
+
+                        try
+                        {
+                            Directory.SetCurrentDirectory(Path.GetDirectoryName(UpdateSokuLauncherFilePath));
+                            Process.Start(processInfo);
+                            Environment.Exit(0);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                            Directory.SetCurrentDirectory(Static.SelfFileDir);
+                        }
+                    }
+                    if (isShowComplatedMessage)
+                    {
+                        MessageBox.Show(
+                            Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
+                            Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (isShowUpdating)
+                    {
+                        updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
+                    }
+                }
+            });
+
+            if (isShowUpdating)
+            {
+                updatingWindow.ShowDialog();
+            }
+
+            await updateTask;
         }
 
         public async Task GetVersionInfoJson()
@@ -414,6 +427,7 @@ namespace SokuLauncher.Utils
                     if (updateFileInfo.LocalFileName == Static.SelfFileName)
                     {
                         File.WriteAllText(Path.Combine(updateFileDir, "replace.txt"), Static.SelfFileName);
+                        File.WriteAllText(Path.Combine(updateFileDir, "args.txt"), string.Join(" ", Static.StartupArgs));
                         UpdateSokuLauncherFilePath = Path.Combine(updateFileDir, "Updater.exe");
                         File.Move(newVersionFileName, UpdateSokuLauncherFilePath);
                         return;
@@ -510,10 +524,11 @@ namespace SokuLauncher.Utils
                 updatingWindow.Status = Static.LanguageService.GetString("UpdatesManager-Updating") + "...";
 
                 await Task.Run(() => {
+                    string args = File.ReadAllText("args.txt");
                     File.Copy(Static.SelfFileName, replaceTargetPath, true);
 
                     Directory.SetCurrentDirectory(Path.GetDirectoryName(replaceTargetPath));
-                    Process.Start(new ProcessStartInfo { FileName = replaceTargetPath, UseShellExecute = true });
+                    Process.Start(new ProcessStartInfo { FileName = replaceTargetPath, UseShellExecute = true, Arguments = args});
                     Environment.Exit(0);
                 });
             }

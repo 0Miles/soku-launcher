@@ -16,6 +16,8 @@
     <system:String x:Key="Common-Disable">禁用</system:String>
     <system:String x:Key="Common-Constant">保持不变</system:String>
 
+    <system:String x:Key="App-ModSettingGroupNotFound">找不到 {0}</system:String>
+
     <system:String x:Key="ConfigUtil-GameFileNotFound-Title">找不到游戏文件</system:String>
     <system:String x:Key="ConfigUtil-GameFileNotFound-Message">若未设置游戏可执行文件路径，将无法启动游戏\n要立刻设置吗?</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Name">Giuroll</system:String>
@@ -32,7 +34,7 @@
     <system:String x:Key="UpdatesManager-MessageBox-Title">更新</system:String>
     <system:String x:Key="UpdatesManager-Updating">更新中</system:String>
     <system:String x:Key="UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc">以下模组有可用更新，请确认您要更新的模组</system:String>
-    <system:String x:Key="UpdatesManager-CheckForUpdates-Completed">全部更新完成</system:String>
+    <system:String x:Key="UpdatesManager-CheckForUpdates-Completed">更新完成</system:String>
     <system:String x:Key="UpdatesManager-CheckForUpdates-AllLatest">所有可用的模组均已更新至最新版本</system:String>
     <system:String x:Key="UpdatesManager-CheckForInstallable-UpdateSelectionWindow-Desc">缺少以下模组，请安装以确保游戏正常运行</system:String>
     <system:String x:Key="UpdatesManager-GetVersionInfoJson-Message">检查版本信息...</system:String>
