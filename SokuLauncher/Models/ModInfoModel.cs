@@ -67,7 +67,7 @@ namespace SokuLauncher.Models
             {
                 if (_ConfigFileList == null)
                 {
-                    _ConfigFileList = Directory.GetFiles(DirName, "*.ini").ToList();
+                    _ConfigFileList = Directory.GetFiles(DirName, "*.ini").Concat(Directory.GetFiles(DirName, "*.json")).ToList();
                 }
                 return _ConfigFileList;
             }
