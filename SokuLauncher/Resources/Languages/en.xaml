@@ -24,8 +24,8 @@
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Desc">Enable SokuLobbies and Giuroll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Name">Giuroll CN</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Desc">Enable SokuLobbies and Giuroll-62F</system:String>
-    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Name">SokuRoll</system:String>
-    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Desc">Enable InGameHostlist and SokuRoll 1.3</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Name">Origin</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Desc">Disable all Network Mods</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name">No Roll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Desc">Enable InGameHostlist, No any Roll</system:String>
     <system:String x:Key="ConfigUtil-SelectSokuFileWindow-Title">Choose game file</system:String>

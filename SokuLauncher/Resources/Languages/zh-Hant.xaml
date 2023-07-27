@@ -24,8 +24,8 @@
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Desc">啟用 SokuLobbies 與 Giuroll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Name">Giuroll CN</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Desc">啟用 SokuLobbies 與 Giuroll-62F</system:String>
-    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Name">SokuRoll</system:String>
-    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Desc">啟用 InGameHostlist 與 SokuRoll 1.3</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Name">原生</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Desc">關閉所有連線模組</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name">No Roll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Desc">啟用 InGameHostlist，不啟用任何 Roll</system:String>
     <system:String x:Key="ConfigUtil-SelectSokuFileWindow-Title">選擇遊戲檔案</system:String>

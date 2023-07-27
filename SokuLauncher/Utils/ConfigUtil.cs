@@ -162,16 +162,6 @@ namespace SokuLauncher.Utils
                 },
                 new ModSettingGroupModel
                 {
-                    Id = "3b9e5e71-6044-432c-b6c3-4c53d93e137d",
-                    Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Name"),
-                    Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-SokuRoll-Desc"),
-                    EnableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Autopunch" },
-                    DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod" },
-                    Cover = "%resources%/gearbackground.png",
-                    CoverOverlayColor = "#6FA92E00"
-                },
-                new ModSettingGroupModel
-                {
                     Id = "31a56390-1f5b-4442-b4e2-7b23ce5683d7",
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name"),
                     Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Desc"),
@@ -179,6 +169,15 @@ namespace SokuLauncher.Utils
                     DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod", "SWRSokuRoll" },
                     Cover = "%resources%/gearbackground-r.png",
                     CoverOverlayColor = "#6F002EA9"
+                },
+                new ModSettingGroupModel
+                {
+                    Id = "3b9e5e71-6044-432c-b6c3-4c53d93e137d",
+                    Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Origin-Name"),
+                    Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Origin-Desc"),
+                    EnableMods = new List<string> { },
+                    DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "Giuroll-62F", "SokuLobbiesMod", "SWRSokuRoll", "InGameHostlist" },
+                    Cover = "%resources%/gearbackground.png"
                 },
             };
             config.VersionInfoUrl = "https://soku.latte.today/version.json";
