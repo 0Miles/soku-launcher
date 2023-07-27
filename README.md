@@ -12,6 +12,10 @@ Just with a single click, SokuLauncher will automatically switch mods and launch
 When missing mods are detected before launch, a prompt to download and install the mods will pop up.
 ![preview](./docs/missingmods.webp)
 
+### Desktop shortcut
+Create a desktop shortcut icon that quickly opens the specified mod setting and still performs automatic update checks when launched from the shortcut.
+![preview](./docs/shortcut.png)
+
 ## Install
 Download SokuLauncher and place it in the main directory of th123.  
 
