@@ -524,7 +524,13 @@ namespace SokuLauncher.Utils
                 updatingWindow.Status = Static.LanguageService.GetString("UpdatesManager-Updating") + "...";
 
                 await Task.Run(() => {
-                    string args = File.ReadAllText("args.txt");
+                    string args = "";
+                    try
+                    {
+                        args = File.ReadAllText("args.txt");
+                    }
+                    catch
+                    { }
                     File.Copy(Static.SelfFileName, replaceTargetPath, true);
 
                     Directory.SetCurrentDirectory(Path.GetDirectoryName(replaceTargetPath));
