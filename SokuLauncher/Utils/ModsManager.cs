@@ -1,11 +1,15 @@
 ﻿using Newtonsoft.Json;
+using SokuLauncher.Controls;
 using SokuLauncher.Models;
+using SokuLauncher.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Media.Imaging;
 
 namespace SokuLauncher.Utils
 {
@@ -266,6 +270,54 @@ namespace SokuLauncher.Utils
             }
             DisableDuplicateEnabledMods();
             SaveSWRSToysIni();
+        }
+
+        public static void CreateShortcutOnDesktop(ModSettingGroupModel selectedModSettingGroupd)
+        {
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            ResourcesManager resourcesManager = new ResourcesManager();
+            resourcesManager.CopyIconResources();
+
+            SelectorWindowViewModel selectorWindowViewModel = new SelectorWindowViewModel
+            {
+                Title = Static.LanguageService.GetString("ModSettingGroupPreview-SelectShortcutIcon"),
+                SelectorNodeList = new ObservableCollection<SelectorNodeModel>()
+            };
+            foreach (var iconPath in resourcesManager.IconPaths)
+            {
+                BitmapImage bitmap;
+                using (FileStream stream = new FileStream(iconPath.Value, FileMode.Open, FileAccess.Read))
+                {
+                    bitmap = new BitmapImage();
+
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.StreamSource = stream;
+                    bitmap.EndInit();
+
+                    bitmap.Freeze();
+
+                    stream.Close();
+                }
+                selectorWindowViewModel.SelectorNodeList.Add(new SelectorNodeModel { Icon = bitmap, Code = iconPath.Value });
+            }
+            selectorWindowViewModel.SelectorNodeList.First().Selected = true;
+
+            SelectIconWindow selectIconWindow = new SelectIconWindow(selectorWindowViewModel);
+
+            if (selectIconWindow.ShowDialog() == true)
+            {
+                string selectedIconPath = selectorWindowViewModel.SelectorNodeList.First(x => x.Selected).Code;
+
+                using (ShellLink shellLink = new ShellLink())
+                {
+                    shellLink.WorkPath = Static.SelfFileDir;
+                    shellLink.ExecuteFile = Static.SelfFileName;
+                    shellLink.ExecuteArguments = $"-s {selectedModSettingGroupd.Id}";
+                    shellLink.IconLocation = $"{selectedIconPath},0";
+                    shellLink.Save(Path.Combine(desktopPath, $"{selectedModSettingGroupd.Name} - SokuLauncher.lnk"));
+                }
+            }
         }
     }
 }

@@ -50,6 +50,23 @@ namespace SokuLauncher.Utils
 
                 Config = JsonConvert.DeserializeObject<ConfigModel>(json) ?? new ConfigModel();
 
+                if (Config.SokuModSettingGroups != null)
+                {
+                    bool addId = false;
+                    foreach(var modSettingGroup in Config.SokuModSettingGroups)
+                    {
+                        if (string.IsNullOrWhiteSpace(modSettingGroup.Id))
+                        {
+                            modSettingGroup.Id = Guid.NewGuid().ToString();
+                            addId = true;
+                        }
+                    }
+                    if (addId)
+                    {
+                        SaveConfig();
+                    }
+                }
+
                 // default values
                 if (string.IsNullOrWhiteSpace(Config.Language))
                 {

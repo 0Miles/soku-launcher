@@ -98,4 +98,7 @@
     <system:String x:Key="ConfigWindow-CheckFouUpdatesNow">Check for updates now</system:String>
 
     <system:String x:Key="MainWindow-SokuFileNotFound">The '{0}' file does not exist.</system:String>
+    <system:String x:Key="ModSettingGroupPreview-Edit">Edit</system:String>
+    <system:String x:Key="ModSettingGroupPreview-CreateShortcut">Create a shortcut on the desktop</system:String>
+    <system:String x:Key="ModSettingGroupPreview-SelectShortcutIcon">Select shortcut icon</system:String>
 </ResourceDictionary>

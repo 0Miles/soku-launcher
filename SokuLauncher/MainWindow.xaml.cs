@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace SokuLauncher
 {
@@ -342,5 +343,84 @@ namespace SokuLauncher
             e.Handled = true;
         }
 
+        private void SokuModSettingGroupListView_PreviewMouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void Edit_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var modSettingGroupId = (string)menuItem.Tag;
+
+            if (ViewModel.ConfigUtil.Config.AutoCheckForUpdates && string.IsNullOrWhiteSpace(ViewModel.UpdatesManager.VersionInfoJson))
+            {
+                ViewModel.UpdatesManager.StopCheckForUpdates();
+            }
+
+            ModsManager configModsManager = new ModsManager(ViewModel.ConfigUtil.SokuDirFullPath);
+            configModsManager.SearchModulesDir();
+            configModsManager.LoadSWRSToysSetting();
+
+            ConfigWindow configWindow = new ConfigWindow(
+                this,
+                new ConfigWindowViewModel
+                {
+                    ModsManager = configModsManager,
+                    ModInfoList = new ObservableCollection<ModInfoModel>(configModsManager.ModInfoList),
+                    SokuDirPath = ViewModel.ConfigUtil.Config.SokuDirPath,
+                    SokuFileName = ViewModel.ConfigUtil.Config.SokuFileName,
+                    SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModSettingGroups)),
+                    AutoCheckForUpdates = ViewModel.ConfigUtil.Config.AutoCheckForUpdates,
+                    AutoCheckForInstallable = ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
+                    VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
+                    Language = ViewModel.ConfigUtil.Config.Language,
+                }
+            );
+
+            configWindow.ViewModel.SelectedSokuModSettingGroup = configWindow.ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
+            if (configWindow.ViewModel.SelectedSokuModSettingGroup != null)
+            {
+                configWindow.ModSettingGroupEditGrid.Opacity = 1;
+                configWindow.ModSettingGroupEditGrid.Visibility = Visibility.Visible;
+                configWindow.SokuModSettingGroupsGrid.Opacity = 0;
+                configWindow.SokuModSettingGroupsGrid.Visibility = Visibility.Collapsed;
+
+                configModsManager = null;
+                ZoomOutHideWindow((s, _) =>
+                {
+                    DoubleAnimation fadeInAnimation = new DoubleAnimation
+                    {
+                        To = 0,
+                        Duration = TimeSpan.FromMilliseconds(0)
+                    };
+                    for (int i = 0; i < LauncherButtonsWrapPanel.Children.Count; i++)
+                    {
+                        LauncherButtonsWrapPanel.Children[i].BeginAnimation(OpacityProperty, fadeInAnimation);
+                    }
+                    Hide();
+                    configWindow.Show();
+                });
+            }
+            else
+            {
+                MessageBox.Show(string.Format(Static.LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void CreateShortcut_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var modSettingGroupId = (string)menuItem.Tag;
+            var selectedModSettingGroupd = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
+            if (selectedModSettingGroupd != null)
+            {
+                ModsManager.CreateShortcutOnDesktop(selectedModSettingGroupd);
+            }
+            else
+            {
+                MessageBox.Show(string.Format(Static.LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

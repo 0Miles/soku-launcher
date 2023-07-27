@@ -49,13 +49,20 @@ namespace SokuLauncher
 
                     if (mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForUpdates)
                     {
-                        await mainWindow.ViewModel.UpdatesManager.GetVersionInfoJson();
-                        List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
-                        checkModes.Add("SokuLauncher");
-                        checkModes.Add("SokuModLoader");
-                        await mainWindow.ViewModel.UpdatesManager.CheckForUpdates(true, mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForInstallable, checkModes, true, false);
-                        mainWindow.ViewModel.ModsManager.SearchModulesDir();
-                        mainWindow.ViewModel.ModsManager.LoadSWRSToysSetting();
+                        try
+                        {
+                            await mainWindow.ViewModel.UpdatesManager.GetVersionInfoJson();
+                            List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
+                            checkModes.Add("SokuLauncher");
+                            checkModes.Add("SokuModLoader");
+                            await mainWindow.ViewModel.UpdatesManager.CheckForUpdates(true, mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForInstallable, checkModes, true, false);
+                            mainWindow.ViewModel.ModsManager.SearchModulesDir();
+                            mainWindow.ViewModel.ModsManager.LoadSWRSToysSetting();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
                     mainWindow.ViewModel.ModsManager.ApplyModSettingGroup(settingGroup);
                     Directory.SetCurrentDirectory(mainWindow.ViewModel.ConfigUtil.SokuDirFullPath);

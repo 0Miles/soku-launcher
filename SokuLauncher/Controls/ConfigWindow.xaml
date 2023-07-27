@@ -72,6 +72,7 @@
                             BorderThickness="0"
                             BorderBrush="{x:Null}"
                             Background="{x:Null}"
+                            PreviewMouseRightButtonDown="SokuModSettingGroupsListView_PreviewMouseRightButtonDown"
                             Keyboard.PreviewKeyDown="SokuModSettingGroupsListView_PreviewKeyDown"
                             SelectionChanged="SokuModSettingGroupsListView_SelectionChanged">
                             <ListView.ItemsPanel>
@@ -84,7 +85,13 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                                <Grid>
+                                                <Grid FlowDirection="LeftToRight">
+                                                    <Grid.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="{DynamicResource ModSettingGroupPreview-Edit}" Click="Edit_Click"  Tag="{Binding Id}" />
+                                                            <MenuItem Header="{DynamicResource ModSettingGroupPreview-CreateShortcut}" Click="CreateShortcut_Click"  Tag="{Binding Id}" />
+                                                        </ContextMenu>
+                                                    </Grid.ContextMenu>
                                                     <Grid Margin="-168,-60,0,0">
                                                         <local:ModSettingGroupUserControl ModSettingGroup="{Binding}" VerticalAlignment="Bottom" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4" Cursor="Hand">
                                                             <local:ModSettingGroupUserControl.RenderTransform>

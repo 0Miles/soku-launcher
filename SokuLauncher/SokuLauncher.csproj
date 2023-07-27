@@ -143,6 +143,9 @@
     <Compile Include="Controls\ModSettingGroupEditWindow.xaml.cs">
       <DependentUpon>ModSettingGroupEditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SelectIconWindow.xaml.cs">
+      <DependentUpon>SelectIconWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UpdateSelectionWindow.xaml.cs">
       <DependentUpon>UpdateSelectionWindow.xaml</DependentUpon>
     </Compile>
@@ -175,6 +178,7 @@
     <Compile Include="Utils\ModsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utils\ResourcesManager.cs" />
+    <Compile Include="Utils\ShellLink.cs" />
     <Compile Include="Utils\UpdatesManager.cs" />
     <Compile Include="Models\ModSettingGroupModel.cs" />
     <Compile Include="ViewModels\MainWindwoViewModel.cs" />
@@ -202,6 +206,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ModSettingGroupEditWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\SelectIconWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -305,7 +313,9 @@
     <Resource Include="Resources\title.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\lnk.ico" />
+    <EmbeddedResource Include="Resources\Icons\lnk1.ico" />
+    <EmbeddedResource Include="Resources\Icons\lnk2.ico" />
+    <EmbeddedResource Include="Resources\Icons\lnk3.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">

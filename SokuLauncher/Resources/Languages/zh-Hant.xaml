@@ -98,4 +98,7 @@
     <system:String x:Key="ConfigWindow-CheckFouUpdatesNow">檢查更新</system:String>
 
     <system:String x:Key="MainWindow-SokuFileNotFound">檔案 '{0}' 不存在.</system:String>
+    <system:String x:Key="ModSettingGroupPreview-Edit">編輯</system:String>
+    <system:String x:Key="ModSettingGroupPreview-CreateShortcut">在桌面建立捷徑</system:String>
+    <system:String x:Key="ModSettingGroupPreview-SelectShortcutIcon">選擇捷徑圖示</system:String>
 </ResourceDictionary>
