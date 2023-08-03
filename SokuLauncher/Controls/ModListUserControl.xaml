@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:converters="clr-namespace:SokuLauncher.Converters"
              mc:Ignorable="d" Loaded="UserControl_Loaded" x:Name="SokuLauncherModListUserControl"
-             d:DesignHeight="720" d:DesignWidth="600">
+             d:DesignHeight="720" d:DesignWidth="600" AllowDrop="True" Drop="DropArea_Drop" DragEnter="DropArea_DragEnter" DragLeave="DropArea_DragLeave">
     <UserControl.Resources>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <converters:PathToImageSourceConverter x:Key="PathToImageSourceConverter" />
@@ -53,6 +53,7 @@
                 </Grid>
             </Border>
         </Grid>
+
         <ListView x:Name="SelectorListView" Grid.Row="1" BorderThickness="0"
                   ItemsSource="{Binding FilteredModInfoList, ElementName=SokuLauncherModListUserControl}"
                   VerticalContentAlignment="Center"
@@ -203,6 +204,13 @@
             </ListView.ItemContainerStyle>
         </ListView>
         <TextBlock Grid.Row="1" x:Name="ModNotFoundTextBlock" Text="{DynamicResource ModListUserControl-NoMod}" FontSize="16" Foreground="LightGray" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+        <Border Grid.Row="1" x:Name="DropHighlightBlock" Background="#ACEFEFEF" IsHitTestVisible="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Opacity="0">
+            <Path Stroke="LightGray" RenderTransformOrigin=".5,.5" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center" Data="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M14 7l6 0 M17 4l0 6">
+                <Path.RenderTransform>
+                    <ScaleTransform ScaleX="5" ScaleY="5"/>
+                </Path.RenderTransform>
+            </Path>
+        </Border>
     </Grid>
 
 </UserControl>

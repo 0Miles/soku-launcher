@@ -757,7 +757,7 @@ namespace SokuLauncher.Controls
 
         private void ModListUserControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (MainTabControl.SelectedIndex == 1 && !installingFromArchive)
+            if (MainTabControl.SelectedIndex == 1 && !installingModFromArchive)
             {
                 ViewModel.Saveable = true;
             }
@@ -838,12 +838,12 @@ namespace SokuLauncher.Controls
             e.Handled = true;
         }
 
-        private bool installingFromArchive = false;
+        private bool installingModFromArchive = false;
         private async void ConfigModListUserControl_InstallButtonClick(object arg1, RoutedEventArgs arg2)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = Static.LanguageService.GetString("ModListUserControl-ZipFilter"),
+                Filter = Static.LanguageService.GetString("Common-ModPackageFilter"),
                 InitialDirectory = Static.SelfFileDir
             };
 
@@ -851,45 +851,79 @@ namespace SokuLauncher.Controls
 
             if (result == true)
             {
-                installingFromArchive = true;
                 string selectedFileName = openFileDialog.FileName;
-                ConfigUtil configUtil = new ConfigUtil
-                {
-                    Config = new ConfigModel
-                    {
-                        SokuDirPath = ViewModel.SokuDirPath,
-                        SokuFileName = ViewModel.SokuFileName,
-                        SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
-                        AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
-                        AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
-                        VersionInfoUrl = ViewModel.VersionInfoUrl,
-                        Language = ViewModel.Language
-                    }
-                };
-                UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
-
-                try
-                {
-                    updatesManager.GetVersionInfoJsonFromZip(selectedFileName);
-                    await updatesManager.CheckForUpdates(
-                        Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Desc"),
-                        Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Completed"),
-                        false,
-                        true,
-                        null,
-                        true,
-                        true);
-                    ViewModel.ModsManager.SearchModulesDir();
-                    ViewModel.ModsManager.LoadSWRSToysSetting();
-                    ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
-                    ConfigModListUserControl.SearchMod();
-                    installingFromArchive = false;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                await InsatllModFromFile(selectedFileName);
             }
+        }
+
+        private async Task InsatllModFromFile(string filename)
+        {
+            installingModFromArchive = true;
+            ConfigUtil configUtil = new ConfigUtil
+            {
+                Config = new ConfigModel
+                {
+                    SokuDirPath = ViewModel.SokuDirPath,
+                    SokuFileName = ViewModel.SokuFileName,
+                    SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
+                    AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
+                    AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
+                    VersionInfoUrl = ViewModel.VersionInfoUrl,
+                    Language = ViewModel.Language
+                }
+            };
+            UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
+
+            string ext = Path.GetExtension(filename);
+
+            try
+            {
+                switch (ext)
+                {
+                    case ".zip":
+                    case ".sokumod":
+                        updatesManager.GetVersionInfoJsonFromZip(filename);
+                        break;
+                    case ".dll":
+                        updatesManager.GetVersionInfoJsonFromDll(filename);
+                        break;
+                    default:
+                        throw new Exception(Static.LanguageService.GetString("Common-UnsupportedFormat"));
+                }
+                await updatesManager.CheckForUpdates(
+                            Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Desc"),
+                            Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Completed"),
+                            false,
+                            true,
+                            null,
+                            true,
+                            true);
+                ViewModel.ModsManager.SearchModulesDir();
+                ViewModel.ModsManager.LoadSWRSToysSetting();
+                ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
+                ConfigModListUserControl.SearchMod();
+                installingModFromArchive = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ConfigModListUserControl_DropFile(object sender, DragEventArgs e)
+        {
+            _ = Task.Run(() =>
+            {
+                Dispatcher.Invoke(async () =>
+                {
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                    if (files != null && files.Length > 0)
+                    {
+                        await InsatllModFromFile(files[0]);
+                    }
+                });
+            });
         }
     }
 }

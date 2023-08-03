@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
 using System.Windows;
+using System.Runtime.InteropServices;
 
 namespace SokuLauncher
 {
@@ -65,6 +66,9 @@ namespace SokuLauncher
                 return null;
             }
         }
+
+        [DllImport("shell32.dll")]
+        public static extern IntPtr ExtractIcon(IntPtr hInst, string lpszExeFileName, int nIconIndex);
 
         public static T DeepCopy<T>(T source)
         {

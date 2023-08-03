@@ -5,6 +5,7 @@ using SokuLauncher.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -14,6 +15,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace SokuLauncher.Utils
 {
@@ -232,7 +236,7 @@ namespace SokuLauncher.Utils
                 {
                     // check mod
                     ZipArchiveEntry modDllFile;
-                    var dllFileList = zip.Entries.Where(x => Path.GetExtension(x.Name).ToLower() == ".dll").ToList();
+                    var dllFileList = zip.Entries.Where(x => Path.GetDirectoryName(x.FullName) == "" && Path.GetExtension(x.Name).ToLower() == ".dll").ToList();
                     if (dllFileList.Count == 0)
                     {
                         throw new Exception(Static.LanguageService.GetString("Common-ModuleNotFound"));
@@ -250,9 +254,12 @@ namespace SokuLauncher.Utils
                             SelectorNodeList = new System.Collections.ObjectModel.ObservableCollection<SelectorNodeModel>()
                         };
 
+                        string systemPath = Environment.GetFolderPath(Environment.SpecialFolder.System);
+                        IntPtr hIcon = Static.ExtractIcon(Process.GetCurrentProcess().Handle, Path.Combine(systemPath, "SHELL32.dll"), 72);
+                        BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHIcon(hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+
                         foreach (var dllFile in dllFileList)
                         {
-                            var bitmapSource = Static.GetExtractAssociatedIcon(dllFile.FullName);
                             swvm.SelectorNodeList.Add(new SelectorNodeModel
                             {
                                 Title = dllFile.Name,
@@ -272,7 +279,7 @@ namespace SokuLauncher.Utils
                     string modName = Path.GetFileNameWithoutExtension(modDllFile.Name);
 
                     // get mod version
-                    string modUnpackTempDir = Path.Combine(UpdateTempDirPath, modName);
+                    string modUnpackTempDir = Path.Combine(UpdateTempDirPath, "tmp", modName);
                     if (Directory.Exists(modUnpackTempDir))
                     {
                         Directory.Delete(modUnpackTempDir, true);
@@ -294,8 +301,27 @@ namespace SokuLauncher.Utils
                             Compressed = true
                         }
                     });
+                    Directory.Delete(modUnpackTempDir, true);
                 }
             }
+        }
+
+        public void GetVersionInfoJsonFromDll(string dllPath)
+        {
+            string fileName = Path.GetFileName(dllPath);
+            string modName = Path.GetFileNameWithoutExtension(fileName);
+            Version modVersion = GetCurrentVersion(dllPath);
+
+            VersionInfoJson = JsonConvert.SerializeObject(new List<UpdateFileInfoModel> {
+                new UpdateFileInfoModel
+                {
+                    Name = modName,
+                    FileName = fileName,
+                    Version = modVersion.ToString(),
+                    DownloadUrl = new Uri(dllPath).ToString(),
+                    Compressed = false
+                }
+            });
         }
 
         public void GetAvailableUpdateList(bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool force = false)

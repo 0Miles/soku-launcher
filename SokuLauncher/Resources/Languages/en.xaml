@@ -16,6 +16,7 @@
     <system:String x:Key="Common-Disable">Disable</system:String>
     <system:String x:Key="Common-Constant">Constant</system:String>
     <system:String x:Key="Common-UnsupportedFormat">Unsupported format</system:String>
+    <system:String x:Key="Common-ModPackageFilter">Mod Package (*.zip)|*.zip|DLL (*.dll)|*.dll</system:String>
     
     <system:String x:Key="App-ModSettingGroupNotFound">{0} not found</system:String>
 
@@ -50,7 +51,7 @@
     <system:String x:Key="UpdatesManager-ParsingArchive">Parsing archive {0}...</system:String>
     <system:String x:Key="UpdatesManager-SelectModuleFileWindow-Title">Select Mod file</system:String>
     <system:String x:Key="UpdatesManager-SelectModuleFileWindow-Desc">Multiple dll files found. Please select one as Mod main dll file.</system:String>
-    <system:String x:Key="UpdatesManager-InstallFromArchive-Desc">The following mods are available for installation in Archive. Please check the mods you want to install.</system:String>
+    <system:String x:Key="UpdatesManager-InstallFromArchive-Desc">The following mods are available for installation. Please check the mods you want to install.</system:String>
     <system:String x:Key="UpdatesManager-InstallFromArchive-Completed">Installation complete</system:String>
     
     <system:String x:Key="UpdatingWindow-Title">Updating</system:String>
@@ -64,7 +65,6 @@
     <system:String x:Key="ModListUserControl-Delete">Delete</system:String>
     <system:String x:Key="ModListUserControl-Undelete">Undelete</system:String>
     <system:String x:Key="ModListUserControl-Button-Install">Install</system:String>
-    <system:String x:Key="ModListUserControl-ZipFilter">Zip Archive(*.zip)|*.zip</system:String>
 
     <system:String x:Key="ConfigWindow-Title">Config</system:String>
     <system:String x:Key="ConfigWindow-Tab-Launcher">Launcher</system:String>

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 
 namespace SokuLauncher.Controls
 {
@@ -28,6 +29,7 @@ namespace SokuLauncher.Controls
         public event Action<object, RoutedEventArgs> ModDeleted;
         public event Action<object, RoutedEventArgs> ModUndeleted;
         public event Action<object, RoutedEventArgs> InstallButtonClick;
+        public event Action<object, DragEventArgs> DropFile;
         private readonly Debouncer SearchDebouncer = new Debouncer(600);
 
         public static DependencyProperty ModInfoListProperty =
@@ -191,5 +193,32 @@ namespace SokuLauncher.Controls
             InstallButtonClick(sender, e);
         }
 
+        private void DropArea_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                AnimateTextBlockOpacity(1);
+            }
+        }
+
+        private void DropArea_DragLeave(object sender, DragEventArgs e)
+        {
+            AnimateTextBlockOpacity(0);
+        }
+
+        private void DropArea_Drop(object sender, DragEventArgs e)
+        {
+            AnimateTextBlockOpacity(0);
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                DropFile(sender, e);
+            }
+        }
+
+        private void AnimateTextBlockOpacity(double targetOpacity)
+        {
+            DoubleAnimation animation = new DoubleAnimation(targetOpacity, new Duration(TimeSpan.FromSeconds(0.3)));
+            DropHighlightBlock.BeginAnimation(OpacityProperty, animation);
+        }
     }
 }

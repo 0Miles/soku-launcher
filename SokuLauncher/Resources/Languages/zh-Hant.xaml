@@ -16,6 +16,7 @@
     <system:String x:Key="Common-Disable">停用</system:String>
     <system:String x:Key="Common-Constant">保持不變</system:String>
     <system:String x:Key="Common-UnsupportedFormat">不支援的格式</system:String>
+    <system:String x:Key="Common-ModPackageFilter">Mod Package (*.zip)|*.zip|DLL (*.dll)|*.dll</system:String>
 
     <system:String x:Key="App-ModSettingGroupNotFound">找不到 {0}</system:String>
 
@@ -50,7 +51,7 @@
     <system:String x:Key="UpdatesManager-ParsingArchive">正在解析壓縮檔 {0}...</system:String>
     <system:String x:Key="UpdatesManager-SelectModuleFileWindow-Title">選擇模組檔案</system:String>
     <system:String x:Key="UpdatesManager-SelectModuleFileWindow-Desc">發現多個dll檔案，請選擇模組的主要dll檔</system:String>
-    <system:String x:Key="UpdatesManager-InstallFromArchive-Desc">壓縮檔中有以下模組可供安裝，請確認您要安裝的模組</system:String>
+    <system:String x:Key="UpdatesManager-InstallFromArchive-Desc">以下模組可供安裝，請確認您要安裝的模組</system:String>
     <system:String x:Key="UpdatesManager-InstallFromArchive-Completed">安裝完成</system:String>
     
     <system:String x:Key="UpdatingWindow-Title">更新中</system:String>
@@ -64,7 +65,6 @@
     <system:String x:Key="ModListUserControl-Delete">刪除</system:String>
     <system:String x:Key="ModListUserControl-Undelete">取消刪除</system:String>
     <system:String x:Key="ModListUserControl-Button-Install">安裝</system:String>
-    <system:String x:Key="ModListUserControl-ZipFilter">Zip 壓縮檔 (*.zip)|*.zip</system:String>
 
     <system:String x:Key="ConfigWindow-Title">設定</system:String>
     <system:String x:Key="ConfigWindow-Tab-Launcher">啟動器</system:String>
