@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SokuLauncher.Controls;
 using SokuLauncher.Models;
+using SokuLauncher.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,6 +31,8 @@ namespace SokuLauncher.Utils
         public Task VersionInfoJsonDownloadTask { get; private set; }
         public string UpdateSokuLauncherFilePath { get; private set; }
 
+        private string LocalArchiveUri { get; set; }
+
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "Update");
 
         public ConfigUtil ConfigUtil { get; set; }
@@ -37,6 +40,10 @@ namespace SokuLauncher.Utils
 
         public UpdatesManager(ConfigUtil configUtil, ModsManager modsManager)
         {
+            if (Directory.Exists(UpdateTempDirPath))
+            {
+                Directory.Delete(UpdateTempDirPath, true);
+            }
             Directory.CreateDirectory(UpdateTempDirPath);
             ConfigUtil = configUtil;
             ModsManager = modsManager;
@@ -48,22 +55,22 @@ namespace SokuLauncher.Utils
             IsStopCheckForUpdates = true;
         }
 
-        public async Task CheckForUpdates(bool isAutoUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool isShowUpdating = true, bool isShowComplatedMessage = true)
+        public async Task<bool?> CheckForUpdates(string desc = null, string complatedMessage = null, bool isAutoUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool isShowUpdating = true, bool force = false)
         {
             try
             {
-                GetAvailableUpdateList(true, checkForInstallable, modsToCheckList);
+                GetAvailableUpdateList(true, checkForInstallable, modsToCheckList, force);
                 if (AvailableUpdateList.Count > 0)
                 {
                     if (IsStopCheckForUpdates)
                     {
                         IsStopCheckForUpdates = false;
-                        return;
+                        return null;
                     }
 
                     UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
                     {
-                        Desc = Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
+                        Desc = desc,
                         AvailableUpdateList = AvailableUpdateList,
                         IsAutoCheckForUpdatesCheckBoxShow = isAutoUpdates,
                         AutoCheckForUpdates = ConfigUtil.Config.AutoCheckForUpdates
@@ -84,55 +91,23 @@ namespace SokuLauncher.Utils
                     {
 
                         var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
-                        await ExecuteUpdates(selectedUpdates, isShowUpdating, isShowComplatedMessage);
+                        await ExecuteUpdates(selectedUpdates, isShowUpdating, complatedMessage);
                     }
+                    return true;
                 }
                 else
                 {
-                    if (!isAutoUpdates)
-                    {
-                        MessageBox.Show(
-                            Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-AllLatest"),
-                            Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-                    }
+                    return false;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
             }
         }
 
-        public async Task CheckForInstallable(List<string> modsToCheckList, bool isShowUpdating = false, bool isShowComplatedMessage = false)
-        {
-            try
-            {
-                GetAvailableUpdateList(false, true, modsToCheckList);
-                if (AvailableUpdateList.Count > 0)
-                {
-                    UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
-                    {
-                        Desc = Static.LanguageService.GetString("UpdatesManager-CheckForInstallable-UpdateSelectionWindow-Desc"),
-                        AvailableUpdateList = AvailableUpdateList,
-                        IsAutoCheckForUpdatesCheckBoxShow = false
-                    };
-
-                    if (updateSelectionWindow.ShowDialog() == true)
-                    {
-                        var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
-                        await ExecuteUpdates(selectedUpdates, isShowUpdating, isShowComplatedMessage);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        public async Task ExecuteUpdates(List<UpdateFileInfoModel> selectedUpdates, bool isShowUpdating, bool isShowComplatedMessage)
+        public async Task ExecuteUpdates(List<UpdateFileInfoModel> selectedUpdates, bool isShowUpdating, string complatedMessage)
         {
             UpdatingWindow updatingWindow = new UpdatingWindow
             {
@@ -176,10 +151,10 @@ namespace SokuLauncher.Utils
                             Directory.SetCurrentDirectory(Static.SelfFileDir);
                         }
                     }
-                    if (isShowComplatedMessage)
+                    if (complatedMessage != null)
                     {
                         MessageBox.Show(
-                            Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
+                            complatedMessage,
                             Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
@@ -236,7 +211,94 @@ namespace SokuLauncher.Utils
             }
         }
 
-        public void GetAvailableUpdateList(bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null)
+        public void GetVersionInfoJsonFromZip(string path)
+        {
+            string fileName = Path.GetFileName(path);
+            StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdatesManager-ParsingArchive"), fileName));
+
+            using (ZipArchive zip = ZipFile.OpenRead(path))
+            {
+                LocalArchiveUri = new Uri(path).AbsoluteUri;
+                ZipArchiveEntry versionInfoJsonFile = zip.Entries.FirstOrDefault(x => x.Name.ToLower() == "version.json");
+                if (versionInfoJsonFile != null)
+                {
+                    using (Stream stream = versionInfoJsonFile.Open())
+                    {
+                        StreamReader reader = new StreamReader(stream);
+                        VersionInfoJson = reader.ReadToEnd();
+                    }
+                }
+                else
+                {
+                    // check mod
+                    ZipArchiveEntry modDllFile;
+                    var dllFileList = zip.Entries.Where(x => Path.GetExtension(x.Name).ToLower() == ".dll").ToList();
+                    if (dllFileList.Count == 0)
+                    {
+                        throw new Exception(Static.LanguageService.GetString("Common-ModuleNotFound"));
+                    }
+                    else if (dllFileList.Count == 1)
+                    {
+                        modDllFile = dllFileList.First();
+                    }
+                    else
+                    {
+                        SelectorWindowViewModel swvm = new SelectorWindowViewModel
+                        {
+                            Title = Static.LanguageService.GetString("UpdatesManager-SelectModuleFileWindow-Title"),
+                            Desc = Static.LanguageService.GetString("UpdatesManager-SelectModuleFileWindow-Desc"),
+                            SelectorNodeList = new System.Collections.ObjectModel.ObservableCollection<SelectorNodeModel>()
+                        };
+
+                        foreach (var dllFile in dllFileList)
+                        {
+                            var bitmapSource = Static.GetExtractAssociatedIcon(dllFile.FullName);
+                            swvm.SelectorNodeList.Add(new SelectorNodeModel
+                            {
+                                Title = dllFile.Name,
+                                Icon = bitmapSource
+                            });
+                        }
+
+                        swvm.SelectorNodeList.First().Selected = true;
+                        SelectorWindow SelectorWindow = new SelectorWindow(swvm);
+                        SelectorWindow.ShowDialog();
+
+                        string modDllFileName = swvm.SelectorNodeList.FirstOrDefault(x => x.Selected)?.Title ?? "";
+                        modDllFile = dllFileList.First(x => x.Name == modDllFileName);
+                    }
+
+                    // get mod name
+                    string modName = Path.GetFileNameWithoutExtension(modDllFile.Name);
+
+                    // get mod version
+                    string modUnpackTempDir = Path.Combine(UpdateTempDirPath, modName);
+                    if (Directory.Exists(modUnpackTempDir))
+                    {
+                        Directory.Delete(modUnpackTempDir, true);
+                    }
+                    Directory.CreateDirectory(modUnpackTempDir);
+                    string tempDllFilePath = Path.Combine(modUnpackTempDir, modDllFile.Name);
+                    modDllFile.ExtractToFile(tempDllFilePath);
+                    ZipArchiveEntry versionFile = zip.Entries.FirstOrDefault(x => x.Name.ToLower() == $"{modName}{MOD_VERSION_FILENAME_SUFFIX}".ToLower());
+                    versionFile?.ExtractToFile(Path.Combine(modUnpackTempDir, versionFile.Name));
+                    Version modVersion = GetCurrentVersion(tempDllFilePath);
+
+                    VersionInfoJson = JsonConvert.SerializeObject(new List<UpdateFileInfoModel> {
+                        new UpdateFileInfoModel
+                        {
+                            Name = modName,
+                            FileName = modDllFile.Name,
+                            Version = modVersion.ToString(),
+                            FromLocalArchive = true,
+                            Compressed = true
+                        }
+                    });
+                }
+            }
+        }
+
+        public void GetAvailableUpdateList(bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool force = false)
         {
             List<UpdateFileInfoModel> latestVersionInfoList;
             try
@@ -301,7 +363,8 @@ namespace SokuLauncher.Utils
                     updateFileInfo.LocalFileVersion = currentVersion.ToString();
 
                     if (checkForUpdates && latestVersion > currentVersion && updateFileInfo.Installed ||
-                        checkForInstallable && !updateFileInfo.Installed)
+                        checkForInstallable && !updateFileInfo.Installed ||
+                        force)
                     {
                         if (updateFileInfo.I18nDesc != null)
                         {
@@ -357,14 +420,32 @@ namespace SokuLauncher.Utils
         {
             try
             {
-                string updateFileDir = Path.Combine(UpdateTempDirPath, updateFileInfo.Name);
-                if (Directory.Exists(updateFileDir))
+                string downloadUri;
+                string updateFileDir;
+
+                if (updateFileInfo.FromLocalArchive)
                 {
-                    Directory.Delete(updateFileDir, true);
+                    string localArchiveName = Path.GetFileNameWithoutExtension(LocalArchiveUri);
+                    updateFileDir = Path.Combine(UpdateTempDirPath, localArchiveName);
+                    if (Directory.Exists(updateFileDir))
+                    {
+                        return;
+                    }
+                    downloadUri = LocalArchiveUri;
                 }
+                else
+                {
+                    downloadUri = updateFileInfo.DownloadUrl;
+                    updateFileDir = Path.Combine(UpdateTempDirPath, updateFileInfo.Name);
+                    if (Directory.Exists(updateFileDir))
+                    {
+                        Directory.Delete(updateFileDir, true);
+                    }
+                }
+
                 Directory.CreateDirectory(updateFileDir);
 
-                string remoteFileName = Path.GetFileName(updateFileInfo.DownloadUrl);
+                string remoteFileName = Path.GetFileName(downloadUri);
                 string downloadToTempFilePath = Path.Combine(updateFileDir, remoteFileName);
 
                 using (WebClient client = new WebClient())
@@ -374,7 +455,7 @@ namespace SokuLauncher.Utils
                         DownloadProgressChanged?.Invoke(e.ProgressPercentage);
                         StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdatesManager-DownloadAndExtractFile-Downloading"), updateFileInfo.Name) + $" {e.ProgressPercentage}%");
                     };
-                    await client.DownloadFileTaskAsync(updateFileInfo.DownloadUrl, downloadToTempFilePath);
+                    await client.DownloadFileTaskAsync(downloadUri, downloadToTempFilePath);
                 }
 
                 if (updateFileInfo.Compressed)
@@ -394,7 +475,18 @@ namespace SokuLauncher.Utils
         public void CopyAndReplaceFile(UpdateFileInfoModel updateFileInfo)
         {
             StatusChanged?.Invoke(Static.LanguageService.GetString("UpdatesManager-Updating") + $" {updateFileInfo.Name}...");
-            string updateFileDir = Path.Combine(UpdateTempDirPath, updateFileInfo.Name);
+
+            string updateFileDir;
+            if (updateFileInfo.FromLocalArchive)
+            {
+                string localArchiveName = Path.GetFileNameWithoutExtension(LocalArchiveUri);
+                updateFileDir = Path.Combine(UpdateTempDirPath, localArchiveName);
+            }
+            else
+            {
+                updateFileDir = Path.Combine(UpdateTempDirPath, updateFileInfo.Name);
+            }
+
             string updateWorkingDir = updateFileDir;
             if (!string.IsNullOrWhiteSpace(updateFileInfo.UpdateWorkingDir))
             {
@@ -452,7 +544,14 @@ namespace SokuLauncher.Utils
             {
                 File.WriteAllText(modVersionFileName, updateFileInfo.Version);
             }
-            Directory.Delete(updateFileDir, true);
+            else
+            {
+                if (File.Exists(modVersionFileName))
+                {
+                    File.Delete(modVersionFileName);
+                }
+            }
+            Directory.Delete(updateWorkingDir, true);
         }
 
         public void ClearVersionInfoJson()

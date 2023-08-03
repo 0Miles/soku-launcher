@@ -286,8 +286,8 @@ namespace SokuLauncher.Utils
 
                 SelectorWindowViewModel swvm = new SelectorWindowViewModel
                 {
-                    Title = Static.LanguageService.GetString("ConfigUtil-SelectSokuFileWindow-Title"),
-                    Desc = Static.LanguageService.GetString("ConfigUtil-SelectSokuFileWindow-Desc"),
+                    Title = Static.LanguageService.GetString("ConfigUtil-SelectorWindow-Title"),
+                    Desc = Static.LanguageService.GetString("ConfigUtil-SelectorWindow-Desc"),
                     SelectorNodeList = new System.Collections.ObjectModel.ObservableCollection<SelectorNodeModel>()
                 };
 
@@ -302,8 +302,8 @@ namespace SokuLauncher.Utils
                 }
 
                 (swvm.SelectorNodeList.FirstOrDefault(x => x.Title == DEFAULT_SOKU_FILE_NAME) ?? swvm.SelectorNodeList.First()).Selected = true;
-                SelectSokuFileWindow SelectSokuFileWindow = new SelectSokuFileWindow(swvm);
-                SelectSokuFileWindow.ShowDialog();
+                SelectorWindow SelectorWindow = new SelectorWindow(swvm);
+                SelectorWindow.ShowDialog();
 
                 return swvm.SelectorNodeList.FirstOrDefault(x => x.Selected)?.Title ?? "";
             }

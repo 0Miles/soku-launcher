@@ -15,6 +15,7 @@
     <system:String x:Key="Common-Enable">Enable</system:String>
     <system:String x:Key="Common-Disable">Disable</system:String>
     <system:String x:Key="Common-Constant">Constant</system:String>
+    <system:String x:Key="Common-UnsupportedFormat">Unsupported format</system:String>
     
     <system:String x:Key="App-ModSettingGroupNotFound">{0} not found</system:String>
 
@@ -28,8 +29,8 @@
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Desc">Disable all Network Mods</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name">No Roll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Desc">Enable InGameHostlist, No any Roll</system:String>
-    <system:String x:Key="ConfigUtil-SelectSokuFileWindow-Title">Choose game file</system:String>
-    <system:String x:Key="ConfigUtil-SelectSokuFileWindow-Desc">Multiple th123 executable files found. Please select one as the launcher target.</system:String>
+    <system:String x:Key="ConfigUtil-SelectorWindow-Title">Choose game file</system:String>
+    <system:String x:Key="ConfigUtil-SelectorWindow-Desc">Multiple th123 executable files found. Please select one as the launcher target.</system:String>
 
     <system:String x:Key="UpdatesManager-MessageBox-Title">Updates</system:String>
     <system:String x:Key="UpdatesManager-Updating">Updating</system:String>
@@ -46,6 +47,11 @@
     <system:String x:Key="UpdatesManager-CopyAndReplaceFile-CanNotCopyFile">Can not copy file</system:String>
     <system:String x:Key="UpdatesManager-CopyDirectory-SourceDirNotFound">Source directory not found</system:String>
     <system:String x:Key="UpdatesManager-CheckSelfIsUpdating-WaitProcessClose">Wait SokuLauncher process close...</system:String>
+    <system:String x:Key="UpdatesManager-ParsingArchive">Parsing archive {0}...</system:String>
+    <system:String x:Key="UpdatesManager-SelectModuleFileWindow-Title">Select Mod file</system:String>
+    <system:String x:Key="UpdatesManager-SelectModuleFileWindow-Desc">Multiple dll files found. Please select one as Mod main dll file.</system:String>
+    <system:String x:Key="UpdatesManager-InstallFromArchive-Desc">The following mods are available for installation in Archive. Please check the mods you want to install.</system:String>
+    <system:String x:Key="UpdatesManager-InstallFromArchive-Completed">Installation complete</system:String>
     
     <system:String x:Key="UpdatingWindow-Title">Updating</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">Updates</system:String>
@@ -57,6 +63,8 @@
     <system:String x:Key="ModListUserControl-OpenConfigFile">Open config file</system:String>
     <system:String x:Key="ModListUserControl-Delete">Delete</system:String>
     <system:String x:Key="ModListUserControl-Undelete">Undelete</system:String>
+    <system:String x:Key="ModListUserControl-Button-Install">Install</system:String>
+    <system:String x:Key="ModListUserControl-ZipFilter">Zip Archive(*.zip)|*.zip</system:String>
 
     <system:String x:Key="ConfigWindow-Title">Config</system:String>
     <system:String x:Key="ConfigWindow-Tab-Launcher">Launcher</system:String>

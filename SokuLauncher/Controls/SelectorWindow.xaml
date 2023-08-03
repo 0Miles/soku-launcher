@@ -1,4 +1,4 @@
-﻿<Window x:Class="SokuLauncher.Controls.SelectSokuFileWindow"
+﻿<Window x:Class="SokuLauncher.Controls.SelectorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -16,6 +16,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock TextWrapping="Wrap"
+                   Margin="8,8,8,0"
                    Padding="8"
                    Text="{Binding Desc}" />
         <ListView Grid.Row="1"

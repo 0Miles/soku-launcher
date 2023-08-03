@@ -1,6 +1,8 @@
-﻿using SokuLauncher.Models;
+﻿using Microsoft.Win32;
+using SokuLauncher.Models;
 using SokuLauncher.Utils;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -25,6 +27,7 @@ namespace SokuLauncher.Controls
         public event Action<object, SelectionChangedEventArgs> SelectionChanged;
         public event Action<object, RoutedEventArgs> ModDeleted;
         public event Action<object, RoutedEventArgs> ModUndeleted;
+        public event Action<object, RoutedEventArgs> InstallButtonClick;
         private readonly Debouncer SearchDebouncer = new Debouncer(600);
 
         public static DependencyProperty ModInfoListProperty =
@@ -182,5 +185,11 @@ namespace SokuLauncher.Controls
                     break;
             }
         }
+
+        private void InsatllButton_Click(object sender, RoutedEventArgs e)
+        {
+            InstallButtonClick(sender, e);
+        }
+
     }
 }

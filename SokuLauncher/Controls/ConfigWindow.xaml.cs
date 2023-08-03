@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Windows.Media.Imaging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SokuLauncher.Controls
 {
@@ -724,7 +725,24 @@ namespace SokuLauncher.Controls
                     }
                     await taskGetVersionInfoJson;
                     ViewModel.CheckForUpdatesButtonText = null;
-                    _ = updatesManager.CheckForUpdates(false);
+                    bool? hasUpdates = await updatesManager.CheckForUpdates(
+                        Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
+                        Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
+                        false);
+                    
+                    if (hasUpdates == false)
+                    {
+                        MessageBox.Show(
+                            Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-AllLatest"),
+                            Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                    }
+
+                    ViewModel.ModsManager.SearchModulesDir();
+                    ViewModel.ModsManager.LoadSWRSToysSetting();
+                    ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
+                    ConfigModListUserControl.SearchMod();
                 }
                 catch (Exception ex)
                 {
@@ -739,7 +757,7 @@ namespace SokuLauncher.Controls
 
         private void ModListUserControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (MainTabControl.SelectedIndex == 1)
+            if (MainTabControl.SelectedIndex == 1 && !installingFromArchive)
             {
                 ViewModel.Saveable = true;
             }
@@ -818,6 +836,60 @@ namespace SokuLauncher.Controls
         private void SokuModSettingGroupsListView_PreviewMouseRightButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             e.Handled = true;
+        }
+
+        private bool installingFromArchive = false;
+        private async void ConfigModListUserControl_InstallButtonClick(object arg1, RoutedEventArgs arg2)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = Static.LanguageService.GetString("ModListUserControl-ZipFilter"),
+                InitialDirectory = Static.SelfFileDir
+            };
+
+            bool? result = openFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                installingFromArchive = true;
+                string selectedFileName = openFileDialog.FileName;
+                ConfigUtil configUtil = new ConfigUtil
+                {
+                    Config = new ConfigModel
+                    {
+                        SokuDirPath = ViewModel.SokuDirPath,
+                        SokuFileName = ViewModel.SokuFileName,
+                        SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
+                        AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
+                        AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
+                        VersionInfoUrl = ViewModel.VersionInfoUrl,
+                        Language = ViewModel.Language
+                    }
+                };
+                UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
+
+                try
+                {
+                    updatesManager.GetVersionInfoJsonFromZip(selectedFileName);
+                    await updatesManager.CheckForUpdates(
+                        Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Desc"),
+                        Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Completed"),
+                        false,
+                        true,
+                        null,
+                        true,
+                        true);
+                    ViewModel.ModsManager.SearchModulesDir();
+                    ViewModel.ModsManager.LoadSWRSToysSetting();
+                    ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
+                    ConfigModListUserControl.SearchMod();
+                    installingFromArchive = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

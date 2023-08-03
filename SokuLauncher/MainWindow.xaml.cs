@@ -152,7 +152,13 @@ namespace SokuLauncher
 
                         List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
                         checkModes.Add("SokuModLoader");
-                        await ViewModel.UpdatesManager.CheckForInstallable(checkModes);
+                        await ViewModel.UpdatesManager.CheckForUpdates(
+                            Static.LanguageService.GetString("UpdatesManager-CheckForInstallable-UpdateSelectionWindow-Desc"),
+                            null,
+                            false,
+                            true,
+                            checkModes,
+                            false);
                         ViewModel.ModsManager.SearchModulesDir();
                         ViewModel.ModsManager.LoadSWRSToysSetting();
 

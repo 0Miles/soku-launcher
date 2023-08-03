@@ -8,10 +8,10 @@ using System.Windows.Media;
 
 namespace SokuLauncher.Controls
 {
-    public partial class SelectSokuFileWindow : Window
+    public partial class SelectorWindow : Window
     {
         public SelectorWindowViewModel ViewModel { get; set; }
-        public SelectSokuFileWindow(SelectorWindowViewModel viewModel = null)
+        public SelectorWindow(SelectorWindowViewModel viewModel = null)
         {
             ViewModel = viewModel;
             if (ViewModel == null)

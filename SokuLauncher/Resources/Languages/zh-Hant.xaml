@@ -15,6 +15,7 @@
     <system:String x:Key="Common-Enable">啟用</system:String>
     <system:String x:Key="Common-Disable">停用</system:String>
     <system:String x:Key="Common-Constant">保持不變</system:String>
+    <system:String x:Key="Common-UnsupportedFormat">不支援的格式</system:String>
 
     <system:String x:Key="App-ModSettingGroupNotFound">找不到 {0}</system:String>
 
@@ -28,8 +29,8 @@
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Desc">關閉所有連線模組</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name">No Roll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Desc">啟用 InGameHostlist，不啟用任何 Roll</system:String>
-    <system:String x:Key="ConfigUtil-SelectSokuFileWindow-Title">選擇遊戲檔案</system:String>
-    <system:String x:Key="ConfigUtil-SelectSokuFileWindow-Desc">發現多個 th123 遊戲檔案，請選擇一個作為啟動目標</system:String>
+    <system:String x:Key="ConfigUtil-SelectorWindow-Title">選擇遊戲檔案</system:String>
+    <system:String x:Key="ConfigUtil-SelectorWindow-Desc">發現多個 th123 遊戲檔案，請選擇一個作為啟動目標</system:String>
 
     <system:String x:Key="UpdatesManager-MessageBox-Title">更新</system:String>
     <system:String x:Key="UpdatesManager-Updating">更新中</system:String>
@@ -46,6 +47,11 @@
     <system:String x:Key="UpdatesManager-CopyAndReplaceFile-CanNotCopyFile">無法複製檔案</system:String>
     <system:String x:Key="UpdatesManager-CopyDirectory-SourceDirNotFound">未找到來源目錄</system:String>
     <system:String x:Key="UpdatesManager-CheckSelfIsUpdating-WaitProcessClose">等待 SokuLauncher 處理程序關閉...</system:String>
+    <system:String x:Key="UpdatesManager-ParsingArchive">正在解析壓縮檔 {0}...</system:String>
+    <system:String x:Key="UpdatesManager-SelectModuleFileWindow-Title">選擇模組檔案</system:String>
+    <system:String x:Key="UpdatesManager-SelectModuleFileWindow-Desc">發現多個dll檔案，請選擇模組的主要dll檔</system:String>
+    <system:String x:Key="UpdatesManager-InstallFromArchive-Desc">壓縮檔中有以下模組可供安裝，請確認您要安裝的模組</system:String>
+    <system:String x:Key="UpdatesManager-InstallFromArchive-Completed">安裝完成</system:String>
     
     <system:String x:Key="UpdatingWindow-Title">更新中</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">更新</system:String>
@@ -57,6 +63,8 @@
     <system:String x:Key="ModListUserControl-OpenConfigFile">開啟設定檔</system:String>
     <system:String x:Key="ModListUserControl-Delete">刪除</system:String>
     <system:String x:Key="ModListUserControl-Undelete">取消刪除</system:String>
+    <system:String x:Key="ModListUserControl-Button-Install">安裝</system:String>
+    <system:String x:Key="ModListUserControl-ZipFilter">Zip 壓縮檔 (*.zip)|*.zip</system:String>
 
     <system:String x:Key="ConfigWindow-Title">設定</system:String>
     <system:String x:Key="ConfigWindow-Tab-Launcher">啟動器</system:String>

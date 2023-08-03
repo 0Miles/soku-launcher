@@ -14,6 +14,7 @@ namespace SokuLauncher.Models
         public string Version { get; set; }
         public bool Compressed { get; set; }
         public string UpdateWorkingDir { get; set; }
+        public bool FromLocalArchive { get; set; }
 
         // mod desc
         public string Icon { get; set; }

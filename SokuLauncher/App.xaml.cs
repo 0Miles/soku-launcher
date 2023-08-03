@@ -22,15 +22,45 @@ namespace SokuLauncher
 
             await UpdatesManager.CheckSelfIsUpdating();
 
-            var currentProcess = Process.GetCurrentProcess();
-            var currentExecutable = currentProcess.MainModule.FileName;
-            var runningProcesses = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(currentExecutable));
-            if (runningProcesses.Length > 1)
-            {
-                Current.Shutdown();
-            }
-
             MainWindow mainWindow = new MainWindow();
+
+            if (Static.StartupArgs.Length > 0)
+            {
+                foreach (string arg in Static.StartupArgs)
+                {
+                    if (File.Exists(arg))
+                    {
+                        Static.StartupArgs = Array.Empty<string>();
+                        string filename = arg;
+                        string ext = Path.GetExtension(filename).ToLower();
+
+                        try
+                        {
+                            switch (ext)
+                            {
+                                case ".zip":
+                                    mainWindow.ViewModel.UpdatesManager.GetVersionInfoJsonFromZip(filename);
+                                    await mainWindow.ViewModel.UpdatesManager.CheckForUpdates(
+                                        Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Desc"),
+                                        Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Completed"),
+                                        false,
+                                        true,
+                                        null,
+                                        true,
+                                        true);
+                                    break;
+                                default:
+                                    throw new Exception(Static.LanguageService.GetString("Common-UnsupportedFormat"));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        Current.Shutdown();
+                    }
+                }
+            }
 
             if (Static.StartupArgs.Length > 1 && Static.StartupArgs[0] == "-s")
             {
@@ -55,7 +85,13 @@ namespace SokuLauncher
                             List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
                             checkModes.Add("SokuLauncher");
                             checkModes.Add("SokuModLoader");
-                            await mainWindow.ViewModel.UpdatesManager.CheckForUpdates(true, mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForInstallable, checkModes, true, false);
+                            await mainWindow.ViewModel.UpdatesManager.CheckForUpdates(
+                                Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"), 
+                                null,
+                                true,
+                                mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
+                                checkModes,
+                                true);
                             mainWindow.ViewModel.ModsManager.SearchModulesDir();
                             mainWindow.ViewModel.ModsManager.LoadSWRSToysSetting();
                         }
@@ -75,6 +111,14 @@ namespace SokuLauncher
                 Current.Shutdown();
             }
 
+            var currentProcess = Process.GetCurrentProcess();
+            var currentExecutable = currentProcess.MainModule.FileName;
+            var runningProcesses = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(currentExecutable));
+            if (runningProcesses.Length > 1)
+            {
+                Current.Shutdown();
+            }
+
             mainWindow.Show();
 
             if (mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForUpdates)
@@ -84,7 +128,10 @@ namespace SokuLauncher
                     try
                     {
                         await mainWindow.ViewModel.UpdatesManager.GetVersionInfoJson();
-                        await Dispatcher.Invoke(() => mainWindow.ViewModel.UpdatesManager.CheckForUpdates());
+                        await Dispatcher.Invoke(() => mainWindow.ViewModel.UpdatesManager.CheckForUpdates(
+                            Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
+                            Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed")
+                            ));
                     }
                     catch (Exception ex)
                     {
