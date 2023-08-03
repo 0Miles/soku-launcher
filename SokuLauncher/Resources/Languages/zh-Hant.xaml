@@ -101,4 +101,5 @@
     <system:String x:Key="ModSettingGroupPreview-Edit">編輯</system:String>
     <system:String x:Key="ModSettingGroupPreview-CreateShortcut">在桌面建立捷徑</system:String>
     <system:String x:Key="ModSettingGroupPreview-SelectShortcutIcon">選擇捷徑圖示</system:String>
+    <system:String x:Key="ModSettingGroupPreview-Hidden">隱藏</system:String>
 </ResourceDictionary>

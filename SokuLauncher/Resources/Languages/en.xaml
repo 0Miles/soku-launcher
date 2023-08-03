@@ -101,4 +101,5 @@
     <system:String x:Key="ModSettingGroupPreview-Edit">Edit</system:String>
     <system:String x:Key="ModSettingGroupPreview-CreateShortcut">Create a shortcut on the desktop</system:String>
     <system:String x:Key="ModSettingGroupPreview-SelectShortcutIcon">Select shortcut icon</system:String>
+    <system:String x:Key="ModSettingGroupPreview-Hidden">Hidden</system:String>
 </ResourceDictionary>

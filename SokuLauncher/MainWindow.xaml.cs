@@ -31,6 +31,7 @@ namespace SokuLauncher
             {
                 ViewModel.ConfigUtil = new ConfigUtil();
                 ViewModel.ConfigUtil.ReadConfig();
+                RefreshModSettingGroups();
             }
             catch (Exception ex)
             {
@@ -51,6 +52,11 @@ namespace SokuLauncher
             ViewModel.UpdatesManager = new UpdatesManager(ViewModel.ConfigUtil, ViewModel.ModsManager);
 
             InitializeComponent();
+        }
+
+        public void RefreshModSettingGroups()
+        {
+            ViewModel.SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(ViewModel.ConfigUtil.Config.SokuModSettingGroups.Where(x => x.IsHidden != true));
         }
 
         private MainWindwoViewModel _ViewModel;
@@ -273,7 +279,6 @@ namespace SokuLauncher
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ViewModel.SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(ViewModel.ConfigUtil.Config.SokuModSettingGroups);
         }
 
         private void ConfigButton_Click(object sender, RoutedEventArgs e)
@@ -416,6 +421,30 @@ namespace SokuLauncher
             if (selectedModSettingGroupd != null)
             {
                 ModsManager.CreateShortcutOnDesktop(selectedModSettingGroupd);
+            }
+            else
+            {
+                MessageBox.Show(string.Format(Static.LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void Hidden_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var modSettingGroupId = (string)menuItem.Tag;
+
+            var selectedModSettingGroupd = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
+            if (selectedModSettingGroupd != null)
+            {
+                selectedModSettingGroupd.IsHidden = !selectedModSettingGroupd.IsHidden;
+                ViewModel.ConfigUtil.Config.SokuModSettingGroups.First(x => x.Id == modSettingGroupId).IsHidden = selectedModSettingGroupd.IsHidden;
+                ViewModel.ConfigUtil.SaveConfig();
+
+                await Task.Delay(300);
+                RefreshModSettingGroups();
+
+                await Task.Delay(100);
+                CenterWindow();
             }
             else
             {

@@ -151,8 +151,6 @@ namespace SokuLauncher.Controls
                         target.ViewModel.UpdatesManager.ClearVersionInfoJson();
                     }
 
-                    target.ViewModel.SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(ViewModel.SokuModSettingGroups);
-
                     target.ViewModel.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
                     target.ViewModel.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
                     target.ViewModel.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
@@ -162,6 +160,8 @@ namespace SokuLauncher.Controls
                     target.ViewModel.ConfigUtil.Config.Language = ViewModel.Language;
 
                     target.ViewModel.ConfigUtil.SaveConfig();
+
+                    target.RefreshModSettingGroups();
 
                     if (target.ViewModel.ModsManager.SokuDirFullPath != target.ViewModel.ConfigUtil.SokuDirFullPath)
                     {
@@ -350,7 +350,7 @@ namespace SokuLauncher.Controls
                     ModSettingGroupModel previousMember = ViewModel.SokuModSettingGroups[selectedIndex - 1];
                     ViewModel.SokuModSettingGroups[selectedIndex - 1] = selectedMember;
                     ViewModel.SokuModSettingGroups[selectedIndex] = previousMember;
-
+                    ForceSokuModSettingGroupsListViewRefresh();
                     ViewModel.Saveable = true;
                 }
                 listViewItem.RenderTransform = new TranslateTransform(0, 0);
@@ -391,7 +391,7 @@ namespace SokuLauncher.Controls
                     ModSettingGroupModel nextMember = ViewModel.SokuModSettingGroups[selectedIndex + 1];
                     ViewModel.SokuModSettingGroups[selectedIndex + 1] = selectedMember;
                     ViewModel.SokuModSettingGroups[selectedIndex] = nextMember;
-
+                    ForceSokuModSettingGroupsListViewRefresh();
                     ViewModel.Saveable = true;
                     IsMovingModSettingGroup = false;
                 }
@@ -791,6 +791,23 @@ namespace SokuLauncher.Controls
             if (selectedModSettingGroupd != null)
             {
                 ModsManager.CreateShortcutOnDesktop(selectedModSettingGroupd);
+            }
+            else
+            {
+                MessageBox.Show(string.Format(Static.LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void Hidden_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var modSettingGroupId = (string)menuItem.Tag;
+            
+            var selectedModSettingGroupd = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
+            if (selectedModSettingGroupd != null)
+            {
+                selectedModSettingGroupd.IsHidden = !selectedModSettingGroupd.IsHidden;
+                ViewModel.Saveable = true;
             }
             else
             {

@@ -101,4 +101,5 @@
     <system:String x:Key="ModSettingGroupPreview-Edit">编辑</system:String>
     <system:String x:Key="ModSettingGroupPreview-CreateShortcut">在桌面创建快捷方式</system:String>
     <system:String x:Key="ModSettingGroupPreview-SelectShortcutIcon">选择快捷方式图示</system:String>
+    <system:String x:Key="ModSettingGroupPreview-Hidden">隐藏</system:String>
 </ResourceDictionary>

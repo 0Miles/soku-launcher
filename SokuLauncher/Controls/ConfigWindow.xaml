@@ -7,6 +7,7 @@
         mc:Ignorable="d" Closing="Window_Closing"
         Title="{DynamicResource ConfigWindow-Title}" MinWidth="500" MinHeight="520" Width="600" Height="720" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <converters:BooleanToFloatConverter x:Key="BooleanToFloatConverter"/>
         <converters:IsFirstItemConverter x:Key="IsFirstItemConverter"/>
         <converters:IsLastItemConverter x:Key="IsLastItemConverter"/>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
@@ -88,11 +89,37 @@
                                                 <Grid FlowDirection="LeftToRight">
                                                     <Grid.ContextMenu>
                                                         <ContextMenu>
+                                                            <MenuItem Header="{DynamicResource ModSettingGroupPreview-Hidden}" Click="Hidden_Click" IsChecked="{Binding IsHidden}" Tag="{Binding Id}" />
+                                                            <Separator/>
                                                             <MenuItem Header="{DynamicResource ModSettingGroupPreview-Edit}" Click="Edit_Click"  Tag="{Binding Id}" />
                                                             <MenuItem Header="{DynamicResource ModSettingGroupPreview-CreateShortcut}" Click="CreateShortcut_Click"  Tag="{Binding Id}" />
                                                         </ContextMenu>
                                                     </Grid.ContextMenu>
                                                     <Grid Margin="-168,-60,0,0">
+                                                        <Grid.Style>
+                                                            <Style TargetType="Grid">
+                                                                <Setter Property="Opacity" Value="{Binding IsHidden, Mode=OneTime, Converter={StaticResource BooleanToFloatConverter}, ConverterParameter=1\,\.3}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsHidden}" Value="True">
+                                                                        <DataTrigger.EnterActions>
+                                                                            <BeginStoryboard>
+                                                                                <Storyboard>
+                                                                                    <DoubleAnimation Duration="0:0:.3" To=".5" Storyboard.TargetProperty="Opacity"/>
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </DataTrigger.EnterActions>
+
+                                                                        <DataTrigger.ExitActions>
+                                                                            <BeginStoryboard>
+                                                                                <Storyboard>
+                                                                                    <DoubleAnimation Duration="0:0:.3" To="1" Storyboard.TargetProperty="Opacity"/>
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </DataTrigger.ExitActions>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Style>
                                                         <local:ModSettingGroupUserControl ModSettingGroup="{Binding}" VerticalAlignment="Bottom" RenderTransformOrigin="1,1" Width="420" Height="150" Margin="4" Cursor="Hand">
                                                             <local:ModSettingGroupUserControl.RenderTransform>
                                                                 <ScaleTransform ScaleX=".6" ScaleY=".6"></ScaleTransform>

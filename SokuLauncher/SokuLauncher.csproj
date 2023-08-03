@@ -159,6 +159,7 @@
     <Compile Include="Converters\PathToImageSourceConverter.cs" />
     <Compile Include="Converters\PathToBackgroundConverter.cs" />
     <Compile Include="Converters\FileNameConverter.cs" />
+    <Compile Include="Converters\BooleanToFloatConverter.cs" />
     <Compile Include="Converters\ReverseBooleanConverter.cs" />
     <Compile Include="Converters\ReverseStringToVisibilityConverter.cs" />
     <Compile Include="Converters\IsFirstItemConverter.cs" />

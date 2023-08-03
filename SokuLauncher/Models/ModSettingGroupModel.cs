@@ -205,6 +205,23 @@ namespace SokuLauncher.Models
             }
         }
 
+        private bool _IsHidden = false;
+        public bool IsHidden
+        {
+            get
+            {
+                return _IsHidden;
+            }
+            set
+            {
+                if (value != _IsHidden)
+                {
+                    _IsHidden = value;
+                    RaisePropertyChanged("IsHidden");
+                }
+            }
+        }
+
         private int _Progress = 0;
         [JsonIgnore]
         public int Progress

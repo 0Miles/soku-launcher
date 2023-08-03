@@ -53,10 +53,28 @@
                                 <Grid FlowDirection="LeftToRight">
                                     <Grid.ContextMenu>
                                         <ContextMenu>
+                                            <MenuItem Header="{DynamicResource ModSettingGroupPreview-Hidden}" Click="Hidden_Click" IsChecked="{Binding IsHidden}" Tag="{Binding Id}" />
+                                            <Separator/>
                                             <MenuItem Header="{DynamicResource ModSettingGroupPreview-Edit}" Click="Edit_Click"  Tag="{Binding Id}" />
                                             <MenuItem Header="{DynamicResource ModSettingGroupPreview-CreateShortcut}" Click="CreateShortcut_Click"  Tag="{Binding Id}" />
                                         </ContextMenu>
                                     </Grid.ContextMenu>
+                                    <Grid.Style>
+                                        <Style TargetType="Grid">
+                                            <Setter Property="Opacity" Value="1"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsHidden}" Value="True">
+                                                    <DataTrigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Duration="0:0:.3" To="0" Storyboard.TargetProperty="Opacity"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.EnterActions>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
                                     <controls:ModSettingGroupUserControl ModSettingGroup="{Binding}"  VerticalAlignment="Center" Width="420" Height="150" Margin="8" Cursor="Hand"/>
                                 </Grid>
                             </ControlTemplate>
