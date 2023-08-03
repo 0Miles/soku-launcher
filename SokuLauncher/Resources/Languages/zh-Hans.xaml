@@ -24,7 +24,7 @@
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Desc">启用 SokuLobbies 与 Giuroll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Name">Giuroll CN</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Desc">启用 SokuLobbies 与 Giuroll-62F</system:String>
-    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Name">原生</system:String>
+    <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Name">Origin</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-Origin-Desc">关闭所有联机模組</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name">No Roll</system:String>
     <system:String x:Key="ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Desc">启用 InGameHostlist，不启用任何 Roll</system:String>
