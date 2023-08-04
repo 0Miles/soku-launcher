@@ -667,7 +667,6 @@ namespace SokuLauncher.Utils
 
         public static async Task CheckSelfIsUpdating()
         {
-            
             string updateSokuLauncherDir = Path.Combine(Static.TempDirPath, "Update", "SokuLauncher");
 
             if (Static.SelfFileDir == updateSokuLauncherDir)
@@ -716,7 +715,7 @@ namespace SokuLauncher.Utils
                     File.Copy(Static.SelfFileName, replaceTargetPath, true);
 
                     Directory.SetCurrentDirectory(Path.GetDirectoryName(replaceTargetPath));
-                    Process.Start(new ProcessStartInfo { FileName = replaceTargetPath, UseShellExecute = true, Arguments = args});
+                    Process.Start(new ProcessStartInfo { FileName = replaceTargetPath, UseShellExecute = true, Arguments = args });
                     Environment.Exit(0);
                 });
             }

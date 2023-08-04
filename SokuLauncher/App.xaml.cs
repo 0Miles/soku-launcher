@@ -16,6 +16,7 @@ namespace SokuLauncher
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
             Static.StartupArgs = e.Args;
 
             LanguageService_OnChangeLanguage(ConfigUtil.GetLanguageCode(CultureInfo.CurrentCulture.Name));
@@ -143,12 +144,14 @@ namespace SokuLauncher
         {
             MessageBox.Show(e.Exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
+            Environment.Exit(0);
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = e.ExceptionObject as Exception;
             MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            Environment.Exit(0);
         }
     }
 }
