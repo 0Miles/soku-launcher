@@ -901,7 +901,7 @@ namespace SokuLauncher.Controls
         {
             var button = (Button)sender;
             var fullPath = (string)button.Tag;
-            Process.Start("explorer.exe", Path.GetDirectoryName(fullPath));
+            Process.Start("explorer.exe", fullPath);
         }
     }
 }
