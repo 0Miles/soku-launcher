@@ -64,8 +64,8 @@
     },
     {
         "Name": "InGameHostlist",
-        "Desc": "A module that adds hostlist bot integration directly into Hisoutensoku.",
-        "Version": "0.0.0.0",
+        "Desc": "A module that adds hostlist bot integration directly into Hisoutensoku.  \n> Added localization support through th123intl.  \n> Localization files can be found in ./localization, and should be added to the intl pack to use.  \n> Doesn't support non-ascii characters.  \n>   \n> Thanks to Čchārah for the Livvi Karelian translation.",
+        "Version": "1.3.3.0",
         "FileName": "InGameHostlist.dll",
         "ConfigFIles": [
             "InGameHostlist.ini"
@@ -80,6 +80,23 @@
         "Version": "0.0.0.0",
         "FileName": "d3d9.dll",
         "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1129357956803219516/d3d9.zip",
+        "Compressed": true
+    },
+    {
+        "Name": "InfiniteDecks",
+        "Desc": "Removes the 4 decks limit in Touhou 12.3  \n> Fixed bug causing specs to send wrong P2 deck",
+        "Version": "1.0.3.0",
+        "FileName": "InfiniteDecks.dll",
+        "DownloadUrl": "https://github.com/SokuDev/InfiniteDecks/releases/download/v1.0.3/InfiniteDecks.dll",
+        "Compressed": false
+    },
+    {
+        "Name": "shady-loader",
+        "Desc": "A specific fighting game resource manipulation tools  \n  \n> Changelog:  \n>  - Changed mod server to the one owned by Pinky's\n>  - Fix path names for some locales",
+        "Version": "2.5.0.0",
+        "FileName": "shady-loader.dll",
+        "UpdateWorkingDir": "./modules/shady-loader",
+        "DownloadUrl": "https://github.com/enebe-nb/shady-packer/releases/download/v2.5/shady-packer.zip",
         "Compressed": true
     }
 ]
