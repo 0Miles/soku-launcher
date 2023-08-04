@@ -17,6 +17,7 @@
     <system:String x:Key="Common-Constant">保持不变</system:String>
     <system:String x:Key="Common-UnsupportedFormat">不支持的格式</system:String>
     <system:String x:Key="Common-ModPackageFilter">Mod Package (*.zip)|*.zip|DLL (*.dll)|*.dll</system:String>
+    <system:String x:Key="Common-ActionAbortedCheckingForUpdates">动作中止：正在检查更新</system:String>
 
     <system:String x:Key="App-ModSettingGroupNotFound">找不到 {0}</system:String>
 

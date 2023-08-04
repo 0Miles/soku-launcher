@@ -457,5 +457,32 @@ namespace SokuLauncher
                 MessageBox.Show(string.Format(Static.LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void DropArea_Drop(object sender, DragEventArgs e)
+        {
+            if (ViewModel.UpdatesManager.IsVersionInfoJsonDownloading)
+            {
+                MessageBox.Show(Static.LanguageService.GetString("Common-ActionAbortedCheckingForUpdates"), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                _ = Task.Run(() =>
+                {
+                    Dispatcher.Invoke(async () =>
+                    {
+                        string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                        if (files != null && files.Length > 0)
+                        {
+                            await ViewModel.UpdatesManager.UpdateFromFile(files[0]);
+
+                            ViewModel.ModsManager.SearchModulesDir();
+                            ViewModel.ModsManager.LoadSWRSToysSetting();
+                        }
+                    });
+                });
+            }
+        }
     }
 }

@@ -351,6 +351,8 @@ namespace SokuLauncher.Utils
                     null,
                     true,
                     true);
+
+                ClearVersionInfoJson();
             }
             catch (Exception ex)
             {
@@ -372,7 +374,7 @@ namespace SokuLauncher.Utils
                     Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
-                VersionInfoJson = null;
+                ClearVersionInfoJson();
                 return;
             }
 

@@ -17,6 +17,7 @@
     <system:String x:Key="Common-Constant">Constant</system:String>
     <system:String x:Key="Common-UnsupportedFormat">Unsupported format</system:String>
     <system:String x:Key="Common-ModPackageFilter">Mod Package (*.zip)|*.zip|DLL (*.dll)|*.dll</system:String>
+    <system:String x:Key="Common-ActionAbortedCheckingForUpdates">Action aborted: Checking for updates</system:String>
     
     <system:String x:Key="App-ModSettingGroupNotFound">{0} not found</system:String>
 
