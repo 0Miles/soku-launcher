@@ -45,10 +45,6 @@ namespace SokuLauncher.Utils
 
         public UpdatesManager(ConfigUtil configUtil, ModsManager modsManager)
         {
-            if (Directory.Exists(UpdateTempDirPath))
-            {
-                Directory.Delete(UpdateTempDirPath, true);
-            }
             Directory.CreateDirectory(UpdateTempDirPath);
             ConfigUtil = configUtil;
             ModsManager = modsManager;
@@ -303,6 +299,13 @@ namespace SokuLauncher.Utils
                         }
                     });
                     Directory.Delete(modUnpackTempDir, true);
+
+                    string localArchiveName = Path.GetFileNameWithoutExtension(LocalArchiveUri);
+                    string updateFileDir = Path.Combine(UpdateTempDirPath, localArchiveName);
+                    if (Directory.Exists(updateFileDir))
+                    {
+                        Directory.Delete(updateFileDir, true);
+                    }
                 }
             }
         }
