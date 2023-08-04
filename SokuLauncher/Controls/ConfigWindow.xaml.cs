@@ -876,8 +876,6 @@ namespace SokuLauncher.Controls
 
             await updatesManager.UpdateFromFile(filename);
 
-            ViewModel.ModsManager.SearchModulesDir();
-            ViewModel.ModsManager.LoadSWRSToysSetting();
             ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
             ConfigModListUserControl.SearchMod();
             installingModFromArchive = false;

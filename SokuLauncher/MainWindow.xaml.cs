@@ -476,9 +476,6 @@ namespace SokuLauncher
                         if (files != null && files.Length > 0)
                         {
                             await ViewModel.UpdatesManager.UpdateFromFile(files[0]);
-
-                            ViewModel.ModsManager.SearchModulesDir();
-                            ViewModel.ModsManager.LoadSWRSToysSetting();
                         }
                     });
                 });

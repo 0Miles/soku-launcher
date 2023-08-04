@@ -352,11 +352,29 @@ namespace SokuLauncher.Utils
                     true,
                     true);
 
+                ModsManager.SearchModulesDir();
+                ModsManager.LoadSWRSToysSetting();
+
+                if (AvailableUpdateList.Any(x => x.Installed == false))
+                {
+                    if (MessageBox.Show(
+                            Static.LanguageService.GetString("UpdatesManager-NewModInstalled"),
+                            Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        foreach (var mod in AvailableUpdateList.Where(x => x.Installed == false).ToList())
+                        {
+                            ModsManager.ChangeModEnabled(mod.Name, true);
+                        }
+                        ModsManager.SaveSWRSToysIni();
+                    }
+                }
                 ClearVersionInfoJson();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

@@ -54,6 +54,7 @@
     <system:String x:Key="UpdatesManager-SelectModuleFileWindow-Desc">發現多個dll檔案，請選擇模組的主要dll檔</system:String>
     <system:String x:Key="UpdatesManager-InstallFromArchive-Desc">以下模組可供安裝，請確認您要安裝的模組</system:String>
     <system:String x:Key="UpdatesManager-InstallFromArchive-Completed">安裝完成</system:String>
+    <system:String x:Key="UpdatesManager-NewModInstalled">有新安裝的模組，要立刻啟用嗎?</system:String>
     
     <system:String x:Key="UpdatingWindow-Title">更新中</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">更新</system:String>
