@@ -425,7 +425,7 @@ namespace SokuLauncher.Utils
                             }
                             break;
                         default:
-                            var modInfo = ModsManager.GetModInfoByModName(updateFileInfo.Name);
+                            var modInfo = ModsManager.GetModInfoByModName(updateFileInfo.Name) ?? ModsManager.GetModInfoByModFileName(updateFileInfo.FileName);
                             if (modInfo == null || !File.Exists(modInfo.FullPath))
                             {
                                 string fileNameForbiddenCharactersPattern = @"[\\/:*?""<>|]";

@@ -174,6 +174,11 @@ namespace SokuLauncher.Utils
             return ModInfoList.FirstOrDefault(x => x.Name.ToLower() == modName.ToLower() || x.DirName.ToLower() == modName.ToLower() && x.SameDirModPathList.Count == 0);
         }
 
+        public ModInfoModel GetModInfoByModFileName(string modFileName)
+        {
+            return ModInfoList.FirstOrDefault(x => x.Name.ToLower() == Path.GetFileNameWithoutExtension(modFileName).ToLower());
+        }
+
         public void ChangeModEnabled(string modName, bool enabled)
         {
             var modInfo = GetModInfoByModName(modName);
