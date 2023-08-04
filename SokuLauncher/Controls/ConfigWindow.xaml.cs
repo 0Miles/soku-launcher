@@ -896,5 +896,12 @@ namespace SokuLauncher.Controls
                 });
             });
         }
+
+        private void OpenFolder_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var fullPath = (string)button.Tag;
+            Process.Start("explorer.exe", Path.GetDirectoryName(fullPath));
+        }
     }
 }

@@ -411,6 +411,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition />
@@ -424,6 +425,13 @@
 
                             <TextBlock Grid.Row="1" Text="Soku Dir: " VerticalAlignment="Center" Margin="4" />
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SokuDirFullPath}" Padding="4" Background="#F5F5F5" IsReadOnly="True" VerticalAlignment="Center" Margin="4"/>
+                            <Button Template="{StaticResource NoMouseOverButtonTemplate}" Grid.Row="1" Grid.Column="2" Background="Transparent" BorderThickness="0" Cursor="Hand" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" Click="OpenFolder_Click" Tag="{Binding SokuDirFullPath}">
+                                <Path Stroke="Gray"  RenderTransformOrigin=".5,.5" Data="M3 21v-4a3 3 0 0 1 3 -3h5 M8 17l3 -3l-3 -3 M3 11v-5a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8" Width="24" Height="24">
+                                    <Path.RenderTransform>
+                                        <ScaleTransform ScaleX=".6" ScaleY=".6"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Button>
 
                             <TextBlock Grid.Row="2" Text="SWRSToys: " VerticalAlignment="Center" Margin="4" />
                             <TextBlock Grid.Row="2" Text="{DynamicResource ConfigWindow-PathTab-Ready}" Foreground="Green" Grid.Column="1" VerticalAlignment="Center" Margin="4,8" Visibility="{Binding SWRSToysD3d9Exist, Converter={StaticResource BooleanToVisibilityConverter}}"></TextBlock>
@@ -431,8 +439,13 @@
 
                             <TextBlock Grid.Row="3" Text="Modules Dir: " VerticalAlignment="Center" Margin="4" />
                             <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ModsDirFullPath}" Padding="4" Background="#F5F5F5" IsReadOnly="True" VerticalAlignment="Center" Margin="4"/>
-
-
+                            <Button Template="{StaticResource NoMouseOverButtonTemplate}" Grid.Row="3" Grid.Column="2" Background="Transparent" BorderThickness="0" Cursor="Hand" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" Click="OpenFolder_Click" Tag="{Binding ModsDirFullPath}">
+                                <Path Stroke="Gray"  RenderTransformOrigin=".5,.5" Data="M3 21v-4a3 3 0 0 1 3 -3h5 M8 17l3 -3l-3 -3 M3 11v-5a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8" Width="24" Height="24">
+                                    <Path.RenderTransform>
+                                        <ScaleTransform ScaleX=".6" ScaleY=".6"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Button>
                         </Grid>
                     </GroupBox>
                 </StackPanel>
