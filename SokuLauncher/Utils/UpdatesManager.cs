@@ -18,6 +18,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SokuLauncher.Utils
 {
@@ -322,6 +323,39 @@ namespace SokuLauncher.Utils
                     Compressed = false
                 }
             });
+        }
+
+        public async Task UpdateFromFile(string modPackagePath)
+        {
+            try
+            {
+                string ext = Path.GetExtension(modPackagePath).ToLower();
+                switch (ext)
+                {
+                    case ".zip":
+                    case ".sokumod":
+                        GetVersionInfoJsonFromZip(modPackagePath);
+                        break;
+                    case ".dll":
+                        GetVersionInfoJsonFromDll(modPackagePath);
+                        break;
+                    default:
+                        throw new Exception(Static.LanguageService.GetString("Common-UnsupportedFormat"));
+                }
+
+                await CheckForUpdates(
+                    Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Desc"),
+                    Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Completed"),
+                    false,
+                    true,
+                    null,
+                    true,
+                    true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void GetAvailableUpdateList(bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool force = false)

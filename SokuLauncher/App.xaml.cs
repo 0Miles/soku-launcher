@@ -31,37 +31,7 @@ namespace SokuLauncher
                 if (paths.Count > 0)
                 {
                     Static.StartupArgs = Array.Empty<string>();
-                    string modPackagePath = paths[0];
-                    string ext = Path.GetExtension(modPackagePath).ToLower();
-
-                    try
-                    {
-                        switch (ext)
-                        {
-                            case ".zip":
-                            case ".sokumod":
-                                mainWindow.ViewModel.UpdatesManager.GetVersionInfoJsonFromZip(modPackagePath);
-                                break;
-                            case ".dll":
-                                mainWindow.ViewModel.UpdatesManager.GetVersionInfoJsonFromDll(modPackagePath);
-                                break;
-                            default:
-                                throw new Exception(Static.LanguageService.GetString("Common-UnsupportedFormat"));
-                        }
-
-                        await mainWindow.ViewModel.UpdatesManager.CheckForUpdates(
-                            Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Desc"),
-                            Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Completed"),
-                            false,
-                            true,
-                            null,
-                            true,
-                            true);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    await mainWindow.ViewModel.UpdatesManager.UpdateFromFile(paths[0]);
                     Current.Shutdown();
                 }
             }

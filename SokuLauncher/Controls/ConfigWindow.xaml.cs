@@ -874,40 +874,13 @@ namespace SokuLauncher.Controls
             };
             UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModsManager);
 
-            string ext = Path.GetExtension(filename);
+            await updatesManager.UpdateFromFile(filename);
 
-            try
-            {
-                switch (ext)
-                {
-                    case ".zip":
-                    case ".sokumod":
-                        updatesManager.GetVersionInfoJsonFromZip(filename);
-                        break;
-                    case ".dll":
-                        updatesManager.GetVersionInfoJsonFromDll(filename);
-                        break;
-                    default:
-                        throw new Exception(Static.LanguageService.GetString("Common-UnsupportedFormat"));
-                }
-                await updatesManager.CheckForUpdates(
-                            Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Desc"),
-                            Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Completed"),
-                            false,
-                            true,
-                            null,
-                            true,
-                            true);
-                ViewModel.ModsManager.SearchModulesDir();
-                ViewModel.ModsManager.LoadSWRSToysSetting();
-                ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
-                ConfigModListUserControl.SearchMod();
-                installingModFromArchive = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            ViewModel.ModsManager.SearchModulesDir();
+            ViewModel.ModsManager.LoadSWRSToysSetting();
+            ViewModel.ModInfoList = new ObservableCollection<ModInfoModel>(ViewModel.ModsManager.ModInfoList);
+            ConfigModListUserControl.SearchMod();
+            installingModFromArchive = false;
         }
 
         private void ConfigModListUserControl_DropFile(object sender, DragEventArgs e)
