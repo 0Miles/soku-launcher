@@ -56,11 +56,11 @@ namespace SokuLauncher.Utils
             IsStopCheckForUpdates = true;
         }
 
-        public async Task<bool?> CheckForUpdates(string desc = null, string complatedMessage = null, bool isAutoUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool isShowUpdating = true, bool force = false)
+        public async Task<bool?> CheckForUpdates(string desc = null, string complatedMessage = null, bool isAutoUpdates = true, bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool isShowUpdating = true, bool force = false)
         {
             try
             {
-                GetAvailableUpdateList(true, checkForInstallable, modsToCheckList, force);
+                GetAvailableUpdateList(checkForUpdates, checkForInstallable, modsToCheckList, force);
                 if (AvailableUpdateList.Count > 0)
                 {
                     if (IsStopCheckForUpdates)
@@ -350,6 +350,7 @@ namespace SokuLauncher.Utils
                     Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Desc"),
                     Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Completed"),
                     false,
+                    true,
                     true,
                     null,
                     true,

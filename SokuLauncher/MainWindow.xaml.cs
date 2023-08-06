@@ -156,6 +156,7 @@ namespace SokuLauncher
                             Static.LanguageService.GetString("UpdatesManager-CheckForInstallable-UpdateSelectionWindow-Desc"),
                             null,
                             false,
+                            false,
                             true,
                             checkModes,
                             false);
