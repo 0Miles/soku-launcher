@@ -37,10 +37,10 @@
     },
     {
         "Name": "SokuLobbiesMod",
-        "Desc": "Multiplayer online lobby.  \n```\n+ Now add [+GR], [+SR], ... at the start of the host message in the hostlist depending on the netcode version you use\n+ Now support adding the port with : in the HostIP property of the INI\n+ Added a timeout when joining a lobby, and retry a few times before timing out\n- No longer play the weather SFX when not in the lobby list\n- Fixed a bug causing achievements for Soku2 characters to be given for wrong characters\n- Fixed a bug causing sprites for Soku2 avatars to be wrong in the achievement award popup\n- No longer try to host when connecting to a match\n```",
-        "Version": "0.6.3.0",
+        "Desc": "Multiplayer online lobby.  \n```+ Now show a message in the chat when using a locked emote.\n+ Rewards are shown nicely in the achievement menu.\n+ Greatly improved the achievement menu.\n- All emotes are now locked, except for the "1" variant of each character.\n- Fixed achievements being wrongfully given when playing random\n- Fixed crashes when getting disconnected in some locales.\n- Fixed name being blank on Windows 7.\n- Fixed "SSL connect error" errors on Linux.```",
+        "Version": "0.6.4.0",
         "FileName": "SokuLobbiesMod.dll",
-        "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1142141057174347848/SokuLobbies_0_6_3.zip",
+        "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1144205657113899059/SokuLobbies_0_6_4.zip",
         "Compressed": true
     },
     {
