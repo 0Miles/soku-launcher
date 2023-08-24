@@ -288,47 +288,61 @@ namespace SokuLauncher
         {
         }
 
+        private bool configWindowShowing = false;
         private void ConfigButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ViewModel.ConfigUtil.Config.AutoCheckForUpdates && string.IsNullOrWhiteSpace(ViewModel.UpdatesManager.VersionInfoJson))
+            if (!configWindowShowing)
             {
-                ViewModel.UpdatesManager.StopCheckForUpdates();
+                configWindowShowing = true;
+                try
+                {
+                    if (ViewModel.ConfigUtil.Config.AutoCheckForUpdates && string.IsNullOrWhiteSpace(ViewModel.UpdatesManager.VersionInfoJson))
+                    {
+                        ViewModel.UpdatesManager.StopCheckForUpdates();
+                    }
+
+                    ModsManager configModsManager = new ModsManager(ViewModel.ConfigUtil.SokuDirFullPath);
+                    configModsManager.SearchModulesDir();
+                    configModsManager.LoadSWRSToysSetting();
+
+                    ConfigWindow configWindow = new ConfigWindow(
+                        this,
+                        new ConfigWindowViewModel
+                        {
+                            ModsManager = configModsManager,
+                            ModInfoList = new ObservableCollection<ModInfoModel>(configModsManager.ModInfoList),
+                            SokuDirPath = ViewModel.ConfigUtil.Config.SokuDirPath,
+                            SokuFileName = ViewModel.ConfigUtil.Config.SokuFileName,
+                            SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModSettingGroups)),
+                            AutoCheckForUpdates = ViewModel.ConfigUtil.Config.AutoCheckForUpdates,
+                            AutoCheckForInstallable = ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
+                            VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
+                            Language = ViewModel.ConfigUtil.Config.Language
+                        }
+                    );
+                    configModsManager = null;
+                    ZoomOutHideWindow((s, _) =>
+                    {
+                        DoubleAnimation fadeInAnimation = new DoubleAnimation
+                        {
+                            To = 0,
+                            Duration = TimeSpan.FromMilliseconds(0)
+                        };
+                        for (int i = 0; i < LauncherButtonsWrapPanel.Children.Count; i++)
+                        {
+                            LauncherButtonsWrapPanel.Children[i].BeginAnimation(OpacityProperty, fadeInAnimation);
+                        }
+                        Hide();
+                        configWindow.Show();
+                        configWindowShowing = false;
+                    });
+                }
+                catch (Exception ex)
+                {
+                    configWindowShowing = false;
+                    MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-
-            ModsManager configModsManager = new ModsManager(ViewModel.ConfigUtil.SokuDirFullPath);
-            configModsManager.SearchModulesDir();
-            configModsManager.LoadSWRSToysSetting();
-
-            ConfigWindow configWindow = new ConfigWindow(
-                this,
-                new ConfigWindowViewModel
-                {
-                    ModsManager = configModsManager,
-                    ModInfoList = new ObservableCollection<ModInfoModel>(configModsManager.ModInfoList),
-                    SokuDirPath = ViewModel.ConfigUtil.Config.SokuDirPath,
-                    SokuFileName = ViewModel.ConfigUtil.Config.SokuFileName,
-                    SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModSettingGroups)),
-                    AutoCheckForUpdates = ViewModel.ConfigUtil.Config.AutoCheckForUpdates,
-                    AutoCheckForInstallable = ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
-                    VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
-                    Language = ViewModel.ConfigUtil.Config.Language
-                }
-            );
-            configModsManager = null;
-            ZoomOutHideWindow((s, _) =>
-            {
-                DoubleAnimation fadeInAnimation = new DoubleAnimation
-                {
-                    To = 0,
-                    Duration = TimeSpan.FromMilliseconds(0)
-                };
-                for (int i = 0; i < LauncherButtonsWrapPanel.Children.Count; i++)
-                {
-                    LauncherButtonsWrapPanel.Children[i].BeginAnimation(OpacityProperty, fadeInAnimation);
-                }
-                Hide();
-                configWindow.Show();
-            });
         }
 
         private void SokuLauncherMainWindow_Activated(object sender, EventArgs e)
