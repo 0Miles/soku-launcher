@@ -38,7 +38,7 @@
     {
         "Name": "SokuLobbiesMod",
         "Desc": "Multiplayer online lobby.  \n```+ Now show a message in the chat when using a locked emote.\n+ Rewards are shown nicely in the achievement menu.\n+ Greatly improved the achievement menu.\n- All emotes are now locked, except for the \"1\" variant of each character.\n- Fixed achievements being wrongfully given when playing random\n- Fixed crashes when getting disconnected in some locales.\n- Fixed name being blank on Windows 7.\n- Fixed \"SSL connect error\" errors on Linux.```",
-        "Version": "0.6.4.1",
+        "Version": "0.6.4.0",
         "FileName": "SokuLobbiesMod.dll",
         "DownloadUrl": "https://cdn.discordapp.com/attachments/404894624008634378/1144609021299523605/SokuLobbies_0_6_4.zip",
         "Compressed": true
