@@ -493,7 +493,7 @@ namespace SokuLauncher.Utils
             }
 
             var (major, minor, build, revision) = (0, 0, 0, 0);
-            var m = Regex.Matches(modCurrentVersion, @"\d");
+            var m = Regex.Matches(modCurrentVersion, @"\d+");
 
             if (m.Count > 0)
             {
