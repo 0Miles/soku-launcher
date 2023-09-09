@@ -474,30 +474,45 @@ namespace SokuLauncher.Utils
         {
             var fileVersionInfo = File.Exists(fileName) ? FileVersionInfo.GetVersionInfo(fileName) : null;
 
-            Version currentVersion;
+            string modCurrentVersion = "0.0.0.0";
+
             if (fileVersionInfo?.FileVersion != null)
             {
-                currentVersion = new Version(fileVersionInfo.FileVersion);
+                modCurrentVersion = fileVersionInfo.FileVersion;
             }
             else
             {
                 string modName = Path.GetFileNameWithoutExtension(fileName);
                 string modDir = Path.GetDirectoryName(fileName);
                 string modVersionFileName = Path.Combine(modDir, $"{modName}{MOD_VERSION_FILENAME_SUFFIX}");
-                string modCurrentVersion = "0.0.0.0";
+                
                 if (File.Exists(modVersionFileName))
                 {
                     modCurrentVersion = File.ReadAllText(modVersionFileName);
                 }
-                currentVersion = new Version(modCurrentVersion);
             }
 
-            if (currentVersion.Revision == -1)
+            var (major, minor, build, revision) = (0, 0, 0, 0);
+            var m = Regex.Matches(modCurrentVersion, @"\d");
+
+            if (m.Count > 0)
             {
-                currentVersion = new Version(currentVersion.Major, currentVersion.Minor, currentVersion.Build, 0);
+                int.TryParse(m[0]?.Value ?? "0", out major);
+            }
+            if (m.Count > 1)
+            {
+                int.TryParse(m[1]?.Value ?? "0", out minor);
+            }
+            if (m.Count > 2)
+            {
+                int.TryParse(m[2]?.Value ?? "0", out build);
+            }
+            if (m.Count > 3)
+            {
+                int.TryParse(m[3]?.Value ?? "0", out revision);
             }
 
-            return currentVersion;
+            return new Version(major, minor, build, revision);
         }
 
         public async Task DownloadAndExtractFile(UpdateFileInfoModel updateFileInfo)
