@@ -15,7 +15,7 @@
     },
     {
         "Name": "Giuroll",
-        "Desc": "giuroll",
+        "Desc": "### NEW IMPROVED ROLLBACK\n**PRE-RELEASE BUILD, VERSION 0.6.0**  \n**NOT COMPATIBLE WITH PAST VERSIONS**  \n**0.6.0: ADDED ONE SIDED DELAY (DETAILS IN changelog.txt)**   \nThis mod fixes FPS issues related to Windows 10, online stuttering, and one-sided rollback.\n  \n**It also allows you to rewind replays with the q keys.**  \nInstalled like any other SWRSToys mod.  \nIncompatible with Sokuroll (must be disabled).  \nReport any issues to [@Giufin](https://discordapp.com/users/278469240879841280).  \nCurrently the only known issue is sound being deleted at the end of the round.  \nAny other issues, especially freezes and sound related issues, other than the one above should be reported.  \n  \n**MOST MODS SEEM TO BE COMPATIBLE, EXCEPT DESYNC-PROTECTOR AND HOST-IN-BACKGROUND, BUT IN CASE OF CRASHES OR OTHER ISSUES DISABLE AS MANY MODS AS YOU CAN**  \nFor more **information**: [https://github.com/Giufinn/giuroll](https://github.com/Giufinn/giuroll)",
         "Version": "0.6.0.0",
         "FileName": "giuroll.dll",
         "ConfigFiles": [
