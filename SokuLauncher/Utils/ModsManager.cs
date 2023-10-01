@@ -285,12 +285,15 @@ namespace SokuLauncher.Utils
                 foreach (var enableMod in settingGroup.EnableMods)
                 {
                     ChangeModEnabled(enableMod, true);
-                    settingGroup.IniSettingsOverride.TryGetValue(enableMod.ToLower(), out List<IniSettingModel> iniSettings);
-                    if (iniSettings != null)
+                    if (settingGroup.IniSettingsOverride != null)
                     {
-                        foreach (var iniSetting in iniSettings)
+                        settingGroup.IniSettingsOverride.TryGetValue(enableMod.ToLower(), out List<IniSettingModel> iniSettings);
+                        if (iniSettings != null)
                         {
-                            ChangeModIniSetting(enableMod, iniSetting);
+                            foreach (var iniSetting in iniSettings)
+                            {
+                                ChangeModIniSetting(enableMod, iniSetting);
+                            }
                         }
                     }
                 }
