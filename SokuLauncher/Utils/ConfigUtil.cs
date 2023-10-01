@@ -148,7 +148,7 @@ namespace SokuLauncher.Utils
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Name"),
                     Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Desc"),
                     EnableMods = new List<string> { "Giuroll", "SokuLobbiesMod", "Autopunch" },
-                    DisableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Giuroll-62F" },
+                    DisableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Giuroll-60F", "Giuroll-62F" },
                     Cover = "%resources%/cover1.png",
                     IniSettingsOverride = new Dictionary<string, List<IniSettingModel>>
                     {
@@ -173,7 +173,7 @@ namespace SokuLauncher.Utils
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Name"),
                     Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Desc"),
                     EnableMods = new List<string> { "Giuroll", "SokuLobbiesMod", "Autopunch" },
-                    DisableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Giuroll-62F" },
+                    DisableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Giuroll-60F", "Giuroll-62F" },
                     Cover = "%resources%/cover2.png",
                     IniSettingsOverride = new Dictionary<string, List<IniSettingModel>>
                     {
