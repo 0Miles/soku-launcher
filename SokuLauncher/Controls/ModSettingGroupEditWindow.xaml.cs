@@ -1,6 +1,7 @@
 ﻿using SokuLauncher.Models;
 using SokuLauncher.Utils;
 using SokuLauncher.ViewModels;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -85,6 +86,22 @@ namespace SokuLauncher.Controls
                 case System.Windows.Input.Key.Escape:
                     SearchTextBox.Text = "";
                     break;
+            }
+        }
+
+        private void SettingButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var modName = (string)button.Tag;
+            ViewModel.IniSettingOverride.TryGetValue(modName.ToLower(), out List<IniSettingModel> iniSettings);
+            EditIniSettingWindow editIniSettingWindow = new EditIniSettingWindow();
+            editIniSettingWindow.IniSettings = new ObservableCollection<IniSettingModel>(iniSettings ?? new List<IniSettingModel>());
+            editIniSettingWindow.DefaultIniFileName = $"{modName}.ini";
+            editIniSettingWindow.ShowDialog();
+
+            if (editIniSettingWindow.DialogResult == true)
+            {
+                ViewModel.IniSettingOverride[modName] = editIniSettingWindow.IniSettings.ToList();
             }
         }
     }

@@ -53,7 +53,7 @@ namespace SokuLauncher.Utils
                 if (Config.SokuModSettingGroups != null)
                 {
                     bool addId = false;
-                    foreach(var modSettingGroup in Config.SokuModSettingGroups)
+                    foreach (var modSettingGroup in Config.SokuModSettingGroups)
                     {
                         if (string.IsNullOrWhiteSpace(modSettingGroup.Id))
                         {
@@ -147,18 +147,50 @@ namespace SokuLauncher.Utils
                     Id = "1d059cd2-1e74-430b-b84f-1d3ad6b67f6c",
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Name"),
                     Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Desc"),
-                    EnableMods = new List<string> { "Giuroll", "Giuroll-60F", "SokuLobbiesMod", "Autopunch" },
-                    DisableMods = new List<string> { "Giuroll-62F", "SWRSokuRoll", "InGameHostlist" },
-                    Cover = "%resources%/cover1.png"
+                    EnableMods = new List<string> { "Giuroll", "SokuLobbiesMod", "Autopunch" },
+                    DisableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Giuroll-62F" },
+                    Cover = "%resources%/cover1.png",
+                    IniSettingOverride = new Dictionary<string, List<IniSettingModel>>
+                    {
+                        {
+                            "giuroll", new List<IniSettingModel>
+                            {
+                                new IniSettingModel
+                                {
+                                    FileName = "giuroll.ini",
+                                    Section = "FramerateFix",
+                                    Key = "enable_f62",
+                                    Value = "off",
+                                    Enabled = true
+                                }
+                            }
+                        }
+                    }
                 },
                 new ModSettingGroupModel
                 {
                     Id = "7d9b118d-5f7a-48b0-8e35-272f0e51f0d6",
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Name"),
                     Desc = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Desc"),
-                    EnableMods = new List<string> { "Giuroll-62F", "SokuLobbiesMod", "Autopunch" },
-                    DisableMods = new List<string> { "Giuroll", "Giuroll-60F", "SWRSokuRoll", "InGameHostlist" },
-                    Cover = "%resources%/cover2.png"
+                    EnableMods = new List<string> { "Giuroll", "SokuLobbiesMod", "Autopunch" },
+                    DisableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Giuroll-62F" },
+                    Cover = "%resources%/cover2.png",
+                    IniSettingOverride = new Dictionary<string, List<IniSettingModel>>
+                    {
+                        {
+                            "giuroll", new List<IniSettingModel>
+                            {
+                                new IniSettingModel
+                                {
+                                    FileName = "giuroll.ini",
+                                    Section = "FramerateFix",
+                                    Key = "enable_f62",
+                                    Value = "on",
+                                    Enabled = true
+                                }
+                            }
+                        }
+                    }
                 },
                 new ModSettingGroupModel
                 {

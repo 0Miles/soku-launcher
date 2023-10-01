@@ -211,6 +211,27 @@ namespace SokuLauncher.Utils
             }
         }
 
+        public void ChangeModIniSetting(string modName, IniSettingModel modIniSetting)
+        {
+            var modInfo = GetModInfoByModName(modName);
+            if (modInfo != null)
+            {
+                string iniFilePath = Path.Combine(modInfo.DirName, modIniSetting.FileName);
+                if (File.Exists(iniFilePath))
+                {
+                    IniFile iniFile = new IniFile(iniFilePath);
+                    if (modIniSetting.Enabled == false)
+                    {
+                        iniFile.DeleteKey(modIniSetting.Key, modIniSetting.Section);
+                    }
+                    else
+                    {
+                        iniFile.Write(modIniSetting.Key, modIniSetting.Value, modIniSetting.Section);
+                    }
+                }
+            }
+        }
+
         public void SaveSWRSToysIni()
         {
             Directory.SetCurrentDirectory(SokuDirFullPath);
@@ -271,6 +292,16 @@ namespace SokuLauncher.Utils
                 foreach (var disableMod in settingGroup.DisableMods)
                 {
                     ChangeModEnabled(disableMod, false);
+                }
+            }
+            if (settingGroup.IniSettingOverride != null)
+            {
+                foreach (var modName in settingGroup.IniSettingOverride.Keys)
+                {
+                    foreach (var iniSetting in settingGroup.IniSettingOverride[modName])
+                    {
+                        ChangeModIniSetting(modName, iniSetting);
+                    }
                 }
             }
             DisableDuplicateEnabledMods();

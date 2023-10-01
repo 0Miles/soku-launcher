@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SokuLauncher.ViewModels;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SokuLauncher.Models
 {
@@ -218,6 +219,23 @@ namespace SokuLauncher.Models
                 {
                     _IsHidden = value;
                     RaisePropertyChanged("IsHidden");
+                }
+            }
+        }
+
+        private Dictionary<string, List<IniSettingModel>> _IniSettingOverride;
+        public Dictionary<string, List<IniSettingModel>> IniSettingOverride
+        {
+            get
+            {
+                return _IniSettingOverride;
+            }
+            set
+            {
+                if (value != _IniSettingOverride)
+                {
+                    _IniSettingOverride = value;
+                    RaisePropertyChanged("IniSettingOverride");
                 }
             }
         }

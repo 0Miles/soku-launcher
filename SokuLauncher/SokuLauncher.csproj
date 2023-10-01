@@ -135,6 +135,9 @@
     <Compile Include="Controls\CropWindow.xaml.cs">
       <DependentUpon>CropWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EditIniSettingWindow.xaml.cs">
+      <DependentUpon>EditIniSettingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ModListUserControl.xaml.cs">
       <DependentUpon>ModListUserControl.xaml</DependentUpon>
     </Compile>
@@ -172,11 +175,13 @@
     <Compile Include="Models\ModLoaderSettingsModel.cs" />
     <Compile Include="Models\ModSettingInfoModel.cs" />
     <Compile Include="Models\ModInfoModel.cs" />
+    <Compile Include="Models\IniSettingModel.cs" />
     <Compile Include="Models\SelectorNodeModel.cs" />
     <Compile Include="Models\UpdateFileModel.cs" />
     <Compile Include="Static.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
     <Compile Include="Utils\Debouncer.cs" />
+    <Compile Include="Utils\IniFile.cs" />
     <Compile Include="Utils\ModsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utils\ResourcesManager.cs" />
@@ -196,6 +201,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\CropWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\EditIniSettingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

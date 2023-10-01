@@ -10,6 +10,7 @@
         <converters:PathToImageSourceConverter x:Key="PathToImageSourceConverter" />
         <converters:ReverseStringToVisibilityConverter x:Key="ReverseStringToVisibilityConverter" />
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -71,28 +72,32 @@
                                             <TextBlock Text="{Binding RelativePath}" Margin="42,0,0,0" MaxWidth="310" TextWrapping="Wrap" Foreground="DarkGray" Visibility="{Binding RelativePath, Converter={StaticResource StringToVisibilityConverter}}" />
                                             <TextBlock Text="{DynamicResource Common-ModuleNotFound}" Margin="42,0,0,0" MaxWidth="310" TextWrapping="Wrap" Foreground="DarkRed" Visibility="{Binding RelativePath, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
                                         </StackPanel>
-                                        <ComboBox Grid.Column="1" ItemsSource="{Binding DataContext.Options, ElementName=SokuLauncherModSettingGroupEditWindow}" SelectedValue="{Binding Enabled}" SelectedValuePath="Enabled" Width="100" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding Name}" >
-                                                        <TextBlock.Style>
-                                                            <Style TargetType="TextBlock">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding Enabled}" Value="true">
-                                                                        <Setter Property="Foreground" Value="Blue" />
-                                                                        <Setter Property="FontWeight" Value="Bold" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Enabled}" Value="false">
-                                                                        <Setter Property="Foreground" Value="Red" />
-                                                                        <Setter Property="FontWeight" Value="Bold" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </TextBlock.Style>
-                                                    </TextBlock>
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
+
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <ComboBox ItemsSource="{Binding DataContext.Options, ElementName=SokuLauncherModSettingGroupEditWindow}" SelectedValue="{Binding Enabled}" SelectedValuePath="Enabled" Width="100" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}" >
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding Enabled}" Value="true">
+                                                                            <Setter Property="Foreground" Value="Blue" />
+                                                                            <Setter Property="FontWeight" Value="Bold" />
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding Enabled}" Value="false">
+                                                                            <Setter Property="Foreground" Value="Red" />
+                                                                            <Setter Property="FontWeight" Value="Bold" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                            <Button Margin="0,8,0,0" Content="Setting" Visibility="{Binding Enabled, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter='true'}" Tag="{Binding Name}" Click="SettingButton_Click"></Button>
+                                        </StackPanel>
                                     </Grid>
                                 </Border>
                             </ControlTemplate>

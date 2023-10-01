@@ -8,13 +8,13 @@ namespace SokuLauncher.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (string.IsNullOrEmpty((string)value))
+            if (parameter != null && (string)parameter == (string)value || parameter == null && !string.IsNullOrWhiteSpace((string)value))
             {
-                return System.Windows.Visibility.Collapsed;
+                return System.Windows.Visibility.Visible;
             }
             else
             {
-                return System.Windows.Visibility.Visible;
+                return System.Windows.Visibility.Collapsed;
             }
         }
 

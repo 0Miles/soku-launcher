@@ -636,6 +636,7 @@ namespace SokuLauncher.Controls
                         Enabled = "null"
                     })
                     .ToList();
+            msgewvm.IniSettingOverride = Static.DeepCopy(ViewModel.SelectedSokuModSettingGroup.IniSettingOverride);
 
             if (ViewModel.SelectedSokuModSettingGroup.EnableMods?.Count > 0)
             {
@@ -676,6 +677,7 @@ namespace SokuLauncher.Controls
             {
                 ViewModel.SelectedSokuModSettingGroup.EnableMods = msgewvm.EnableMods;
                 ViewModel.SelectedSokuModSettingGroup.DisableMods = msgewvm.DisableMods;
+                ViewModel.SelectedSokuModSettingGroup.IniSettingOverride = msgewvm.IniSettingOverride;
                 ViewModel.Saveable = true;
             }
         }
@@ -729,7 +731,7 @@ namespace SokuLauncher.Controls
                         Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
                         Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
                         false);
-                    
+
                     if (hasUpdates == false)
                     {
                         MessageBox.Show(
@@ -820,7 +822,7 @@ namespace SokuLauncher.Controls
         {
             var menuItem = (MenuItem)sender;
             var modSettingGroupId = (string)menuItem.Tag;
-            
+
             var selectedModSettingGroupd = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
             if (selectedModSettingGroupd != null)
             {

@@ -31,6 +31,22 @@ namespace SokuLauncher.ViewModels
         }
 
 
+        private Dictionary<string, List<IniSettingModel>> _IniSettingOverride;
+        public Dictionary<string, List<IniSettingModel>> IniSettingOverride
+
+        {
+            get
+            {
+                return _IniSettingOverride;
+            }
+            set
+            {
+                _IniSettingOverride = value;
+                RaisePropertyChanged("IniSettingOverride");
+            }
+        }
+
+
         private ObservableCollection<ModSettingInfoModel> _FilteredModSettingInfoList;
         public ObservableCollection<ModSettingInfoModel> FilteredModSettingInfoList
         {
