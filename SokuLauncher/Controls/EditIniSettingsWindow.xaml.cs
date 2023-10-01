@@ -19,9 +19,9 @@ using System.Windows.Shapes;
 namespace SokuLauncher.Controls
 {
     /// <summary>
-    /// EditIniSettingWindow.xaml 的互動邏輯
+    /// EditIniSettingsWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class EditIniSettingWindow : Window, INotifyPropertyChanged
+    public partial class EditIniSettingsWindow : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -30,7 +30,7 @@ namespace SokuLauncher.Controls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public EditIniSettingWindow()
+        public EditIniSettingsWindow()
         {
             InitializeComponent();
             DataContext = this;

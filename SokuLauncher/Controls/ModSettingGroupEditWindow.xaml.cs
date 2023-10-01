@@ -94,14 +94,14 @@ namespace SokuLauncher.Controls
             var button = (Button)sender;
             var modName = (string)button.Tag;
             ViewModel.IniSettingsOverride.TryGetValue(modName.ToLower(), out List<IniSettingModel> iniSettings);
-            EditIniSettingWindow editIniSettingWindow = new EditIniSettingWindow();
-            editIniSettingWindow.IniSettings = new ObservableCollection<IniSettingModel>(iniSettings ?? new List<IniSettingModel>());
-            editIniSettingWindow.DefaultIniFileName = $"{modName}.ini";
-            editIniSettingWindow.ShowDialog();
+            EditIniSettingsWindow EditIniSettingsWindow = new EditIniSettingsWindow();
+            EditIniSettingsWindow.IniSettings = new ObservableCollection<IniSettingModel>(iniSettings ?? new List<IniSettingModel>());
+            EditIniSettingsWindow.DefaultIniFileName = $"{modName}.ini";
+            EditIniSettingsWindow.ShowDialog();
 
-            if (editIniSettingWindow.DialogResult == true)
+            if (EditIniSettingsWindow.DialogResult == true)
             {
-                ViewModel.IniSettingsOverride[modName] = editIniSettingWindow.IniSettings.ToList();
+                ViewModel.IniSettingsOverride[modName] = EditIniSettingsWindow.IniSettings.ToList();
             }
         }
     }

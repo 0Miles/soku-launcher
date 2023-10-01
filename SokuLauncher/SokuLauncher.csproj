@@ -135,8 +135,8 @@
     <Compile Include="Controls\CropWindow.xaml.cs">
       <DependentUpon>CropWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\EditIniSettingWindow.xaml.cs">
-      <DependentUpon>EditIniSettingWindow.xaml</DependentUpon>
+    <Compile Include="Controls\EditIniSettingsWindow.xaml.cs">
+      <DependentUpon>EditIniSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ModListUserControl.xaml.cs">
       <DependentUpon>ModListUserControl.xaml</DependentUpon>
@@ -204,7 +204,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\EditIniSettingWindow.xaml">
+    <Page Include="Controls\EditIniSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
