@@ -728,7 +728,7 @@ namespace SokuLauncher.Controls
                     await taskGetVersionInfoJson;
                     ViewModel.CheckForUpdatesButtonText = null;
                     bool? hasUpdates = await updatesManager.CheckForUpdates(
-                        Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
+                        Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
                         Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
                         false);
 
