@@ -92,6 +92,7 @@
     <system:String x:Key="ConfigWindow-LauncherTab-Settings">設定</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-EnableMods">啟用模組:</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-DisableMods">停用模組:</system:String>
+    <system:String x:Key="EditIniSettingsWindow-Title">編輯 ini 設定</system:String>
 
     <system:String x:Key="ConfigWindow-PathTab-Browse">瀏覽</system:String>
     <system:String x:Key="ConfigWindow-PathTab-Info">相關資訊</system:String>

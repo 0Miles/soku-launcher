@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SokuLauncher.Controls"
         mc:Ignorable="d"
-        Title="EditIniSettingsWindow"
+        Title="{DynamicResource EditIniSettingsWindow-Title}"
         Height="300" Width="500" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="DataGridContentCellCentering" TargetType="{x:Type DataGridCell}">
