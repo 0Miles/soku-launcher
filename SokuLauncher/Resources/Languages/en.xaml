@@ -61,6 +61,7 @@
     <system:String x:Key="UpdateSelectionWindow-AutoCheckFouUpdatesCheckbox-Content">Auto check for updates on startup</system:String>
     <system:String x:Key="CropWindow-Title">Crop</system:String>
     <system:String x:Key="ModSettingGroupEditWindow-Title">Mod Setting</system:String>
+    <system:String x:Key="ModSettingGroupEditWindow-SettingsOverride">Settings Override</system:String>
     <system:String x:Key="ModListUserControl-NoMod">Mod not found</system:String>
     <system:String x:Key="ModListUserControl-OpenModFolder">Open folder</system:String>
     <system:String x:Key="ModListUserControl-OpenConfigFile">Open config file</system:String>

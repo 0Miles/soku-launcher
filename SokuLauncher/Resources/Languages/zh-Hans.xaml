@@ -61,6 +61,7 @@
     <system:String x:Key="UpdateSelectionWindow-AutoCheckFouUpdatesCheckbox-Content">启动时自动检查更新</system:String>
     <system:String x:Key="CropWindow-Title">裁切</system:String>
     <system:String x:Key="ModSettingGroupEditWindow-Title">模组设置</system:String>
+    <system:String x:Key="ModSettingGroupEditWindow-SettingsOverride">设置覆写</system:String>
     <system:String x:Key="ModListUserControl-NoMod">找不到模组</system:String>
     <system:String x:Key="ModListUserControl-OpenModFolder">开启文件夹</system:String>
     <system:String x:Key="ModListUserControl-OpenConfigFile">开启设定档</system:String>
