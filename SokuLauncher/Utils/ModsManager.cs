@@ -285,6 +285,14 @@ namespace SokuLauncher.Utils
                 foreach (var enableMod in settingGroup.EnableMods)
                 {
                     ChangeModEnabled(enableMod, true);
+                    settingGroup.IniSettingOverride.TryGetValue(enableMod.ToLower(), out List<IniSettingModel> iniSettings);
+                    if (iniSettings != null)
+                    {
+                        foreach (var iniSetting in iniSettings)
+                        {
+                            ChangeModIniSetting(enableMod, iniSetting);
+                        }
+                    }
                 }
             }
             if (settingGroup.DisableMods != null)
@@ -292,16 +300,6 @@ namespace SokuLauncher.Utils
                 foreach (var disableMod in settingGroup.DisableMods)
                 {
                     ChangeModEnabled(disableMod, false);
-                }
-            }
-            if (settingGroup.IniSettingOverride != null)
-            {
-                foreach (var modName in settingGroup.IniSettingOverride.Keys)
-                {
-                    foreach (var iniSetting in settingGroup.IniSettingOverride[modName])
-                    {
-                        ChangeModIniSetting(modName, iniSetting);
-                    }
                 }
             }
             DisableDuplicateEnabledMods();
