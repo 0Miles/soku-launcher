@@ -43,9 +43,18 @@ namespace SokuLauncher.Utils
         public ConfigUtil ConfigUtil { get; set; }
         public ModsManager ModsManager { get; set; }
 
+        private void ClearUpdateTempDir()
+        {
+            if (Directory.Exists(UpdateTempDirPath))
+            {
+                Directory.Delete(UpdateTempDirPath, true);
+            }
+            Directory.CreateDirectory(UpdateTempDirPath);
+        }
+
         public UpdatesManager(ConfigUtil configUtil, ModsManager modsManager)
         {
-            Directory.CreateDirectory(UpdateTempDirPath);
+            ClearUpdateTempDir();
             ConfigUtil = configUtil;
             ModsManager = modsManager;
         }
@@ -181,6 +190,7 @@ namespace SokuLauncher.Utils
 
         public async Task GetVersionInfoJson()
         {
+            IsStopCheckForUpdates = false;
             if (IsVersionInfoJsonDownloading)
             {
                 await VersionInfoJsonDownloadTask;
@@ -332,6 +342,9 @@ namespace SokuLauncher.Utils
         {
             try
             {
+                ClearUpdateTempDir();
+                IsStopCheckForUpdates = false;
+
                 string ext = Path.GetExtension(modPackagePath).ToLower();
                 switch (ext)
                 {
