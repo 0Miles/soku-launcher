@@ -636,7 +636,7 @@ namespace SokuLauncher.Controls
                         Enabled = "null"
                     })
                     .ToList();
-            msgewvm.IniSettingOverride = Static.DeepCopy(ViewModel.SelectedSokuModSettingGroup.IniSettingOverride);
+            msgewvm.IniSettingsOverride = Static.DeepCopy(ViewModel.SelectedSokuModSettingGroup.IniSettingsOverride);
 
             if (ViewModel.SelectedSokuModSettingGroup.EnableMods?.Count > 0)
             {
@@ -677,7 +677,7 @@ namespace SokuLauncher.Controls
             {
                 ViewModel.SelectedSokuModSettingGroup.EnableMods = msgewvm.EnableMods;
                 ViewModel.SelectedSokuModSettingGroup.DisableMods = msgewvm.DisableMods;
-                ViewModel.SelectedSokuModSettingGroup.IniSettingOverride = msgewvm.IniSettingOverride;
+                ViewModel.SelectedSokuModSettingGroup.IniSettingsOverride = msgewvm.IniSettingsOverride;
                 ViewModel.Saveable = true;
             }
         }

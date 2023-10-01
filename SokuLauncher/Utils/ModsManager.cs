@@ -285,7 +285,7 @@ namespace SokuLauncher.Utils
                 foreach (var enableMod in settingGroup.EnableMods)
                 {
                     ChangeModEnabled(enableMod, true);
-                    settingGroup.IniSettingOverride.TryGetValue(enableMod.ToLower(), out List<IniSettingModel> iniSettings);
+                    settingGroup.IniSettingsOverride.TryGetValue(enableMod.ToLower(), out List<IniSettingModel> iniSettings);
                     if (iniSettings != null)
                     {
                         foreach (var iniSetting in iniSettings)

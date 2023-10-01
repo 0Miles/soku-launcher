@@ -223,19 +223,19 @@ namespace SokuLauncher.Models
             }
         }
 
-        private Dictionary<string, List<IniSettingModel>> _IniSettingOverride;
-        public Dictionary<string, List<IniSettingModel>> IniSettingOverride
+        private Dictionary<string, List<IniSettingModel>> _IniSettingsOverride;
+        public Dictionary<string, List<IniSettingModel>> IniSettingsOverride
         {
             get
             {
-                return _IniSettingOverride;
+                return _IniSettingsOverride;
             }
             set
             {
-                if (value != _IniSettingOverride)
+                if (value != _IniSettingsOverride)
                 {
-                    _IniSettingOverride = value;
-                    RaisePropertyChanged("IniSettingOverride");
+                    _IniSettingsOverride = value;
+                    RaisePropertyChanged("IniSettingsOverride");
                 }
             }
         }

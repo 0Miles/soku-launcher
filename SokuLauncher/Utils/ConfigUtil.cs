@@ -150,7 +150,7 @@ namespace SokuLauncher.Utils
                     EnableMods = new List<string> { "Giuroll", "SokuLobbiesMod", "Autopunch" },
                     DisableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Giuroll-62F" },
                     Cover = "%resources%/cover1.png",
-                    IniSettingOverride = new Dictionary<string, List<IniSettingModel>>
+                    IniSettingsOverride = new Dictionary<string, List<IniSettingModel>>
                     {
                         {
                             "giuroll", new List<IniSettingModel>
@@ -175,7 +175,7 @@ namespace SokuLauncher.Utils
                     EnableMods = new List<string> { "Giuroll", "SokuLobbiesMod", "Autopunch" },
                     DisableMods = new List<string> { "SWRSokuRoll", "InGameHostlist", "Giuroll-62F" },
                     Cover = "%resources%/cover2.png",
-                    IniSettingOverride = new Dictionary<string, List<IniSettingModel>>
+                    IniSettingsOverride = new Dictionary<string, List<IniSettingModel>>
                     {
                         {
                             "giuroll", new List<IniSettingModel>

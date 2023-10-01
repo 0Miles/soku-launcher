@@ -71,6 +71,7 @@
                                             </Canvas>
                                             <TextBlock Text="{Binding RelativePath}" Margin="42,0,0,0" MaxWidth="310" TextWrapping="Wrap" Foreground="DarkGray" Visibility="{Binding RelativePath, Converter={StaticResource StringToVisibilityConverter}}" />
                                             <TextBlock Text="{DynamicResource Common-ModuleNotFound}" Margin="42,0,0,0" MaxWidth="310" TextWrapping="Wrap" Foreground="DarkRed" Visibility="{Binding RelativePath, Converter={StaticResource ReverseStringToVisibilityConverter}}" />
+                                            <Button Margin="42,8,0,0" Padding="8,0" Width="Auto" HorizontalAlignment="Left" Content="{DynamicResource ModSettingGroupEditWindow-SettingsOverride}" Visibility="{Binding Enabled, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter='true'}" Tag="{Binding Name}" Click="SettingButton_Click"></Button>
                                         </StackPanel>
 
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -96,7 +97,6 @@
                                                     </DataTemplate>
                                                 </ComboBox.ItemTemplate>
                                             </ComboBox>
-                                            <Button Margin="0,8,0,0" Content="Setting" Visibility="{Binding Enabled, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter='true'}" Tag="{Binding Name}" Click="SettingButton_Click"></Button>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
