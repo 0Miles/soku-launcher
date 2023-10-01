@@ -7,44 +7,44 @@ namespace SokuLauncher.Utils
 {
     public class IniFile
     {
-        string Path;
+        string IniFilePath;
 
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        static extern long WritePrivateProfileString(string Section, string Key, string Value, string FilePath);
+        [DllImport("kernel32")]
+        static extern long WritePrivateProfileString(string section, byte[] key, byte[] val, string filePath);
 
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
+        [DllImport("kernel32")]
+        static extern int GetPrivateProfileString(string section, string key, string def, byte[] retVal, int size, string filePath);
 
-        public IniFile(string IniPath)
+        public IniFile(string iniPath)
         {
-            Path = new FileInfo(IniPath).FullName;
+            IniFilePath = new FileInfo(iniPath).FullName;
         }
 
-        public string Read(string Key, string Section)
+        public string Read(string key, string section)
         {
-            var RetVal = new StringBuilder(255);
-            GetPrivateProfileString(Section, Key, "", RetVal, 255, Path);
-            return RetVal.ToString();
+            byte[] buffer = new byte[1024];
+            int bufLen = GetPrivateProfileString(section, key, "", buffer, buffer.GetUpperBound(0), IniFilePath);
+            return Encoding.UTF8.GetString(buffer, 0, bufLen);
         }
 
-        public void Write(string Key, string Value, string Section)
+        public void Write(string key, string value, string section)
         {
-            WritePrivateProfileString(Section, Key, Value, Path);
+            WritePrivateProfileString(section, Encoding.UTF8.GetBytes(key), Encoding.UTF8.GetBytes(value), IniFilePath);
         }
 
-        public void DeleteKey(string Key, string Section)
+        public void DeleteKey(string key, string section)
         {
-            Write(Key, null, Section);
+            Write(key, null, section);
         }
 
-        public void DeleteSection(string Section)
+        public void DeleteSection(string section)
         {
-            Write(null, null, Section);
+            Write(null, null, section);
         }
 
-        public bool KeyExists(string Key, string Section)
+        public bool KeyExists(string key, string section)
         {
-            return Read(Key, Section).Length > 0;
+            return Read(key, section).Length > 0;
         }
     }
 }
