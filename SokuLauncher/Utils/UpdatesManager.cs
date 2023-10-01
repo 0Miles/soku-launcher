@@ -45,10 +45,13 @@ namespace SokuLauncher.Utils
 
         private void ClearUpdateTempDir()
         {
-            if (Directory.Exists(UpdateTempDirPath))
+            try
             {
-                Directory.Delete(UpdateTempDirPath, true);
-            }
+                if (Directory.Exists(UpdateTempDirPath))
+                {
+                    Directory.Delete(UpdateTempDirPath, true);
+                }
+            } catch { }
             Directory.CreateDirectory(UpdateTempDirPath);
         }
 
