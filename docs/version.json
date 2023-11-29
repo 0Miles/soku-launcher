@@ -99,5 +99,22 @@
         "UpdateWorkingDir": "./modules/shady-loader",
         "DownloadUrl": "https://github.com/enebe-nb/shady-packer/releases/download/v2.5/shady-packer.zip",
         "Compressed": true
+    },
+    {
+        "Name": "SaveRep",
+        "Desc": "A mod that saves the replay when the battle is ended by Esc, connection lost, closing window, desync or game crash.",
+        "Version": "0.2.1",
+        "FileName": "SaveRep-0.2.1.dll",
+        "DownloadUrl": "https://github.com/Hagb/SaveRep/releases/download/v0.2.1/SaveRep-0.2.1.dll",
+        "Compressed": false
+    },
+    {
+        "name": "IPv6MapSokuMod",
+        "Desc": "A mod that makes Soku host and join via IPv4+IPv6 dual stack.\n\nUsage:\n- Join other player: copy the address (IPv4 or IPv6) into clipboard, and let Soku read the address from clipboard.\n- Host: host as usual, and other players can join you by both IPv4 and IPv6.",
+        "Version": "0.2.0.1",
+        "UpdateWorkingDir": "./IPv6MapSokuMod",
+        "FileName": "IPv6MapSokuMod.dll",
+        "DownloadUrl": "https://github.com/Hagb/IPv6Map/releases/download/0.2.0.1/IPv6MapSokuMod-0.2.0.1.zip",
+        "Compressed": true
     }
 ]
