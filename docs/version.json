@@ -15,14 +15,14 @@
     },
     {
         "Name": "Giuroll",
-        "Desc": "- added option for auto delay adjustment  \n- max rollback will now be chosen according to the player with the higher delay",
-        "Version": "0.6.7.0",
+        "Desc": "fixed desyncs at the start of the set.",
+        "Version": "0.6.11.0",
         "FileName": "giuroll.dll",
         "ConfigFiles": [
             "giuroll.ini"
         ],
         "UpdateWorkingDir": "./giuroll",
-        "DownloadUrl": "https://github.com/Giufinn/giuroll/releases/download/0.6.7/giuroll_0_6_7.zip",
+        "DownloadUrl": "https://github.com/Giufinn/giuroll/releases/download/0.6.11/giuroll_0_6_11.zip",
         "Compressed": true
     },
     {
