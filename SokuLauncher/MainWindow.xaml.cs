@@ -2,6 +2,7 @@
 using SokuLauncher.Models;
 using SokuLauncher.Utils;
 using SokuLauncher.ViewModels;
+using SokuModManager;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,23 +41,23 @@ namespace SokuLauncher
 
             try
             {
-                ViewModel.ModsManager = new ModsManager(ViewModel.ConfigUtil.SokuDirFullPath);
-                ViewModel.ModsManager.SearchModulesDir();
-                ViewModel.ModsManager.LoadSWRSToysSetting();
+                ViewModel.ModManager = new ModManager(ViewModel.ConfigUtil.SokuDirFullPath);
+                ViewModel.ModManager.Refresh();
+                ViewModel.ModManager.LoadSWRSToysSetting();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            ViewModel.UpdatesManager = new UpdatesManager(ViewModel.ConfigUtil, ViewModel.ModsManager);
+            ViewModel.UpdatesManager = new UpdatesManager(ViewModel.ConfigUtil, ViewModel.ModManager);
 
             InitializeComponent();
         }
 
         public void RefreshModSettingGroups()
         {
-            ViewModel.SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(ViewModel.ConfigUtil.Config.SokuModSettingGroups.Where(x => x.IsHidden != true));
+            ViewModel.SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(ViewModel.ConfigUtil.Config.SokuModSettingGroups.Where(x => x.IsHidden != true));
         }
 
         private MainWindwoViewModel _ViewModel;
@@ -160,8 +161,8 @@ namespace SokuLauncher
                             true,
                             checkModes,
                             false);
-                        ViewModel.ModsManager.SearchModulesDir();
-                        ViewModel.ModsManager.LoadSWRSToysSetting();
+                        ViewModel.ModManager.Refresh();
+                        ViewModel.ModManager.LoadSWRSToysSetting();
 
                         ViewModel.UpdatesManager.DownloadProgressChanged -= DownloadProgressChanged;
                         ViewModel.UpdatesManager.StatusChanged -= StatusChanged;
@@ -173,7 +174,15 @@ namespace SokuLauncher
                     ViewModel.SelectedSokuModSettingGroup.IsShowProgress = false;
                 }
 
-                ViewModel.ModsManager.ApplyModSettingGroup(settingGroup);
+                ViewModel.ModManager.ApplyModSettingGroup(
+                    new SokuModManager.Models.Mod.ModSettingGroupModel
+                    {
+                        Id = settingGroup.Id,
+                        Name = settingGroup.Name,
+                        EnableMods = settingGroup.EnableMods,
+                        DisableMods = settingGroup.DisableMods
+                    }
+                );
 
                 string sokuFile = Path.Combine(ViewModel.ConfigUtil.SokuDirFullPath, ViewModel.ConfigUtil.Config.SokuFileName);
 
@@ -301,26 +310,38 @@ namespace SokuLauncher
                         ViewModel.UpdatesManager.StopCheckForUpdates();
                     }
 
-                    ModsManager configModsManager = new ModsManager(ViewModel.ConfigUtil.SokuDirFullPath);
-                    configModsManager.SearchModulesDir();
-                    configModsManager.LoadSWRSToysSetting();
+                    ModManager configModManager = new ModManager(ViewModel.ConfigUtil.SokuDirFullPath);
+                    configModManager.Refresh();
+                    configModManager.LoadSWRSToysSetting();
 
                     ConfigWindow configWindow = new ConfigWindow(
                         this,
                         new ConfigWindowViewModel
                         {
-                            ModsManager = configModsManager,
-                            ModInfoList = new ObservableCollection<ModInfoModel>(configModsManager.ModInfoList),
+                            ModManager = configModManager,
+                            ModInfoList = new ObservableCollection<ModInfoViewModel>(configModManager.ModInfoList
+                                .Select(x => new ModInfoViewModel()
+                                {
+                                    Name = x.Name,
+                                    FullPath = x.FullPath,
+                                    RelativePath = x.RelativePath,
+                                    DirName = x.DirName,
+                                    Enabled = x.Enabled,
+                                    Version = x.Version,
+                                    Icon = x.Icon,
+                                    ConfigFileList = x.ConfigFiles,
+                                })
+                            ),
                             SokuDirPath = ViewModel.ConfigUtil.Config.SokuDirPath,
                             SokuFileName = ViewModel.ConfigUtil.Config.SokuFileName,
-                            SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModSettingGroups)),
+                            SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModSettingGroups)),
                             AutoCheckForUpdates = ViewModel.ConfigUtil.Config.AutoCheckForUpdates,
                             AutoCheckForInstallable = ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
                             VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
                             Language = ViewModel.ConfigUtil.Config.Language
                         }
                     );
-                    configModsManager = null;
+                    configModManager = null;
                     ZoomOutHideWindow((s, _) =>
                     {
                         DoubleAnimation fadeInAnimation = new DoubleAnimation
@@ -384,19 +405,31 @@ namespace SokuLauncher
                 ViewModel.UpdatesManager.StopCheckForUpdates();
             }
 
-            ModsManager configModsManager = new ModsManager(ViewModel.ConfigUtil.SokuDirFullPath);
-            configModsManager.SearchModulesDir();
-            configModsManager.LoadSWRSToysSetting();
+            ModManager configModManager = new ModManager(ViewModel.ConfigUtil.SokuDirFullPath);
+            configModManager.Refresh();
+            configModManager.LoadSWRSToysSetting();
 
             ConfigWindow configWindow = new ConfigWindow(
                 this,
                 new ConfigWindowViewModel
                 {
-                    ModsManager = configModsManager,
-                    ModInfoList = new ObservableCollection<ModInfoModel>(configModsManager.ModInfoList),
+                    ModManager = configModManager,
+                    ModInfoList = new ObservableCollection<ModInfoViewModel>(configModManager.ModInfoList
+                        .Select(x => new ModInfoViewModel()
+                        {
+                            Name = x.Name,
+                            FullPath = x.FullPath,
+                            RelativePath = x.RelativePath,
+                            DirName = x.DirName,
+                            Enabled = x.Enabled,
+                            Version = x.Version,
+                            Icon = x.Icon,
+                            ConfigFileList = x.ConfigFiles,
+                        })
+                    ),
                     SokuDirPath = ViewModel.ConfigUtil.Config.SokuDirPath,
                     SokuFileName = ViewModel.ConfigUtil.Config.SokuFileName,
-                    SokuModSettingGroups = new ObservableCollection<ModSettingGroupModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModSettingGroups)),
+                    SokuModSettingGroups = new ObservableCollection<ModSettingGroupViewModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.SokuModSettingGroups)),
                     AutoCheckForUpdates = ViewModel.ConfigUtil.Config.AutoCheckForUpdates,
                     AutoCheckForInstallable = ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
                     VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
@@ -412,7 +445,7 @@ namespace SokuLauncher
                 configWindow.SokuModSettingGroupsGrid.Opacity = 0;
                 configWindow.SokuModSettingGroupsGrid.Visibility = Visibility.Collapsed;
 
-                configModsManager = null;
+                configModManager = null;
                 ZoomOutHideWindow((s, _) =>
                 {
                     DoubleAnimation fadeInAnimation = new DoubleAnimation
@@ -441,7 +474,7 @@ namespace SokuLauncher
             var selectedModSettingGroupd = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
             if (selectedModSettingGroupd != null)
             {
-                ModsManager.CreateShortcutOnDesktop(selectedModSettingGroupd);
+                Static.CreateShortcutOnDesktop(selectedModSettingGroupd);
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using SokuLauncher.Models;
 using SokuLauncher.Utils;
+using SokuModManager.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

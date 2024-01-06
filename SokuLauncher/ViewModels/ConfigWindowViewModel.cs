@@ -1,5 +1,6 @@
 ﻿using SokuLauncher.Models;
 using SokuLauncher.Utils;
+using SokuModManager;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,10 +14,10 @@ namespace SokuLauncher.ViewModels
 {
     public class ConfigWindowViewModel : ViewModelBase
     {
-        public ModsManager ModsManager { get; set; }
+        public ModManager ModManager { get; set; }
 
-        private ObservableCollection<ModInfoModel> _ModInfoList;
-        public ObservableCollection<ModInfoModel> ModInfoList
+        private ObservableCollection<ModInfoViewModel> _ModInfoList;
+        public ObservableCollection<ModInfoViewModel> ModInfoList
         {
             get
             {
@@ -44,8 +45,8 @@ namespace SokuLauncher.ViewModels
         }
 
 
-        private ObservableCollection<ModSettingGroupModel> _SokuModSettingGroups;
-        public ObservableCollection<ModSettingGroupModel> SokuModSettingGroups
+        private ObservableCollection<ModSettingGroupViewModel> _SokuModSettingGroups;
+        public ObservableCollection<ModSettingGroupViewModel> SokuModSettingGroups
         {
             get
             {
@@ -59,8 +60,8 @@ namespace SokuLauncher.ViewModels
             }
         }
 
-        private ModSettingGroupModel _SelectedSokuModSettingGroup;
-        public ModSettingGroupModel SelectedSokuModSettingGroup
+        private ModSettingGroupViewModel _SelectedSokuModSettingGroup;
+        public ModSettingGroupViewModel SelectedSokuModSettingGroup
         {
             get
             {
@@ -123,11 +124,11 @@ namespace SokuLauncher.ViewModels
         {
             get
             {
-                if (!Directory.Exists(ModsManager.DefaultModsDir))
+                if (!Directory.Exists(ModManager.DefaultModsDir))
                 {
                     return "";
                 }
-                return ModsManager.DefaultModsDir;
+                return ModManager.DefaultModsDir;
             }
             set { }
         }
@@ -136,7 +137,7 @@ namespace SokuLauncher.ViewModels
         {
             get
             {
-                return ModsManager.SWRSToysD3d9Exist;
+                return ModManager.SWRSToysD3d9Exist;
             }
             set { }
         }

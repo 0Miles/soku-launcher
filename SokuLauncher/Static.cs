@@ -85,7 +85,7 @@ namespace SokuLauncher
             return JsonConvert.DeserializeObject<T>(jsonString);
         }
 
-        public static void CreateShortcutOnDesktop(ModSettingGroupModel selectedModSettingGroupd)
+        public static void CreateShortcutOnDesktop(ModSettingGroupViewModel selectedModSettingGroupd)
         {
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             ResourcesManager resourcesManager = new ResourcesManager();

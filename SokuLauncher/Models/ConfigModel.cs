@@ -6,7 +6,7 @@ namespace SokuLauncher.Models
 {
     public class ConfigModel
     {
-        public List<ModSettingGroupModel> SokuModSettingGroups { get; set; } = new List<ModSettingGroupModel>();
+        public List<ModSettingGroupViewModel> SokuModSettingGroups { get; set; } = new List<ModSettingGroupViewModel>();
         public string SokuFileName { get; set; }
         public string SokuDirPath { get; set; }
         public bool AutoCheckForUpdates { get; set; } = true;

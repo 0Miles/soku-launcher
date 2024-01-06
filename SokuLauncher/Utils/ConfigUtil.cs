@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SokuLauncher.Controls;
 using SokuLauncher.Models;
 using SokuLauncher.ViewModels;
+using SokuModManager.Models.Mod;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -140,9 +141,9 @@ namespace SokuLauncher.Utils
                 config.SokuFileName = SelectSokuFile(config.SokuDirPath);
             }
 
-            config.SokuModSettingGroups = new List<ModSettingGroupModel>
+            config.SokuModSettingGroups = new List<ModSettingGroupViewModel>
             {
-                new ModSettingGroupModel
+                new ModSettingGroupViewModel
                 {
                     Id = "1d059cd2-1e74-430b-b84f-1d3ad6b67f6c",
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Giuroll-Name"),
@@ -167,7 +168,7 @@ namespace SokuLauncher.Utils
                         }
                     }
                 },
-                new ModSettingGroupModel
+                new ModSettingGroupViewModel
                 {
                     Id = "7d9b118d-5f7a-48b0-8e35-272f0e51f0d6",
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-GiurollCN-Name"),
@@ -192,7 +193,7 @@ namespace SokuLauncher.Utils
                         }
                     }
                 },
-                new ModSettingGroupModel
+                new ModSettingGroupViewModel
                 {
                     Id = "31a56390-1f5b-4442-b4e2-7b23ce5683d7",
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-NoRoll-Name"),
@@ -202,7 +203,7 @@ namespace SokuLauncher.Utils
                     Cover = "%resources%/gearbackground-r.png",
                     CoverOverlayColor = "#6F002EA9"
                 },
-                new ModSettingGroupModel
+                new ModSettingGroupViewModel
                 {
                     Id = "3b9e5e71-6044-432c-b6c3-4c53d93e137d",
                     Name = Static.LanguageService.GetString("ConfigUtil-DefaultSokuModSettingGroups-Origin-Name"),
