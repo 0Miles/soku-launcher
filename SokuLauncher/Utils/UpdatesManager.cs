@@ -2,6 +2,8 @@
 using SokuLauncher.Controls;
 using SokuLauncher.Models;
 using SokuLauncher.ViewModels;
+using SokuModManager;
+using SokuModManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -41,7 +43,7 @@ namespace SokuLauncher.Utils
         private readonly string UpdateTempDirPath = Path.Combine(Static.TempDirPath, "Update");
 
         public ConfigUtil ConfigUtil { get; set; }
-        public ModsManager ModsManager { get; set; }
+        public ModManager ModManager { get; set; }
 
         private void ClearUpdateTempDir()
         {
@@ -55,11 +57,11 @@ namespace SokuLauncher.Utils
             Directory.CreateDirectory(UpdateTempDirPath);
         }
 
-        public UpdatesManager(ConfigUtil configUtil, ModsManager modsManager)
+        public UpdatesManager(ConfigUtil configUtil, ModManager ModManager)
         {
             ClearUpdateTempDir();
             ConfigUtil = configUtil;
-            ModsManager = modsManager;
+            this.ModManager = ModManager;
         }
 
         private bool IsStopCheckForUpdates = false;
@@ -103,8 +105,8 @@ namespace SokuLauncher.Utils
                     if (isRunUpdate)
                     {
 
-                        var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
-                        await ExecuteUpdates(selectedUpdates, isShowUpdating, complatedMessage);
+                        //var selectedUpdates = updateSelectionWindow.AvailableUpdateList.Where(x => x.Selected).ToList();
+                        //await ExecuteUpdates(selectedUpdates, isShowUpdating, complatedMessage);
                     }
                     return true;
                 }
@@ -335,7 +337,7 @@ namespace SokuLauncher.Utils
                     Name = modName,
                     FileName = fileName,
                     Version = modVersion.ToString(),
-                    DownloadUrl = new Uri(dllPath).ToString(),
+                    //DownloadUrl = new Uri(dllPath).ToString(),
                     Compressed = false
                 }
             });
@@ -372,8 +374,8 @@ namespace SokuLauncher.Utils
                     true,
                     true);
 
-                ModsManager.SearchModulesDir();
-                ModsManager.LoadSWRSToysSetting();
+                ModManager.Refresh();
+                ModManager.LoadSWRSToysSetting();
 
                 if (AvailableUpdateList.Any(x => x.Installed == false))
                 {
@@ -385,9 +387,9 @@ namespace SokuLauncher.Utils
                     {
                         foreach (var mod in AvailableUpdateList.Where(x => x.Installed == false).ToList())
                         {
-                            ModsManager.ChangeModEnabled(mod.Name, true);
+                            ModManager.ChangeModEnabled(mod.Name, true);
                         }
-                        ModsManager.SaveSWRSToysIni();
+                        ModManager.SaveSWRSToysIni();
                     }
                 }
                 ClearVersionInfoJson();
@@ -436,19 +438,19 @@ namespace SokuLauncher.Utils
                             break;
                         case "SokuModLoader":
                             updateFileInfo.LocalFileName = Path.Combine(ConfigUtil.SokuDirFullPath, "d3d9.dll");
-                            if (!ModsManager.SWRSToysD3d9Exist)
+                            if (!ModManager.SWRSToysD3d9Exist)
                             {
                                 updateFileInfo.Installed = false;
                             }
                             break;
                         default:
-                            var modInfo = ModsManager.GetModInfoByModName(updateFileInfo.Name) ?? ModsManager.GetModInfoByModFileName(updateFileInfo.FileName);
+                            var modInfo = ModManager.GetModInfoByModName(updateFileInfo.Name) ?? ModManager.GetModInfoByModFileName(updateFileInfo.FileName);
                             if (modInfo == null || !File.Exists(modInfo.FullPath))
                             {
                                 string fileNameForbiddenCharactersPattern = @"[\\/:*?""<>|]";
                                 string fileName = Regex.Replace(updateFileInfo.Name, fileNameForbiddenCharactersPattern, "_");
 
-                                updateFileInfo.LocalFileName = Path.Combine(ModsManager.DefaultModsDir, updateFileInfo.Name, $"{fileName}{Path.GetExtension(updateFileInfo.FileName)}");
+                                updateFileInfo.LocalFileName = Path.Combine(ModManager.DefaultModsDir, updateFileInfo.Name, $"{fileName}{Path.GetExtension(updateFileInfo.FileName)}");
                                 updateFileInfo.Installed = false;
                             }
                             else
@@ -466,14 +468,14 @@ namespace SokuLauncher.Utils
                         checkForInstallable && !updateFileInfo.Installed ||
                         force)
                     {
-                        if (updateFileInfo.I18nDesc != null)
+                        if (updateFileInfo.DescriptionI18n != null)
                         {
                             string localDesc =
-                                updateFileInfo.I18nDesc.FirstOrDefault(x => x.Language == ConfigUtil.Config.Language)?.Content
-                                ?? updateFileInfo.I18nDesc.FirstOrDefault(x => x.Language != null && x.Language.Split('-')[0] == ConfigUtil.Config.Language.Split('-')[0])?.Content;
+                                updateFileInfo.DescriptionI18n.FirstOrDefault(x => x.Language == ConfigUtil.Config.Language)?.Content
+                                ?? updateFileInfo.DescriptionI18n.FirstOrDefault(x => x.Language != null && x.Language.Split('-')[0] == ConfigUtil.Config.Language.Split('-')[0])?.Content;
                             if (!string.IsNullOrWhiteSpace(localDesc))
                             {
-                                updateFileInfo.Desc = localDesc;
+                                updateFileInfo.Description = localDesc;
                             }
                         }
                         AvailableUpdateList.Add(updateFileInfo);
@@ -550,7 +552,7 @@ namespace SokuLauncher.Utils
                 }
                 else
                 {
-                    downloadUri = updateFileInfo.DownloadUrl;
+                    //downloadUri = updateFileInfo.DownloadUrl;
                     updateFileDir = Path.Combine(UpdateTempDirPath, updateFileInfo.Name);
                     if (Directory.Exists(updateFileDir))
                     {
@@ -560,25 +562,25 @@ namespace SokuLauncher.Utils
 
                 Directory.CreateDirectory(updateFileDir);
 
-                string remoteFileName = Path.GetFileName(downloadUri);
-                string downloadToTempFilePath = Path.Combine(updateFileDir, remoteFileName);
+                //string remoteFileName = Path.GetFileName(downloadUri);
+                //string downloadToTempFilePath = Path.Combine(updateFileDir, remoteFileName);
 
-                using (WebClient client = new WebClient())
-                {
-                    client.DownloadProgressChanged += (sender, e) =>
-                    {
-                        DownloadProgressChanged?.Invoke(e.ProgressPercentage);
-                        StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdatesManager-DownloadAndExtractFile-Downloading"), updateFileInfo.Name) + $" {e.ProgressPercentage}%");
-                    };
-                    await client.DownloadFileTaskAsync(downloadUri, downloadToTempFilePath);
-                }
+                //using (WebClient client = new WebClient())
+                //{
+                //    client.DownloadProgressChanged += (sender, e) =>
+                //    {
+                //        DownloadProgressChanged?.Invoke(e.ProgressPercentage);
+                //        StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdatesManager-DownloadAndExtractFile-Downloading"), updateFileInfo.Name) + $" {e.ProgressPercentage}%");
+                //    };
+                //    await client.DownloadFileTaskAsync(downloadUri, downloadToTempFilePath);
+                //}
 
-                if (updateFileInfo.Compressed)
-                {
-                    StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdatesManager-DownloadAndExtractFile-Extracting"), updateFileInfo.Name));
-                    ZipFile.ExtractToDirectory(downloadToTempFilePath, updateFileDir);
-                    File.Delete(downloadToTempFilePath);
-                }
+                //if (updateFileInfo.Compressed)
+                //{
+                //    StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdatesManager-DownloadAndExtractFile-Extracting"), updateFileInfo.Name));
+                //    ZipFile.ExtractToDirectory(downloadToTempFilePath, updateFileDir);
+                //    File.Delete(downloadToTempFilePath);
+                //}
 
             }
             catch (Exception ex)

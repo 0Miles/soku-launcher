@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using SokuLauncher.Models;
+using SokuLauncher.ViewModels;
 
 namespace SokuLauncher.Controls
 {
@@ -22,16 +23,16 @@ namespace SokuLauncher.Controls
         public static DependencyProperty ModSettingGroupProperty =
             DependencyProperty.Register(
                 "ModSettingGroup",
-                typeof(ModSettingGroupModel),
+                typeof(ModSettingGroupViewModel),
                 typeof(ModSettingGroupUserControl),
-                new PropertyMetadata(new ModSettingGroupModel())
+                new PropertyMetadata(new ModSettingGroupViewModel())
             );
 
-        public ModSettingGroupModel ModSettingGroup
+        public ModSettingGroupViewModel ModSettingGroup
         {
             get
             {
-                return (ModSettingGroupModel)(GetValue(ModSettingGroupProperty));
+                return (ModSettingGroupViewModel)(GetValue(ModSettingGroupProperty));
             }
             set
             {
@@ -75,7 +76,7 @@ namespace SokuLauncher.Controls
         {
             get
             {
-                if ((DataContext as ModSettingGroupModel)?.Cover != null && new string[] { "mp4", "avi", "wmv", "gif" }.Any(x => (DataContext as ModSettingGroupModel)?.Cover.ToLower().EndsWith(x) ?? false))
+                if ((DataContext as ModSettingGroupViewModel)?.Cover != null && new string[] { "mp4", "avi", "wmv", "gif" }.Any(x => (DataContext as ModSettingGroupViewModel)?.Cover.ToLower().EndsWith(x) ?? false))
                 {
                     return true;
                 }

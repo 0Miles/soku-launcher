@@ -61,22 +61,30 @@ namespace SokuLauncher
                             checkModes.Add("SokuLauncher");
                             checkModes.Add("SokuModLoader");
                             await mainWindow.ViewModel.UpdatesManager.CheckForUpdates(
-                                Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"), 
+                                Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
                                 null,
                                 true,
                                 true,
                                 mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
                                 checkModes,
                                 true);
-                            mainWindow.ViewModel.ModsManager.SearchModulesDir();
-                            mainWindow.ViewModel.ModsManager.LoadSWRSToysSetting();
+                            mainWindow.ViewModel.ModManager.Refresh();
+                            mainWindow.ViewModel.ModManager.LoadSWRSToysSetting();
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
-                    mainWindow.ViewModel.ModsManager.ApplyModSettingGroup(settingGroup);
+                    mainWindow.ViewModel.ModManager.ApplyModSettingGroup(
+                        new SokuModManager.Models.Mod.ModSettingGroupModel
+                        {
+                            Id = settingGroup.Id,
+                            Name = settingGroup.Name,
+                            EnableMods = settingGroup.EnableMods,
+                            DisableMods = settingGroup.DisableMods
+                        }
+                    );
                     Directory.SetCurrentDirectory(mainWindow.ViewModel.ConfigUtil.SokuDirFullPath);
                     Process.Start(sokuFile);
                 }

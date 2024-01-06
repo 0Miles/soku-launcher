@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:converters="clr-namespace:SokuLauncher.Converters" xmlns:models="clr-namespace:SokuLauncher.Models" d:DataContext="{d:DesignInstance Type=models:ModSettingGroupModel}"
+             xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:converters="clr-namespace:SokuLauncher.Converters" xmlns:viewModels="clr-namespace:SokuLauncher.ViewModels" d:DataContext="{d:DesignInstance Type=viewModels:ModSettingGroupViewModel}"
              mc:Ignorable="d" d:Width="420" d:Height="150">
     <UserControl.Resources>
         <converters:RelativePathConverter x:Key="RelativePathConverter" />

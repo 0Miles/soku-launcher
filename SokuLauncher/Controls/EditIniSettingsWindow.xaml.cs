@@ -1,4 +1,5 @@
 ﻿using SokuLauncher.Models;
+using SokuModManager.Models.Mod;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

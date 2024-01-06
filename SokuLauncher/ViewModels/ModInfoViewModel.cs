@@ -1,13 +1,12 @@
-﻿using SokuLauncher.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
-namespace SokuLauncher.Models
+namespace SokuLauncher.ViewModels
 {
-    public class ModInfoModel : ViewModelBase
+    public class ModInfoViewModel : ViewModelBase
     {
         public string Name { get; set; }
         public string FullPath { get; set; }
@@ -60,35 +59,11 @@ namespace SokuLauncher.Models
             }
         }
 
-        private List<string> _ConfigFileList;
-        public List<string> ConfigFileList
-        {
-            get
-            {
-                if (_ConfigFileList == null)
-                {
-                    _ConfigFileList = Directory.GetFiles(DirName, "*.ini").Concat(Directory.GetFiles(DirName, "*.json")).ToList();
-                }
-                return _ConfigFileList;
-            }
-        }
+        public List<string> ConfigFileList { get; set; }
 
         public string Version { get; set; }
 
         public string Icon { get; set; }
 
-        public ModInfoModel(string dllFilePath, string sokuDir)
-        {
-            Name = Path.GetFileNameWithoutExtension(dllFilePath);
-            FullPath = dllFilePath;
-            DirName = Path.GetDirectoryName(dllFilePath);
-            RelativePath = Static.GetRelativePath(dllFilePath, sokuDir);
-
-            string icon = Path.Combine(DirName, "icon.png");
-            if (File.Exists(icon))
-            {
-                Icon = icon;
-            }
-        }
     }
 }

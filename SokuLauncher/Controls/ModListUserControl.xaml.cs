@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using SokuLauncher.Models;
 using SokuLauncher.Utils;
+using SokuLauncher.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,16 +36,16 @@ namespace SokuLauncher.Controls
         public static DependencyProperty ModInfoListProperty =
             DependencyProperty.Register(
                 "ModInfoList",
-                typeof(ObservableCollection<ModInfoModel>),
+                typeof(ObservableCollection<ModInfoViewModel>),
                 typeof(ModListUserControl),
-                new PropertyMetadata(new ObservableCollection<ModInfoModel>())
+                new PropertyMetadata(new ObservableCollection<ModInfoViewModel>())
             );
 
-        public ObservableCollection<ModInfoModel> ModInfoList
+        public ObservableCollection<ModInfoViewModel> ModInfoList
         {
             get
             {
-                return (ObservableCollection<ModInfoModel>)(GetValue(ModInfoListProperty));
+                return (ObservableCollection<ModInfoViewModel>)(GetValue(ModInfoListProperty));
             }
             set
             {
@@ -56,16 +57,16 @@ namespace SokuLauncher.Controls
         public static DependencyProperty FilteredModInfoListProperty =
             DependencyProperty.Register(
                 "FilteredModInfoList",
-                typeof(ObservableCollection<ModInfoModel>),
+                typeof(ObservableCollection<ModInfoViewModel>),
                 typeof(ModListUserControl),
-                new PropertyMetadata(new ObservableCollection<ModInfoModel>())
+                new PropertyMetadata(new ObservableCollection<ModInfoViewModel>())
             );
 
-        public ObservableCollection<ModInfoModel> FilteredModInfoList
+        public ObservableCollection<ModInfoViewModel> FilteredModInfoList
         {
             get
             {
-                return (ObservableCollection<ModInfoModel>)(GetValue(FilteredModInfoListProperty));
+                return (ObservableCollection<ModInfoViewModel>)(GetValue(FilteredModInfoListProperty));
             }
             set
             {
@@ -101,11 +102,11 @@ namespace SokuLauncher.Controls
 
             if (string.IsNullOrWhiteSpace(seachValue))
             {
-                FilteredModInfoList = new ObservableCollection<ModInfoModel>(ModInfoList);
+                FilteredModInfoList = new ObservableCollection<ModInfoViewModel>(ModInfoList);
             }
             else
             {
-                FilteredModInfoList = new ObservableCollection<ModInfoModel>(ModInfoList.Where(x => (x.Name?.ToLower().Contains(seachValue.ToLower()) ?? false) || (x.RelativePath?.ToLower().Contains(seachValue.ToLower()) ?? false)));
+                FilteredModInfoList = new ObservableCollection<ModInfoViewModel>(ModInfoList.Where(x => (x.Name?.ToLower().Contains(seachValue.ToLower()) ?? false) || (x.RelativePath?.ToLower().Contains(seachValue.ToLower()) ?? false)));
             }
 
             if (FilteredModInfoList.Count == 0)
