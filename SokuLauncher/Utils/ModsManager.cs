@@ -2,6 +2,7 @@
 using SokuLauncher.Controls;
 using SokuLauncher.Models;
 using SokuLauncher.ViewModels;
+using SokuModManager;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

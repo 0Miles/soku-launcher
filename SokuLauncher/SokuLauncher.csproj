@@ -181,7 +181,6 @@
     <Compile Include="Static.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
     <Compile Include="Utils\Debouncer.cs" />
-    <Compile Include="Utils\IniFile.cs" />
     <Compile Include="Utils\ModsManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utils\ResourcesManager.cs" />
@@ -327,6 +326,12 @@
     <EmbeddedResource Include="Resources\Icons\lnk1.ico" />
     <EmbeddedResource Include="Resources\Icons\lnk2.ico" />
     <EmbeddedResource Include="Resources\Icons\lnk3.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SokuModManager\SokuModManager.csproj">
+      <Project>{9f9b0e07-deed-4cba-95ae-8ea402e8dfb6}</Project>
+      <Name>SokuModManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
