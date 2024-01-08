@@ -181,7 +181,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Utils\ResourcesManager.cs" />
     <Compile Include="Utils\ShellLink.cs" />
-    <Compile Include="UpdateCenter\UpdateMaster.cs" />
+    <Compile Include="UpdateCenter\UpdateManager.cs" />
     <Compile Include="Models\ModSettingGroupViewModel.cs" />
     <Compile Include="Models\MainWindwoViewModel.cs" />
     <Compile Include="Models\ConfigWindowViewModel.cs" />

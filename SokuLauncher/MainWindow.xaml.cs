@@ -50,7 +50,7 @@ namespace SokuLauncher
                 MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            ViewModel.UpdatesManager = new UpdateMaster(ViewModel.ConfigUtil, ViewModel.ModManager);
+            ViewModel.UpdateManager = new UpdateManager(ViewModel.ConfigUtil, ViewModel.ModManager);
 
             InitializeComponent();
         }
@@ -142,14 +142,14 @@ namespace SokuLauncher
                     {
                         void DownloadProgressChanged(int progress) => ViewModel.SelectedSokuModSettingGroup.Progress = progress;
                         void StatusChanged(string status) => ViewModel.SelectedSokuModSettingGroup.Status = status;
-                        ViewModel.UpdatesManager.DownloadProgressChanged += DownloadProgressChanged;
-                        ViewModel.UpdatesManager.StatusChanged += StatusChanged;
+                        ViewModel.UpdateManager.DownloadProgressChanged += DownloadProgressChanged;
+                        ViewModel.UpdateManager.StatusChanged += StatusChanged;
                         ViewModel.SelectedSokuModSettingGroup.Status = Static.LanguageService.GetString("Common-CheckVersionInfo");
 
                         List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
                         checkModes.Add("SokuModLoader");
-                        await ViewModel.UpdatesManager.CheckForUpdates(
-                            Static.LanguageService.GetString("UpdatesManager-CheckForInstallable-UpdateSelectionWindow-Desc"),
+                        await ViewModel.UpdateManager.CheckForUpdates(
+                            Static.LanguageService.GetString("UpdateManager-CheckForInstallable-UpdateSelectionWindow-Desc"),
                             null,
                             false,
                             false,
@@ -159,8 +159,8 @@ namespace SokuLauncher
                         ViewModel.ModManager.Refresh();
                         ViewModel.ModManager.LoadSWRSToysSetting();
 
-                        ViewModel.UpdatesManager.DownloadProgressChanged -= DownloadProgressChanged;
-                        ViewModel.UpdatesManager.StatusChanged -= StatusChanged;
+                        ViewModel.UpdateManager.DownloadProgressChanged -= DownloadProgressChanged;
+                        ViewModel.UpdateManager.StatusChanged -= StatusChanged;
                     }
                     catch (Exception ex)
                     {
@@ -295,6 +295,7 @@ namespace SokuLauncher
         private bool configWindowShowing = false;
         private void ConfigButton_Click(object sender, RoutedEventArgs e)
         {
+            ViewModel.UpdateManager.CancelCheckForUpdates();
             if (!configWindowShowing)
             {
                 configWindowShowing = true;
@@ -387,6 +388,7 @@ namespace SokuLauncher
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
+            ViewModel.UpdateManager.CancelCheckForUpdates();
             var menuItem = (MenuItem)sender;
             var modSettingGroupId = (string)menuItem.Tag;
 
@@ -501,7 +503,7 @@ namespace SokuLauncher
 
                     if (files != null && files.Length > 0)
                     {
-                        await ViewModel.UpdatesManager.UpdateFromFile(files[0]);
+                        await ViewModel.UpdateManager.UpdateFromFile(files[0]);
                     }
                 });
             });

@@ -17,7 +17,7 @@ using SokuModManager.Models;
 
 namespace SokuLauncher.Utils
 {
-    public class UpdateMaster
+    public class UpdateManager
     {
         private const string SELF_UPDATE_VERSION_INFO_URL = "https://soku.latte.today/version.json";
         private const string MOD_VERSION_FILENAME_SUFFIX = ".version.txt";
@@ -29,12 +29,14 @@ namespace SokuLauncher.Utils
 
         public string UpdateSokuLauncherFilePath { get; private set; }
 
+        public Task FetchSourceListTask { get; private set; }
+
         public ConfigUtil CurrentConfigUtil { get; set; }
         public ModManager CurrentModManager { get; set; }
         public Updater CurrentUpdater { get; set; }
         public SourceManager CurrentSourceManager { get; set; }
 
-        public UpdateMaster(ConfigUtil configUtil, ModManager modManager)
+        public UpdateManager(ConfigUtil configUtil, ModManager modManager)
         {
             CurrentConfigUtil = configUtil;
             CurrentModManager = modManager;
@@ -49,7 +51,7 @@ namespace SokuLauncher.Utils
                 switch (e.Status)
                 {
                     case SourceManagerStatus.Fetching:
-                        StatusChanged?.Invoke(Static.LanguageService.GetString("UpdatesManager-GetVersionInfoJson-Message"));
+                        StatusChanged?.Invoke(Static.LanguageService.GetString("UpdateManager-GetVersionInfoJson-Message"));
                         break;
                 }
             };
@@ -62,36 +64,49 @@ namespace SokuLauncher.Utils
                 switch(e.Status)
                 {
                     case UpdaterStatus.Downloading:
-                        StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdatesManager-DownloadAndExtractFile-Downloading"), e.Target) + $" {e.Progress}%");
+                        StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdateManager-DownloadAndExtractFile-Downloading"), e.Target) + $" {e.Progress}%");
                         break;
                     case UpdaterStatus.Extracting:
-                        StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdatesManager-DownloadAndExtractFile-Extracting"), e.Target));
+                        StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdateManager-DownloadAndExtractFile-Extracting"), e.Target));
                         break;
                     case UpdaterStatus.CopyingFiles:
-                        StatusChanged?.Invoke(Static.LanguageService.GetString("UpdatesManager-Updating") + $" {e.Target}...");
+                        StatusChanged?.Invoke(Static.LanguageService.GetString("UpdateManager-Updating") + $" {e.Target}...");
                         break;
                     case UpdaterStatus.Pending:
                         StatusChanged?.Invoke(Static.LanguageService.GetString("Common-Pending"));
                         break;
                 }
             };
+
+            FetchSourceListTask = Task.Run(async () =>
+            {
+                await CurrentSourceManager.FetchSourceList();
+            });
         }
 
-        public async Task<bool?> CheckForUpdates(string desc = null, string complatedMessage = null, bool isAutoUpdates = true, bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool isShowUpdating = true, bool force = false)
+        private readonly List<Guid> checkForUpdatesGuidList = new List<Guid>();
+        public async Task<bool?> CheckForUpdates(string desc = null, string complatedMessage = null, bool isAutoUpdates = true, bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool isShowUpdating = true)
         {
             try
             {
-                List<UpdateFileInfoModel> updateList = new List<UpdateFileInfoModel>();
-                var selfUpdateFileInfo = await GetAvailableSelfUpdateFileInfo();
-                if (selfUpdateFileInfo != null)
-                {
-                    updateList.Add(selfUpdateFileInfo);
-                }
+                Guid myGuid = Guid.NewGuid();
+                checkForUpdatesGuidList.Add(myGuid);
 
-                await CurrentSourceManager.FetchSourceList();
-                foreach(var source in CurrentSourceManager.SourceList)
+                List<UpdateFileInfoModel> updateList = new List<UpdateFileInfoModel>();
+
+                if (checkForUpdates && (modsToCheckList == null || modsToCheckList.Contains("SokuLauncher")))
                 {
-                    List<UpdateFileInfoModel> sourceUpdateInfoList = Updater.GetUpdateFileInfosFromSource(source);
+                    var selfUpdateFileInfo = await GetAvailableSelfUpdateFileInfo();
+                    if (selfUpdateFileInfo != null)
+                    {
+                        updateList.Add(selfUpdateFileInfo);
+                    }
+                }
+                await FetchSourceListTask;
+
+                foreach (var source in CurrentSourceManager.SourceList)
+                {
+                    List<UpdateFileInfoModel> sourceUpdateInfoList = CurrentUpdater.GetUpdateFileInfosFromSource(source);
                     CurrentUpdater.RefreshAvailable(sourceUpdateInfoList, modsToCheckList);
 
                     if (checkForUpdates)
@@ -103,14 +118,27 @@ namespace SokuLauncher.Utils
                         updateList = updateList.Concat(CurrentUpdater.AvailableInstallList.Where(x => !updateList.Select(updateInfo => updateInfo.Name).Contains(x.Name))).ToList();
                     }
                 }
-             
+
+                if (checkForUpdatesGuidList.LastOrDefault() != myGuid)
+                {
+                    return null;
+                }
+                else
+                {
+                    checkForUpdatesGuidList.Clear();
+                }
                 return await SelectAndUpdate(updateList, desc, complatedMessage, isAutoUpdates, isShowUpdating);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdateManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
+        }
+
+        public void CancelCheckForUpdates()
+        {
+            checkForUpdatesGuidList.Clear();
         }
 
         public async Task<bool?> SelectAndUpdate(List<UpdateFileInfoModel> updateFileInfoList, string desc = null, string complatedMessage = null, bool isAutoUpdates = true, bool isShowUpdating = true)
@@ -170,7 +198,7 @@ namespace SokuLauncher.Utils
                 client.DownloadProgressChanged += (sender, e) =>
                 {
                     DownloadProgressChanged?.Invoke(e.ProgressPercentage);
-                    StatusChanged?.Invoke(Static.LanguageService.GetString("UpdatesManager-GetVersionInfoJson-Message") + $" {e.ProgressPercentage}%");
+                    StatusChanged?.Invoke(Static.LanguageService.GetString("UpdateManager-GetVersionInfoJson-Message") + $" {e.ProgressPercentage}%");
                 };
                 return await client.DownloadStringTaskAsync(string.IsNullOrWhiteSpace(CurrentConfigUtil.Config.VersionInfoUrl) ? SELF_UPDATE_VERSION_INFO_URL : CurrentConfigUtil.Config.VersionInfoUrl);
             }
@@ -180,7 +208,7 @@ namespace SokuLauncher.Utils
         {
             UpdatingWindow updatingWindow = new UpdatingWindow
             {
-                UpdatesManager = this
+                UpdateManager = this
             };
 
             var updateTask = Task.Run(async () =>
@@ -234,14 +262,14 @@ namespace SokuLauncher.Utils
                     {
                         MessageBox.Show(
                             complatedMessage,
-                            Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
+                            Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdateManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                     if (isShowUpdating)
                     {
                         updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
@@ -268,19 +296,18 @@ namespace SokuLauncher.Utils
                 {
                     case ".zip":
                     case ".sokumod":
-                        updateFileInfoList = Updater.GetUpdateFileInfosFromZip(modPackagePath);
+                        updateFileInfoList = CurrentUpdater.GetUpdateFileInfosFromZip(modPackagePath);
                         break;
                     default:
                         throw new Exception(Static.LanguageService.GetString("Common-UnsupportedFormat"));
                 }
 
-
-                CurrentUpdater.RefreshAvailable(updateFileInfoList);
+                CurrentUpdater.RefreshAvailable(updateFileInfoList, null, true);
 
                 await SelectAndUpdate(
                     CurrentUpdater.AvailableUpdateList.Concat(CurrentUpdater.AvailableInstallList).ToList(),
-                    Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Desc"),
-                    Static.LanguageService.GetString("UpdatesManager-InstallFromArchive-Completed"), 
+                    Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Desc"),
+                    Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Completed"), 
                     false, 
                     true);
 
@@ -290,8 +317,8 @@ namespace SokuLauncher.Utils
                 if (updateFileInfoList.Any(x => x.Installed == false))
                 {
                     if (MessageBox.Show(
-                            Static.LanguageService.GetString("UpdatesManager-NewModInstalled"),
-                            Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
+                            Static.LanguageService.GetString("UpdateManager-NewModInstalled"),
+                            Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
@@ -305,7 +332,7 @@ namespace SokuLauncher.Utils
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdateManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -320,8 +347,8 @@ namespace SokuLauncher.Utils
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    Static.LanguageService.GetString("UpdatesManager-GetAvailableUpdateList-ParsingVersionInfoFailed") + $": {ex}",
-                    Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
+                    Static.LanguageService.GetString("UpdateManager-GetAvailableUpdateList-ParsingVersionInfoFailed") + $": {ex}",
+                    Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 return null;
@@ -365,7 +392,7 @@ namespace SokuLauncher.Utils
             }
             catch (Exception ex)
             {
-                throw new Exception(Static.LanguageService.GetString("UpdatesManager-GetAvailableUpdateList-UpdatesFailed") + ": " + ex.Message);
+                throw new Exception(Static.LanguageService.GetString("UpdateManager-GetAvailableUpdateList-UpdatesFailed") + ": " + ex.Message);
             }
         }
 
@@ -424,9 +451,9 @@ namespace SokuLauncher.Utils
 
                 UpdatingWindow updatingWindow = new UpdatingWindow
                 {
-                    UpdatesManager = null,
+                    UpdateManager = null,
                     IsIndeterminate = true,
-                    Status = Static.LanguageService.GetString("UpdatesManager-CheckSelfIsUpdating-WaitProcessClose")
+                    Status = Static.LanguageService.GetString("UpdateManager-CheckSelfIsUpdating-WaitProcessClose")
                 };
 
                 updatingWindow.Show();
@@ -451,7 +478,7 @@ namespace SokuLauncher.Utils
                     }
                 } while (hasSameProcess);
 
-                updatingWindow.Status = Static.LanguageService.GetString("UpdatesManager-Updating") + "...";
+                updatingWindow.Status = Static.LanguageService.GetString("UpdateManager-Updating") + "...";
 
                 await Task.Run(() => {
                     string args = "";

@@ -12,7 +12,7 @@ namespace SokuLauncher.ViewModels
     {
         public ConfigUtil ConfigUtil { get; set; }
         public ModManager ModManager { get; set; }
-        public UpdateMaster UpdatesManager { get; set; }
+        public UpdateManager UpdateManager { get; set; }
 
         private ObservableCollection<ModSettingGroupViewModel> _SokuModSettingGroups;
         public ObservableCollection<ModSettingGroupViewModel> SokuModSettingGroups

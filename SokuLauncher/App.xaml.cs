@@ -21,7 +21,7 @@ namespace SokuLauncher
 
             LanguageService_OnChangeLanguage(ConfigUtil.GetLanguageCode(CultureInfo.CurrentCulture.Name));
 
-            await UpdateMaster.CheckSelfIsUpdating();
+            await UpdateManager.CheckSelfIsUpdating();
 
             MainWindow mainWindow = new MainWindow();
 
@@ -32,7 +32,7 @@ namespace SokuLauncher
                 if (paths.Count > 0)
                 {
                     Static.StartupArgs = Array.Empty<string>();
-                    await mainWindow.ViewModel.UpdatesManager.UpdateFromFile(paths[0]);
+                    await mainWindow.ViewModel.UpdateManager.UpdateFromFile(paths[0]);
                     Current.Shutdown();
                 }
             }
@@ -59,8 +59,8 @@ namespace SokuLauncher
                             List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
                             checkModes.Add("SokuLauncher");
                             checkModes.Add("SokuModLoader");
-                            await mainWindow.ViewModel.UpdatesManager.CheckForUpdates(
-                                Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
+                            await mainWindow.ViewModel.UpdateManager.CheckForUpdates(
+                                Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
                                 null,
                                 true,
                                 true,
@@ -72,7 +72,7 @@ namespace SokuLauncher
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdateManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                     mainWindow.ViewModel.ModManager.ApplyModSettingGroup(
@@ -110,9 +110,9 @@ namespace SokuLauncher
                 {
                     try
                     {
-                        await Dispatcher.Invoke(() => mainWindow.ViewModel.UpdatesManager.CheckForUpdates(
-                            Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
-                            Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed")
+                        await Dispatcher.Invoke(() => mainWindow.ViewModel.UpdateManager.CheckForUpdates(
+                            Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
+                            Static.LanguageService.GetString("UpdateManager-CheckForUpdates-Completed")
                             ));
                     }
                     catch (Exception ex)

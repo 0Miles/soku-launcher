@@ -27,7 +27,7 @@ namespace SokuLauncher.UpdateCenter.Controls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public UpdateMaster UpdatesManager { get; set; }
+        public UpdateManager UpdateManager { get; set; }
 
         private int _Progress = 0;
         public int Progress
@@ -81,10 +81,10 @@ namespace SokuLauncher.UpdateCenter.Controls
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (UpdatesManager != null)
+            if (UpdateManager != null)
             {
-                UpdatesManager.DownloadProgressChanged += (progress) => Progress = progress;
-                UpdatesManager.StatusChanged += (status) => Status = status;
+                UpdateManager.DownloadProgressChanged += (progress) => Progress = progress;
+                UpdateManager.StatusChanged += (status) => Status = status;
             }
         }
     }

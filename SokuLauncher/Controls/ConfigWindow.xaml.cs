@@ -722,21 +722,21 @@ namespace SokuLauncher.Controls
                         }
                     };
 
-                    UpdateMaster updatesManager = new UpdateMaster(configUtil, ViewModel.ModManager);
+                    UpdateManager updatesManager = new UpdateManager(configUtil, ViewModel.ModManager);
 
                     ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")}";
 
                     //ViewModel.CheckForUpdatesButtonText = null;
                     bool? hasUpdates = await updatesManager.CheckForUpdates(
-                        Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
-                        Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
+                        Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
+                        Static.LanguageService.GetString("UpdateManager-CheckForUpdates-Completed"),
                         false);
 
                     if (hasUpdates == false)
                     {
                         MessageBox.Show(
-                            Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-AllLatest"),
-                            Static.LanguageService.GetString("UpdatesManager-MessageBox-Title"),
+                            Static.LanguageService.GetString("UpdateManager-CheckForUpdates-AllLatest"),
+                            Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
                     }
@@ -886,7 +886,7 @@ namespace SokuLauncher.Controls
                     Language = ViewModel.Language
                 }
             };
-            UpdateMaster updatesManager = new UpdateMaster(configUtil, ViewModel.ModManager);
+            UpdateManager updatesManager = new UpdateManager(configUtil, ViewModel.ModManager);
 
             await updatesManager.UpdateFromFile(filename);
 
