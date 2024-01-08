@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace SokuLauncher.Controls
+namespace SokuLauncher.UpdateCenter.Controls
 {
     public partial class UpdatingWindow : Window, INotifyPropertyChanged
     {
@@ -27,9 +27,7 @@ namespace SokuLauncher.Controls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public UpdatesManager UpdatesManager { get; set; }
-
-        public List<UpdateFileInfoModel> AvailableUpdateList { get; set; }
+        public UpdateMaster UpdatesManager { get; set; }
 
         private int _Progress = 0;
         public int Progress
@@ -48,7 +46,7 @@ namespace SokuLauncher.Controls
             }
         }
 
-        private string _Status = "";
+        private string _Status = Static.LanguageService.GetString("Common-Pending") + "...";
         public string Status
         {
             get

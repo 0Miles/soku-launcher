@@ -99,9 +99,7 @@ namespace SokuLauncher.Controls
                     ViewModel.SokuFileName = selectedFileName;
                     GetSokuFileIcon();
 
-                    ViewModel.ModManager = new ModManager(Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath)));
-                    ViewModel.ModManager.Refresh();
-                    ViewModel.ModManager.LoadSWRSToysSetting();
+                    ViewModel.ModManager.ChangeSokuDir(Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath)));
                     ViewModel.UpdateModsPathInfo();
                     ViewModel.ModInfoList = new ObservableCollection<ModInfoViewModel>(
                         ViewModel.ModManager.ModInfoList
@@ -172,11 +170,6 @@ namespace SokuLauncher.Controls
 
                 if (MainWindow.TryGetTarget(out MainWindow target))
                 {
-                    if (target.ViewModel.ConfigUtil.Config.VersionInfoUrl != ViewModel.VersionInfoUrl)
-                    {
-                        target.ViewModel.UpdatesManager.ClearVersionInfoJson();
-                    }
-
                     target.ViewModel.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
                     target.ViewModel.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
                     target.ViewModel.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
@@ -191,9 +184,7 @@ namespace SokuLauncher.Controls
 
                     if (target.ViewModel.ModManager.SokuDirFullPath != target.ViewModel.ConfigUtil.SokuDirFullPath)
                     {
-                        target.ViewModel.ModManager = new ModManager(target.ViewModel.ConfigUtil.SokuDirFullPath);
-                        target.ViewModel.ModManager.Refresh();
-                        target.ViewModel.ModManager.LoadSWRSToysSetting();
+                        target.ViewModel.ModManager.ChangeSokuDir(target.ViewModel.ConfigUtil.SokuDirFullPath);
                     }
                 }
 
@@ -731,27 +722,11 @@ namespace SokuLauncher.Controls
                         }
                     };
 
-                    UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModManager);
+                    UpdateMaster updatesManager = new UpdateMaster(configUtil, ViewModel.ModManager);
 
-                    var taskGetVersionInfoJson = updatesManager.GetVersionInfoJson();
+                    ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")}";
 
-                    Random random = new Random(Guid.NewGuid().GetHashCode());
-
-                    for (int i = 0; i < 100; i++)
-                    {
-                        ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")} {i}%";
-                        await Task.Delay(random.Next(200));
-                        i += random.Next(5);
-
-                        if (taskGetVersionInfoJson.IsCompleted)
-                        {
-                            ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")} 100%";
-                            await Task.Delay(100);
-                            break;
-                        }
-                    }
-                    await taskGetVersionInfoJson;
-                    ViewModel.CheckForUpdatesButtonText = null;
+                    //ViewModel.CheckForUpdatesButtonText = null;
                     bool? hasUpdates = await updatesManager.CheckForUpdates(
                         Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
                         Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed"),
@@ -911,7 +886,7 @@ namespace SokuLauncher.Controls
                     Language = ViewModel.Language
                 }
             };
-            UpdatesManager updatesManager = new UpdatesManager(configUtil, ViewModel.ModManager);
+            UpdateMaster updatesManager = new UpdateMaster(configUtil, ViewModel.ModManager);
 
             await updatesManager.UpdateFromFile(filename);
 

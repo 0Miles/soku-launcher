@@ -18,6 +18,7 @@
     <system:String x:Key="Common-UnsupportedFormat">不支援的格式</system:String>
     <system:String x:Key="Common-ModPackageFilter">Mod Package (*.zip)|*.zip|DLL (*.dll)|*.dll</system:String>
     <system:String x:Key="Common-ActionAbortedCheckingForUpdates">動作中止：正在檢查更新</system:String>
+    <system:String x:Key="Common-Pending">等待中</system:String>
 
     <system:String x:Key="App-ModSettingGroupNotFound">找不到 {0}</system:String>
 
@@ -55,7 +56,7 @@
     <system:String x:Key="UpdatesManager-InstallFromArchive-Desc">以下模組可供安裝，請確認您要安裝的模組</system:String>
     <system:String x:Key="UpdatesManager-InstallFromArchive-Completed">安裝完成</system:String>
     <system:String x:Key="UpdatesManager-NewModInstalled">有新安裝的模組，要立刻啟用嗎?</system:String>
-    
+
     <system:String x:Key="UpdatingWindow-Title">更新中</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">更新</system:String>
     <system:String x:Key="UpdateSelectionWindow-AutoCheckFouUpdatesCheckbox-Content">啟動時自動檢查更新</system:String>

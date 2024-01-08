@@ -1,14 +1,16 @@
 ﻿using SokuLauncher.Models;
+using SokuLauncher.UpdateCenter.Models;
 using SokuModManager.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
-namespace SokuLauncher.Controls
+namespace SokuLauncher.UpdateCenter.Controls
 {
     public partial class UpdateSelectionWindow : Window, INotifyPropertyChanged
     {
@@ -24,7 +26,7 @@ namespace SokuLauncher.Controls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public List<UpdateFileInfoModel> AvailableUpdateList { get; set; }
+        public ObservableCollection<UpdateSelectorNodeModel> UpdateSelectorNodeList { get; set; }
         public string Desc { get; set; }
 
         public bool IsAutoCheckForUpdatesCheckBoxShow { get; set; } = false;

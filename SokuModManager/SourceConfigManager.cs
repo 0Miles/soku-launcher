@@ -8,12 +8,12 @@ using System.Text.RegularExpressions;
 
 namespace SokuModManager
 {
-    public class SourceConfig
+    public class SourceConfigManager
     {
         private const string SOURCE_FILE_NAME = "sources.json";
         public List<SourceConfigModel> ConfigList { get; private set; } = new List<SourceConfigModel>();
 
-        public SourceConfig()
+        public SourceConfigManager()
         {
             Refresh();
         }

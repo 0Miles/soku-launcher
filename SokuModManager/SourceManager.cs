@@ -8,8 +8,28 @@ using System.Threading.Tasks;
 
 namespace SokuModManager
 {
+    public enum SourceManagerStatus
+    {
+        Pending,
+        Fetching
+    }
+
+    public class SourceManagerStatusChangedEventArgs : EventArgs
+    {
+        public SourceManagerStatus Status { get; set; }
+        public string Target { get; set; }
+        public int? Progress { get; set; }
+    }
+
     public class SourceManager
     {
+
+        public event EventHandler<SourceManagerStatusChangedEventArgs> SourceManagerStatusChanged;
+        private void OnSourceManagerStatusChanged(SourceManagerStatusChangedEventArgs e)
+        {
+            SourceManagerStatusChanged?.Invoke(this, e);
+        }
+
         public List<SourceModel> SourceList { get; private set; } = new List<SourceModel>();
         public readonly string SokuModSourceTempDirPath = Path.Combine(Path.GetTempPath(), "SokuModSource");
         private readonly List<SourceConfigModel> sourceConfigs;
@@ -27,6 +47,12 @@ namespace SokuModManager
             foreach (var source in SourceList)
             {
                 if (source.Url == null) continue;
+
+                OnSourceManagerStatusChanged(new SourceManagerStatusChangedEventArgs
+                {
+                    Status = SourceManagerStatus.Fetching,
+                    Target = source.Name
+                });
 
                 try
                 {

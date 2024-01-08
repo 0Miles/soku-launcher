@@ -21,7 +21,7 @@ namespace SokuLauncher
 
             LanguageService_OnChangeLanguage(ConfigUtil.GetLanguageCode(CultureInfo.CurrentCulture.Name));
 
-            await UpdatesManager.CheckSelfIsUpdating();
+            await UpdateMaster.CheckSelfIsUpdating();
 
             MainWindow mainWindow = new MainWindow();
 
@@ -56,7 +56,6 @@ namespace SokuLauncher
                     {
                         try
                         {
-                            await mainWindow.ViewModel.UpdatesManager.GetVersionInfoJson();
                             List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
                             checkModes.Add("SokuLauncher");
                             checkModes.Add("SokuModLoader");
@@ -111,7 +110,6 @@ namespace SokuLauncher
                 {
                     try
                     {
-                        await mainWindow.ViewModel.UpdatesManager.GetVersionInfoJson();
                         await Dispatcher.Invoke(() => mainWindow.ViewModel.UpdatesManager.CheckForUpdates(
                             Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
                             Static.LanguageService.GetString("UpdatesManager-CheckForUpdates-Completed")
