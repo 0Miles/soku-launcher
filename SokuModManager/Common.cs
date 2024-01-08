@@ -37,7 +37,7 @@ namespace SokuModManager
 
         public static async Task DownloadAndSaveFileAsync(string baseUrl, string relativeUrl, string saveFolder, string fileName)
         {
-            string fileUrl = Path.Combine(baseUrl, relativeUrl);
+            string fileUrl = new Uri(new Uri(baseUrl), relativeUrl).ToString();
             string filePath = Path.Combine(saveFolder, fileName);
 
             using (HttpClient client = new HttpClient())

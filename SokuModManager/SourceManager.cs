@@ -42,31 +42,54 @@ namespace SokuModManager
         public async Task FetchSourceList()
         {
             SourceList = sourceConfigs.Select(x => new SourceModel { Name = x.Name ?? "", Url = x.Url ?? "", PreferredDownloadLinkType = x.PreferredDownloadLinkType }).ToList();
-
+            OnSourceManagerStatusChanged(new SourceManagerStatusChangedEventArgs
+            {
+                Status = SourceManagerStatus.Fetching
+            });
+            
+            List<Task> tasks = new List<Task>();
 
             foreach (var source in SourceList)
             {
                 if (source.Url == null) continue;
 
-                OnSourceManagerStatusChanged(new SourceManagerStatusChangedEventArgs
-                {
-                    Status = SourceManagerStatus.Fetching,
-                    Target = source.Name
-                });
-
-                try
-                {
-                    var modulesUrl = Path.Combine(source.Url, "modules.json");
-                    var modulesJson = await Common.DownloadStringAsync(modulesUrl);
-                    if (modulesJson != null)
+                tasks.Add(
+                    Task.Run(async () =>
                     {
-                        source.ModuleSummaries = JsonConvert.DeserializeObject<List<SourceModuleSummaryModel>>(modulesJson) ?? new List<SourceModuleSummaryModel>();
-                        foreach (var moduleSummary in source.ModuleSummaries)
+                        try
                         {
-                            _ = DownloadModuleImageFiles(moduleSummary, source);
+                            await FetchModuleList(source);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogError($"Error fetching modules data for {source.Name}", ex);
+                        }
+                    })
+                );
+            }
+            await Task.WhenAll(tasks);
+        }
+
+        public async Task FetchModuleList(SourceModel source)
+        {
+            var modulesUrl = new Uri(new Uri(source.Url), "modules.json").ToString();
+            var modulesJson = await Common.DownloadStringAsync(modulesUrl);
+            if (modulesJson != null)
+            {
+                source.ModuleSummaries = JsonConvert.DeserializeObject<List<SourceModuleSummaryModel>>(modulesJson) ?? new List<SourceModuleSummaryModel>();
+
+                List<Task> tasks = new List<Task>();
+
+                foreach (var moduleSummary in source.ModuleSummaries)
+                {
+                    _ = DownloadModuleImageFiles(moduleSummary, source);
+                    tasks.Add(
+                        Task.Run(async () =>
+                        {
+
                             try
                             {
-                                var modInfoUrl = Path.Combine(source.Url, $"modules/{moduleSummary.Name}/mod.json");
+                                var modInfoUrl = new Uri(new Uri(source.Url), $"modules/{moduleSummary.Name}/mod.json").ToString();
 
                                 var modInfoJson = await Common.DownloadStringAsync(modInfoUrl);
                                 if (modInfoJson != null)
@@ -91,18 +114,15 @@ namespace SokuModManager
                             {
                                 Logger.LogError($"Error fetching module data for {moduleSummary.Name}", ex);
                             }
-                        }
+                        })
+                    );
+                }
 
-                    }
-                    else
-                    {
-                        Logger.LogInformation($"Error fetching modules data for {source.Name}: modules.json not found or empty");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError($"Error fetching modules data for {source.Name}", ex);
-                }
+                await Task.WhenAll(tasks);
+            }
+            else
+            {
+                Logger.LogInformation($"Error fetching modules data for {source.Name}: modules.json not found or empty");
             }
         }
 
@@ -138,7 +158,7 @@ namespace SokuModManager
 
         public static async Task<SourceModuleVersionModel> FetchModuleVersionInfo(SourceModel source, string moduleName, string versionNumber)
         {
-            var versionInfoUrl = Path.Combine(source.Url, $"modules/{moduleName}/versions/{versionNumber}/version.json");
+            var versionInfoUrl = new Uri(new Uri(source.Url), $"modules/{moduleName}/versions/{versionNumber}/version.json").ToString();
 
             var versionInfoJson = await Common.DownloadStringAsync(versionInfoUrl);
             if (versionInfoJson != null)

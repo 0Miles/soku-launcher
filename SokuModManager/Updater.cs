@@ -97,7 +97,7 @@ namespace SokuModManager
             return results;
         }
 
-        public static List<UpdateFileInfoModel> GetUpdateFileInfosFromZip(string path)
+        public List<UpdateFileInfoModel> GetUpdateFileInfosFromZip(string path)
         {
             string fileName = Path.GetFileName(path);
 
@@ -118,6 +118,7 @@ namespace SokuModManager
                         {
                             updateFileInfo.LocalArchiveUri = localArchiveUri;
                         }
+                        CompleteLocalModuleInfo(updateFileInfos);
                         return updateFileInfos;
                     }
                 }
@@ -128,7 +129,42 @@ namespace SokuModManager
             }
         }
 
-        public void RefreshAvailable(List<UpdateFileInfoModel> updateFileInfos, List<string> checkOnlyTheseMods = null)
+        public List<UpdateFileInfoModel> GetUpdateFileInfosFromSource(SourceModel source)
+        {
+            var updateFileInfos = source.Modules
+                .Where(x => !string.IsNullOrWhiteSpace(x.RecommendedVersionNumber) && x.RecommendedVersion != null)
+                .Select(module =>
+                {
+                    UpdateFileInfoModel newUpdateFileInfoModel = new UpdateFileInfoModel()
+                    {
+                        Name = module.Name,
+                        Description = module.Description,
+                        DescriptionI18n = module.DescriptionI18n,
+                        Version = module.RecommendedVersionNumber,
+                        Notes = module.RecommendedVersion?.Notes ?? "",
+                        NotesI18n = module.RecommendedVersion?.NotesI18n,
+                        FileName = module.RecommendedVersion?.Main ?? "",
+                        ConfigFiles = module.RecommendedVersion?.ConfigFiles,
+                        DownloadLinks = module.RecommendedVersion?.DownloadLinks,
+                        Compressed = true,
+                        UpdateWorkingDir = $"./{module.Name.ToLower()}",
+                        Icon = module.Icon,
+                        Banner = module.Banner
+                    };
+
+                    newUpdateFileInfoModel.DownloadLinks = newUpdateFileInfoModel.DownloadLinks?
+                        .OrderByDescending(link => link.Type == source.PreferredDownloadLinkType)
+                        .ToList();
+
+                    return newUpdateFileInfoModel;
+                })
+                .ToList();
+
+            CompleteLocalModuleInfo(updateFileInfos);
+            return updateFileInfos;
+        }
+
+        public void RefreshAvailable(List<UpdateFileInfoModel> updateFileInfos, List<string> checkOnlyTheseMods = null, bool forceAvailableInstall = false)
         {
             try
             {
@@ -141,48 +177,12 @@ namespace SokuModManager
                         continue;
                     }
 
-                    ModManager.Refresh();
-                    ModManager.LoadSWRSToysSetting();
-
-                    switch (updateFileInfo.Name)
-                    {
-                        case "SokuModLoader":
-                            updateFileInfo.LocalFileName = Path.Combine(ModManager.SokuDirFullPath, "d3d9.dll");
-                            updateFileInfo.LocalFileDir = ModManager.SokuDirFullPath;
-                            if (!ModManager.SWRSToysD3d9Exist)
-                            {
-                                updateFileInfo.Installed = false;
-                            }
-                            else
-                            {
-                                updateFileInfo.LocalFileVersion = ModManager.GetVersionFromDllFileOrVersionTxt(updateFileInfo.LocalFileName).ToString();
-                                updateFileInfo.Installed = true;
-                            }
-                            break;
-                        default:
-                            var modInfo = ModManager.GetModInfoByModName(updateFileInfo.Name) ?? ModManager.GetModInfoByModFileName(updateFileInfo.FileName);
-                            if (modInfo == null || !File.Exists(modInfo.FullPath))
-                            {
-                                updateFileInfo.Installed = false;
-                                updateFileInfo.LocalFileDir = Path.Combine(ModManager.DefaultModsDir, updateFileInfo.Name);
-                            }
-                            else
-                            {
-                                updateFileInfo.LocalFileName = modInfo.FullPath;
-                                updateFileInfo.LocalFileDir = Path.GetDirectoryName(modInfo.FullPath);
-                                updateFileInfo.LocalFileVersion = modInfo.Version;
-                                updateFileInfo.Icon = modInfo.Icon;
-                                updateFileInfo.Installed = true;
-                            }
-                            break;
-                    }
-
                     if (updateFileInfo.Version != updateFileInfo.LocalFileVersion && updateFileInfo.Installed)
                     {
                         AvailableUpdateList.Add(updateFileInfo);
                     }
 
-                    if (!updateFileInfo.Installed)
+                    if (!updateFileInfo.Installed || forceAvailableInstall)
                     {
                         AvailableInstallList.Add(updateFileInfo);
                     }
@@ -371,38 +371,48 @@ namespace SokuModManager
             Directory.Delete(updateWorkingDir, true);
         }
 
-        public static List<UpdateFileInfoModel> GetUpdateFileInfosFromSource(SourceModel source)
+        private void CompleteLocalModuleInfo(List<UpdateFileInfoModel> updateFileInfos)
         {
-            return source.Modules
-                .Where(x => !string.IsNullOrWhiteSpace(x.RecommendedVersionNumber) && x.RecommendedVersion != null)
-                .Select(module =>
+            foreach (UpdateFileInfoModel updateFileInfo in updateFileInfos)
+            {
+                ModManager.Refresh();
+                ModManager.LoadSWRSToysSetting();
+
+                switch (updateFileInfo.Name)
                 {
-                    UpdateFileInfoModel newUpdateFileInfoModel = new UpdateFileInfoModel()
-                    {
-                        Name = module.Name,
-                        Description = module.Description,
-                        DescriptionI18n = module.DescriptionI18n,
-                        Version = module.RecommendedVersionNumber,
-                        Notes = module.RecommendedVersion?.Notes ?? "",
-                        NotesI18n = module.RecommendedVersion?.NotesI18n,
-                        FileName = module.RecommendedVersion?.Main ?? "",
-                        ConfigFiles = module.RecommendedVersion?.ConfigFiles,
-                        DownloadLinks = module.RecommendedVersion?.DownloadLinks,
-                        Compressed = true,
-                        UpdateWorkingDir = $"./{module.Name.ToLower()}",
-                        Icon = module.Icon,
-                        Banner = module.Banner
-                    };
-
-                    newUpdateFileInfoModel.DownloadLinks = newUpdateFileInfoModel.DownloadLinks?
-                        .OrderByDescending(link => link.Type == source.PreferredDownloadLinkType)
-                        .ToList();
-
-                    return newUpdateFileInfoModel;
-                })
-                .ToList();
+                    case "SokuModLoader":
+                        updateFileInfo.LocalFileName = Path.Combine(ModManager.SokuDirFullPath, "d3d9.dll");
+                        updateFileInfo.LocalFileDir = ModManager.SokuDirFullPath;
+                        if (!ModManager.SWRSToysD3d9Exist)
+                        {
+                            updateFileInfo.Installed = false;
+                        }
+                        else
+                        {
+                            updateFileInfo.LocalFileVersion = ModManager.GetVersionFromDllFileOrVersionTxt(updateFileInfo.LocalFileName).ToString();
+                            updateFileInfo.Installed = true;
+                        }
+                        break;
+                    default:
+                        var modInfo = ModManager.GetModInfoByModName(updateFileInfo.Name) ?? ModManager.GetModInfoByModFileName(updateFileInfo.FileName);
+                        if (modInfo == null || !File.Exists(modInfo.FullPath))
+                        {
+                            updateFileInfo.Installed = false;
+                            updateFileInfo.LocalFileDir = Path.Combine(ModManager.DefaultModsDir, updateFileInfo.Name);
+                        }
+                        else
+                        {
+                            updateFileInfo.LocalFileName = modInfo.FullPath;
+                            updateFileInfo.LocalFileDir = Path.GetDirectoryName(modInfo.FullPath);
+                            updateFileInfo.LocalFileVersion = modInfo.Version;
+                            updateFileInfo.Icon = modInfo.Icon;
+                            updateFileInfo.Installed = true;
+                        }
+                        break;
+                }
+            }
         }
-
+        
         private static void CopyDirectory(string sourceDir, string destinationDir, bool recursive = true)
         {
             var dir = new DirectoryInfo(sourceDir);
