@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace SokuModManager
@@ -227,8 +228,9 @@ namespace SokuModManager
 
                 foreach (string downloadLink in downloadLinks)
                 {
+                    Uri uri = new Uri(downloadLink);
 
-                    string remoteFileName = Path.GetFileName(downloadLink);
+                    string remoteFileName = Path.GetFileName(uri.LocalPath);
                     string downloadToTempFilePath = Path.Combine(updateFileDir, remoteFileName);
 
                     try
