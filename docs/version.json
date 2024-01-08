@@ -8,21 +8,34 @@
                 "Content": "若主程式更新失敗，請至Mega下載新版本  \nhttps://mega.nz/folder/c7MCnBAL#nhBC_OmUoEOKuOzZu3rAgg"
             }
         ],
+        "Description": "SokuLauncher main program.",
+        "DescriptionI18n": [
+            {
+                "Language": "zh-TW",
+                "Content": "啟動器主程式"
+            }
+        ],
         "Version": "1.11.4.0",
         "FileName": "SokuLauncher.exe",
         "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v1.11.4.0/SokuLauncher.zip",
+        "DownloadLinks": [
+            {
+                "Type": "Github",
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v1.11.4.0/SokuLauncher.zip"
+            }
+        ],
         "Compressed": true
     },
     {
         "Name": "Giuroll",
-        "Desc": "fixed desyncs at the start of the set.",
-        "Version": "0.6.11.0",
+        "Desc": "- added support for a future desync detection mod  \n- fixed the \"stuck in stage select\" bug. It's triggered by either player staying on the after battle screen for too long.  \nThe frame one freeze mitigation was not the cause and will be included as an option again.",
+        "Version": "0.6.12.0",
         "FileName": "giuroll.dll",
         "ConfigFiles": [
             "giuroll.ini"
         ],
         "UpdateWorkingDir": "./giuroll",
-        "DownloadUrl": "https://github.com/Giufinn/giuroll/releases/download/0.6.11/giuroll_0_6_11.zip",
+        "DownloadUrl": "https://github.com/Giufinn/giuroll/releases/download/0.6.11/giuroll_0_6_12.zip",
         "Compressed": true
     },
     {
