@@ -153,7 +153,7 @@ namespace SokuModManager
                     };
 
                     newUpdateFileInfoModel.DownloadLinks = newUpdateFileInfoModel.DownloadLinks?
-                        .OrderByDescending(link => link.Type == source.PreferredDownloadLinkType)
+                        .OrderByDescending(link => link.Type.ToLower() == source.PreferredDownloadLinkType.ToLower())
                         .ToList();
 
                     return newUpdateFileInfoModel;

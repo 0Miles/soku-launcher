@@ -196,6 +196,17 @@ namespace SokuModManager
                         if (modInfo != null)
                         {
                             modInfo.Enabled = module.Value.Enabled;
+
+                            // 若來自啟動器的模組json檔的優先權為0，則不設定優先權
+                            if (modInfo.Priority == 0)
+                            {
+                                modInfo.Priority = null;
+                            }
+                            // 若ModLoaderSettings.json中有設定自訂優先權，則以ModLoaderSettings.json中的優先權為主
+                            if (module.Value.Priority != null)
+                            {
+                                modInfo.Priority = module.Value.Priority;
+                            }
                         }
                     }
                 }
@@ -320,7 +331,28 @@ namespace SokuModManager
             string modLoaderSettingsPath = Path.Combine(SokuDirFullPath, "ModLoaderSettings.json");
             if (File.Exists(modLoaderSettingsPath))
             {
-                File.Delete(modLoaderSettingsPath);
+                ModLoaderSettingsModel modLoaderSettingsModel = new ModLoaderSettingsModel
+                {
+                    Modules = ModInfoList
+                           .Select(modInfo =>
+                                new KeyValuePair<string, ModLoaderSettingsModuleModel>(
+                                    modInfo.RelativePath,
+                                    new ModLoaderSettingsModuleModel
+                                    {
+                                        Enabled = modInfo.Enabled,
+                                        Priority = modInfo.Priority
+                                    }
+                                ))
+                           .ToDictionary(x => x.Key, x => x.Value)
+                };
+
+                JsonSerializerSettings settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                };
+
+                File.WriteAllText(modLoaderSettingsPath, JsonConvert.SerializeObject(modLoaderSettingsModel, settings));
             }
 
             string iniFilePath = Path.Combine(SokuDirFullPath, "SWRSToys.ini");
@@ -330,7 +362,7 @@ namespace SokuModManager
 
                 writer.WriteLine("[Module]");
 
-                var sortedModInfoList = ModInfoList.OrderByDescending(mod => mod.Priority).ToList();
+                var sortedModInfoList = ModInfoList.OrderByDescending(mod => mod.Priority ?? 0).ToList();
                 foreach (var modInfo in sortedModInfoList)
                 {
                     writer.WriteLine((modInfo.Enabled ? "" : ";") + $"{modInfo.Name}={modInfo.RelativePath}");

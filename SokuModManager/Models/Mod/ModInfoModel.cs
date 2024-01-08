@@ -10,7 +10,7 @@ namespace SokuModManager.Models.Mod
         public string Description { get; set; }
         public List<I18nFieldModel> DescriptionI18n { get; set; }
         public string Author { get; set; }
-        public int Priority { get; set; } = 0;
+        public int? Priority { get; set; }
         public string Version { get; set; } = "";
 
         // path
