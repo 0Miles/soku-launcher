@@ -35,7 +35,7 @@
             "giuroll.ini"
         ],
         "UpdateWorkingDir": "./giuroll",
-        "DownloadUrl": "https://github.com/Giufinn/giuroll/releases/download/0.6.11/giuroll_0_6_12.zip",
+        "DownloadUrl": "https://github.com/Giufinn/giuroll/releases/download/0.6.12/giuroll_0_6_12.zip",
         "Compressed": true
     },
     {
