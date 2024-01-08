@@ -195,7 +195,7 @@ namespace SokuModManager
             }
         }
 
-        private async Task DownloadAndExtractFile(UpdateFileInfoModel updateFileInfo)
+        public async Task DownloadAndExtractFile(UpdateFileInfoModel updateFileInfo)
         {
             try
             {
@@ -260,7 +260,6 @@ namespace SokuModManager
                                         await fileStream.WriteAsync(buffer, 0, bytesRead);
                                         downloadedBytes += bytesRead;
 
-                                        // 這裡可以觸發進度更新事件
                                         int progressPercentage = (int)((double)downloadedBytes / totalBytes * 100);
                                         OnUpdaterStatusChanged(new UpdaterStatusChangedEventArgs
                                         {
@@ -293,7 +292,7 @@ namespace SokuModManager
             }
         }
 
-        private void CopyAndReplaceFile(UpdateFileInfoModel updateFileInfo)
+        public void CopyAndReplaceFile(UpdateFileInfoModel updateFileInfo)
         {
             OnUpdaterStatusChanged(new UpdaterStatusChangedEventArgs
             {

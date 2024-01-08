@@ -14,27 +14,26 @@ namespace SokuModManager
     public class ModManager
     {
         public const string MOD_VERSION_FILENAME_SUFFIX = ".version.txt";
-        private readonly string sokuDirFullPath;
-        public string SokuDirFullPath { get { return sokuDirFullPath; } }
+        public string SokuDirFullPath { get; private set; }
 
         public List<ModInfoModel> ModInfoList { get; private set; } = new List<ModInfoModel>();
 
         public List<string> ToBeDeletedDirList { get; private set; } = new List<string>();
 
         public string DefaultModsDir { get; private set; }
-        public bool SWRSToysD3d9Exist { get { return File.Exists(Path.Combine(sokuDirFullPath, "d3d9.dll")); } }
+        public bool SWRSToysD3d9Exist { get { return File.Exists(Path.Combine(SokuDirFullPath, "d3d9.dll")); } }
 
         public ModManager(string sokuDirFullPath = null)
         {
-            this.sokuDirFullPath = sokuDirFullPath ?? Common.ExecutableDir;
-            DefaultModsDir = Path.Combine(this.sokuDirFullPath, "modules");
+            SokuDirFullPath = sokuDirFullPath ?? Common.ExecutableDir;
+            DefaultModsDir = Path.Combine(SokuDirFullPath, "modules");
         }
 
         private ModInfoModel GetModInfo(string dllFilePath)
         {
             var dirName = Path.GetDirectoryName(dllFilePath);
             var fullPath = dllFilePath;
-            var relativePath = Common.GetRelativePath(dllFilePath, sokuDirFullPath);
+            var relativePath = Common.GetRelativePath(dllFilePath, SokuDirFullPath);
 
             var modInfoJsonFilename = Path.Combine(dirName, "mod.json");
 
@@ -85,6 +84,14 @@ namespace SokuModManager
             result.SameDirModPathList = dllFiles.Where(filePath => filePath != fullPath).ToList();
 
             return result;
+        }
+
+        public void ChangeSokuDir(string sokuDirFullPath)
+        {
+            SokuDirFullPath = sokuDirFullPath;
+            DefaultModsDir = Path.Combine(SokuDirFullPath, "modules");
+            Refresh();
+            LoadSWRSToysSetting();
         }
 
         public static Version GetVersionFromDllFileOrVersionTxt(string fileName)
@@ -161,7 +168,7 @@ namespace SokuModManager
 
         public void LoadSWRSToysSetting()
         {
-            string modLoaderSettingsPath = Path.Combine(sokuDirFullPath, "ModLoaderSettings.json");
+            string modLoaderSettingsPath = Path.Combine(SokuDirFullPath, "ModLoaderSettings.json");
             if (File.Exists(modLoaderSettingsPath))
             {
                 try
@@ -171,7 +178,7 @@ namespace SokuModManager
 
                     foreach (var module in modLoaderSettings?.Modules ?? new Dictionary<string, ModLoaderSettingsModuleModel>())
                     {
-                        string fullPath = Path.Combine(sokuDirFullPath, module.Key.Trim().Replace('/', Path.DirectorySeparatorChar));
+                        string fullPath = Path.Combine(SokuDirFullPath, module.Key.Trim().Replace('/', Path.DirectorySeparatorChar));
                         if (!File.Exists(fullPath))
                         {
                             continue;
@@ -201,7 +208,7 @@ namespace SokuModManager
             {
                 try
                 {
-                    string iniFilePath = Path.Combine(sokuDirFullPath, "SWRSToys.ini");
+                    string iniFilePath = Path.Combine(SokuDirFullPath, "SWRSToys.ini");
 
                     if (!File.Exists(iniFilePath))
                     {
@@ -233,7 +240,7 @@ namespace SokuModManager
                                 bool enabled = !splitedLine[0].StartsWith(";");
 
                                 string[] splitedPath = splitedLine[1].Split(';');
-                                string fullPath = Path.Combine(sokuDirFullPath, splitedPath[0].Trim().Replace('/', Path.DirectorySeparatorChar));
+                                string fullPath = Path.Combine(SokuDirFullPath, splitedPath[0].Trim().Replace('/', Path.DirectorySeparatorChar));
 
                                 if (!File.Exists(fullPath))
                                 {
@@ -308,15 +315,15 @@ namespace SokuModManager
 
         public void SaveSWRSToysIni()
         {
-            Directory.SetCurrentDirectory(sokuDirFullPath);
+            Directory.SetCurrentDirectory(SokuDirFullPath);
 
-            string modLoaderSettingsPath = Path.Combine(sokuDirFullPath, "ModLoaderSettings.json");
+            string modLoaderSettingsPath = Path.Combine(SokuDirFullPath, "ModLoaderSettings.json");
             if (File.Exists(modLoaderSettingsPath))
             {
                 File.Delete(modLoaderSettingsPath);
             }
 
-            string iniFilePath = Path.Combine(sokuDirFullPath, "SWRSToys.ini");
+            string iniFilePath = Path.Combine(SokuDirFullPath, "SWRSToys.ini");
 
             using (StreamWriter writer = new StreamWriter(iniFilePath))
             {

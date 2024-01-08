@@ -50,7 +50,7 @@ namespace SokuLauncher
                 MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            ViewModel.UpdatesManager = new UpdatesManager(ViewModel.ConfigUtil, ViewModel.ModManager);
+            ViewModel.UpdatesManager = new UpdateMaster(ViewModel.ConfigUtil, ViewModel.ModManager);
 
             InitializeComponent();
         }
@@ -144,12 +144,7 @@ namespace SokuLauncher
                         void StatusChanged(string status) => ViewModel.SelectedSokuModSettingGroup.Status = status;
                         ViewModel.UpdatesManager.DownloadProgressChanged += DownloadProgressChanged;
                         ViewModel.UpdatesManager.StatusChanged += StatusChanged;
-                        if (string.IsNullOrWhiteSpace(ViewModel.UpdatesManager.VersionInfoJson))
-                        {
-                            ViewModel.SelectedSokuModSettingGroup.Status = Static.LanguageService.GetString("Common-CheckVersionInfo");
-                            await Task.Delay(200);
-                            await ViewModel.UpdatesManager.GetVersionInfoJson();
-                        }
+                        ViewModel.SelectedSokuModSettingGroup.Status = Static.LanguageService.GetString("Common-CheckVersionInfo");
 
                         List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
                         checkModes.Add("SokuModLoader");
@@ -305,11 +300,6 @@ namespace SokuLauncher
                 configWindowShowing = true;
                 try
                 {
-                    if (ViewModel.ConfigUtil.Config.AutoCheckForUpdates && string.IsNullOrWhiteSpace(ViewModel.UpdatesManager.VersionInfoJson))
-                    {
-                        ViewModel.UpdatesManager.StopCheckForUpdates();
-                    }
-
                     ModManager configModManager = new ModManager(ViewModel.ConfigUtil.SokuDirFullPath);
                     configModManager.Refresh();
                     configModManager.LoadSWRSToysSetting();
@@ -399,11 +389,6 @@ namespace SokuLauncher
         {
             var menuItem = (MenuItem)sender;
             var modSettingGroupId = (string)menuItem.Tag;
-
-            if (ViewModel.ConfigUtil.Config.AutoCheckForUpdates && string.IsNullOrWhiteSpace(ViewModel.UpdatesManager.VersionInfoJson))
-            {
-                ViewModel.UpdatesManager.StopCheckForUpdates();
-            }
 
             ModManager configModManager = new ModManager(ViewModel.ConfigUtil.SokuDirFullPath);
             configModManager.Refresh();
@@ -508,26 +493,18 @@ namespace SokuLauncher
 
         private void DropArea_Drop(object sender, DragEventArgs e)
         {
-            if (ViewModel.UpdatesManager.IsVersionInfoJsonDownloading)
+            _ = Task.Run(() =>
             {
-                MessageBox.Show(Static.LanguageService.GetString("Common-ActionAbortedCheckingForUpdates"), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                _ = Task.Run(() =>
+                Dispatcher.Invoke(async () =>
                 {
-                    Dispatcher.Invoke(async () =>
-                    {
-                        string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                        if (files != null && files.Length > 0)
-                        {
-                            await ViewModel.UpdatesManager.UpdateFromFile(files[0]);
-                        }
-                    });
+                    if (files != null && files.Length > 0)
+                    {
+                        await ViewModel.UpdatesManager.UpdateFromFile(files[0]);
+                    }
                 });
-            }
+            });
         }
     }
 }
