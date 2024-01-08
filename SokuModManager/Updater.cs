@@ -199,7 +199,7 @@ namespace SokuModManager
         {
             try
             {
-                string downloadUri;
+                List<string> downloadLinks;
                 string updateFileDir;
 
                 if (updateFileInfo.FromLocalArchive)
@@ -210,12 +210,12 @@ namespace SokuModManager
                     {
                         return;
                     }
-                    downloadUri = updateFileInfo.LocalArchiveUri;
+                    downloadLinks = new List<string> { updateFileInfo.LocalArchiveUri };
                 }
                 else
                 {
                     if (updateFileInfo.DownloadLinks == null || updateFileInfo.DownloadLinks.Count == 0) throw new Exception($"{updateFileInfo.Name} no download link");
-                    downloadUri = updateFileInfo.DownloadLinks.First().Url;
+                    downloadLinks = updateFileInfo.DownloadLinks.Select(x => x.Url).ToList();
                     updateFileDir = Path.Combine(sokuModUpdateTempDirPath, updateFileInfo.Name);
                     if (Directory.Exists(updateFileDir))
                     {
@@ -225,64 +225,79 @@ namespace SokuModManager
 
                 Directory.CreateDirectory(updateFileDir);
 
-                string remoteFileName = Path.GetFileName(downloadUri);
-                string downloadToTempFilePath = Path.Combine(updateFileDir, remoteFileName);
-
-                using (HttpClient client = new HttpClient())
+                foreach (string downloadLink in downloadLinks)
                 {
 
-                    client.Timeout = TimeSpan.FromMinutes(10);
+                    string remoteFileName = Path.GetFileName(downloadLink);
+                    string downloadToTempFilePath = Path.Combine(updateFileDir, remoteFileName);
 
-                    using (HttpResponseMessage response = await client.GetAsync(downloadUri, HttpCompletionOption.ResponseHeadersRead))
+                    try
                     {
-                        // 確認回應狀態碼為成功
-                        response.EnsureSuccessStatusCode();
-
-                        // 確認 Content Headers 中有 Content-Length，以確定進度
-                        if (response.Content.Headers.TryGetValues("Content-Length", out var contentLengthValues))
+                        using (HttpClient client = new HttpClient())
                         {
-                            long totalBytes = long.Parse(contentLengthValues?.First() ?? "0");
-                            long downloadedBytes = 0;
 
-                            // 開啟目標檔案，並使用 Response Content 中的資料寫入
-                            using (FileStream fileStream = File.OpenWrite(downloadToTempFilePath))
+                            client.Timeout = TimeSpan.FromMinutes(10);
+
+                            using (HttpResponseMessage response = await client.GetAsync(downloadLink, HttpCompletionOption.ResponseHeadersRead))
                             {
+                                // 確認回應狀態碼為成功
+                                response.EnsureSuccessStatusCode();
 
-                                using (Stream contentStream = await response.Content.ReadAsStreamAsync())
+                                // 確認 Content Headers 中有 Content-Length，以確定進度
+                                if (response.Content.Headers.TryGetValues("Content-Length", out var contentLengthValues))
                                 {
+                                    long totalBytes = long.Parse(contentLengthValues?.First() ?? "0");
+                                    long downloadedBytes = 0;
 
-                                    byte[] buffer = new byte[8192];
-                                    int bytesRead;
-
-                                    // 逐步讀取和寫入檔案
-                                    while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                                    // 開啟目標檔案，並使用 Response Content 中的資料寫入
+                                    using (FileStream fileStream = File.OpenWrite(downloadToTempFilePath))
                                     {
-                                        await fileStream.WriteAsync(buffer, 0, bytesRead);
-                                        downloadedBytes += bytesRead;
 
-                                        int progressPercentage = (int)((double)downloadedBytes / totalBytes * 100);
-                                        OnUpdaterStatusChanged(new UpdaterStatusChangedEventArgs
+                                        using (Stream contentStream = await response.Content.ReadAsStreamAsync())
                                         {
-                                            Status = UpdaterStatus.Downloading,
-                                            Target = updateFileInfo.Name,
-                                            Progress = progressPercentage
-                                        });
+
+                                            byte[] buffer = new byte[8192];
+                                            int bytesRead;
+
+                                            // 逐步讀取和寫入檔案
+                                            while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                                            {
+                                                await fileStream.WriteAsync(buffer, 0, bytesRead);
+                                                downloadedBytes += bytesRead;
+
+                                                int progressPercentage = (int)((double)downloadedBytes / totalBytes * 100);
+                                                OnUpdaterStatusChanged(new UpdaterStatusChangedEventArgs
+                                                {
+                                                    Status = UpdaterStatus.Downloading,
+                                                    Target = updateFileInfo.Name,
+                                                    Progress = progressPercentage
+                                                });
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
-
-                if (updateFileInfo.Compressed)
-                {
-                    OnUpdaterStatusChanged(new UpdaterStatusChangedEventArgs
+                    catch (Exception ex)
                     {
-                        Status = UpdaterStatus.Extracting,
-                        Target = updateFileInfo.Name
-                    });
-                    ZipFile.ExtractToDirectory(downloadToTempFilePath, updateFileDir);
-                    File.Delete(downloadToTempFilePath);
+                        Logger.LogError(string.Format("Failed to download {0}", downloadLink), ex);
+                        continue;
+                    }
+
+                    
+
+                    if (updateFileInfo.Compressed)
+                    {
+                        OnUpdaterStatusChanged(new UpdaterStatusChangedEventArgs
+                        {
+                            Status = UpdaterStatus.Extracting,
+                            Target = updateFileInfo.Name
+                        });
+                        ZipFile.ExtractToDirectory(downloadToTempFilePath, updateFileDir);
+                        File.Delete(downloadToTempFilePath);
+                    }
+                    break;
                 }
             }
             catch (Exception ex)
