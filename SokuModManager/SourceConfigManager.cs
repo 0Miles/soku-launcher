@@ -92,6 +92,11 @@ namespace SokuModManager
             Save();
         }
 
+        public void LoadConfigList(List<SourceConfigModel> configList)
+        {
+            ConfigList = configList;
+        }
+
         public void Refresh()
         {
             try

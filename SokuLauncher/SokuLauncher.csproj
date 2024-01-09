@@ -150,10 +150,10 @@
     <Compile Include="Controls\SelectIconWindow.xaml.cs">
       <DependentUpon>SelectIconWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UpdateCenter\Controls\UpdateSelectionWindow.xaml.cs">
+    <Compile Include="UpdateManager\Controls\UpdateSelectionWindow.xaml.cs">
       <DependentUpon>UpdateSelectionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UpdateCenter\Controls\UpdatingWindow.xaml.cs">
+    <Compile Include="UpdateManager\Controls\UpdatingWindow.xaml.cs">
       <DependentUpon>UpdatingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\MarkdownToFlowDocumentConverter.cs" />
@@ -175,13 +175,13 @@
     <Compile Include="Models\ModInfoViewModel.cs" />
     <Compile Include="Models\SelectorNodeModel.cs" />
     <Compile Include="Static.cs" />
-    <Compile Include="UpdateCenter\Models\SelectorNodeModel.cs" />
+    <Compile Include="UpdateManager\Models\SelectorNodeModel.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
     <Compile Include="Utils\Debouncer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utils\ResourcesManager.cs" />
     <Compile Include="Utils\ShellLink.cs" />
-    <Compile Include="UpdateCenter\UpdateManager.cs" />
+    <Compile Include="UpdateManager\UpdateManager.cs" />
     <Compile Include="Models\ModSettingGroupViewModel.cs" />
     <Compile Include="Models\MainWindwoViewModel.cs" />
     <Compile Include="Models\ConfigWindowViewModel.cs" />
@@ -219,11 +219,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UpdateCenter\Controls\UpdateSelectionWindow.xaml">
+    <Page Include="UpdateManager\Controls\UpdateSelectionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UpdateCenter\Controls\UpdatingWindow.xaml">
+    <Page Include="UpdateManager\Controls\UpdatingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

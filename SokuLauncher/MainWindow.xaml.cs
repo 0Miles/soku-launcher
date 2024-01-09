@@ -1,8 +1,8 @@
 ﻿using SokuLauncher.Controls;
-using SokuLauncher.Models;
 using SokuLauncher.Utils;
 using SokuLauncher.ViewModels;
 using SokuModManager;
+using SokuModManager.Models.Source;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +14,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 
 namespace SokuLauncher
 {
@@ -148,14 +147,21 @@ namespace SokuLauncher
 
                         List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
                         checkModes.Add("SokuModLoader");
-                        await ViewModel.UpdateManager.CheckForUpdates(
-                            Static.LanguageService.GetString("UpdateManager-CheckForInstallable-UpdateSelectionWindow-Desc"),
-                            null,
-                            false,
+                        var updateList = await ViewModel.UpdateManager.CheckForUpdates(
                             false,
                             true,
-                            checkModes,
-                            false);
+                            checkModes
+                        );
+                        if (updateList?.Count > 0)
+                        {
+                            await ViewModel.UpdateManager.SelectAndUpdate(
+                                updateList,
+                                Static.LanguageService.GetString("UpdateManager-CheckForInstallable-UpdateSelectionWindow-Desc"),
+                                null,
+                                false,
+                                false
+                            );
+                        }
                         ViewModel.ModManager.Refresh();
                         ViewModel.ModManager.LoadSWRSToysSetting();
 
@@ -329,7 +335,8 @@ namespace SokuLauncher
                             AutoCheckForUpdates = ViewModel.ConfigUtil.Config.AutoCheckForUpdates,
                             AutoCheckForInstallable = ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
                             VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
-                            Language = ViewModel.ConfigUtil.Config.Language
+                            Language = ViewModel.ConfigUtil.Config.Language,
+                            Sources = new ObservableCollection<SourceConfigModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.Sources)),
                         }
                     );
                     configModManager = null;
@@ -421,6 +428,7 @@ namespace SokuLauncher
                     AutoCheckForInstallable = ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
                     VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
                     Language = ViewModel.ConfigUtil.Config.Language,
+                    Sources = new ObservableCollection<SourceConfigModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.Sources)),
                 }
             );
 

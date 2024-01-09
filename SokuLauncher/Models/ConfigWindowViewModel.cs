@@ -1,6 +1,7 @@
 ﻿using SokuLauncher.Models;
 using SokuLauncher.Utils;
 using SokuModManager;
+using SokuModManager.Models.Source;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -261,5 +262,21 @@ namespace SokuLauncher.ViewModels
             new SelectorNodeModel { Title = "中文 (简体)", Code = "zh-Hans"},
             new SelectorNodeModel { Title = "English", Code = "en" }
         };
+
+
+        private ObservableCollection<SourceConfigModel> _Sources;
+        public ObservableCollection<SourceConfigModel> Sources
+        {
+            get
+            {
+                return _Sources;
+            }
+            set
+            {
+                _Sources = value;
+                Saveable = true;
+                RaisePropertyChanged("Sources");
+            }
+        }
     }
 }

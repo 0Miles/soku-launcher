@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace SokuLauncher.UpdateCenter.Controls
+namespace SokuLauncher.Controls
 {
     public partial class UpdatingWindow : Window, INotifyPropertyChanged
     {

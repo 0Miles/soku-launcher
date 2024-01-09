@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using SokuLauncher.UpdateCenter.Controls;
-using SokuLauncher.UpdateCenter.Models;
+using SokuLauncher.Controls;
+using SokuLauncher.Models;
 using SokuModManager;
 using System;
 using System.Collections.Generic;
@@ -42,8 +42,17 @@ namespace SokuLauncher.Utils
             CurrentModManager = modManager;
 
             SourceConfigManager sourceConfigManager = new SourceConfigManager();
-            sourceConfigManager.Refresh();
-            CurrentSourceManager = new SourceManager(sourceConfigManager.ConfigList);
+
+            if (CurrentConfigUtil.Config.Sources != null)
+            {
+                sourceConfigManager.LoadConfigList(CurrentConfigUtil.Config.Sources);
+            }
+            else
+            {
+                sourceConfigManager.Refresh();
+            }
+
+            CurrentSourceManager = new SourceManager(sourceConfigManager.ConfigList.Where((_, index) => index == 0).ToList());
             CurrentSourceManager.SourceManagerStatusChanged += (sender, e) =>
             {
                 DownloadProgressChanged?.Invoke(e.Progress ?? 0);
@@ -85,7 +94,7 @@ namespace SokuLauncher.Utils
         }
 
         private readonly List<Guid> checkForUpdatesGuidList = new List<Guid>();
-        public async Task<bool?> CheckForUpdates(string desc = null, string complatedMessage = null, bool isAutoUpdates = true, bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null, bool isShowUpdating = true)
+        public async Task<List<UpdateFileInfoModel>> CheckForUpdates(bool checkForUpdates = true, bool checkForInstallable = false, List<string> modsToCheckList = null)
         {
             try
             {
@@ -99,7 +108,10 @@ namespace SokuLauncher.Utils
                     var selfUpdateFileInfo = await GetAvailableSelfUpdateFileInfo();
                     if (selfUpdateFileInfo != null)
                     {
-                        updateList.Add(selfUpdateFileInfo);
+                        if (new Version(selfUpdateFileInfo.Version) > new Version(selfUpdateFileInfo.LocalFileVersion))
+                        {
+                            updateList.Add(selfUpdateFileInfo);
+                        }
                     }
                 }
                 await FetchSourceListTask;
@@ -127,7 +139,7 @@ namespace SokuLauncher.Utils
                 {
                     checkForUpdatesGuidList.Clear();
                 }
-                return await SelectAndUpdate(updateList, desc, complatedMessage, isAutoUpdates, isShowUpdating);
+                return updateList;
             }
             catch (Exception ex)
             {

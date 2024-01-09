@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -59,14 +60,15 @@ namespace SokuLauncher
                             List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
                             checkModes.Add("SokuLauncher");
                             checkModes.Add("SokuModLoader");
-                            await mainWindow.ViewModel.UpdateManager.CheckForUpdates(
-                                Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
-                                null,
-                                true,
+                            var updateList = await mainWindow.ViewModel.UpdateManager.CheckForUpdates(
                                 true,
                                 mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
-                                checkModes,
-                                true);
+                                checkModes
+                            );
+                            if (updateList?.Count > 0)
+                            {
+                                await mainWindow.ViewModel.UpdateManager.SelectAndUpdate(updateList, Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"));
+                            }
                             mainWindow.ViewModel.ModManager.Refresh();
                             mainWindow.ViewModel.ModManager.LoadSWRSToysSetting();
                         }
@@ -102,18 +104,24 @@ namespace SokuLauncher
                 Current.Shutdown();
             }
 
-            mainWindow.Show();
-
             if (mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForUpdates)
             {
                 _ = Task.Run(async () =>
                 {
                     try
                     {
-                        await Dispatcher.Invoke(() => mainWindow.ViewModel.UpdateManager.CheckForUpdates(
-                            Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
-                            Static.LanguageService.GetString("UpdateManager-CheckForUpdates-Completed")
-                            ));
+                        await Dispatcher.Invoke(async () =>
+                        {
+                            var updateList = await mainWindow.ViewModel.UpdateManager.CheckForUpdates();
+                            if (updateList?.Count > 0)
+                            {
+                                await mainWindow.ViewModel.UpdateManager.SelectAndUpdate(
+                                    updateList,
+                                    Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
+                                    Static.LanguageService.GetString("UpdateManager-CheckForUpdates-Completed")
+                                );
+                            }
+                        });
                     }
                     catch (Exception ex)
                     {
@@ -121,6 +129,8 @@ namespace SokuLauncher
                     }
                 });
             }
+
+            mainWindow.Show();
         }
 
         public App()

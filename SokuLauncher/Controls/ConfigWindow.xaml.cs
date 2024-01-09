@@ -718,7 +718,8 @@ namespace SokuLauncher.Controls
                             AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
                             AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
                             VersionInfoUrl = ViewModel.VersionInfoUrl,
-                            Language = ViewModel.Language
+                            Language = ViewModel.Language,
+                            Sources = ViewModel.Sources.ToList()
                         }
                     };
 
@@ -726,19 +727,43 @@ namespace SokuLauncher.Controls
 
                     ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")}";
 
-                    //ViewModel.CheckForUpdatesButtonText = null;
-                    bool? hasUpdates = await updatesManager.CheckForUpdates(
-                        Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
-                        Static.LanguageService.GetString("UpdateManager-CheckForUpdates-Completed"),
-                        false);
+                    var taskGetVersionInfoJson = updatesManager.CheckForUpdates();
 
-                    if (hasUpdates == false)
+                    Random random = new Random(Guid.NewGuid().GetHashCode());
+
+                    for (int i = 0; i < 100; i++)
                     {
-                        MessageBox.Show(
-                            Static.LanguageService.GetString("UpdateManager-CheckForUpdates-AllLatest"),
-                            Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
+                        ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")} {i}%";
+                        await Task.Delay(random.Next(500));
+                        i += random.Next(3);
+
+                        if (taskGetVersionInfoJson.IsCompleted)
+                        {
+                            ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")} 100%";
+                            await Task.Delay(100);
+                            break;
+                        }
+                    }
+
+                    var updateList = await taskGetVersionInfoJson;
+                    ViewModel.CheckForUpdatesButtonText = null;
+                    if (updateList?.Count > 0)
+                    {
+                        bool? hasUpdates = await updatesManager.SelectAndUpdate(
+                            updateList,
+                            Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
+                            Static.LanguageService.GetString("UpdateManager-CheckForUpdates-Completed"),
+                            false
+                        );
+
+                        if (hasUpdates == false)
+                        {
+                            MessageBox.Show(
+                                Static.LanguageService.GetString("UpdateManager-CheckForUpdates-AllLatest"),
+                                Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
+                        }
                     }
 
                     ViewModel.ModManager.Refresh();
@@ -883,7 +908,8 @@ namespace SokuLauncher.Controls
                     AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
                     AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
                     VersionInfoUrl = ViewModel.VersionInfoUrl,
-                    Language = ViewModel.Language
+                    Language = ViewModel.Language,
+                    Sources = ViewModel.Sources.ToList()
                 }
             };
             UpdateManager updatesManager = new UpdateManager(configUtil, ViewModel.ModManager);

@@ -4,6 +4,7 @@ using SokuLauncher.Controls;
 using SokuLauncher.Models;
 using SokuLauncher.ViewModels;
 using SokuModManager.Models.Mod;
+using SokuModManager.Models.Source;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -214,6 +215,46 @@ namespace SokuLauncher.Utils
                 },
             };
             config.VersionInfoUrl = "https://soku.latte.today/version.json";
+
+            if (config.Language == "zh-Hans")
+            {
+                config.VersionInfoUrl = "https://gitee.com/milestw/soku-launcher/raw/main/docs/version.json";
+                config.Sources = new List<SourceConfigModel>
+                {
+                    new SourceConfigModel
+                    {
+                        Name = "SokuCN-gitee",
+                        Url = "https://gitee.com/soku-cn/main-source/raw/main/",
+                        PreferredDownloadLinkType = "gitee"
+                    },
+                    new SourceConfigModel
+                    {
+                        Name = "SokuCN-github",
+                        Url = "https://soku-cn.latte.today",
+                        PreferredDownloadLinkType = "github"
+                    }
+                };
+            }
+            else
+            {
+                config.VersionInfoUrl = "https://soku.latte.today/version.json";
+                config.Sources = new List<SourceConfigModel>
+                {
+                    new SourceConfigModel
+                    {
+                        Name = "SokuCN-github",
+                        Url = "https://soku-cn.latte.today",
+                        PreferredDownloadLinkType = "github"
+                    },
+                    new SourceConfigModel
+                    {
+                        Name = "SokuCN-gitee",
+                        Url = "https://gitee.com/soku-cn/main-source/raw/main/",
+                        PreferredDownloadLinkType = "gitee"
+                    },
+                };
+            }
+
             return config;
         }
 

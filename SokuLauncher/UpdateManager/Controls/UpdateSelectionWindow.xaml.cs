@@ -1,5 +1,5 @@
 ﻿using SokuLauncher.Models;
-using SokuLauncher.UpdateCenter.Models;
+using SokuLauncher.Models;
 using SokuModManager.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
-namespace SokuLauncher.UpdateCenter.Controls
+namespace SokuLauncher.Controls
 {
     public partial class UpdateSelectionWindow : Window, INotifyPropertyChanged
     {
