@@ -103,15 +103,16 @@ namespace SokuLauncher.Controls
                     ViewModel.UpdateModsPathInfo();
                     ViewModel.ModInfoList = new ObservableCollection<ModInfoViewModel>(
                         ViewModel.ModManager.ModInfoList
-                            .Select(x => new ModInfoViewModel() { 
-                                Name = x.Name, 
+                            .Select(x => new ModInfoViewModel()
+                            {
+                                Name = x.Name,
                                 FullPath = x.FullPath,
-                                RelativePath = x.RelativePath, 
-                                DirName = x.DirName, 
+                                RelativePath = x.RelativePath,
+                                DirName = x.DirName,
                                 Enabled = x.Enabled,
                                 Version = x.Version,
-                                Icon = x.Icon, 
-                                ConfigFileList = x.ConfigFiles, 
+                                Icon = x.Icon,
+                                ConfigFileList = x.ConfigFiles,
                             })
                     );
                 }
@@ -734,7 +735,7 @@ namespace SokuLauncher.Controls
                     for (int i = 0; i < 100; i++)
                     {
                         ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")} {i}%";
-                        await Task.Delay(random.Next(500));
+                        await Task.Delay(random.Next(300));
                         i += random.Next(3);
 
                         if (taskGetVersionInfoJson.IsCompleted)
@@ -749,21 +750,20 @@ namespace SokuLauncher.Controls
                     ViewModel.CheckForUpdatesButtonText = null;
                     if (updateList?.Count > 0)
                     {
-                        bool? hasUpdates = await updatesManager.SelectAndUpdate(
+                        await updatesManager.SelectAndUpdate(
                             updateList,
                             Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
                             Static.LanguageService.GetString("UpdateManager-CheckForUpdates-Completed"),
                             false
                         );
-
-                        if (hasUpdates == false)
-                        {
-                            MessageBox.Show(
+                    }
+                    else
+                    {
+                        MessageBox.Show(
                                 Static.LanguageService.GetString("UpdateManager-CheckForUpdates-AllLatest"),
                                 Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information);
-                        }
                     }
 
                     ViewModel.ModManager.Refresh();
