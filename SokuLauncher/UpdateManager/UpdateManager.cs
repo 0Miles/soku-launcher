@@ -43,7 +43,7 @@ namespace SokuLauncher.Utils
 
             SourceConfigManager sourceConfigManager = new SourceConfigManager();
 
-            if (CurrentConfigUtil.Config.Sources != null)
+            if (CurrentConfigUtil.Config.Sources?.Count > 0)
             {
                 sourceConfigManager.LoadConfigList(CurrentConfigUtil.Config.Sources);
             }
