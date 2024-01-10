@@ -720,7 +720,8 @@ namespace SokuLauncher.Controls
                             AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
                             VersionInfoUrl = ViewModel.VersionInfoUrl,
                             Language = ViewModel.Language,
-                            Sources = ViewModel.Sources.ToList()
+                            Sources = ViewModel.Sources.ToList(),
+                            AdditionalExecutablePaths = ViewModel.AdditionalExecutablePaths.ToList()
                         }
                     };
 
@@ -909,7 +910,8 @@ namespace SokuLauncher.Controls
                     AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
                     VersionInfoUrl = ViewModel.VersionInfoUrl,
                     Language = ViewModel.Language,
-                    Sources = ViewModel.Sources.ToList()
+                    Sources = ViewModel.Sources.ToList(),
+                    AdditionalExecutablePaths = ViewModel.AdditionalExecutablePaths.ToList()
                 }
             };
             UpdateManager updatesManager = new UpdateManager(configUtil, ViewModel.ModManager);
@@ -983,7 +985,8 @@ namespace SokuLauncher.Controls
                     AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
                     VersionInfoUrl = ViewModel.VersionInfoUrl,
                     Language = ViewModel.Language,
-                    Sources = ViewModel.Sources.ToList()
+                    Sources = ViewModel.Sources.ToList(),
+                    AdditionalExecutablePaths = ViewModel.AdditionalExecutablePaths.ToList()
                 }
             };
             UpdateManager updatesManager = new UpdateManager(configUtil, ViewModel.ModManager);

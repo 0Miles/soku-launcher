@@ -337,6 +337,7 @@ namespace SokuLauncher
                             VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
                             Language = ViewModel.ConfigUtil.Config.Language,
                             Sources = new ObservableCollection<SourceConfigModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.Sources)),
+                            AdditionalExecutablePaths = new ObservableCollection<string>(Static.DeepCopy(ViewModel.ConfigUtil.Config.AdditionalExecutablePaths)),
                         }
                     );
                     configModManager = null;
@@ -429,6 +430,7 @@ namespace SokuLauncher
                     VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
                     Language = ViewModel.ConfigUtil.Config.Language,
                     Sources = new ObservableCollection<SourceConfigModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.Sources)),
+                    AdditionalExecutablePaths = new ObservableCollection<string>(Static.DeepCopy(ViewModel.ConfigUtil.Config.AdditionalExecutablePaths)),
                 }
             );
 

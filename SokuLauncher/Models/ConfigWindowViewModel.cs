@@ -278,5 +278,20 @@ namespace SokuLauncher.ViewModels
                 RaisePropertyChanged("Sources");
             }
         }
+
+        private ObservableCollection<string> _AdditionalExecutablePaths;
+        public ObservableCollection<string> AdditionalExecutablePaths
+        {
+            get
+            {
+                return _AdditionalExecutablePaths;
+            }
+            set
+            {
+                _AdditionalExecutablePaths = value;
+                Saveable = true;
+                RaisePropertyChanged("AdditionalExecutablePaths");
+            }
+        }
     }
 }
