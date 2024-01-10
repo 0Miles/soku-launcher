@@ -163,6 +163,31 @@ namespace SokuLauncher.Utils
         {
             if (updateFileInfoList.Count > 0)
             {
+                foreach (var updateFileInfo in updateFileInfoList)
+                {
+                    if (updateFileInfo.DescriptionI18n != null)
+                    {
+                        string localDesc =
+                            updateFileInfo.DescriptionI18n.FirstOrDefault(x => x.Language == CurrentConfigUtil.Config.Language)?.Content
+                            ?? updateFileInfo.DescriptionI18n.FirstOrDefault(x => x.Language != null && x.Language.Split('-')[0] == CurrentConfigUtil.Config.Language.Split('-')[0])?.Content;
+                        if (!string.IsNullOrWhiteSpace(localDesc))
+                        {
+                            updateFileInfo.Description = localDesc;
+                        }
+                    }
+
+                    if (updateFileInfo.NotesI18n != null)
+                    {
+                        string localNotes =
+                            updateFileInfo.NotesI18n.FirstOrDefault(x => x.Language == CurrentConfigUtil.Config.Language)?.Content
+                            ?? updateFileInfo.NotesI18n.FirstOrDefault(x => x.Language != null && x.Language.Split('-')[0] == CurrentConfigUtil.Config.Language.Split('-')[0])?.Content;
+                        if (!string.IsNullOrWhiteSpace(localNotes))
+                        {
+                            updateFileInfo.Notes = localNotes;
+                        }
+                    }
+                }
+
                 UpdateSelectionWindow updateSelectionWindow = new UpdateSelectionWindow
                 {
                     Desc = desc,
@@ -395,27 +420,6 @@ namespace SokuLauncher.Utils
                 Version currentVersion = GetCurrentVersion(updateFileInfo.LocalFileName);
                 updateFileInfo.LocalFileVersion = currentVersion.ToString();
 
-                if (updateFileInfo.DescriptionI18n != null)
-                {
-                    string localDesc =
-                        updateFileInfo.DescriptionI18n.FirstOrDefault(x => x.Language == CurrentConfigUtil.Config.Language)?.Content
-                        ?? updateFileInfo.DescriptionI18n.FirstOrDefault(x => x.Language != null && x.Language.Split('-')[0] == CurrentConfigUtil.Config.Language.Split('-')[0])?.Content;
-                    if (!string.IsNullOrWhiteSpace(localDesc))
-                    {
-                        updateFileInfo.Description = localDesc;
-                    }
-                }
-
-                if (updateFileInfo.NotesI18n != null)
-                {
-                    string localDesc =
-                        updateFileInfo.NotesI18n.FirstOrDefault(x => x.Language == CurrentConfigUtil.Config.Language)?.Content
-                        ?? updateFileInfo.NotesI18n.FirstOrDefault(x => x.Language != null && x.Language.Split('-')[0] == CurrentConfigUtil.Config.Language.Split('-')[0])?.Content;
-                    if (!string.IsNullOrWhiteSpace(localDesc))
-                    {
-                        updateFileInfo.Notes = localDesc;
-                    }
-                }
                 return updateFileInfo;
             }
             catch (Exception ex)
