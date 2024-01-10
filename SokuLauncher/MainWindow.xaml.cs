@@ -565,5 +565,11 @@ namespace SokuLauncher
                     MessageBoxImage.Information);
             }
         }
+
+        private void DragWindow(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+                DragMove();
+        }
     }
 }
