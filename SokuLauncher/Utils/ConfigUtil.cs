@@ -224,7 +224,7 @@ namespace SokuLauncher.Utils
                     new SourceConfigModel
                     {
                         Name = "SokuCN-gitee",
-                        Url = "https://gitee.com/soku-cn/main-source/raw/main/",
+                        Url = "https://soku-cn.gitee.io/main-source/",
                         PreferredDownloadLinkType = "gitee"
                     },
                     new SourceConfigModel
