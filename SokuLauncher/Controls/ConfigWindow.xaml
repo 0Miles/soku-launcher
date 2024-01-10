@@ -385,7 +385,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="{DynamicResource ConfigWindow-Tab-Mod}">
-                <local:ModListUserControl x:Name="ConfigModListUserControl" ModInfoList="{Binding ModInfoList}" SelectionChanged="ModListUserControl_SelectionChanged" ModDeleted="ModListUserControl_ModDeleted" ModUndeleted="ModListUserControl_ModUndeleted" InstallButtonClick="ConfigModListUserControl_InstallButtonClick" DropFile="ConfigModListUserControl_DropFile" />
+                <local:ModListUserControl x:Name="ConfigModListUserControl" ModInfoList="{Binding ModInfoList}" SelectionChanged="ModListUserControl_SelectionChanged" ModDeleted="ModListUserControl_ModDeleted" ModUndeleted="ModListUserControl_ModUndeleted" InstallButtonClick="ConfigModListUserControl_InstallButtonClick" DropFile="ConfigModListUserControl_DropFile" DownloadButtonClick="ConfigModListUserControl_DownloadButtonClick" />
             </TabItem>
             <TabItem Header="{DynamicResource ConfigWindow-Tab-Path}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">

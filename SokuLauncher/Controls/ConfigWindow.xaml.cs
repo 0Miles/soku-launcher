@@ -896,6 +896,79 @@ namespace SokuLauncher.Controls
             }
         }
 
+        private async void ConfigModListUserControl_DownloadButtonClick(object arg1, RoutedEventArgs arg2)
+        {
+            ConfigUtil configUtil = new ConfigUtil
+            {
+                Config = new ConfigModel
+                {
+                    SokuDirPath = ViewModel.SokuDirPath,
+                    SokuFileName = ViewModel.SokuFileName,
+                    SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
+                    AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
+                    AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
+                    VersionInfoUrl = ViewModel.VersionInfoUrl,
+                    Language = ViewModel.Language,
+                    Sources = ViewModel.Sources.ToList()
+                }
+            };
+            UpdateManager updatesManager = new UpdateManager(configUtil, ViewModel.ModManager);
+
+            UpdatingWindow updatingWindow = new UpdatingWindow
+            {
+                UpdateManager = updatesManager,
+                IsIndeterminate = true
+            };
+
+            updatingWindow.Show();
+            var updateList = await updatesManager.CheckForUpdates(
+                            false,
+                            true
+                        );
+            updatingWindow.Close();
+            if (updateList?.Count > 0)
+            {
+                if (
+                    await updatesManager.SelectAndUpdate(
+                        updateList,
+                        Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Desc"),
+                        Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Completed"),
+                        false,
+                        true,
+                        false
+                    ) == true
+                )
+                {
+                    ViewModel.ModManager.Refresh();
+                    ViewModel.ModManager.LoadSWRSToysSetting();
+
+                    if (updateList.Any(x => x.Installed == false))
+                    {
+                        if (MessageBox.Show(
+                                Static.LanguageService.GetString("UpdateManager-NewModInstalled"),
+                                Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            foreach (var mod in updateList.Where(x => x.Installed == false).ToList())
+                            {
+                                ViewModel.ModManager.ChangeModEnabled(mod.Name, true);
+                            }
+                            ViewModel.ModManager.SaveSWRSToysIni();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show(
+                    Static.LanguageService.GetString("UpdateManager-AllAvailableModsInstalled"),
+                    Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+        }
+
         private async Task InsatllModFromFile(string filename)
         {
             installingModFromArchive = true;

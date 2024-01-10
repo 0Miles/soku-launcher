@@ -70,6 +70,7 @@
     <system:String x:Key="ModListUserControl-Delete">Delete</system:String>
     <system:String x:Key="ModListUserControl-Undelete">Undelete</system:String>
     <system:String x:Key="ModListUserControl-Button-Install">Install</system:String>
+    <system:String x:Key="ModListUserControl-Button-Download">Download</system:String>
     <system:String x:Key="EditIniSettingsWindow-Title">Edit ini Settings</system:String>
 
     <system:String x:Key="ConfigWindow-Title">Config</system:String>

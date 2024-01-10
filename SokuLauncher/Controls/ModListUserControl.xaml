@@ -28,16 +28,30 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Cursor="Hand" Click="InsatllButton_Click">
-                <StackPanel Orientation="Horizontal" IsHitTestVisible="False">
-                    <Path Stroke="Green" RenderTransformOrigin=".5,.5" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center" Data="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M14 7l6 0 M17 4l0 6">
-                        <Path.RenderTransform>
-                            <ScaleTransform ScaleX=".8" ScaleY=".8"/>
-                        </Path.RenderTransform>
-                    </Path>
-                    <TextBlock Text="{DynamicResource ModListUserControl-Button-Install}" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
+            <StackPanel Orientation="Horizontal">
+                <Button Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Cursor="Hand" Click="InsatllButton_Click">
+                    <StackPanel Orientation="Horizontal" IsHitTestVisible="False">
+                        <Path Stroke="Green" RenderTransformOrigin=".5,.5" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center" Data="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z M14 7l6 0 M17 4l0 6">
+                            <Path.RenderTransform>
+                                <ScaleTransform ScaleX=".8" ScaleY=".8"/>
+                            </Path.RenderTransform>
+                        </Path>
+                        <TextBlock Text="{DynamicResource ModListUserControl-Button-Install}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Padding="8,4" Background="#FFEFEFEF" BorderThickness="0" Cursor="Hand" Click="DownloadButton_Click">
+                    <StackPanel Orientation="Horizontal" IsHitTestVisible="False">
+
+                        <Path Stroke="Green" RenderTransformOrigin=".5,.5" StrokeThickness="2" Fill="Transparent" StrokeLineJoin="Round" Width="24" Height="24" VerticalAlignment="Center" Data="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2 M7 11l5 5l5 -5 M12 4l0 12">
+                            <Path.RenderTransform>
+                                <ScaleTransform ScaleX=".8" ScaleY=".8"/>
+                            </Path.RenderTransform>
+                        </Path>
+                        <TextBlock Text="{DynamicResource ModListUserControl-Button-Download}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                
+            </StackPanel>
             <Border Grid.Column="2" Width="180" Margin="4" Height="22" BorderBrush="DarkGray" BorderThickness="1" Background="White" >
                 <Grid>
                     <Grid.ColumnDefinitions>

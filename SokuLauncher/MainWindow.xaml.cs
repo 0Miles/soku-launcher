@@ -519,10 +519,18 @@ namespace SokuLauncher
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
+            UpdatingWindow updatingWindow = new UpdatingWindow
+            {
+                UpdateManager = ViewModel.UpdateManager,
+                IsIndeterminate = true
+            };
+
+            updatingWindow.Show();
             var updateList = await ViewModel.UpdateManager.CheckForUpdates(
                             false,
                             true
                         );
+            updatingWindow.Close();
             if (updateList?.Count > 0)
             {
                 if (

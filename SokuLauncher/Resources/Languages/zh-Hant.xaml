@@ -70,6 +70,8 @@
     <system:String x:Key="ModListUserControl-Delete">刪除</system:String>
     <system:String x:Key="ModListUserControl-Undelete">取消刪除</system:String>
     <system:String x:Key="ModListUserControl-Button-Install">安裝</system:String>
+    <system:String x:Key="ModListUserControl-Button-Download">下載</system:String>
+    <system:String x:Key="EditIniSettingsWindow-Title">編輯 ini 設定</system:String>
 
     <system:String x:Key="ConfigWindow-Title">設定</system:String>
     <system:String x:Key="ConfigWindow-Tab-Launcher">啟動器</system:String>
@@ -94,7 +96,6 @@
     <system:String x:Key="ConfigWindow-LauncherTab-Settings">設定</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-EnableMods">啟用模組:</system:String>
     <system:String x:Key="ConfigWindow-LauncherTab-DisableMods">停用模組:</system:String>
-    <system:String x:Key="EditIniSettingsWindow-Title">編輯 ini 設定</system:String>
 
     <system:String x:Key="ConfigWindow-PathTab-Browse">瀏覽</system:String>
     <system:String x:Key="ConfigWindow-PathTab-Info">相關資訊</system:String>

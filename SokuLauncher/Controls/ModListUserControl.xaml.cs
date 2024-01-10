@@ -30,6 +30,7 @@ namespace SokuLauncher.Controls
         public event Action<object, RoutedEventArgs> ModDeleted;
         public event Action<object, RoutedEventArgs> ModUndeleted;
         public event Action<object, RoutedEventArgs> InstallButtonClick;
+        public event Action<object, RoutedEventArgs> DownloadButtonClick;
         public event Action<object, DragEventArgs> DropFile;
         private readonly Debouncer SearchDebouncer = new Debouncer(600);
 
@@ -220,6 +221,11 @@ namespace SokuLauncher.Controls
         {
             DoubleAnimation animation = new DoubleAnimation(targetOpacity, new Duration(TimeSpan.FromSeconds(0.3)));
             DropHighlightBlock.BeginAnimation(OpacityProperty, animation);
+        }
+
+        private void DownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            DownloadButtonClick(sender, e);
         }
     }
 }

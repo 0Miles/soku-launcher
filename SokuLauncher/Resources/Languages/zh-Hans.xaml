@@ -70,6 +70,7 @@
     <system:String x:Key="ModListUserControl-Delete">删除</system:String>
     <system:String x:Key="ModListUserControl-Undelete">取消删除</system:String>
     <system:String x:Key="ModListUserControl-Button-Install">安装</system:String>
+    <system:String x:Key="ModListUserControl-Button-Download">下载</system:String>
     <system:String x:Key="EditIniSettingsWindow-Title">编辑 ini 设定</system:String>
 
     <system:String x:Key="ConfigWindow-Title">设置</system:String>

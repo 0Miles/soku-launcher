@@ -89,7 +89,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Border Grid.Row="0" CornerRadius="2" Background="Gray" Cursor="ScrollAll" Height="32" VerticalAlignment="Top" MouseLeftButtonDown="DragWindow">
+            <Border Grid.Row="0" CornerRadius="2" Background="#015F5F5F" Cursor="ScrollAll" Height="32" VerticalAlignment="Top" MouseLeftButtonDown="DragWindow">
                 <Border.Triggers>
                     <EventTrigger RoutedEvent="MouseEnter">
                         <BeginStoryboard>
