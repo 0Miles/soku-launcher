@@ -10,8 +10,13 @@ namespace SokuModManager
 {
     public class Common
     {
-        public static string ExecutableFileName { get; internal set; } = System.Reflection.Assembly.GetExecutingAssembly().Location;
-        public static string ExecutableDir { get; internal set; } = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) ?? AppContext.BaseDirectory;
+        public static string ExecutableFileName { get; internal set; } = System.Reflection.Assembly.GetEntryAssembly().Location;
+        public static string ExecutableDir {
+            get
+            {
+                return Path.GetDirectoryName(ExecutableFileName);
+            }
+        }
 
         public static string GetFilePath(string filename)
         {
