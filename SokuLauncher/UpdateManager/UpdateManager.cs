@@ -70,7 +70,7 @@ namespace SokuLauncher.Utils
             {
                 DownloadProgressChanged?.Invoke(e.Progress ?? 0);
 
-                switch(e.Status)
+                switch (e.Status)
                 {
                     case UpdaterStatus.Downloading:
                         StatusChanged?.Invoke(string.Format(Static.LanguageService.GetString("UpdateManager-DownloadAndExtractFile-Downloading"), e.Target) + $" {e.Progress}%");
@@ -153,7 +153,13 @@ namespace SokuLauncher.Utils
             checkForUpdatesGuidList.Clear();
         }
 
-        public async Task<bool?> SelectAndUpdate(List<UpdateFileInfoModel> updateFileInfoList, string desc = null, string complatedMessage = null, bool isAutoUpdates = true, bool isShowUpdating = true)
+        public async Task<bool?> SelectAndUpdate(
+            List<UpdateFileInfoModel> updateFileInfoList,
+            string desc = null,
+            string complatedMessage = null,
+            bool isAutoUpdates = true,
+            bool isShowUpdating = true,
+            bool isDefaultAllChecked = true)
         {
             if (updateFileInfoList.Count > 0)
             {
@@ -170,7 +176,7 @@ namespace SokuLauncher.Utils
                             LocalFileVersion = x.LocalFileVersion,
                             Installed = x.Installed,
                             Icon = x.Icon,
-                            Selected = true
+                            Selected = isDefaultAllChecked
                         }
                     )),
                     IsAutoCheckForUpdatesCheckBoxShow = isAutoUpdates,
@@ -190,11 +196,21 @@ namespace SokuLauncher.Utils
 
                 if (isRunUpdate)
                 {
-
                     var selectedUpdates = updateSelectionWindow.UpdateSelectorNodeList.Where(x => x.Selected).Select(x => updateFileInfoList.First(updateFile => updateFile.Name == x.Name)).ToList();
-                    await ExecuteUpdates(selectedUpdates, isShowUpdating, complatedMessage);
+                    if (selectedUpdates.Count > 0)
+                    {
+                        await ExecuteUpdates(selectedUpdates, isShowUpdating, complatedMessage);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-                return true;
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -319,8 +335,8 @@ namespace SokuLauncher.Utils
                 await SelectAndUpdate(
                     CurrentUpdater.AvailableUpdateList.Concat(CurrentUpdater.AvailableInstallList).ToList(),
                     Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Desc"),
-                    Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Completed"), 
-                    false, 
+                    Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Completed"),
+                    false,
                     true);
 
                 CurrentModManager.Refresh();
@@ -423,7 +439,7 @@ namespace SokuLauncher.Utils
                 string modName = Path.GetFileNameWithoutExtension(fileName);
                 string modDir = Path.GetDirectoryName(fileName);
                 string modVersionFileName = Path.Combine(modDir, $"{modName}{MOD_VERSION_FILENAME_SUFFIX}");
-                
+
                 if (File.Exists(modVersionFileName))
                 {
                     modCurrentVersion = File.ReadAllText(modVersionFileName);
@@ -492,7 +508,8 @@ namespace SokuLauncher.Utils
 
                 updatingWindow.Status = Static.LanguageService.GetString("UpdateManager-Updating") + "...";
 
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     string args = "";
                     try
                     {

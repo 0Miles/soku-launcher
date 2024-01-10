@@ -754,7 +754,8 @@ namespace SokuLauncher.Controls
                             updateList,
                             Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
                             Static.LanguageService.GetString("UpdateManager-CheckForUpdates-Completed"),
-                            false
+                            false,
+                            true
                         );
                     }
                     else

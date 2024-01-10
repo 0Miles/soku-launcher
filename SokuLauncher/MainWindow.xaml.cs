@@ -516,5 +516,54 @@ namespace SokuLauncher
                 });
             });
         }
+
+        private async void DownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            var updateList = await ViewModel.UpdateManager.CheckForUpdates(
+                            false,
+                            true
+                        );
+            if (updateList?.Count > 0)
+            {
+                if (
+                    await ViewModel.UpdateManager.SelectAndUpdate(
+                        updateList,
+                        Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Desc"),
+                        Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Completed"),
+                        false,
+                        true,
+                        false
+                    ) == true
+                )
+                {
+                    ViewModel.ModManager.Refresh();
+                    ViewModel.ModManager.LoadSWRSToysSetting();
+
+                    if (updateList.Any(x => x.Installed == false))
+                    {
+                        if (MessageBox.Show(
+                                Static.LanguageService.GetString("UpdateManager-NewModInstalled"),
+                                Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            foreach (var mod in updateList.Where(x => x.Installed == false).ToList())
+                            {
+                                ViewModel.ModManager.ChangeModEnabled(mod.Name, true);
+                            }
+                            ViewModel.ModManager.SaveSWRSToysIni();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show(
+                    Static.LanguageService.GetString("UpdateManager-AllAvailableModsInstalled"), 
+                    Static.LanguageService.GetString("UpdateManager-MessageBox-Title"), 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Information);
+            }
+        }
     }
 }

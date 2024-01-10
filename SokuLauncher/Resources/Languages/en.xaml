@@ -56,7 +56,8 @@
     <system:String x:Key="UpdateManager-InstallFromArchive-Desc">The following mods are available for installation. Please check the mods you want to install.</system:String>
     <system:String x:Key="UpdateManager-InstallFromArchive-Completed">Installation complete</system:String>
     <system:String x:Key="UpdateManager-NewModInstalled">One or more new mods have been installed, do you want to enable them now?</system:String>
-    
+    <system:String x:Key="UpdateManager-AllAvailableModsInstalled">All available mods installed.</system:String>
+
     <system:String x:Key="UpdatingWindow-Title">Updating</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">Updates</system:String>
     <system:String x:Key="UpdateSelectionWindow-AutoCheckFouUpdatesCheckbox-Content">Auto check for updates on startup</system:String>

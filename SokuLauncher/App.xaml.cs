@@ -67,7 +67,10 @@ namespace SokuLauncher
                             );
                             if (updateList?.Count > 0)
                             {
-                                await mainWindow.ViewModel.UpdateManager.SelectAndUpdate(updateList, Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"));
+                                await mainWindow.ViewModel.UpdateManager.SelectAndUpdate(
+                                    updateList, 
+                                    Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc")
+                                );
                             }
                             mainWindow.ViewModel.ModManager.Refresh();
                             mainWindow.ViewModel.ModManager.LoadSWRSToysSetting();

@@ -56,6 +56,7 @@
     <system:String x:Key="UpdateManager-InstallFromArchive-Desc">以下模組可供安裝，請確認您要安裝的模組</system:String>
     <system:String x:Key="UpdateManager-InstallFromArchive-Completed">安裝完成</system:String>
     <system:String x:Key="UpdateManager-NewModInstalled">有新安裝的模組，要立刻啟用嗎?</system:String>
+    <system:String x:Key="UpdateManager-AllAvailableModsInstalled">已安裝所有可供安裝的模組</system:String>
 
     <system:String x:Key="UpdatingWindow-Title">更新中</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">更新</system:String>

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:converters="clr-namespace:SokuLauncher.Converters"
         xmlns:md="clr-namespace:Neo.Markdig.Xaml;assembly=Neo.Markdig.Xaml"
         mc:Ignorable="d"
+        x:Name="SokuLauncherUpdateSelectionWindow"
         Title="{DynamicResource UpdateSelectionWindow-Title}" MaxHeight="720" MinHeight="320" Width="560" ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
@@ -103,8 +104,14 @@
                                                     </StackPanel>
                                                 </Canvas>
                                             </Grid>
-                                            
-                                            <FlowDocumentScrollViewer Margin="8" Document="{Binding Desc, Converter={StaticResource MarkdownToFlowDocumentConverter}}" Padding="0" BorderThickness="0" VerticalScrollBarVisibility="Auto" MaxWidth="420">
+
+                                            <FlowDocumentScrollViewer Margin="8" Document="{Binding Desc, Converter={StaticResource MarkdownToFlowDocumentConverter}}" Visibility="{Binding Installed, Converter={StaticResource ReverseBooleanToVisibilityConverter}}" Padding="0" BorderThickness="0" VerticalScrollBarVisibility="Auto" MaxWidth="420">
+                                                <FlowDocumentScrollViewer.CommandBindings>
+                                                    <CommandBinding Command="{x:Static md:MarkdownXaml.Hyperlink}" Executed="CommandBinding_Executed" />
+                                                </FlowDocumentScrollViewer.CommandBindings>
+                                            </FlowDocumentScrollViewer>
+
+                                            <FlowDocumentScrollViewer Margin="8" Document="{Binding Notes, Converter={StaticResource MarkdownToFlowDocumentConverter}}" Visibility="{Binding Installed, Converter={StaticResource BooleanToVisibilityConverter}}" Padding="0" BorderThickness="0" VerticalScrollBarVisibility="Auto" MaxWidth="420">
                                                 <FlowDocumentScrollViewer.CommandBindings>
                                                     <CommandBinding Command="{x:Static md:MarkdownXaml.Hyperlink}" Executed="CommandBinding_Executed" />
                                                 </FlowDocumentScrollViewer.CommandBindings>
