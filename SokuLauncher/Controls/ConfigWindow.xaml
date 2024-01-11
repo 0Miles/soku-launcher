@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Converters" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
+        xmlns:local="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" xmlns:converters="clr-namespace:SokuLauncher.Shared.Converters;assembly=SokuLauncher.Shared" d:DataContext="{d:DesignInstance Type=viewmodels:ConfigWindowViewModel}"
         mc:Ignorable="d" Closing="Window_Closing"
         Title="{DynamicResource ConfigWindow-Title}" MinWidth="500" MinHeight="520" Width="600" Height="720" WindowStartupLocation="CenterScreen">
     <Window.Resources>

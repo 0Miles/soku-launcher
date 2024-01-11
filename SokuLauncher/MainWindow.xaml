@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SokuLauncher" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:converters="clr-namespace:SokuLauncher.Converters" xmlns:controls="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindwoViewModel}"
+        xmlns:local="clr-namespace:SokuLauncher" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:converters="clr-namespace:SokuLauncher.Shared.Converters;assembly=SokuLauncher.Shared" xmlns:controls="clr-namespace:SokuLauncher.Controls" xmlns:viewmodels="clr-namespace:SokuLauncher.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
         x:Name="SokuLauncherMainWindow" Background="{x:Null}" AllowsTransparency="True" WindowStyle="None" Activated="SokuLauncherMainWindow_Activated" AllowDrop="True" Drop="DropArea_Drop"
         Title="SokuLauncher" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" SizeToContent="WidthAndHeight" Icon="/Resources/icon.ico">

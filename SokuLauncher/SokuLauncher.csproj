@@ -147,50 +147,13 @@
     <Compile Include="Controls\ModSettingGroupEditWindow.xaml.cs">
       <DependentUpon>ModSettingGroupEditWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SelectIconWindow.xaml.cs">
-      <DependentUpon>SelectIconWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UpdateManager\Controls\UpdateSelectionWindow.xaml.cs">
-      <DependentUpon>UpdateSelectionWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UpdateManager\Controls\UpdatingWindow.xaml.cs">
-      <DependentUpon>UpdatingWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Converters\MarkdownToFlowDocumentConverter.cs" />
-    <Compile Include="Converters\IsLastItemConverter.cs" />
-    <Compile Include="Converters\ListCountToBoolenConverter.cs" />
-    <Compile Include="Converters\NullToVisibilityConverter.cs" />
-    <Compile Include="Converters\PathToImageSourceConverter.cs" />
-    <Compile Include="Converters\PathToBackgroundConverter.cs" />
-    <Compile Include="Converters\FileNameConverter.cs" />
-    <Compile Include="Converters\BooleanToFloatConverter.cs" />
-    <Compile Include="Converters\ReverseBooleanConverter.cs" />
-    <Compile Include="Converters\ReverseStringToVisibilityConverter.cs" />
-    <Compile Include="Converters\IsFirstItemConverter.cs" />
-    <Compile Include="Converters\StringToVisibilityConverter.cs" />
-    <Compile Include="Converters\ReverseBooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\RelativePathConverter.cs" />
-    <Compile Include="LanguageService.cs" />
     <Compile Include="Models\ModSettingInfoModel.cs" />
-    <Compile Include="Models\ModInfoViewModel.cs" />
-    <Compile Include="Models\SelectorNodeModel.cs" />
-    <Compile Include="Static.cs" />
-    <Compile Include="UpdateManager\Models\SelectorNodeModel.cs" />
-    <Compile Include="Utils\ConfigUtil.cs" />
-    <Compile Include="Utils\Debouncer.cs" />
+    <Compile Include="ViewModels\ModInfoViewModel.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Utils\ResourcesManager.cs" />
-    <Compile Include="Utils\ShellLink.cs" />
-    <Compile Include="UpdateManager\UpdateManager.cs" />
-    <Compile Include="Models\ModSettingGroupViewModel.cs" />
-    <Compile Include="Models\MainWindwoViewModel.cs" />
-    <Compile Include="Models\ConfigWindowViewModel.cs" />
-    <Compile Include="Models\ModSettingGroupEditWindowViewModel.cs" />
-    <Compile Include="Models\SelectorWindowViewModel.cs" />
-    <Compile Include="Models\ViewModelBase.cs" />
-    <Compile Include="Controls\SelectorWindow.xaml.cs">
-      <DependentUpon>SelectorWindow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="ViewModels\ModSettingGroupViewModel.cs" />
+    <Compile Include="ViewModels\MainWindwoViewModel.cs" />
+    <Compile Include="ViewModels\ConfigWindowViewModel.cs" />
+    <Compile Include="ViewModels\ModSettingGroupEditWindowViewModel.cs" />
     <Page Include="Controls\ConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -215,30 +178,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\SelectIconWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UpdateManager\Controls\UpdateSelectionWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UpdateManager\Controls\UpdatingWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Resource Include="Resources\Languages\zh-Hans.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Resource>
-    <Resource Include="Resources\Languages\en.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Resource>
-    <Resource Include="Resources\Languages\zh-Hant.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Resource>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -251,13 +190,8 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\SelectorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ConfigModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -324,6 +258,14 @@
     <EmbeddedResource Include="Resources\Icons\lnk3.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SokuLauncher.Shared\SokuLauncher.Shared.csproj">
+      <Project>{0a80ffee-8ad6-4101-b670-33ff336f70d9}</Project>
+      <Name>SokuLauncher.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SokuLauncher.UpdateCenter\SokuLauncher.UpdateCenter.csproj">
+      <Project>{D2594D93-643C-47C0-86D7-D16C148F997F}</Project>
+      <Name>SokuLauncher.UpdateCenter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SokuModManager\SokuModManager.csproj">
       <Project>{9f9b0e07-deed-4cba-95ae-8ea402e8dfb6}</Project>
       <Name>SokuModManager</Name>

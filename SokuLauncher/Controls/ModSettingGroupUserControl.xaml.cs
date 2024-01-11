@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using SokuLauncher.Models;
 using SokuLauncher.ViewModels;
 
 namespace SokuLauncher.Controls

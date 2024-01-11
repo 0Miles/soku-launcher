@@ -1,11 +1,13 @@
-﻿using SokuLauncher.Utils;
+﻿using SokuLauncher.Shared;
+using SokuLauncher.Shared.Utils;
+using SokuLauncher.UpdateCenter;
+using SokuModManager;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -17,15 +19,15 @@ namespace SokuLauncher
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-
             Static.StartupArgs = e.Args;
-
             LanguageService_OnChangeLanguage(ConfigUtil.GetLanguageCode(CultureInfo.CurrentCulture.Name));
 
+            // check if there is a new version of SokuLauncher
             await UpdateManager.CheckSelfIsUpdating();
 
             MainWindow mainWindow = new MainWindow();
 
+            // if startup args contains file path, update or install mod from file
             if (Static.StartupArgs.Length > 0)
             {
                 List<string> paths = Static.StartupArgs.Where(x => File.Exists(x)).ToList();
@@ -38,6 +40,8 @@ namespace SokuLauncher
                 }
             }
 
+            
+            // start soku with mod setting group id as argument -s <mod setting group id>
             if (Static.StartupArgs.Length > 1 && Static.StartupArgs[0] == "-s")
             {
                 try
@@ -48,10 +52,10 @@ namespace SokuLauncher
 
                     if (!File.Exists(sokuFile))
                     {
-                        throw new Exception(string.Format(Static.LanguageService.GetString("MainWindow-SokuFileNotFound"), mainWindow.ViewModel.ConfigUtil.Config.SokuFileName));
+                        throw new Exception(string.Format(LanguageService.GetString("MainWindow-SokuFileNotFound"), mainWindow.ViewModel.ConfigUtil.Config.SokuFileName));
                     }
 
-                    var settingGroup = mainWindow.ViewModel.ConfigUtil.Config.SokuModSettingGroups.FirstOrDefault(x => x.Id.ToLower() == modSettingGroupId.ToLower() || x.Name.ToLower() == modSettingGroupId.ToLower()) ?? throw new Exception(string.Format(Static.LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId));
+                    var settingGroup = mainWindow.ViewModel.ConfigUtil.Config.SokuModSettingGroups.FirstOrDefault(x => x.Id.ToLower() == modSettingGroupId.ToLower() || x.Name.ToLower() == modSettingGroupId.ToLower()) ?? throw new Exception(string.Format(LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId));
 
                     if (mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForUpdates)
                     {
@@ -69,7 +73,7 @@ namespace SokuLauncher
                             {
                                 await mainWindow.ViewModel.UpdateManager.SelectAndUpdate(
                                     updateList, 
-                                    Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc")
+                                    LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc")
                                 );
                             }
                             mainWindow.ViewModel.ModManager.Refresh();
@@ -77,7 +81,7 @@ namespace SokuLauncher
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message, Static.LanguageService.GetString("UpdateManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(ex.Message, LanguageService.GetString("UpdateManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                     mainWindow.ViewModel.ModManager.ApplyModSettingGroup(
@@ -94,11 +98,13 @@ namespace SokuLauncher
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 Current.Shutdown();
             }
 
+            
+            // if there is another instance running, exit
             var currentProcess = Process.GetCurrentProcess();
             var currentExecutable = currentProcess.MainModule.FileName;
             var runningProcesses = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(currentExecutable));
@@ -107,6 +113,7 @@ namespace SokuLauncher
                 Current.Shutdown();
             }
 
+            // check for updates on startup
             if (mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForUpdates)
             {
                 _ = Task.Run(async () =>
@@ -120,15 +127,15 @@ namespace SokuLauncher
                             {
                                 await mainWindow.ViewModel.UpdateManager.SelectAndUpdate(
                                     updateList,
-                                    Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
-                                    Static.LanguageService.GetString("UpdateManager-CheckForUpdates-Completed")
+                                    LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
+                                    LanguageService.GetString("UpdateManager-CheckForUpdates-Completed")
                                 );
                             }
                         });
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(ex.Message, LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 });
             }
@@ -138,8 +145,7 @@ namespace SokuLauncher
 
         public App()
         {
-            Static.LanguageService = new LanguageService();
-            Static.LanguageService.OnChangeLanguage += LanguageService_OnChangeLanguage;
+            LanguageService.OnChangeLanguage += LanguageService_OnChangeLanguage;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Current.DispatcherUnhandledException += Application_DispatcherUnhandledException;
         }
@@ -149,13 +155,13 @@ namespace SokuLauncher
             switch (languageCode)
             {
                 case "zh-Hant":
-                    Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/Resources/Languages/zh-Hant.xaml");
+                    Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/SokuLauncher.Shared;component/Resources/Languages/zh-Hant.xaml");
                     break;
                 case "zh-Hans":
-                    Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/Resources/Languages/zh-Hans.xaml");
+                    Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/SokuLauncher.Shared;component/Resources/Languages/zh-Hans.xaml");
                     break;
                 default:
-                    Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/Resources/Languages/en.xaml");
+                    Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/SokuLauncher.Shared;component/Resources/Languages/en.xaml");
                     break;
             }
         }
@@ -164,6 +170,7 @@ namespace SokuLauncher
         {
             MessageBox.Show(e.Exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
+            Logger.LogError("DispatcherUnhandledException", e.Exception);
             Environment.Exit(0);
         }
 
@@ -171,6 +178,7 @@ namespace SokuLauncher
         {
             Exception ex = e.ExceptionObject as Exception;
             MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            Logger.LogError("UnhandledException", ex);
             Environment.Exit(0);
         }
     }

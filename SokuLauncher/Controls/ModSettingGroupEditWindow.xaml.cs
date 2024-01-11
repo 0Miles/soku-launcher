@@ -1,5 +1,5 @@
 ﻿using SokuLauncher.Models;
-using SokuLauncher.Utils;
+using SokuLauncher.Shared.Utils;
 using SokuLauncher.ViewModels;
 using SokuModManager.Models.Mod;
 using System.Collections.Generic;
@@ -7,8 +7,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 
 namespace SokuLauncher.Controls
 {

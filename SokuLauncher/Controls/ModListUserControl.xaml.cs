@@ -1,16 +1,11 @@
-﻿using Microsoft.Win32;
-using SokuLauncher.Models;
-using SokuLauncher.Utils;
+﻿using SokuLauncher.Shared.Utils;
 using SokuLauncher.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -53,7 +48,6 @@ namespace SokuLauncher.Controls
                 SetValue(ModInfoListProperty, value);
             }
         }
-
 
         public static DependencyProperty FilteredModInfoListProperty =
             DependencyProperty.Register(
@@ -138,6 +132,7 @@ namespace SokuLauncher.Controls
             var fullPath = (string)menuItem.Tag;
             Process.Start(fullPath);
         }
+
         private void DeleteMod_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = (MenuItem)sender;

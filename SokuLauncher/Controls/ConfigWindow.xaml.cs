@@ -1,5 +1,4 @@
 ﻿using SokuLauncher.Models;
-using SokuLauncher.Utils;
 using SokuLauncher.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,13 +12,15 @@ using System.Windows.Media.Animation;
 using Button = System.Windows.Controls.Button;
 using Microsoft.Win32;
 using Dsafa.WpfColorPicker;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using System.Diagnostics;
-using System.Windows.Media.Imaging;
-using static System.Net.Mime.MediaTypeNames;
-using SokuModManager;
+using SokuModManager.Models.Mod;
+using SokuLauncher.Shared.ViewModels;
+using SokuLauncher.Shared;
+using SokuLauncher.Shared.Utils;
+using SokuLauncher.Shared.Models;
+using SokuLauncher.UpdateCenter;
+using SokuLauncher.UpdateCenter.Controls;
 
 namespace SokuLauncher.Controls
 {
@@ -62,8 +63,8 @@ namespace SokuLauncher.Controls
             if (ViewModel.Saveable)
             {
                 if (MessageBox.Show(
-                        Static.LanguageService.GetString("ConfigWindow-UnsavedChanges-Message"),
-                        Static.LanguageService.GetString("ConfigWindow-UnsavedChanges-Title"),
+                        LanguageService.GetString("ConfigWindow-UnsavedChanges-Message"),
+                        LanguageService.GetString("ConfigWindow-UnsavedChanges-Title"),
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Question) == MessageBoxResult.No)
                 {
@@ -74,7 +75,7 @@ namespace SokuLauncher.Controls
 
             if (MainWindow.TryGetTarget(out MainWindow target))
             {
-                Static.LanguageService.ChangeLanguagePublish(target.ViewModel.ConfigUtil.Config.Language);
+                LanguageService.ChangeLanguagePublish(target.ViewModel.ConfigUtil.Config.Language);
                 target.Show();
             }
         }
@@ -139,7 +140,7 @@ namespace SokuLauncher.Controls
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(Static.LanguageService.GetString("ConfigWindow-DeleteFailed") + ": " + ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(LanguageService.GetString("ConfigWindow-DeleteFailed") + ": " + ex.Message, LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     ViewModel.ModInfoList = new ObservableCollection<ModInfoViewModel>(ViewModel.ModManager.ModInfoList
                         .Select(x => new ModInfoViewModel()
@@ -174,7 +175,7 @@ namespace SokuLauncher.Controls
                     target.ViewModel.ConfigUtil.Config.VersionInfoUrl = ViewModel.VersionInfoUrl;
                     target.ViewModel.ConfigUtil.Config.SokuDirPath = ViewModel.SokuDirPath;
                     target.ViewModel.ConfigUtil.Config.SokuFileName = ViewModel.SokuFileName;
-                    target.ViewModel.ConfigUtil.Config.SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList();
+                    target.ViewModel.ConfigUtil.Config.SokuModSettingGroups = ViewModel.ModSettingGroupModelList;
                     target.ViewModel.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
                     target.ViewModel.ConfigUtil.Config.AutoCheckForInstallable = ViewModel.AutoCheckForInstallable;
                     target.ViewModel.ConfigUtil.Config.Language = ViewModel.Language;
@@ -193,7 +194,7 @@ namespace SokuLauncher.Controls
             }
             catch (Exception ex)
             {
-                MessageBox.Show(Static.LanguageService.GetString("ConfigWindow-SaveConfigFailed") + ": " + ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(LanguageService.GetString("ConfigWindow-SaveConfigFailed") + ": " + ex.Message, LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -469,8 +470,8 @@ namespace SokuLauncher.Controls
             ViewModel.SokuModSettingGroups.Add(new ModSettingGroupViewModel
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = Static.LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Name"),
-                Desc = Static.LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Desc"),
+                Name = LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Name"),
+                Desc = LanguageService.GetString("ConfigWindow-LauncherTab-NewSokuModSettingGroup-Desc"),
                 Cover = "%resources%/gearbackground.png",
                 EnableMods = new List<string>(),
                 DisableMods = new List<string>()
@@ -542,7 +543,7 @@ namespace SokuLauncher.Controls
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            openFileDialog.Filter = Static.LanguageService.GetString("ConfigWindow-ImageAndVideoFilter");
+            openFileDialog.Filter = LanguageService.GetString("ConfigWindow-ImageAndVideoFilter");
             openFileDialog.InitialDirectory = Path.GetFullPath(Path.Combine(Static.SelfFileDir, ViewModel.SokuDirPath));
 
             bool? result = openFileDialog.ShowDialog();
@@ -615,7 +616,7 @@ namespace SokuLauncher.Controls
             }
             else
             {
-                MessageBox.Show(Static.LanguageService.GetString("ConfigWindow-OriginImageNotFound"), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(LanguageService.GetString("ConfigWindow-OriginImageNotFound"), LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                 ViewModel.SelectedSokuModSettingGroup.CoverOrigin = null;
                 ViewModel.Saveable = true;
             }
@@ -715,7 +716,7 @@ namespace SokuLauncher.Controls
                         {
                             SokuDirPath = ViewModel.SokuDirPath,
                             SokuFileName = ViewModel.SokuFileName,
-                            SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
+                            SokuModSettingGroups = ViewModel.ModSettingGroupModelList,
                             AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
                             AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
                             VersionInfoUrl = ViewModel.VersionInfoUrl,
@@ -727,7 +728,7 @@ namespace SokuLauncher.Controls
 
                     UpdateManager updatesManager = new UpdateManager(configUtil, ViewModel.ModManager);
 
-                    ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")}";
+                    ViewModel.CheckForUpdatesButtonText = $"{LanguageService.GetString("Common-CheckVersionInfo")}";
 
                     var taskGetVersionInfoJson = updatesManager.CheckForUpdates();
 
@@ -735,13 +736,13 @@ namespace SokuLauncher.Controls
 
                     for (int i = 0; i < 100; i++)
                     {
-                        ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")} {i}%";
+                        ViewModel.CheckForUpdatesButtonText = $"{LanguageService.GetString("Common-CheckVersionInfo")} {i}%";
                         await Task.Delay(random.Next(300));
                         i += random.Next(3);
 
                         if (taskGetVersionInfoJson.IsCompleted)
                         {
-                            ViewModel.CheckForUpdatesButtonText = $"{Static.LanguageService.GetString("Common-CheckVersionInfo")} 100%";
+                            ViewModel.CheckForUpdatesButtonText = $"{LanguageService.GetString("Common-CheckVersionInfo")} 100%";
                             await Task.Delay(100);
                             break;
                         }
@@ -753,8 +754,8 @@ namespace SokuLauncher.Controls
                     {
                         await updatesManager.SelectAndUpdate(
                             updateList,
-                            Static.LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
-                            Static.LanguageService.GetString("UpdateManager-CheckForUpdates-Completed"),
+                            LanguageService.GetString("UpdateManager-CheckForUpdates-UpdateSelectionWindow-Desc"),
+                            LanguageService.GetString("UpdateManager-CheckForUpdates-Completed"),
                             false,
                             true
                         );
@@ -762,8 +763,8 @@ namespace SokuLauncher.Controls
                     else
                     {
                         MessageBox.Show(
-                                Static.LanguageService.GetString("UpdateManager-CheckForUpdates-AllLatest"),
-                                Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
+                                LanguageService.GetString("UpdateManager-CheckForUpdates-AllLatest"),
+                                LanguageService.GetString("UpdateManager-MessageBox-Title"),
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information);
                     }
@@ -787,7 +788,7 @@ namespace SokuLauncher.Controls
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally
                 {
@@ -798,7 +799,7 @@ namespace SokuLauncher.Controls
 
         private void ModListUserControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (MainTabControl.SelectedIndex == 1 && !installingModFromArchive)
+            if (MainTabControl.SelectedIndex == 1 && !installingMod)
             {
                 ViewModel.Saveable = true;
             }
@@ -823,16 +824,16 @@ namespace SokuLauncher.Controls
 
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Static.LanguageService.ChangeLanguagePublish(((sender as ComboBox).SelectedItem as SelectorNodeModel).Code);
+            LanguageService.ChangeLanguagePublish(((sender as ComboBox).SelectedItem as SelectorNodeViewModel).Code);
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = (MenuItem)sender;
             var modSettingGroupId = (string)menuItem.Tag;
-            var selectedModSettingGroupd = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
+            var selectedModSettingGroup = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
 
-            ViewModel.SelectedSokuModSettingGroup = selectedModSettingGroupd;
+            ViewModel.SelectedSokuModSettingGroup = selectedModSettingGroup;
             ModSettingGroupEditGrid.Opacity = 0;
             ModSettingGroupEditGrid.Visibility = Visibility.Visible;
             HideSokuModSettingGroupsGridAnimation((s, _) =>
@@ -846,14 +847,29 @@ namespace SokuLauncher.Controls
         {
             var menuItem = (MenuItem)sender;
             var modSettingGroupId = (string)menuItem.Tag;
-            var selectedModSettingGroupd = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
-            if (selectedModSettingGroupd != null)
+            var selectedModSettingGroup = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
+            if (selectedModSettingGroup != null)
             {
-                Static.CreateShortcutOnDesktop(selectedModSettingGroupd);
+                Static.CreateShortcutOnDesktop(new ModSettingGroupModel()
+                {
+                    Id = selectedModSettingGroup.Id,
+                    Name = selectedModSettingGroup.Name,
+                    Desc = selectedModSettingGroup.Desc,
+                    Cover = selectedModSettingGroup.Cover,
+                    CoverOrigin = selectedModSettingGroup.CoverOrigin,
+                    CoverOverlayColor = selectedModSettingGroup.CoverOverlayColor,
+                    HoverColor = selectedModSettingGroup.HoverColor,
+                    NameColor = selectedModSettingGroup.NameColor,
+                    DescColor = selectedModSettingGroup.DescColor,
+                    EnableMods = selectedModSettingGroup.EnableMods,
+                    DisableMods = selectedModSettingGroup.DisableMods,
+                    IsHidden = selectedModSettingGroup.IsHidden,
+                    IniSettingsOverride = selectedModSettingGroup.IniSettingsOverride
+                });
             }
             else
             {
-                MessageBox.Show(string.Format(Static.LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format(LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -862,15 +878,15 @@ namespace SokuLauncher.Controls
             var menuItem = (MenuItem)sender;
             var modSettingGroupId = (string)menuItem.Tag;
 
-            var selectedModSettingGroupd = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
-            if (selectedModSettingGroupd != null)
+            var selectedModSettingGroup = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
+            if (selectedModSettingGroup != null)
             {
-                selectedModSettingGroupd.IsHidden = !selectedModSettingGroupd.IsHidden;
+                selectedModSettingGroup.IsHidden = !selectedModSettingGroup.IsHidden;
                 ViewModel.Saveable = true;
             }
             else
             {
-                MessageBox.Show(string.Format(Static.LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), Static.LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format(LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -879,12 +895,12 @@ namespace SokuLauncher.Controls
             e.Handled = true;
         }
 
-        private bool installingModFromArchive = false;
+        private bool installingMod = false;
         private async void ConfigModListUserControl_InstallButtonClick(object arg1, RoutedEventArgs arg2)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = Static.LanguageService.GetString("Common-ModPackageFilter"),
+                Filter = LanguageService.GetString("Common-ModPackageFilter"),
                 InitialDirectory = Static.SelfFileDir
             };
 
@@ -899,13 +915,14 @@ namespace SokuLauncher.Controls
 
         private async void ConfigModListUserControl_DownloadButtonClick(object arg1, RoutedEventArgs arg2)
         {
+            installingMod = true;
             ConfigUtil configUtil = new ConfigUtil
             {
                 Config = new ConfigModel
                 {
                     SokuDirPath = ViewModel.SokuDirPath,
                     SokuFileName = ViewModel.SokuFileName,
-                    SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
+                    SokuModSettingGroups = ViewModel.ModSettingGroupModelList,
                     AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
                     AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
                     VersionInfoUrl = ViewModel.VersionInfoUrl,
@@ -933,8 +950,8 @@ namespace SokuLauncher.Controls
                 if (
                     await updatesManager.SelectAndUpdate(
                         updateList,
-                        Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Desc"),
-                        Static.LanguageService.GetString("UpdateManager-InstallFromArchive-Completed"),
+                        LanguageService.GetString("UpdateManager-InstallFromArchive-Desc"),
+                        LanguageService.GetString("UpdateManager-InstallFromArchive-Completed"),
                         false,
                         true,
                         false
@@ -947,8 +964,8 @@ namespace SokuLauncher.Controls
                     if (updateList.Any(x => x.Installed == false))
                     {
                         if (MessageBox.Show(
-                                Static.LanguageService.GetString("UpdateManager-NewModInstalled"),
-                                Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
+                                LanguageService.GetString("UpdateManager-NewModInstalled"),
+                                LanguageService.GetString("UpdateManager-MessageBox-Title"),
                                 MessageBoxButton.YesNo,
                                 MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
@@ -959,13 +976,30 @@ namespace SokuLauncher.Controls
                             ViewModel.ModManager.SaveSWRSToysIni();
                         }
                     }
+
+                    ViewModel.ModInfoList = new ObservableCollection<ModInfoViewModel>(
+                        ViewModel.ModManager.ModInfoList
+                        .Select(x => new ModInfoViewModel()
+                        {
+                            Name = x.Name,
+                            FullPath = x.FullPath,
+                            RelativePath = x.RelativePath,
+                            DirName = x.DirName,
+                            Enabled = x.Enabled,
+                            Version = x.Version,
+                            Icon = x.Icon,
+                            ConfigFileList = x.ConfigFiles,
+                        })
+                    );
+                    ConfigModListUserControl.SearchMod();
+                    installingMod = false;
                 }
             }
             else
             {
                 MessageBox.Show(
-                    Static.LanguageService.GetString("UpdateManager-AllAvailableModsInstalled"),
-                    Static.LanguageService.GetString("UpdateManager-MessageBox-Title"),
+                    LanguageService.GetString("UpdateManager-AllAvailableModsInstalled"),
+                    LanguageService.GetString("UpdateManager-MessageBox-Title"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
@@ -973,14 +1007,14 @@ namespace SokuLauncher.Controls
 
         private async Task InsatllModFromFile(string filename)
         {
-            installingModFromArchive = true;
+            installingMod = true;
             ConfigUtil configUtil = new ConfigUtil
             {
                 Config = new ConfigModel
                 {
                     SokuDirPath = ViewModel.SokuDirPath,
                     SokuFileName = ViewModel.SokuFileName,
-                    SokuModSettingGroups = ViewModel.SokuModSettingGroups.ToList(),
+                    SokuModSettingGroups = ViewModel.ModSettingGroupModelList,
                     AutoCheckForUpdates = ViewModel.AutoCheckForUpdates,
                     AutoCheckForInstallable = ViewModel.AutoCheckForInstallable,
                     VersionInfoUrl = ViewModel.VersionInfoUrl,
@@ -1007,7 +1041,7 @@ namespace SokuLauncher.Controls
                 })
             );
             ConfigModListUserControl.SearchMod();
-            installingModFromArchive = false;
+            installingMod = false;
         }
 
         private void ConfigModListUserControl_DropFile(object sender, DragEventArgs e)
