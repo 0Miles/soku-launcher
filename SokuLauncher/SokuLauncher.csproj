@@ -148,10 +148,10 @@
       <DependentUpon>ModSettingGroupEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ModSettingInfoModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ModInfoViewModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ViewModels\ModSettingGroupViewModel.cs" />
-    <Compile Include="ViewModels\MainWindwoViewModel.cs" />
     <Compile Include="ViewModels\ConfigWindowViewModel.cs" />
     <Compile Include="ViewModels\ModSettingGroupEditWindowViewModel.cs" />
     <Page Include="Controls\ConfigWindow.xaml">
