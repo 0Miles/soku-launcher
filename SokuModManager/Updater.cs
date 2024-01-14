@@ -115,11 +115,23 @@ namespace SokuModManager
 
                         StreamReader reader = new StreamReader(stream);
                         var updateFileInfosJsonString = reader.ReadToEnd();
-                        var updateFileInfos = JsonConvert.DeserializeObject<List<UpdateFileInfoModel>>(updateFileInfosJsonString);
+                        List<UpdateFileInfoModel> updateFileInfos = new List<UpdateFileInfoModel>();
+
+                        try
+                        {
+                            UpdateFileInfoModel singleModel = JsonConvert.DeserializeObject<UpdateFileInfoModel>(updateFileInfosJsonString);
+                            updateFileInfos.Add(singleModel);
+                        }
+                        catch
+                        {
+                            updateFileInfos = JsonConvert.DeserializeObject<List<UpdateFileInfoModel>>(updateFileInfosJsonString);
+                        }
+
                         foreach (var updateFileInfo in updateFileInfos ?? new List<UpdateFileInfoModel>())
                         {
                             updateFileInfo.LocalArchiveUri = localArchiveUri;
                         }
+
                         CompleteLocalModuleInfo(updateFileInfos);
                         return updateFileInfos;
                     }
@@ -236,46 +248,61 @@ namespace SokuModManager
 
                     try
                     {
-                        using (HttpClient client = new HttpClient())
+                        if (downloadLink.StartsWith("file://"))
                         {
-
-                            client.Timeout = TimeSpan.FromMinutes(10);
-
-                            using (HttpResponseMessage response = await client.GetAsync(downloadLink, HttpCompletionOption.ResponseHeadersRead))
+                            string localFilePath = new Uri(downloadLink).LocalPath;
+                            if (File.Exists(localFilePath))
                             {
-                                // 確認回應狀態碼為成功
-                                response.EnsureSuccessStatusCode();
+                                File.Copy(localFilePath, downloadToTempFilePath);
+                            }
+                            else
+                            {
+                                throw new Exception($"File not found: {localFilePath}");
+                            }
+                        }
+                        else if (downloadLink.StartsWith("http://") || downloadLink.StartsWith("https://"))
+                        {
+                            using (HttpClient client = new HttpClient())
+                            {
 
-                                // 確認 Content Headers 中有 Content-Length，以確定進度
-                                if (response.Content.Headers.TryGetValues("Content-Length", out var contentLengthValues))
+                                client.Timeout = TimeSpan.FromMinutes(10);
+
+                                using (HttpResponseMessage response = await client.GetAsync(downloadLink, HttpCompletionOption.ResponseHeadersRead))
                                 {
-                                    long totalBytes = long.Parse(contentLengthValues?.First() ?? "0");
-                                    long downloadedBytes = 0;
+                                    // 確認回應狀態碼為成功
+                                    response.EnsureSuccessStatusCode();
 
-                                    // 開啟目標檔案，並使用 Response Content 中的資料寫入
-                                    using (FileStream fileStream = File.OpenWrite(downloadToTempFilePath))
+                                    // 確認 Content Headers 中有 Content-Length，以確定進度
+                                    if (response.Content.Headers.TryGetValues("Content-Length", out var contentLengthValues))
                                     {
+                                        long totalBytes = long.Parse(contentLengthValues?.First() ?? "0");
+                                        long downloadedBytes = 0;
 
-                                        using (Stream contentStream = await response.Content.ReadAsStreamAsync())
+                                        // 開啟目標檔案，並使用 Response Content 中的資料寫入
+                                        using (FileStream fileStream = File.OpenWrite(downloadToTempFilePath))
                                         {
 
-                                            byte[] buffer = new byte[8192];
-                                            int bytesRead;
-
-                                            // 逐步讀取和寫入檔案
-                                            while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                                            using (Stream contentStream = await response.Content.ReadAsStreamAsync())
                                             {
-                                                cancellationToken?.ThrowIfCancellationRequested();
-                                                await fileStream.WriteAsync(buffer, 0, bytesRead);
-                                                downloadedBytes += bytesRead;
 
-                                                int progressPercentage = (int)((double)downloadedBytes / totalBytes * 100);
-                                                OnUpdaterStatusChanged(new UpdaterStatusChangedEventArgs
+                                                byte[] buffer = new byte[8192];
+                                                int bytesRead;
+
+                                                // 逐步讀取和寫入檔案
+                                                while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
                                                 {
-                                                    Status = UpdaterStatus.Downloading,
-                                                    Target = updateFileInfo.Name,
-                                                    Progress = progressPercentage
-                                                });
+                                                    cancellationToken?.ThrowIfCancellationRequested();
+                                                    await fileStream.WriteAsync(buffer, 0, bytesRead);
+                                                    downloadedBytes += bytesRead;
+
+                                                    int progressPercentage = (int)((double)downloadedBytes / totalBytes * 100);
+                                                    OnUpdaterStatusChanged(new UpdaterStatusChangedEventArgs
+                                                    {
+                                                        Status = UpdaterStatus.Downloading,
+                                                        Target = updateFileInfo.Name,
+                                                        Progress = progressPercentage
+                                                    });
+                                                }
                                             }
                                         }
                                     }
@@ -289,7 +316,7 @@ namespace SokuModManager
                         continue;
                     }
 
-                    
+
 
                     if (updateFileInfo.Compressed)
                     {
@@ -431,7 +458,7 @@ namespace SokuModManager
                 }
             }
         }
-        
+
         private static void CopyDirectory(string sourceDir, string destinationDir, bool recursive = true)
         {
             var dir = new DirectoryInfo(sourceDir);
