@@ -129,7 +129,7 @@ namespace SokuModManager
 
                 if (source.Url.StartsWith("https://gitee.com"))
                 {
-                    await RunTasksInBatches(tasks, 10);
+                    await RunTasksInBatches(tasks, 5);
                 }
                 else
                 {
