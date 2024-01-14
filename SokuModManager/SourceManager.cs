@@ -70,6 +70,15 @@ namespace SokuModManager
             await Task.WhenAll(tasks);
         }
 
+        private static async Task RunTasksInBatches(List<Task> tasks, int batchSize)
+        {
+            for (int i = 0; i < tasks.Count; i += batchSize)
+            {
+                var currentBatch = tasks.Skip(i).Take(batchSize);
+                await Task.WhenAll(currentBatch);
+            }
+        }
+
         public async Task FetchModuleList(SourceModel source)
         {
             var modulesUrl = new Uri(new Uri(source.Url), "modules.json").ToString();
@@ -118,7 +127,14 @@ namespace SokuModManager
                     );
                 }
 
-                await Task.WhenAll(tasks);
+                if (source.Url.StartsWith("https://gitee.com"))
+                {
+                    await RunTasksInBatches(tasks, 10);
+                }
+                else
+                {
+                    await Task.WhenAll(tasks);
+                }
             }
             else
             {
