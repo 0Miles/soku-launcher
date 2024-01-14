@@ -9,6 +9,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Policy;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SokuModManager
@@ -133,7 +134,7 @@ namespace SokuModManager
         public List<UpdateFileInfoModel> GetUpdateFileInfosFromSource(SourceModel source)
         {
             var updateFileInfos = source.Modules
-                .Where(x => x != null && !string.IsNullOrWhiteSpace(x.RecommendedVersionNumber) && x.RecommendedVersion != null)
+                .Where(x => !string.IsNullOrWhiteSpace(x.RecommendedVersionNumber) && x.RecommendedVersion != null)
                 .Select(module =>
                 {
                     UpdateFileInfoModel newUpdateFileInfoModel = new UpdateFileInfoModel()
@@ -196,7 +197,7 @@ namespace SokuModManager
             }
         }
 
-        public async Task DownloadAndExtractFile(UpdateFileInfoModel updateFileInfo)
+        public async Task DownloadAndExtractFile(UpdateFileInfoModel updateFileInfo, CancellationToken? cancellationToken = null)
         {
             try
             {
@@ -264,6 +265,7 @@ namespace SokuModManager
                                             // 逐步讀取和寫入檔案
                                             while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
                                             {
+                                                cancellationToken?.ThrowIfCancellationRequested();
                                                 await fileStream.WriteAsync(buffer, 0, bytesRead);
                                                 downloadedBytes += bytesRead;
 

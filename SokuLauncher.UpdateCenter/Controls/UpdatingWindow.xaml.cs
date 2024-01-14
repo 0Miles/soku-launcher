@@ -1,5 +1,6 @@
 ﻿using SokuLauncher.Shared;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows;
 
 namespace SokuLauncher.UpdateCenter.Controls
@@ -18,6 +19,8 @@ namespace SokuLauncher.UpdateCenter.Controls
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public CancellationTokenSource CancellationTokenSource { get; set; }
 
         public UpdateManager UpdateManager { get; set; }
 
@@ -78,6 +81,11 @@ namespace SokuLauncher.UpdateCenter.Controls
                 UpdateManager.DownloadProgressChanged += (progress) => Progress = progress;
                 UpdateManager.StatusChanged += (status) => Status = status;
             }
+        }
+
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            CancellationTokenSource?.Cancel();
         }
     }
 }

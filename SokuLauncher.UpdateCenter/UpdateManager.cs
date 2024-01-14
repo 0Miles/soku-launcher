@@ -16,6 +16,7 @@ using SokuModManager.Models;
 using SokuLauncher.UpdateCenter.Controls;
 using SokuLauncher.UpdateCenter.ViewModels;
 using SokuLauncher.Shared.Utils;
+using System.Threading;
 
 namespace SokuLauncher.UpdateCenter
 {
@@ -261,9 +262,12 @@ namespace SokuLauncher.UpdateCenter
 
         public async Task ExecuteUpdates(List<UpdateFileInfoModel> selectedUpdates, bool isShowUpdating, string complatedMessage)
         {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
             UpdatingWindow updatingWindow = new UpdatingWindow
             {
-                UpdateManager = this
+                UpdateManager = this,
+                CancellationTokenSource = cancellationTokenSource
             };
 
             var updateTask = Task.Run(async () =>
@@ -272,7 +276,11 @@ namespace SokuLauncher.UpdateCenter
                 {
                     foreach (var updateFileInfo in selectedUpdates)
                     {
-                        await CurrentUpdater.DownloadAndExtractFile(updateFileInfo);
+                        cancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                        await CurrentUpdater.DownloadAndExtractFile(updateFileInfo, cancellationTokenSource.Token);
+
+                        cancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                         if (updateFileInfo.Name == "SokuLauncher")
                         {
@@ -321,16 +329,21 @@ namespace SokuLauncher.UpdateCenter
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
                     }
+
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, LanguageService.GetString("UpdateManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
-                    if (isShowUpdating)
+                    if (!cancellationTokenSource.IsCancellationRequested)
                     {
-                        updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
+                        MessageBox.Show(ex.Message, LanguageService.GetString("UpdateManager-MessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+
+                        if (isShowUpdating)
+                        {
+                            updatingWindow.Dispatcher.Invoke(() => updatingWindow.Close());
+                        }
                     }
                 }
-            });
+            }, cancellationTokenSource.Token);
 
             if (isShowUpdating)
             {

@@ -756,7 +756,7 @@ namespace SokuLauncher.Controls
                     }
 
                     var updateList = await taskGetVersionInfoJson;
-                    ViewModel.CheckForUpdatesButtonText = null;
+                    
                     if (updateList?.Count > 0)
                     {
                         await updatesManager.SelectAndUpdate(
@@ -775,6 +775,7 @@ namespace SokuLauncher.Controls
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information);
                     }
+                    ViewModel.CheckForUpdatesButtonText = null;
 
                     ViewModel.ModManager.Refresh();
                     ViewModel.ModManager.LoadSWRSToysSetting();

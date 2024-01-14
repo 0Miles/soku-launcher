@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="{DynamicResource UpdatingWindow-Title}" Height="100" Width="380" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Topmost="True"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded" Closed="Window_Closed">
     <StackPanel>
         <ProgressBar Value="{Binding Progress}" IsIndeterminate="{Binding IsIndeterminate}"  HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Center" Margin="8,8,8,0"/>
         <TextBlock Text="{Binding Status }" Margin="8" />
