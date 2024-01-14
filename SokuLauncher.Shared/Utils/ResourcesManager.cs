@@ -52,7 +52,7 @@ namespace SokuLauncher.Shared.Utils
 
         public void CopyIconResources()
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
+            Assembly assembly = Assembly.GetEntryAssembly();
             string[] resourceNames = assembly.GetManifestResourceNames();
 
             foreach (string resourceName in resourceNames)
