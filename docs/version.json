@@ -1,13 +1,7 @@
 [
     {
         "Name": "SokuLauncher",
-        "Desc": "If fails to update the main program, please go to Mega to download the new version.  \nhttps://mega.nz/folder/c7MCnBAL#nhBC_OmUoEOKuOzZu3rAgg",
-        "I18nDesc": [
-            {
-                "Language": "zh-TW",
-                "Content": "若主程式更新失敗，請至Mega下載新版本  \nhttps://mega.nz/folder/c7MCnBAL#nhBC_OmUoEOKuOzZu3rAgg"
-            }
-        ],
+        "Desc": "測試中的版本，請考慮需要更新。",
         "Description": "SokuLauncher main program.",
         "DescriptionI18n": [
             {
@@ -15,13 +9,14 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Version": "1.11.4.0",
+        "Notes": "- 修正点过 下载 按钮后，再 启用/关闭 任意模组时，保存 按钮始终不可点的错误",
+        "Version": "2.0.0.2",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v1.11.4.0/SokuLauncher.zip",
+        "DownloadUrl": "https://gitee.com/milestw/soku-launcher/releases/download/v2.0.0.2/SokuLauncher.zip",
         "DownloadLinks": [
             {
-                "Type": "Github",
-                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v1.11.4.0/SokuLauncher.zip"
+                "Type": "Gitee",
+                "Url": "https://gitee.com/milestw/soku-launcher/releases/download/v2.0.0.2/SokuLauncher.zip"
             }
         ],
         "Compressed": true
