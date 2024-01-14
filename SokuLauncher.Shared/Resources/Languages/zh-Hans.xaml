@@ -101,6 +101,7 @@
     <system:String x:Key="ConfigWindow-PathTab-Info">相关信息</system:String>
     <system:String x:Key="ConfigWindow-PathTab-Ready">就绪</system:String>
     <system:String x:Key="ConfigWindow-PathTab-NotFound">未找到</system:String>
+    <system:String x:Key="ConfigWindow-PathTab-AdditionalExecutionBeforeStartup">启动前额外执行</system:String>
 
     <system:String x:Key="ConfigWindow-UpdateTab-VersionInfoUrl">版本信息URL:</system:String>
     <system:String x:Key="ConfigWindow-UpdateTab-AutoCheckForUpdatesOnStartup">启动时自动检查更新</system:String>

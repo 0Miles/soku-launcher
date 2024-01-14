@@ -452,7 +452,7 @@
 
                     <GroupBox HorizontalAlignment="Stretch" Margin="8" Padding="8" Visibility="{Binding SokuFileName, Converter={StaticResource StringToVisibilityConverter}}">
                         <GroupBox.Header>
-                            <TextBlock Text="啟動前額外執行" />
+                            <TextBlock Text="{DynamicResource ConfigWindow-PathTab-AdditionalExecutionBeforeStartup}" />
                         </GroupBox.Header>
                         <Grid>
                             <Grid.RowDefinitions>

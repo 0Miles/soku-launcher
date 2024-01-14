@@ -101,6 +101,7 @@
     <system:String x:Key="ConfigWindow-PathTab-Info">Info</system:String>
     <system:String x:Key="ConfigWindow-PathTab-Ready">Ready</system:String>
     <system:String x:Key="ConfigWindow-PathTab-NotFound">Not found</system:String>
+    <system:String x:Key="ConfigWindow-PathTab-AdditionalExecutionBeforeStartup">Additional execution before startup</system:String>
 
     <system:String x:Key="ConfigWindow-UpdateTab-VersionInfoUrl">Version info URL:</system:String>
     <system:String x:Key="ConfigWindow-UpdateTab-AutoCheckForUpdatesOnStartup">Auto check for updates on startup</system:String>
