@@ -233,7 +233,6 @@ namespace SokuLauncher.Shared.Utils
 
             if (config.Language == "zh-Hans")
             {
-                config.VersionInfoUrl = "https://gitee.com/milestw/soku-launcher/raw/main/docs/version.json";
                 config.Sources = new List<SourceConfigModel>
                 {
                     new SourceConfigModel
@@ -249,10 +248,18 @@ namespace SokuLauncher.Shared.Utils
                         PreferredDownloadLinkType = "github"
                     }
                 };
+
+                config.AdditionalExecutablePaths = new List<AdditionalExecutablePathModel>
+                {
+                    new AdditionalExecutablePathModel
+                    {
+                        Path = "./swarm.exe",
+                        Enabled = true
+                    }
+                };
             }
             else
             {
-                config.VersionInfoUrl = "https://soku.latte.today/version.json";
                 config.Sources = new List<SourceConfigModel>
                 {
                     new SourceConfigModel
@@ -264,7 +271,7 @@ namespace SokuLauncher.Shared.Utils
                     new SourceConfigModel
                     {
                         Name = "SokuCN-gitee",
-                        Url = "https://gitee.com/soku-cn/main-source/raw/main/",
+                        Url = "https://soku-cn.gitee.io/main-source/",
                         PreferredDownloadLinkType = "gitee"
                     },
                 };
