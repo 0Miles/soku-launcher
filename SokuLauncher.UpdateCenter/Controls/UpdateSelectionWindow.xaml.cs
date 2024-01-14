@@ -85,5 +85,21 @@ namespace SokuLauncher.UpdateCenter.Controls
 
             return null;
         }
+
+        private void SelectAll_Checked(object sender, RoutedEventArgs e)
+        {
+            foreach (var updateSelectorNodeList in UpdateSelectorNodeList)
+            {
+                updateSelectorNodeList.Selected = true;
+            }
+        }
+
+        private void SelectAll_Unchecked(object sender, RoutedEventArgs e)
+        {
+            foreach (var updateSelectorNodeList in UpdateSelectorNodeList)
+            {
+                updateSelectorNodeList.Selected = false;
+            }
+        }
     }
 }
