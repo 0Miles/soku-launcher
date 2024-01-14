@@ -999,7 +999,6 @@ namespace SokuLauncher.Controls
                         })
                     );
                     ConfigModListUserControl.SearchMod();
-                    installingMod = false;
                 }
             }
             else
@@ -1010,6 +1009,7 @@ namespace SokuLauncher.Controls
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
+            installingMod = false;
         }
 
         private async Task InsatllModFromFile(string filename)
