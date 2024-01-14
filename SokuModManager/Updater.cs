@@ -133,7 +133,7 @@ namespace SokuModManager
         public List<UpdateFileInfoModel> GetUpdateFileInfosFromSource(SourceModel source)
         {
             var updateFileInfos = source.Modules
-                .Where(x => !string.IsNullOrWhiteSpace(x.RecommendedVersionNumber) && x.RecommendedVersion != null)
+                .Where(x => x != null && !string.IsNullOrWhiteSpace(x.RecommendedVersionNumber) && x.RecommendedVersion != null)
                 .Select(module =>
                 {
                     UpdateFileInfoModel newUpdateFileInfoModel = new UpdateFileInfoModel()
