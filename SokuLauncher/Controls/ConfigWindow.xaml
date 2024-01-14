@@ -388,8 +388,8 @@
                 <local:ModListUserControl x:Name="ConfigModListUserControl" ModInfoList="{Binding ModInfoList}" SelectionChanged="ModListUserControl_SelectionChanged" ModDeleted="ModListUserControl_ModDeleted" ModUndeleted="ModListUserControl_ModUndeleted" InstallButtonClick="ConfigModListUserControl_InstallButtonClick" DropFile="ConfigModListUserControl_DropFile" DownloadButtonClick="ConfigModListUserControl_DownloadButtonClick" />
             </TabItem>
             <TabItem Header="{DynamicResource ConfigWindow-Tab-Path}">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Border Padding="8,8,8,0">
+                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <Border Padding="8,42,8,0">
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
@@ -448,7 +448,51 @@
                             </Button>
                         </Grid>
                     </GroupBox>
+
+                    <!--<Separator/>
+
+                    <Border Padding="8" HorizontalAlignment="Center">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Text="啟動前額外執行" Margin="0,16,0,16"/>
+
+                            <ListView Grid.Row="1"
+                                  x:Name="SelectorListView"
+                                  ItemsSource="{Binding SelectorNodeList}"
+                                  ScrollViewer.CanContentScroll="False"
+                                  Margin="8">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListViewItem}">
+                                        <Setter Property="IsSelected" Value="{Binding Selected }"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <Image Source="{Binding Icon}" Width="32" Height="32" Margin="0,0,8,0" VerticalAlignment="Center" Visibility="{Binding Icon, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Title}" FontSize="16"/>
+                                                    <TextBlock Text="{Binding Desc}" Foreground="DarkGray" Visibility="{Binding Desc, Converter={StaticResource StringToVisibilityConverter}}"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </Border>-->
+
                 </StackPanel>
+
             </TabItem>
             <TabItem Header="{DynamicResource ConfigWindow-Tab-Update}">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
