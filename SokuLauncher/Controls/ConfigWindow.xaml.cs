@@ -184,6 +184,8 @@ namespace SokuLauncher.Controls
                     target.ViewModel.ConfigUtil.Config.AutoCheckForUpdates = ViewModel.AutoCheckForUpdates;
                     target.ViewModel.ConfigUtil.Config.AutoCheckForInstallable = ViewModel.AutoCheckForInstallable;
                     target.ViewModel.ConfigUtil.Config.Language = ViewModel.Language;
+                    target.ViewModel.ConfigUtil.Config.Sources = ViewModel.Sources.ToList();
+                    target.ViewModel.ConfigUtil.Config.AdditionalExecutablePaths = ViewModel.AdditionalExecutablePaths.ToList();
 
                     target.ViewModel.ConfigUtil.SaveConfig();
 
