@@ -14,6 +14,6 @@ namespace SokuLauncher.Shared.Models
         public string VersionInfoUrl { get; set; }
         public string Language { get; set; }
         public List<SourceConfigModel> Sources { get; set; } = new List<SourceConfigModel>();
-        public List<string> AdditionalExecutablePaths { get; set; } = new List<string>();
+        public List<AdditionalExecutablePathModel> AdditionalExecutablePaths { get; set; } = new List<AdditionalExecutablePathModel>();
     }
 }

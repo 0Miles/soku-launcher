@@ -92,6 +92,7 @@
     <Compile Include="Converters\ReverseStringToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="LanguageService.cs" />
+    <Compile Include="Models\AdditionalExecutablePathModel.cs" />
     <Compile Include="Models\ConfigModel.cs" />
     <Compile Include="Utils\ConfigUtil.cs" />
     <Compile Include="ViewModels\SelectorNodeViewModel.cs" />

@@ -1,4 +1,5 @@
 ﻿using SokuLauncher.Shared;
+using SokuLauncher.Shared.Models;
 using SokuLauncher.Shared.ViewModels;
 using SokuLauncher.UpdateCenter;
 using SokuModManager;
@@ -301,8 +302,8 @@ namespace SokuLauncher.ViewModels
             }
         }
 
-        private ObservableCollection<string> _AdditionalExecutablePaths;
-        public ObservableCollection<string> AdditionalExecutablePaths
+        private ObservableCollection<AdditionalExecutablePathModel> _AdditionalExecutablePaths;
+        public ObservableCollection<AdditionalExecutablePathModel> AdditionalExecutablePaths
         {
             get
             {

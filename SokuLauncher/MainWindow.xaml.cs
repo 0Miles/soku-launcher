@@ -18,6 +18,7 @@ using SokuLauncher.Controls;
 using SokuLauncher.UpdateCenter.Controls;
 using SokuLauncher.Shared.Utils;
 using SokuLauncher.UpdateCenter;
+using SokuLauncher.Shared.Models;
 
 namespace SokuLauncher
 {
@@ -212,8 +213,29 @@ namespace SokuLauncher
 
                 ZoomInHideWindow((s, _) =>
                 {
+                    Directory.SetCurrentDirectory(Static.SelfFileDir);
+                    if (ViewModel.ConfigUtil.Config.AdditionalExecutablePaths != null)
+                    {
+                        foreach (var additionalExecutablePathModel in ViewModel.ConfigUtil.Config.AdditionalExecutablePaths)
+                        {
+
+                            if (additionalExecutablePathModel.Enabled && File.Exists(additionalExecutablePathModel.Path))
+                            {
+                                try
+                                {
+                                    Process.Start(additionalExecutablePathModel.Path);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logger.LogError(additionalExecutablePathModel.Path, ex);
+                                }
+                            }
+                        }
+                    }
+
                     Directory.SetCurrentDirectory(ViewModel.ConfigUtil.SokuDirFullPath);
                     Process.Start(sokuFile);
+
                     Application.Current.Shutdown();
                 });
             }
@@ -374,7 +396,7 @@ namespace SokuLauncher
                             VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
                             Language = ViewModel.ConfigUtil.Config.Language,
                             Sources = new ObservableCollection<SourceConfigModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.Sources)),
-                            AdditionalExecutablePaths = new ObservableCollection<string>(Static.DeepCopy(ViewModel.ConfigUtil.Config.AdditionalExecutablePaths)),
+                            AdditionalExecutablePaths = new ObservableCollection<AdditionalExecutablePathModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.AdditionalExecutablePaths)),
                         }
                     );
                     configModManager = null;
@@ -486,7 +508,7 @@ namespace SokuLauncher
                     VersionInfoUrl = ViewModel.ConfigUtil.Config.VersionInfoUrl,
                     Language = ViewModel.ConfigUtil.Config.Language,
                     Sources = new ObservableCollection<SourceConfigModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.Sources)),
-                    AdditionalExecutablePaths = new ObservableCollection<string>(Static.DeepCopy(ViewModel.ConfigUtil.Config.AdditionalExecutablePaths)),
+                    AdditionalExecutablePaths = new ObservableCollection<AdditionalExecutablePathModel>(Static.DeepCopy(ViewModel.ConfigUtil.Config.AdditionalExecutablePaths)),
                 }
             );
 

@@ -1073,5 +1073,42 @@ namespace SokuLauncher.Controls
             var fullPath = (string)button.Tag;
             Process.Start("explorer.exe", fullPath);
         }
+
+        private void AddAdditionalExecutablePath_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Static.SelfFileDir;
+            openFileDialog.Filter = "Executable Files|*.exe|All Files|*.*";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFileName = openFileDialog.FileName;
+                string relativePath = Static.GetRelativePath(selectedFileName, Static.SelfFileDir);
+                if (!relativePath.StartsWith("../../"))
+                {
+                    selectedFileName = relativePath;
+                }
+                ViewModel.AdditionalExecutablePaths.Add(new AdditionalExecutablePathModel
+                {
+                    Path = selectedFileName,
+                    Enabled = true
+                });
+                ViewModel.Saveable = true;
+            }
+        }
+
+        private void RemoveSelectedAdditionalExecutablePath_Click(object sender, RoutedEventArgs e)
+        {
+            if (AdditionalExecutablePathsListView.SelectedIndex != -1)
+            {
+                ViewModel.AdditionalExecutablePaths.RemoveAt(AdditionalExecutablePathsListView.SelectedIndex);
+                ViewModel.Saveable = true;
+            }
+        }
+
+        private void AdditionalExecutablePathCheckBox_Change(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Saveable = true;
+        }
     }
 }

@@ -93,6 +93,26 @@ namespace SokuLauncher
                             DisableMods = settingGroup.DisableMods
                         }
                     );
+
+                    Directory.SetCurrentDirectory(Static.SelfFileDir);
+                    if (mainWindow.ViewModel.ConfigUtil.Config.AdditionalExecutablePaths != null)
+                    {
+                        foreach (var additionalExecutablePathModel in mainWindow.ViewModel.ConfigUtil.Config.AdditionalExecutablePaths)
+                        {
+                            if (additionalExecutablePathModel.Enabled && File.Exists(additionalExecutablePathModel.Path))
+                            {
+                                try
+                                {
+                                    Process.Start(additionalExecutablePathModel.Path);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logger.LogError(additionalExecutablePathModel.Path, ex);
+                                }
+                            }
+                        }
+                    }
+
                     Directory.SetCurrentDirectory(mainWindow.ViewModel.ConfigUtil.SokuDirFullPath);
                     Process.Start(sokuFile);
                 }
