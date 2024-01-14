@@ -117,4 +117,5 @@
     <system:String x:Key="ModSettingGroupPreview-CreateShortcut">在桌面创建快捷方式</system:String>
     <system:String x:Key="ModSettingGroupPreview-SelectShortcutIcon">选择快捷方式图示</system:String>
     <system:String x:Key="ModSettingGroupPreview-Hidden">隐藏</system:String>
+    <system:String x:Key="ModSettingGroupPreview-CopyBelow">复制到下方</system:String>
 </ResourceDictionary>

@@ -90,6 +90,7 @@
                                                     <Grid.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem Header="{DynamicResource ModSettingGroupPreview-Hidden}" Click="Hidden_Click" IsChecked="{Binding IsHidden}" Tag="{Binding Id}" />
+                                                            <MenuItem Header="{DynamicResource ModSettingGroupPreview-CopyBelow}" Click="CopyBelow_Click" IsChecked="{Binding IsHidden}" Tag="{Binding Id}" />
                                                             <Separator/>
                                                             <MenuItem Header="{DynamicResource ModSettingGroupPreview-Edit}" Click="Edit_Click"  Tag="{Binding Id}" />
                                                             <MenuItem Header="{DynamicResource ModSettingGroupPreview-CreateShortcut}" Click="CreateShortcut_Click"  Tag="{Binding Id}" />

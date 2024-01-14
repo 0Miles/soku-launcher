@@ -1111,5 +1111,42 @@ namespace SokuLauncher.Controls
         {
             ViewModel.Saveable = true;
         }
+
+        private void CopyBelow_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            var modSettingGroupId = (string)menuItem.Tag;
+
+            var selectedModSettingGroup = ViewModel.SokuModSettingGroups.FirstOrDefault(x => x.Id == modSettingGroupId);
+            if (selectedModSettingGroup != null)
+            {
+                var index = ViewModel.SokuModSettingGroups.IndexOf(selectedModSettingGroup);
+
+                ViewModel.SokuModSettingGroups.Insert(index + 1, new ModSettingGroupViewModel()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = selectedModSettingGroup.Name,
+                    Desc = selectedModSettingGroup.Desc,
+                    Cover = selectedModSettingGroup.Cover,
+                    CoverOrigin = selectedModSettingGroup.CoverOrigin,
+                    CoverOverlayColor = selectedModSettingGroup.CoverOverlayColor,
+                    HoverColor = selectedModSettingGroup.HoverColor,
+                    NameColor = selectedModSettingGroup.NameColor,
+                    DescColor = selectedModSettingGroup.DescColor,
+                    EnableMods = Static.DeepCopy(selectedModSettingGroup.EnableMods),
+                    DisableMods = Static.DeepCopy(selectedModSettingGroup.DisableMods),
+                    IsHidden = selectedModSettingGroup.IsHidden,
+                    IniSettingsOverride = Static.DeepCopy(selectedModSettingGroup.IniSettingsOverride)
+                });
+
+                ForceSokuModSettingGroupsListViewRefresh();
+
+                ViewModel.Saveable = true;
+            }
+            else
+            {
+                MessageBox.Show(string.Format(LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
