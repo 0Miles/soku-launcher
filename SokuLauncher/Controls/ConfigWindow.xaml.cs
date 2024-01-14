@@ -129,7 +129,12 @@ namespace SokuLauncher.Controls
         {
             try
             {
+                foreach (var modInfoViewModel in ViewModel.ModInfoList)
+                {
+                    ViewModel.ModManager.ChangeModEnabled(modInfoViewModel.Name, modInfoViewModel.Enabled);
+                }
                 ViewModel.ModManager.SaveSWRSToysIni();
+
                 if (ViewModel.ModManager.ToBeDeletedDirList.Count > 0)
                 {
                     try
