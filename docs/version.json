@@ -9,14 +9,14 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Notes": "### Bug Fixes\r\n\r\n* directory separator issue in file paths ([d983c01](https://github.com/0Miles/soku-launcher/commit/d983c01f5338a928a954c9a2f2c7843b687f3656))\r\n* self updater ([614b8ed](https://github.com/0Miles/soku-launcher/commit/614b8ed3e881e92729e6f063c6e1bff3c3b8fab3))\r\n",
-        "Version": "2.0.1.0",
+        "Notes": "### Bug Fixes\r\n\r\n* default sources ([27de5a5](https://github.com/0Miles/soku-launcher/commit/27de5a5f982ef089b73712704ef84fa1b93bf719))\r\n",
+        "Version": "2.0.2.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.1.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.2.0/SokuLauncher.zip",
         "DownloadLinks": [
             {
                 "Type": "Github",
-                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.1.0/SokuLauncher.zip"
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.2.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
