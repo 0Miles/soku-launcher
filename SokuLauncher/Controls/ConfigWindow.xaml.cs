@@ -94,6 +94,8 @@ namespace SokuLauncher.Controls
                     selectedDirPath = relativePath;
                 }
 
+                selectedDirPath = selectedDirPath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+                selectedFileName = selectedFileName.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                 if (selectedDirPath != ViewModel.SokuDirPath || selectedFileName != ViewModel.SokuFileName)
                 {
                     ViewModel.SokuDirPath = selectedDirPath;
@@ -568,7 +570,7 @@ namespace SokuLauncher.Controls
                     if (cropWindow.ShowDialog() == true)
                     {
                         ViewModel.SelectedSokuModSettingGroup.CoverOrigin = openFileDialog.FileName;
-                        selectedFileName = cropWindow.FileName;
+                        selectedFileName = cropWindow.FileName.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                     }
                     else
                     {
@@ -586,6 +588,7 @@ namespace SokuLauncher.Controls
                     selectedFileName = relativePath;
                 }
 
+                selectedFileName = selectedFileName.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                 if (ViewModel.SelectedSokuModSettingGroup.Cover != selectedFileName)
                 {
                     ViewModel.SelectedSokuModSettingGroup.Cover = selectedFileName;
@@ -608,13 +611,14 @@ namespace SokuLauncher.Controls
                 if (cropWindow.ShowDialog() == true)
                 {
                     ViewModel.SelectedSokuModSettingGroup.CoverOrigin = coverOriginFileName;
-                    selectedFileName = cropWindow.FileName;
+                    selectedFileName = cropWindow.FileName.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                 }
                 else
                 {
                     return;
                 }
 
+                selectedFileName = selectedFileName.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                 if (ViewModel.SelectedSokuModSettingGroup.Cover != selectedFileName)
                 {
                     ViewModel.SelectedSokuModSettingGroup.Cover = selectedFileName;
@@ -916,7 +920,7 @@ namespace SokuLauncher.Controls
 
             if (result == true)
             {
-                string selectedFileName = openFileDialog.FileName;
+                string selectedFileName = openFileDialog.FileName.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                 await InsatllModFromFile(selectedFileName);
             }
         }
@@ -1091,7 +1095,7 @@ namespace SokuLauncher.Controls
                 }
                 ViewModel.AdditionalExecutablePaths.Add(new AdditionalExecutablePathModel
                 {
-                    Path = selectedFileName,
+                    Path = selectedFileName.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar),
                     Enabled = true
                 });
                 ViewModel.Saveable = true;

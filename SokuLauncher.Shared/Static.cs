@@ -40,9 +40,9 @@ namespace SokuLauncher.Shared
                 return "..";
             }
 
-            if (!baseDirPath.EndsWith("\\"))
+            if (!baseDirPath.EndsWith(Path.DirectorySeparatorChar.ToString()))
             {
-                baseDirPath += "\\";
+                baseDirPath += Path.DirectorySeparatorChar;
             }
             Uri baseUri = new Uri(baseDirPath);
             Uri absoluteUri = new Uri(absolutePath);
