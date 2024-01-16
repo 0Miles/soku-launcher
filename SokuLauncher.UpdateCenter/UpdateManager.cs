@@ -490,9 +490,9 @@ namespace SokuLauncher.UpdateCenter
 
         public static async Task CheckSelfIsUpdating()
         {
-            string updateSokuLauncherDir = Path.Combine(Path.GetTempPath(), "SokuModUpdate", "SokuLauncher");
+            string selfName = Path.GetFileNameWithoutExtension(Static.SelfFileName);
 
-            if (Static.SelfFileDir == updateSokuLauncherDir)
+            if (selfName == "Updater")
             {
                 string replaceTargetPath = File.ReadAllText("replace.txt");
 
