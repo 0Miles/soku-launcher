@@ -13,7 +13,7 @@ namespace SokuLauncher.Shared.Models
         public bool AutoCheckForInstallable { get; set; } = true;
         public string VersionInfoUrl { get; set; }
         public string Language { get; set; }
-        public List<SourceConfigModel> Sources { get; set; } = new List<SourceConfigModel>();
+        public List<SourceConfigModel> Sources { get; set; }
         public List<AdditionalExecutablePathModel> AdditionalExecutablePaths { get; set; } = new List<AdditionalExecutablePathModel>();
     }
 }

@@ -76,6 +76,26 @@ namespace SokuLauncher.Shared.Utils
                 }
                 LanguageService.ChangeLanguagePublish(Config.Language);
 
+                // default sources
+                if (Config.Sources == null)
+                {
+                    Config.Sources = new List<SourceConfigModel>
+                    {
+                        new SourceConfigModel
+                        {
+                            Name = "SokuCN-github",
+                            Url = "https://soku-cn.latte.today",
+                            PreferredDownloadLinkType = "github"
+                        },
+                        new SourceConfigModel
+                        {
+                            Name = "SokuCN-gitee",
+                            Url = "https://soku-cn.gitee.io/main-source/",
+                            PreferredDownloadLinkType = "gitee"
+                        },
+                    };
+                }
+
                 if (!CheckSokuDirAndFileExists(Config.SokuDirPath, Config.SokuFileName))
                 {
                     Config.SokuDirPath = FindSokuDir() ?? DEFAULT_SOKU_DIR;
