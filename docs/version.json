@@ -9,14 +9,14 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Notes": "- 添加 启动前额外执行 设定项\n- 修正预设设定\n- 修正在桌面建立捷径功能\n- 添加更新窗口的全选功能\n- 修正中止更新窗口的行为\n- 添加 复制到下方 功能在设定窗口的启动器设定选项\n- 修正从压缩档更新或安装模组",
-        "Version": "2.0.0.3",
+        "Notes": "### Bug Fixes\r\n\r\n* directory separator issue in file paths ([d983c01](https://github.com/0Miles/soku-launcher/commit/d983c01f5338a928a954c9a2f2c7843b687f3656))\r\n* self updater ([614b8ed](https://github.com/0Miles/soku-launcher/commit/614b8ed3e881e92729e6f063c6e1bff3c3b8fab3))\r\n",
+        "Version": "2.0.1.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://gitee.com/milestw/soku-launcher/releases/download/v2.0.0.3/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.1.0/SokuLauncher.zip",
         "DownloadLinks": [
             {
-                "Type": "Gitee",
-                "Url": "https://gitee.com/milestw/soku-launcher/releases/download/v2.0.0.3/SokuLauncher.zip"
+                "Type": "Github",
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.1.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
