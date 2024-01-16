@@ -614,6 +614,7 @@ namespace SokuLauncher
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
+            ViewModel.UpdateManager.CancelCheckForUpdates();
             UpdatingWindow updatingWindow = new UpdatingWindow
             {
                 UpdateManager = ViewModel.UpdateManager,
