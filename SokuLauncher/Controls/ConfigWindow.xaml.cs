@@ -116,6 +116,7 @@ namespace SokuLauncher.Controls
                                 Version = x.Version,
                                 Icon = x.Icon,
                                 ConfigFileList = x.ConfigFiles,
+                                Desc = x.Description
                             })
                     );
                 }
@@ -160,6 +161,7 @@ namespace SokuLauncher.Controls
                             Version = x.Version,
                             Icon = x.Icon,
                             ConfigFileList = x.ConfigFiles,
+                            Desc = x.Description
                         })
                     );
                     ConfigModListUserControl.SearchMod();
@@ -794,6 +796,7 @@ namespace SokuLauncher.Controls
                             Version = x.Version,
                             Icon = x.Icon,
                             ConfigFileList = x.ConfigFiles,
+                            Desc = x.Description
                         })
                     );
                     ConfigModListUserControl.SearchMod();
@@ -1001,6 +1004,7 @@ namespace SokuLauncher.Controls
                             Version = x.Version,
                             Icon = x.Icon,
                             ConfigFileList = x.ConfigFiles,
+                            Desc = x.Description
                         })
                     );
                     ConfigModListUserControl.SearchMod();
@@ -1050,6 +1054,7 @@ namespace SokuLauncher.Controls
                     Version = x.Version,
                     Icon = x.Icon,
                     ConfigFileList = x.ConfigFiles,
+                    Desc = x.Description
                 })
             );
             ConfigModListUserControl.SearchMod();

@@ -86,6 +86,9 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListViewItem}">
                                 <Grid Margin="4">
+                                    <Grid.ToolTip>
+                                        <ToolTip Content="{Binding Desc}" />
+                                    </Grid.ToolTip>
                                     <Grid.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="{DynamicResource ModListUserControl-OpenModFolder}" Click="OpenModFolder_Click" Tag="{Binding FullPath}" />

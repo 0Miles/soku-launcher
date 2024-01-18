@@ -10,6 +10,7 @@ namespace SokuLauncher.ViewModels
         public string Name { get; set; }
         public string FullPath { get; set; }
         public string RelativePath { get; set; }
+        public string Desc { get; set; }
         public string DirName { get; set; }
         private bool _Enabled;
         public bool Enabled

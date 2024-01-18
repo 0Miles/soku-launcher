@@ -368,6 +368,7 @@ namespace SokuLauncher
                                     Version = x.Version,
                                     Icon = x.Icon,
                                     ConfigFileList = x.ConfigFiles,
+                                    Desc = x.Description
                                 })
                             ),
                             SokuDirPath = ViewModel.ConfigUtil.Config.SokuDirPath,
@@ -480,6 +481,7 @@ namespace SokuLauncher
                             Version = x.Version,
                             Icon = x.Icon,
                             ConfigFileList = x.ConfigFiles,
+                            Desc = x.Description
                         })
                     ),
                     SokuDirPath = ViewModel.ConfigUtil.Config.SokuDirPath,
