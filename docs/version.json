@@ -9,14 +9,14 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Notes": "### Bug Fixes\r\n\r\n* cancel check for updates before downloading ([933a0b1](https://github.com/0Miles/soku-launcher/commit/933a0b187daa91b956f826c1af310a8393ddc92a))\r\n",
-        "Version": "2.0.3.0",
+        "Notes": "### Bug Fixes\r\n\r\n* add retry option for failed module information retrieval ([1e2b8e6](https://github.com/0Miles/soku-launcher/commit/1e2b8e6ee8921aacb6b081198282bab9b6308131))\r\n",
+        "Version": "2.0.4.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.3.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.4.0/SokuLauncher.zip",
         "DownloadLinks": [
             {
                 "Type": "Github",
-                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.3.0/SokuLauncher.zip"
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.4.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
