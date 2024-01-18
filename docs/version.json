@@ -9,18 +9,14 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Notes": "### Performance Improvements\r\n\r\n* add Description tip to ModCard ([bfc6f09](https://github.com/0Miles/soku-launcher/commit/bfc6f0961f576480994a9cf7f91aa380592c2c26))\r\n",
-        "Version": "2.0.5.0",
+        "Notes": "### Bug Fixes\r\n\r\n* close updating window after update ([93df7ee](https://github.com/0Miles/soku-launcher/commit/93df7ee6e694e96ecafb4bdf01c3c970d71abb0f))\r\n",
+        "Version": "2.0.6.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.5.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.6.0/SokuLauncher.zip",
         "DownloadLinks": [
             {
                 "Type": "Github",
-                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.5.0/SokuLauncher.zip"
-            },
-            {
-                "Type": "Gitee",
-                "Url": "https://gitee.com/milestw/soku-launcher/releases/download/v2.0.5.0/SokuLauncher.zip"
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.6.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
