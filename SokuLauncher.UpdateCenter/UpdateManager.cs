@@ -154,6 +154,8 @@ namespace SokuLauncher.UpdateCenter
                         }
                     }
 
+                    updatingWindow.Close();
+
                     List<UpdateFileInfoModel> sourceUpdateInfoList = CurrentUpdater.GetUpdateFileInfosFromSource(source);
                     CurrentUpdater.RefreshAvailable(sourceUpdateInfoList, modsToCheckList);
 
