@@ -9,14 +9,14 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Notes": "### Bug Fixes\r\n\r\n* add retry option for failed module information retrieval ([1e2b8e6](https://github.com/0Miles/soku-launcher/commit/1e2b8e6ee8921aacb6b081198282bab9b6308131))\r\n",
-        "Version": "2.0.4.0",
+        "Notes": "### Performance Improvements\r\n\r\n* add Description tip to ModCard ([bfc6f09](https://github.com/0Miles/soku-launcher/commit/bfc6f0961f576480994a9cf7f91aa380592c2c26))\r\n",
+        "Version": "2.0.5.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.4.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.5.0/SokuLauncher.zip",
         "DownloadLinks": [
             {
                 "Type": "Github",
-                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.4.0/SokuLauncher.zip"
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.5.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
