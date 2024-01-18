@@ -57,6 +57,7 @@
     <system:String x:Key="UpdateManager-InstallFromArchive-Completed">安装完成</system:String>
     <system:String x:Key="UpdateManager-NewModInstalled">有新安装的模组，要立刻启用吗？</system:String>
     <system:String x:Key="UpdateManager-AllAvailableModsInstalled">已安装所有可供安装的模组</system:String>
+    <system:String x:Key="UpdateManager-MessageBox-RetryGetModInfo">有 {0} 个模组资讯取得失败，是否要重试？</system:String>
 
     <system:String x:Key="UpdatingWindow-Title">更新中</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">更新</system:String>

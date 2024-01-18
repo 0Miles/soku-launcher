@@ -79,7 +79,27 @@ namespace SokuModManager
             }
         }
 
-        public async Task FetchModuleList(SourceModel source)
+        private static async Task RetryOnFailure(Func<Task> task, int retryLimit = 10, int currentRetryCount = 0)
+        {
+            try
+            {
+                await task();
+            } catch (Exception ex)
+            {
+                Logger.LogError($"Failed", ex);
+                if (currentRetryCount < retryLimit)
+                {
+                    await Task.Delay(1000 * (currentRetryCount + 1));
+                    await RetryOnFailure(task, retryLimit, currentRetryCount + 1);
+                }
+                else
+                {
+                    throw new Exception("The retry limit has been reached.", ex);
+                }
+            }
+        }
+
+        public async Task FetchModuleList(SourceModel source, List<SourceModuleSummaryModel> specifyModuleSummaries = null)
         {
             var modulesUrl = new Uri(new Uri(source.Url), "modules.json").ToString();
             var modulesJson = await Common.DownloadStringAsync(modulesUrl);
@@ -89,47 +109,53 @@ namespace SokuModManager
 
                 List<Task> tasks = new List<Task>();
 
-                foreach (var moduleSummary in source.ModuleSummaries)
+                foreach (var moduleSummary in specifyModuleSummaries ?? source.ModuleSummaries)
                 {
                     _ = DownloadModuleImageFiles(moduleSummary, source);
                     tasks.Add(
-                        Task.Run(async () =>
-                        {
-
-                            try
-                            {
-                                var modInfoUrl = new Uri(new Uri(source.Url), $"modules/{moduleSummary.Name}/mod.json").ToString();
-
-                                var modInfoJson = await Common.DownloadStringAsync(modInfoUrl);
-                                if (modInfoJson != null)
+                        RetryOnFailure(
+                            async () =>
                                 {
-                                    var modInfo = JsonConvert.DeserializeObject<SourceModuleModel>(modInfoJson);
-                                    if (modInfo != null)
+                                    try
                                     {
-                                        modInfo.Icon = moduleSummary.Icon;
-                                        modInfo.Banner = moduleSummary.Banner;
+                                        var modInfoUrl = new Uri(new Uri(source.Url), $"modules/{moduleSummary.Name}/mod.json").ToString();
 
-                                        if (modInfo.RecommendedVersionNumber != null)
+                                        var modInfoJson = await Common.DownloadStringAsync(modInfoUrl);
+                                        if (modInfoJson != null)
                                         {
-                                            modInfo.RecommendedVersion = await FetchModuleVersionInfo(source, modInfo.Name, modInfo.RecommendedVersionNumber);
+                                            var modInfo = JsonConvert.DeserializeObject<SourceModuleModel>(modInfoJson);
+                                            if (modInfo != null)
+                                            {
+                                                modInfo.Icon = moduleSummary.Icon;
+                                                modInfo.Banner = moduleSummary.Banner;
+
+                                                if (modInfo.RecommendedVersionNumber != null)
+                                                {
+                                                    modInfo.RecommendedVersion = await FetchModuleVersionInfo(source, modInfo.Name, modInfo.RecommendedVersionNumber);
+                                                }
+
+
+                                                source.Modules.Add(modInfo);
+                                            }
                                         }
-
-
-                                        source.Modules.Add(modInfo);
+                                        else
+                                        {
+                                            throw new Exception("Get mod info failed.");
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Logger.LogError($"Error fetching module data for {moduleSummary.Name}", ex);
+                                        throw ex;
                                     }
                                 }
-                            }
-                            catch (Exception ex)
-                            {
-                                Logger.LogError($"Error fetching module data for {moduleSummary.Name}", ex);
-                            }
-                        })
-                    );
+                            )
+                        );
                 }
 
                 if (source.Url.StartsWith("https://gitee.com"))
                 {
-                    await RunTasksInBatches(tasks, 5);
+                    await RunTasksInBatches(tasks, 3);
                 }
                 else
                 {

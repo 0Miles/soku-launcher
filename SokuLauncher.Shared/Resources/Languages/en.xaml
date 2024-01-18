@@ -57,6 +57,7 @@
     <system:String x:Key="UpdateManager-InstallFromArchive-Completed">Installation complete</system:String>
     <system:String x:Key="UpdateManager-NewModInstalled">One or more new mods have been installed, do you want to enable them now?</system:String>
     <system:String x:Key="UpdateManager-AllAvailableModsInstalled">All available mods installed.</system:String>
+    <system:String x:Key="UpdateManager-MessageBox-RetryGetModInfo">{0} module information failed to be obtained. Do you want to try again?</system:String>
 
     <system:String x:Key="UpdatingWindow-Title">Updating</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">Updates</system:String>

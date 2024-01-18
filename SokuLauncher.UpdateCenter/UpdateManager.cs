@@ -119,8 +119,41 @@ namespace SokuLauncher.UpdateCenter
                 }
                 await FetchSourceListTask;
 
+                if (checkForUpdatesGuidList.LastOrDefault() != myGuid)
+                {
+                    return null;
+                }
+
                 foreach (var source in CurrentSourceManager.SourceList)
                 {
+                    UpdatingWindow updatingWindow = new UpdatingWindow
+                    {
+                        UpdateManager = this,
+                        IsIndeterminate = true,
+                    };
+                    while (source.ModuleSummaries.Count > source.Modules.Count)
+                    {
+                        var result = MessageBox.Show(
+                            string.Format(LanguageService.GetString("UpdateManager-MessageBox-RetryGetModInfo"), source.ModuleSummaries.Count - source.Modules.Count), 
+                            LanguageService.GetString("UpdateManager-MessageBox-Title"), 
+                            MessageBoxButton.YesNo, 
+                            MessageBoxImage.Error);
+
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            updatingWindow.Show();
+                            await CurrentSourceManager.FetchModuleList(
+                                    source, 
+                                    source.ModuleSummaries.Where(x => !source.Modules.Any(module => module.Name == x.Name)).ToList()
+                                );
+                            updatingWindow.Close();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
                     List<UpdateFileInfoModel> sourceUpdateInfoList = CurrentUpdater.GetUpdateFileInfosFromSource(source);
                     CurrentUpdater.RefreshAvailable(sourceUpdateInfoList, modsToCheckList);
 
