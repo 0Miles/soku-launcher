@@ -17,6 +17,10 @@
             {
                 "Type": "Github",
                 "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.0.5.0/SokuLauncher.zip"
+            },
+            {
+                "Type": "Gitee",
+                "Url": "https://gitee.com/milestw/soku-launcher/releases/download/v2.0.5.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
