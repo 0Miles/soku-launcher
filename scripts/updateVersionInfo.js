@@ -61,6 +61,10 @@ async function updateVersionInfo(version, githubToken) {
         {
             Type: 'Github',
             Url: `https://github.com/0Miles/soku-launcher/releases/download/v${version}/SokuLauncher.zip`
+        },
+        {
+            Type: 'Gitee',
+            Url: `https://gitee.com/milestw/soku-launcher/releases/download/v${version}/SokuLauncher.zip`
         }
     ]
     jsonContent[0].Notes = releaseNotes;
