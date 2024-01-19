@@ -90,7 +90,8 @@ namespace SokuLauncher
                             Id = settingGroup.Id,
                             Name = settingGroup.Name,
                             EnableMods = settingGroup.EnableMods,
-                            DisableMods = settingGroup.DisableMods
+                            DisableMods = settingGroup.DisableMods,
+                            IniSettingsOverride = settingGroup.IniSettingsOverride,
                         }
                     );
 

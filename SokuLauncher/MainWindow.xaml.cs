@@ -195,12 +195,13 @@ namespace SokuLauncher
                 }
 
                 ViewModel.ModManager.ApplyModSettingGroup(
-                    new SokuModManager.Models.Mod.ModSettingGroupModel
+                    new ModSettingGroupModel
                     {
                         Id = settingGroup.Id,
                         Name = settingGroup.Name,
                         EnableMods = settingGroup.EnableMods,
-                        DisableMods = settingGroup.DisableMods
+                        DisableMods = settingGroup.DisableMods,
+                        IniSettingsOverride = settingGroup.IniSettingsOverride,
                     }
                 );
 
