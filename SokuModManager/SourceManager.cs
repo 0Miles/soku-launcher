@@ -46,7 +46,7 @@ namespace SokuModManager
             {
                 Status = SourceManagerStatus.Fetching
             });
-            
+
             List<Task> tasks = new List<Task>();
 
             foreach (var source in SourceList)
@@ -84,7 +84,8 @@ namespace SokuModManager
             try
             {
                 await task();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.LogError($"Failed", ex);
                 if (currentRetryCount < retryLimit)
@@ -99,72 +100,112 @@ namespace SokuModManager
             }
         }
 
-        public async Task FetchModuleList(SourceModel source, List<SourceModuleSummaryModel> specifyModuleSummaries = null)
+        public async Task<bool> FetchModuleListSnapshot(SourceModel source)
         {
-            var modulesUrl = new Uri(new Uri(source.Url), "modules.json").ToString();
-            var modulesJson = await Common.DownloadStringAsync(modulesUrl);
-            if (modulesJson != null)
+            try
             {
-                source.ModuleSummaries = JsonConvert.DeserializeObject<List<SourceModuleSummaryModel>>(modulesJson) ?? new List<SourceModuleSummaryModel>();
-
-                List<Task> tasks = new List<Task>();
-
-                foreach (var moduleSummary in specifyModuleSummaries ?? source.ModuleSummaries)
+                var modulesCacheUrl = new Uri(new Uri(source.Url), "modules-snapshot.json").ToString();
+                var modulesJson = await Common.DownloadStringAsync(modulesCacheUrl);
+                if (modulesJson != null)
                 {
-                    _ = DownloadModuleImageFiles(moduleSummary, source);
-                    tasks.Add(
-                        RetryOnFailure(
-                            async () =>
-                                {
-                                    try
-                                    {
-                                        var modInfoUrl = new Uri(new Uri(source.Url), $"modules/{moduleSummary.Name}/mod.json").ToString();
-
-                                        var modInfoJson = await Common.DownloadStringAsync(modInfoUrl);
-                                        if (modInfoJson != null)
-                                        {
-                                            var modInfo = JsonConvert.DeserializeObject<SourceModuleModel>(modInfoJson);
-                                            if (modInfo != null)
-                                            {
-                                                modInfo.Icon = moduleSummary.Icon;
-                                                modInfo.Banner = moduleSummary.Banner;
-
-                                                if (modInfo.RecommendedVersionNumber != null)
-                                                {
-                                                    modInfo.RecommendedVersion = await FetchModuleVersionInfo(source, modInfo.Name, modInfo.RecommendedVersionNumber);
-                                                }
-
-
-                                                source.Modules.Add(modInfo);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            throw new Exception("Get mod info failed.");
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Logger.LogError($"Error fetching module data for {moduleSummary.Name}", ex);
-                                        throw ex;
-                                    }
-                                }
-                            )
-                        );
-                }
-
-                if (source.Url.StartsWith("https://gitee.com"))
-                {
-                    await RunTasksInBatches(tasks, 3);
+                    source.ModuleSummaries = JsonConvert.DeserializeObject<List<SourceModuleSummaryModel>>(modulesJson) ?? new List<SourceModuleSummaryModel>();
+                    source.Modules = JsonConvert.DeserializeObject<List<SourceModuleModel>>(modulesJson) ?? new List<SourceModuleModel>();
+                    List<Task> tasks = new List<Task>();
+                    foreach (var moduleSummary in source.ModuleSummaries)
+                    {
+                        tasks.Add(DownloadModuleImageFiles(moduleSummary, source));
+                    }
+                    await Task.WhenAll(tasks);
+                    return true;
                 }
                 else
                 {
-                    await Task.WhenAll(tasks);
+                    Logger.LogInformation($"Error fetching modules data snapshot for {source.Name}: modules.json not found or empty");
+                    return false;
                 }
+            } 
+            catch (Exception ex)
+            {
+                Logger.LogError($"Error fetching modules data snapshot for {source.Name}", ex);
+                return false;
+            }
+        }
+
+        public async Task FetchModuleList(SourceModel source, List<SourceModuleSummaryModel> specifyModuleSummaries = null)
+        {
+            if (specifyModuleSummaries == null)
+            {
+                if (await FetchModuleListSnapshot(source))
+                {
+                    // If snapshot is available, don't fetch modules.json
+                    return;
+                }
+
+                var modulesUrl = new Uri(new Uri(source.Url), "modules.json").ToString();
+                var modulesJson = await Common.DownloadStringAsync(modulesUrl);
+                if (modulesJson != null)
+                {
+                    source.ModuleSummaries = JsonConvert.DeserializeObject<List<SourceModuleSummaryModel>>(modulesJson) ?? new List<SourceModuleSummaryModel>();
+                }
+                else
+                {
+                    Logger.LogInformation($"Error fetching modules data for {source.Name}: modules.json not found or empty");
+                }
+            }
+
+            List<Task> tasks = new List<Task>();
+
+            foreach (var moduleSummary in specifyModuleSummaries ?? source.ModuleSummaries)
+            {
+                _ = DownloadModuleImageFiles(moduleSummary, source);
+                tasks.Add(
+                    RetryOnFailure(
+                        async () =>
+                        {
+                            try
+                            {
+                                var modInfoUrl = new Uri(new Uri(source.Url), $"modules/{moduleSummary.Name}/mod.json").ToString();
+
+                                var modInfoJson = await Common.DownloadStringAsync(modInfoUrl);
+                                if (modInfoJson != null)
+                                {
+                                    var modInfo = JsonConvert.DeserializeObject<SourceModuleModel>(modInfoJson);
+                                    if (modInfo != null)
+                                    {
+                                        modInfo.Icon = moduleSummary.Icon;
+                                        modInfo.Banner = moduleSummary.Banner;
+
+                                        if (modInfo.RecommendedVersionNumber != null)
+                                        {
+                                            modInfo.RecommendedVersion = await FetchModuleVersionInfo(source, modInfo.Name, modInfo.RecommendedVersionNumber);
+                                        }
+
+
+                                        source.Modules.Add(modInfo);
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception("Get mod info failed.");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.LogError($"Error fetching module data for {moduleSummary.Name}", ex);
+                                throw ex;
+                            }
+                        }
+                        )
+                    );
+            }
+
+            if (source.Url.StartsWith("https://gitee.com"))
+            {
+                await RunTasksInBatches(tasks, 3);
             }
             else
             {
-                Logger.LogInformation($"Error fetching modules data for {source.Name}: modules.json not found or empty");
+                await Task.WhenAll(tasks);
             }
         }
 
