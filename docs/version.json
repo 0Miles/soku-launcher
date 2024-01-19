@@ -9,18 +9,18 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Notes": "### Bug Fixes\r\n\r\n* IniSettingsOverride ([b540e01](https://github.com/0Miles/soku-launcher/commit/b540e017a8ccfbdc40a1e2c75b04c0582ae3238f))\r\n\r\n\r\n### Features\r\n\r\n* modInfo snapshot support ([6b4cfc0](https://github.com/0Miles/soku-launcher/commit/6b4cfc00da151bbc7fb45d2642caadaacec57ed6))\r\n",
-        "Version": "2.1.0.0",
+        "Notes": "### Bug Fixes\r\n\r\n* ini file editor ([bdcca54](https://github.com/0Miles/soku-launcher/commit/bdcca545eb3a524334437af1db88641f509d9b7a))\r\n",
+        "Version": "2.1.1.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.1.0.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.1.1.0/SokuLauncher.zip",
         "DownloadLinks": [
             {
                 "Type": "Github",
-                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.1.0.0/SokuLauncher.zip"
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.1.1.0/SokuLauncher.zip"
             },
             {
                 "Type": "Gitee",
-                "Url": "https://gitee.com/milestw/soku-launcher/releases/download/v2.1.0.0/SokuLauncher.zip"
+                "Url": "https://gitee.com/milestw/soku-launcher/releases/download/v2.1.1.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
