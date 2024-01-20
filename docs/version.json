@@ -9,18 +9,18 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Notes": "### Bug Fixes\r\n\r\n* ini file editor ([bdcca54](https://github.com/0Miles/soku-launcher/commit/bdcca545eb3a524334437af1db88641f509d9b7a))\r\n",
-        "Version": "2.1.1.0",
+        "Notes": "### Bug Fixes\r\n\r\n* unable to properly disable ini setting items ([29038aa](https://github.com/0Miles/soku-launcher/commit/29038aaddc2d27f8b9490507d1fc5b7f96a68800))\r\n",
+        "Version": "2.1.2.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.1.1.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.1.2.0/SokuLauncher.zip",
         "DownloadLinks": [
             {
                 "Type": "Github",
-                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.1.1.0/SokuLauncher.zip"
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.1.2.0/SokuLauncher.zip"
             },
             {
                 "Type": "Gitee",
-                "Url": "https://gitee.com/milestw/soku-launcher/releases/download/v2.1.1.0/SokuLauncher.zip"
+                "Url": "https://gitee.com/milestw/soku-launcher/releases/download/v2.1.2.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
