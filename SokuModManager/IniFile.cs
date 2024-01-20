@@ -31,7 +31,7 @@ namespace SokuModManager
 
         public void Write(string key, string value, string section)
         {
-            WritePrivateProfileString(section, Encoding.UTF8.GetBytes(key), Encoding.UTF8.GetBytes(value), IniFilePath);
+            WritePrivateProfileString(section, key == null ? null : Encoding.UTF8.GetBytes(key), value == null ? null : Encoding.UTF8.GetBytes(value), IniFilePath);
         }
 
         public void DeleteKey(string key, string section)
