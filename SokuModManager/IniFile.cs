@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SokuModManager
 {
@@ -39,6 +39,70 @@ namespace SokuModManager
             Write(key, null, section);
         }
 
+        public void EnableKey(string key, string section)
+        {
+            List<string> iniLineList = File.ReadAllLines(IniFilePath).ToList();
+            bool inSection = false;
+            for (int i = 0; i < iniLineList.Count; i++)
+            {
+                string line = iniLineList[i];
+                if (line.Contains($"[{section}]"))
+                {
+                    inSection = true;
+                }
+                else if (new Regex(@"^\s*\[.*\]\s*$").IsMatch(line))
+                {
+                    inSection = false;
+                }
+
+                if (inSection && line.Contains(key))
+                {
+                    iniLineList[i] = new Regex($@";\s*{key}\s*=\s*(.*)\s*").Replace(line, $@"{key}=$1");
+                    break;
+                }
+            }
+
+            WriteLinesWithoutBom(iniLineList);
+        }
+
+        public void DisableKey(string key, string section)
+        {
+            List<string> iniLineList = File.ReadAllLines(IniFilePath).ToList();
+            bool inSection = false;
+            for (int i = 0; i < iniLineList.Count; i++)
+            {
+                string line = iniLineList[i];
+                if (line.Contains($"[{section}]"))
+                {
+                    inSection = true;
+                }
+                else if (new Regex(@"^\s*\[.*\]\s*$").IsMatch(line))
+                {
+                    inSection = false;
+                }
+
+                if (inSection && line.Contains(key))
+                {
+                    iniLineList[i] = new Regex($@"^\s*{key}\s*=\s*(.*)\s*").Replace(line, $@";{key}=$1");
+                    break;
+                }
+            }
+
+            WriteLinesWithoutBom(iniLineList);
+        }
+
+        private void WriteLinesWithoutBom(IEnumerable<string> lines)
+        {
+            using (StreamWriter writer = new StreamWriter(IniFilePath, false, new UTF8Encoding(false)))
+            {
+                foreach (string line in lines)
+                {
+                    writer.WriteLine(line);
+                }
+                writer.Close();
+            }
+        }
+
         public void DeleteSection(string section)
         {
             Write(null, null, section);
@@ -46,7 +110,7 @@ namespace SokuModManager
 
         public bool KeyExists(string key, string section)
         {
-            return Read(key, section).Length > 0;
+            return !string.IsNullOrEmpty(Read(key, section));
         }
     }
 }

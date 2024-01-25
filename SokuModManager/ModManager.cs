@@ -314,10 +314,11 @@ namespace SokuModManager
                     IniFile iniFile = new IniFile(iniFilePath);
                     if (modIniSetting.Enabled == false)
                     {
-                        iniFile.DeleteKey(modIniSetting.Key, modIniSetting.Section);
+                        iniFile.DisableKey(modIniSetting.Key, modIniSetting.Section);
                     }
                     else
                     {
+                        iniFile.EnableKey(modIniSetting.Key, modIniSetting.Section);
                         iniFile.Write(modIniSetting.Key, modIniSetting.Value, modIniSetting.Section);
                     }
                 }
