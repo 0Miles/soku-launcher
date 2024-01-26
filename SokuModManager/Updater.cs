@@ -1,6 +1,7 @@
 ﻿
 using Newtonsoft.Json;
 using SokuModManager.Models;
+using SokuModManager.Models.Mod;
 using SokuModManager.Models.Source;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Policy;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -398,22 +400,6 @@ namespace SokuModManager
                 }
             }
 
-            if (updateFileInfo.Name == "SokuModLoader")
-            {
-                string modVersionFileName = Path.Combine(updateFileInfo.LocalFileDir, $"{Path.GetFileNameWithoutExtension(updateFileInfo.LocalFileName)}{ModManager.MOD_VERSION_FILENAME_SUFFIX}");
-                if (updateFileInfo.Version != "0.0.0.0")
-                {
-                    File.WriteAllText(modVersionFileName, updateFileInfo.Version);
-                }
-                else
-                {
-                    if (File.Exists(modVersionFileName))
-                    {
-                        File.Delete(modVersionFileName);
-                    }
-                }
-            }
-
             Directory.Delete(updateWorkingDir, true);
         }
 
@@ -435,7 +421,18 @@ namespace SokuModManager
                         }
                         else
                         {
-                            updateFileInfo.LocalFileVersion = ModManager.GetVersionFromDllFileOrVersionTxt(updateFileInfo.LocalFileName).ToString();
+                            var modInfoJsonFilename = Path.Combine(ModManager.SokuDirFullPath, "mod.json");
+                            if (File.Exists(modInfoJsonFilename))
+                            {
+                                var json = File.ReadAllText(modInfoJsonFilename, Encoding.UTF8);
+                                var result = JsonConvert.DeserializeObject<ModInfoModel>(json) ?? new ModInfoModel();
+                                updateFileInfo.LocalFileVersion = result.Version;
+                            }
+                            else
+                            {
+                                updateFileInfo.LocalFileVersion = ModManager.GetVersionFromDllFileOrVersionTxt(updateFileInfo.LocalFileName).ToString();
+                            }
+
                             updateFileInfo.Installed = true;
                         }
                         break;
