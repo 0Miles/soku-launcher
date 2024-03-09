@@ -266,6 +266,12 @@ namespace SokuLauncher.Shared.Utils
                         Name = "SokuCN-github",
                         Url = "https://soku-cn.latte.today",
                         PreferredDownloadLinkType = "github"
+                    },
+                    new SourceConfigModel
+                    {
+                        Name = "soku-launcher-modpacks",
+                        Url = "https://soku-launcher-modpacks.github.io/main-source/",
+                        PreferredDownloadLinkType = "github"
                     }
                 };
 
@@ -278,7 +284,7 @@ namespace SokuLauncher.Shared.Utils
                     }
                 };
             }
-            else
+            else if (config.Language == "zh-Hant")
             {
                 config.Sources = new List<SourceConfigModel>
                 {
@@ -294,6 +300,36 @@ namespace SokuLauncher.Shared.Utils
                         Url = "https://soku-cn.gitee.io/main-source/",
                         PreferredDownloadLinkType = "gitee"
                     },
+                    new SourceConfigModel
+                    {
+                        Name = "soku-launcher-modpacks",
+                        Url = "https://soku-launcher-modpacks.github.io/main-source/",
+                        PreferredDownloadLinkType = "github"
+                    }
+                };
+            }
+            else
+            {
+                config.Sources = new List<SourceConfigModel>
+                {
+                    new SourceConfigModel
+                    {
+                        Name = "soku-launcher-modpacks",
+                        Url = "https://soku-launcher-modpacks.github.io/main-source/",
+                        PreferredDownloadLinkType = "github"
+                    },
+                    new SourceConfigModel
+                    {
+                        Name = "SokuCN-github",
+                        Url = "https://soku-cn.latte.today",
+                        PreferredDownloadLinkType = "github"
+                    },
+                    new SourceConfigModel
+                    {
+                        Name = "SokuCN-gitee",
+                        Url = "https://soku-cn.gitee.io/main-source/",
+                        PreferredDownloadLinkType = "gitee"
+                    }
                 };
             }
 
