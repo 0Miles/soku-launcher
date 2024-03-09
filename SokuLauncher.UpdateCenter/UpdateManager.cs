@@ -408,7 +408,7 @@ namespace SokuLauncher.UpdateCenter
                 CurrentUpdater.RefreshAvailable(updateFileInfoList, null, true);
 
                 await SelectAndUpdate(
-                    CurrentUpdater.AvailableUpdateList.Concat(CurrentUpdater.AvailableInstallList).ToList(),
+                    CurrentUpdater.AvailableInstallList,
                     LanguageService.GetString("UpdateManager-InstallFromArchive-Desc"),
                     LanguageService.GetString("UpdateManager-InstallFromArchive-Completed"),
                     false,
