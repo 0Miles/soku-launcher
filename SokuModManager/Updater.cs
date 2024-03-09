@@ -109,9 +109,11 @@ namespace SokuModManager
             {
 
                 var localArchiveUri = new Uri(path).AbsoluteUri;
-                ZipArchiveEntry updateFileInfosJsonFile = zip.Entries.FirstOrDefault(x => x.Name.ToLower() == "version.json");
+                ZipArchiveEntry updateFileInfosJsonFile = zip.Entries.FirstOrDefault(x => x.FullName.ToLower().EndsWith("version.json") || x.FullName.ToLower().EndsWith("mod.json"));
                 if (updateFileInfosJsonFile != null)
                 {
+                    string archiveUpdateFileDirname = Path.GetDirectoryName(updateFileInfosJsonFile.FullName);
+
                     using (Stream stream = updateFileInfosJsonFile.Open())
                     {
 
@@ -132,6 +134,7 @@ namespace SokuModManager
                         foreach (var updateFileInfo in updateFileInfos ?? new List<UpdateFileInfoModel>())
                         {
                             updateFileInfo.LocalArchiveUri = localArchiveUri;
+                            updateFileInfo.UpdateWorkingDir = Path.Combine(archiveUpdateFileDirname, updateFileInfo.UpdateWorkingDir);
                         }
 
                         CompleteLocalModuleInfo(updateFileInfos);
@@ -163,7 +166,7 @@ namespace SokuModManager
                         ConfigFiles = module.RecommendedVersion?.ConfigFiles,
                         DownloadLinks = module.RecommendedVersion?.DownloadLinks,
                         Compressed = true,
-                        UpdateWorkingDir = $"./{module.Name.ToLower()}",
+                        UpdateWorkingDir = $"./{module.Name}",
                         Icon = module.Icon,
                         Banner = module.Banner
                     };
