@@ -9,18 +9,18 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Notes": "### Bug Fixes\r\n\r\n* sokuModLoader version parse ([8ed26ca](https://github.com/0Miles/soku-launcher/commit/8ed26caa0f0c611b3ee3144f671118187422fd1d))\r\n",
-        "Version": "2.1.4.0",
+        "Notes": "### Bug Fixes\r\n\r\n* available update items repeat ([a49fa64](https://github.com/0Miles/soku-launcher/commit/a49fa64c7ad6714119cd23061e00055a54c428c2))\r\n\r\n\r\n### Features\r\n\r\n* add new default source configurations ([672c046](https://github.com/0Miles/soku-launcher/commit/672c046cf9ba70671759e485abceba56c8e19134))\r\n* source configuration window ([f5c6ef0](https://github.com/0Miles/soku-launcher/commit/f5c6ef0b5f488053b4717084e231e7039c902149))\r\n",
+        "Version": "2.2.0.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.1.4.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.2.0.0/SokuLauncher.zip",
         "DownloadLinks": [
             {
                 "Type": "Github",
-                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.1.4.0/SokuLauncher.zip"
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.2.0.0/SokuLauncher.zip"
             },
             {
                 "Type": "Gitee",
-                "Url": "https://gitee.com/milestw/soku-launcher/releases/download/v2.1.4.0/SokuLauncher.zip"
+                "Url": "https://gitee.com/milestw/soku-launcher/releases/download/v2.2.0.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
