@@ -59,6 +59,11 @@
     <system:String x:Key="UpdateManager-AllAvailableModsInstalled">All available mods installed.</system:String>
     <system:String x:Key="UpdateManager-MessageBox-RetryGetModInfo">{0} module information failed to be obtained. Do you want to try again?</system:String>
 
+    <system:String x:Key="SourceConfig-Title">Source Setting</system:String>
+    <system:String x:Key="SourceConfig-SourceName">SourceName: </system:String>
+    <system:String x:Key="SourceConfig-Preferred">Preferred: </system:String>
+    <system:String x:Key="SourceConfig-SourceURL">SourceURL: </system:String>
+
     <system:String x:Key="UpdatingWindow-Title">Updating</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">Updates</system:String>
     <system:String x:Key="UpdateSelectionWindow-AutoCheckFouUpdatesCheckbox-Content">Auto check for updates on startup</system:String>

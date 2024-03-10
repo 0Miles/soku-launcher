@@ -490,6 +490,8 @@
                     </Canvas>
                     <TextBlock Text="{DynamicResource ConfigWindow-UpdateTab-VersionInfoUrl}" Margin="8,0,0,0"/>
                     <TextBox Text="{Binding VersionInfoUrl}" Padding="4" Margin="8" TextChanged="TextBoxSetSaveableTrue_TextChanged" />
+                    <Button Content="{DynamicResource SourceConfig-Title}" Margin="8" Padding="16,4" HorizontalAlignment="Stretch" Click="SourceConfigSettingButton_Click"></Button>
+                    
                     <CheckBox Content="{DynamicResource ConfigWindow-UpdateTab-AutoCheckForUpdatesOnStartup}" IsChecked="{Binding AutoCheckForUpdates}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8"/>
                     <CheckBox Content="{DynamicResource ConfigWindow-UpdateTab-AutoCheckForInstallableMods}" IsChecked="{Binding AutoCheckForInstallable}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8"/>
                     <Button Content="{DynamicResource ConfigWindow-CheckFouUpdatesNow}" Margin="8" Padding="16,4" HorizontalAlignment="Center" Click="CheckForUpdatesButton_Click" Visibility="{Binding CheckForUpdatesButtonText, Converter={StaticResource ReverseStringToVisibilityConverter}}"></Button>

@@ -73,6 +73,9 @@
     <Reference Include="Dsafa.WpfColorPicker, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dsafa.WpfColorPicker.1.3.0\lib\net462\Dsafa.WpfColorPicker.dll</HintPath>
     </Reference>
+    <Reference Include="GongSolutions.WPF.DragDrop, Version=3.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
+      <HintPath>..\packages\gong-wpf-dragdrop.3.2.1\lib\net47\GongSolutions.WPF.DragDrop.dll</HintPath>
+    </Reference>
     <Reference Include="Markdig, Version=0.25.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Markdig.0.25.0\lib\net452\Markdig.dll</HintPath>
     </Reference>
@@ -147,10 +150,17 @@
     <Compile Include="Controls\ModSettingGroupEditWindow.xaml.cs">
       <DependentUpon>ModSettingGroupEditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SourceConfigUserControl.xaml.cs">
+      <DependentUpon>SourceConfigUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SourceConfigWindow.xaml.cs">
+      <DependentUpon>SourceConfigWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\ModSettingInfoModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ModInfoViewModel.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ViewModels\SourceConfigWindowViewModel.cs" />
     <Compile Include="ViewModels\ModSettingGroupViewModel.cs" />
     <Compile Include="ViewModels\ConfigWindowViewModel.cs" />
     <Compile Include="ViewModels\ModSettingGroupEditWindowViewModel.cs" />
@@ -177,6 +187,14 @@
     <Page Include="Controls\ModSettingGroupEditWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\SourceConfigUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SourceConfigWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

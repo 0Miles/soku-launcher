@@ -21,6 +21,8 @@ using SokuLauncher.Shared.Utils;
 using SokuLauncher.Shared.Models;
 using SokuLauncher.UpdateCenter;
 using SokuLauncher.UpdateCenter.Controls;
+using SokuLauncher.Properties;
+using SokuModManager.Models.Source;
 
 namespace SokuLauncher.Controls
 {
@@ -1155,6 +1157,20 @@ namespace SokuLauncher.Controls
             else
             {
                 MessageBox.Show(string.Format(LanguageService.GetString("App-ModSettingGroupNotFound"), modSettingGroupId), LanguageService.GetString("Common-ErrorMessageBox-Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void SourceConfigSettingButton_Click(object sender, RoutedEventArgs e)
+        {
+            SourceConfigWindowViewModel scwvm = new SourceConfigWindowViewModel();
+            scwvm.Sources = new ObservableCollection<SourceConfigModel>(Static.DeepCopy(ViewModel.Sources));
+            SourceConfigWindow sourceConfigWindow = new SourceConfigWindow(scwvm);
+            sourceConfigWindow.ShowDialog();
+
+            if (sourceConfigWindow.DialogResult == true)
+            {
+                ViewModel.Sources = scwvm.Sources;
+                ViewModel.Saveable = true;
             }
         }
     }

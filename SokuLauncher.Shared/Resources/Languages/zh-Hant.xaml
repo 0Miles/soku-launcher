@@ -59,6 +59,11 @@
     <system:String x:Key="UpdateManager-AllAvailableModsInstalled">已安裝所有可供安裝的模組</system:String>
     <system:String x:Key="UpdateManager-MessageBox-RetryGetModInfo">有 {0} 個模組資訊取得失敗，是否要重試？</system:String>
 
+    <system:String x:Key="SourceConfig-Title">模組來源設定</system:String>
+    <system:String x:Key="SourceConfig-SourceName">來源名稱: </system:String>
+    <system:String x:Key="SourceConfig-Preferred">優先站點: </system:String>
+    <system:String x:Key="SourceConfig-SourceURL">來源URL: </system:String>
+
     <system:String x:Key="UpdatingWindow-Title">更新中</system:String>
     <system:String x:Key="UpdateSelectionWindow-Title">更新</system:String>
     <system:String x:Key="UpdateSelectionWindow-AutoCheckFouUpdatesCheckbox-Content">啟動時自動檢查更新</system:String>

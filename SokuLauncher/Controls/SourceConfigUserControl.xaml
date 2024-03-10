@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="SokuLauncher.Controls.SourceConfigUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SokuLauncher.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="550" d:Background="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="{DynamicResource SourceConfig-SourceName}" VerticalAlignment="Center" Margin="8" />
+        <TextBox Grid.Column="1" Text="{Binding Name}" HorizontalAlignment="Stretch" Height="23" Margin="8" TextWrapping="Wrap" VerticalAlignment="Top" />
+
+        <TextBlock Grid.Column="2" Text="{DynamicResource SourceConfig-Preferred}" VerticalAlignment="Center" Margin="8" />
+        <ComboBox x:Name="PreferredDownloadLinkTypeComboBox" Grid.Column="3" SelectedValue="{Binding PreferredDownloadLinkType}" Width="90" HorizontalAlignment="Stretch" Height="23" Margin="8" VerticalAlignment="Top">
+        </ComboBox>
+
+        <TextBlock Grid.Row="1" Text="{DynamicResource SourceConfig-SourceURL}" VerticalAlignment="Center" Margin="8" />
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Url}" HorizontalAlignment="Stretch" Height="23" Margin="8" TextWrapping="Wrap" VerticalAlignment="Top" />
+    </Grid>
+</UserControl>
