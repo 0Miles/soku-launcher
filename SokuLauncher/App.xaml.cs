@@ -61,10 +61,14 @@ namespace SokuLauncher
                     {
                         try
                         {
-                            List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
+                            List<string> checkModes = mainWindow.ViewModel.ModManager.ModInfoList?
+                                .Where(mod => mod.Enabled)?
+                                .Select(mod => mod.Name)
+                                .Concat(settingGroup.EnableMods ?? new List<string>())
+                                .Distinct()
+                                .ToList() ?? new List<string>();
                             checkModes.Add("SokuLauncher");
                             checkModes.Add("SokuModLoader");
-                            checkModes.AddRange(mainWindow.ViewModel.ModManager.ModInfoList?.Where(mod => mod.Enabled)?.Select(mod => mod.Name));
                             var updateList = await mainWindow.ViewModel.UpdateManager.CheckForUpdates(
                                 true,
                                 mainWindow.ViewModel.ConfigUtil.Config.AutoCheckForInstallable,
