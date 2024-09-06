@@ -57,10 +57,9 @@ jobs:
 
       - name: Release
         if: steps.check_for_new_version.outputs.hasNewVersion == 'True'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
             name: v${{ env.RELEASE_VERSION }}
             tag_name: v${{ env.RELEASE_VERSION }}
-            token: ${{ secrets.MY_TOKEN }}
             body_path: ./changelog.md
             files: ${{ env.PROJECT_NAME }}.zip
