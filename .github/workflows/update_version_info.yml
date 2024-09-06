@@ -11,15 +11,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-            token: ${{ secrets.MY_TOKEN }}
+        uses: actions/checkout@v4
 
       - name: Update version.json
         run: node scripts/updateVersionInfo.js ${{ github.event.release.name }} ${{ secrets.GITHUB_TOKEN }}
       
       - name: Git commit
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
             commit_message: "docs: update version.json"
             commit_user_name: Miles
