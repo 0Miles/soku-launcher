@@ -164,7 +164,7 @@ namespace SokuLauncher
                         ViewModel.UpdateManager.StatusChanged += StatusChanged;
                         ViewModel.SelectedSokuModSettingGroup.Status = LanguageService.GetString("Common-CheckVersionInfo");
 
-                        List<string> checkModes = settingGroup.EnableMods?.Select(x => x).ToList() ?? new List<string>();
+                        List<string> checkModes = settingGroup.EnableMods ?? new List<string>();
                         checkModes.Add("SokuModLoader");
                         var updateList = await ViewModel.UpdateManager.CheckForUpdates(
                             false,
