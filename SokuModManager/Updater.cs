@@ -57,12 +57,34 @@ namespace SokuModManager
             ModManager = modManager;
         }
 
+        private void DeleteReadOnlyFilesInDirectory(string directoryPath)
+        {
+            if (!Directory.Exists(directoryPath))
+            {
+                return;
+            }
+
+            foreach (var file in Directory.GetFiles(directoryPath))
+            {
+                var fileInfo = new FileInfo(file);
+                fileInfo.IsReadOnly = false;
+                File.Delete(file);
+            }
+
+            foreach (var subDirectory in Directory.GetDirectories(directoryPath))
+            {
+                DeleteReadOnlyFilesInDirectory(subDirectory);
+                Directory.Delete(subDirectory, true);
+            }
+        }
+
         private void ClearUpdateTempDir()
         {
             try
             {
                 if (Directory.Exists(sokuModUpdateTempDirPath))
                 {
+                    DeleteReadOnlyFilesInDirectory(sokuModUpdateTempDirPath);
                     Directory.Delete(sokuModUpdateTempDirPath, true);
                 }
             }
