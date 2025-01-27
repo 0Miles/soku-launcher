@@ -283,6 +283,7 @@ namespace SokuLauncher.ViewModels
         {
             new SelectorNodeViewModel { Title = "中文 (繁體)", Code = "zh-Hant"},
             new SelectorNodeViewModel { Title = "中文 (简体)", Code = "zh-Hans"},
+            new SelectorNodeViewModel { Title = "日本語", Code = "ja-JP"},
             new SelectorNodeViewModel { Title = "English", Code = "en" }
         };
 

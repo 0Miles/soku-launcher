@@ -186,6 +186,9 @@ namespace SokuLauncher
                 case "zh-Hans":
                     Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/SokuLauncher.Shared;component/Resources/Languages/zh-Hans.xaml");
                     break;
+                case "ja-JP":
+                    Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/SokuLauncher.Shared;component/Resources/Languages/ja-JP.xaml");
+                    break;
                 default:
                     Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/SokuLauncher.Shared;component/Resources/Languages/en.xaml");
                     break;

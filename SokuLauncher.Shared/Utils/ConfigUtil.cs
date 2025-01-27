@@ -400,7 +400,8 @@ namespace SokuLauncher.Shared.Utils
                 case "zh-Hans-SG":
                     return "zh-Hans";
                 case "ja":
-                    return "ja";
+                case "ja-JP":
+                    return "ja-JP";
                 default:
                     return "en";
             }
