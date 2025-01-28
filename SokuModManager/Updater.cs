@@ -495,6 +495,8 @@ namespace SokuModManager
             foreach (FileInfo file in dir.GetFiles())
             {
                 string targetFilePath = Path.Combine(destinationDir, file.Name);
+                var targetFile = new FileInfo(targetFilePath);
+                targetFile.IsReadOnly = false;
                 File.Copy(file.FullName, targetFilePath, true);
             }
 
