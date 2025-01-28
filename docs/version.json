@@ -9,14 +9,14 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Notes": "### Features\n\n* Japanese language support ([7d5cec1](https://github.com/0Miles/soku-launcher/commit/7d5cec14f0c44a7f5bb59d73f15c083913dbc6d3))\n\n### Bug Fixes\n\n* delete read-only files in update temp directory ([79b3de7](https://github.com/0Miles/soku-launcher/commit/79b3de72a9c51e866f6ef20dafd99db6a7e42936))",
-        "Version": "2.4.0.0",
+        "Notes": "### Bug Fixes\n\n* update failed due to read-only overwrite of local file ([da300fb](https://github.com/0Miles/soku-launcher/commit/da300fb0bb2f80d39410d7bee47f36d792a198cb))",
+        "Version": "2.4.1.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.4.0.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.4.1.0/SokuLauncher.zip",
         "DownloadLinks": [
             {
                 "Type": "Github",
-                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.4.0.0/SokuLauncher.zip"
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.4.1.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
