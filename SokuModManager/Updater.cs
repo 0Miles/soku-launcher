@@ -496,7 +496,10 @@ namespace SokuModManager
             {
                 string targetFilePath = Path.Combine(destinationDir, file.Name);
                 var targetFile = new FileInfo(targetFilePath);
-                targetFile.IsReadOnly = false;
+                if (targetFile.Exists && targetFile.IsReadOnly)
+                {
+                    targetFile.IsReadOnly = false;
+                }
                 File.Copy(file.FullName, targetFilePath, true);
             }
 
