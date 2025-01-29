@@ -9,14 +9,14 @@
                 "Content": "啟動器主程式"
             }
         ],
-        "Notes": "### Bug Fixes\n\n* update failed due to read-only overwrite of local file ([da300fb](https://github.com/0Miles/soku-launcher/commit/da300fb0bb2f80d39410d7bee47f36d792a198cb))",
-        "Version": "2.4.1.0",
+        "Notes": "### Bug Fixes\n\n* check if local archive exists when updating ([e0974ce](https://github.com/0Miles/soku-launcher/commit/e0974ce4e20f4fcb5c65b7fac1d75a8ae4561451))",
+        "Version": "2.4.2.0",
         "FileName": "SokuLauncher.exe",
-        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.4.1.0/SokuLauncher.zip",
+        "DownloadUrl": "https://github.com/0Miles/soku-launcher/releases/download/v2.4.2.0/SokuLauncher.zip",
         "DownloadLinks": [
             {
                 "Type": "Github",
-                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.4.1.0/SokuLauncher.zip"
+                "Url": "https://github.com/0Miles/soku-launcher/releases/download/v2.4.2.0/SokuLauncher.zip"
             }
         ],
         "Compressed": true
